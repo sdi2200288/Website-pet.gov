@@ -1,4 +1,6 @@
-import logo from './logo.svg';
+import logo from './images/Arxiki_eikona.png';
+import owner from './images/owner.png';
+import vet from './images/vet.png';
 import './App.css';
 
 function App() {
@@ -6,8 +8,11 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <img src={owner} className="owner-image" alt="owner" />
+        <img src={vet} className="owner-image" alt="vet" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          {/* Edit <code>src/App.js</code> and save to reload. */}
+          Γεια σου React
         </p>
         <a
           className="App-link"
