@@ -1,9 +1,13 @@
 import React from "react";
 import arxikieikona from "../../images/Arxiki_eikona.png";
+import lostPet1 from "../../images/lostPet1.png";
+import lostPet2 from "../../images/lostPet2.png";
+import lostPet3 from "../../images/lostPet3.png";
 import owner from "../../images/owner.png";
 import vet from "../../images/vet.png";
 import Footer from "../../components/Footer/Footer";
 import "./HomePage.css";
+import { Link } from "react-router-dom";
 
 export default function Homepage() {
   return (
@@ -44,7 +48,9 @@ export default function Homepage() {
           </div>
 
           <div className="info-text">
-            <h2>Είσαι κτηνίατρος;</h2>
+            <Link to="/vet-dashboard" className="vet-owner-button">
+              Είσαι κτηνίατρος;
+            </Link>
             <p>Ως συνδεδεμένος κτηνίατρος στην πλατφόρμα μπορείς να:</p>
             <ul>
               <li>Να δημιουργήσεις/ενημερώσεις επαγγελματικό προφίλ</li>
@@ -63,7 +69,9 @@ export default function Homepage() {
           </div>
 
           <div className="info-text">
-            <h2>Είσαι ιδιοκτήτης;</h2>
+             <Link to="/owner-dashboard" className="vet-owner-button">
+              Είσαι ιδιοκτήτης;
+            </Link>
             <p>Ως συνδεδεμένος ιδιοκτήτης στην πλατφόρμα μπορείς να:</p>
             <ul>
               <li>Να παρακολουθείς ιατρικές πράξεις και ηλεκτρονικό βιβλιάριο</li>
@@ -77,7 +85,41 @@ export default function Homepage() {
         </div>
       </section>
 
-      <section className="stats-section">
+      <section className=" lost-pets-grid">
+        <div className="lost-pet-card">
+          <img src={lostPet1} alt="Χαμένος σκύλος" className="lost-pet-image" />
+          <div className="lost-pet-info">
+            <h3>Μαξ</h3>
+            <p className="pet-breed">Πομερανιανός</p>
+            <p className="pet-location">📍 Βρέθηκε: Αθήνα, Κέντρο</p>
+            <p className="pet-date">📅 15 Μαρτίου 2024</p>
+            <button className="pet-button">Περισσότερες Πληροφορίες</button>
+          </div>
+        </div>
+       
+        <div className="lost-pet-card">
+          <img src={lostPet2} alt="Χαμένη γάτα με ρίγες" className="lost-pet-image" />
+          <div className="lost-pet-info">
+            <h3>Μαξ</h3>
+            <p className="pet-breed">Ευρωπαϊκή Σταγόνα</p>
+            <p className="pet-location">📍 Βρέθηκε: Θεσσαλονίκη, Νεάπολη</p>
+            <p className="pet-date">📅 12 Μαρτίου 2024</p>
+            <button className="pet-button">Περισσότερες Πληροφορίες</button>
+          </div>
+        </div>
+
+        <div className="lost-pet-card">
+              <img src={lostPet3} alt="Χαμένο κουνέλι" className="lost-pet-image" />
+              <div className="lost-pet-info">
+                <h3>Κουνελάκι</h3>
+                <p className="pet-breed">Λιονταράκι</p>
+                <p className="pet-location">📍 Βρέθηκε: Πάτρα, Δυτικά Προάστια</p>
+                <p className="pet-date">📅 10 Μαρτίου 2024</p>
+                <button className="pet-button">Περισσότερες Πληροφορίες</button>
+              </div>
+          </div>
+      </section>
+      {/* <section className="stats-section">
         <div className="stats-wrap">
           <div className="stats-title">Είμαι ...</div>
 
@@ -107,7 +149,7 @@ export default function Homepage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <Footer />
     </div>
   );

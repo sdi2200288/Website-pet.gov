@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import "./Menu.css";
 
@@ -6,15 +7,15 @@ export default function Menu() {
   return (
     <header className="top-header">
       <div className="menu-container">
-        <a href="#home" className="logo-link" aria-label="Home">
+        <Link to="/" className="logo-link" aria-label="Home">
           <img src={logo} className="header-logo" alt="PetCare Logo" />
-        </a>
+        </Link>
 
         <nav className="main-menu">
-          <a className="menu-item active">Αρχική</a>
+          <Link to="/" className="menu-item active">Αρχική</Link> 
 
           <div className="menu-dropdown">
-            <a  className="menu-item">Ιδιοκτήτης</a>
+            <Link to="/owner-dashboard" className="menu-item">Ιδιοκτήτης</Link>
             <div className="dropdown-panel">
               <ul>
                 <li>Δήλωση εύρεσης κατοικιδίου</li>
@@ -29,7 +30,7 @@ export default function Menu() {
           </div>
 
           <div className="menu-dropdown">
-            <a className="menu-item">Κτηνίατρος</a>
+            <Link to="/vet-dashboard" className="menu-item">Κτηνίατρος</Link>
             <div className="dropdown-panel">
               <ul>
                 <li>Δήλωση εύρεσης κατοικιδίου</li>
@@ -47,8 +48,8 @@ export default function Menu() {
             </div>
           </div>
 
-          <a className="menu-item">Χαμένα Κατοικίδια</a>
-          <a className="menu-item">Προς Υιοθεσία</a>
+          <Link to="/all-lost-pets" className="menu-item">Χαμένα Κατοικίδια</Link>
+          <Link to="/adoption" className="menu-item">Προς Υιοθεσία</Link>
 
           <div className="menu-actions">
             <a href="#register" className="menu-btn menu-btn--register">Εγγραφή</a>
