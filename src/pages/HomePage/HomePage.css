@@ -195,6 +195,14 @@
   transition: background 0.3s;
 }
 
+.vet-owner-button .arrow {
+  color: white; /* Άσπρο χρώμα */
+  font-size: 1.4em;
+  font-weight: 900;
+  transition: transform 0.3s ease;
+  margin-left: 6px;
+}
+
 .vet-owner-button:hover {
   background-color: #1a2632;
 }
