@@ -1,9 +1,19 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import "./Menu.css";
 
 export default function Menu() {
+  // Προσθήκη state variables
+  const [language, setLanguage] = useState("el");
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+
+  // Συνάρτηση για αλλαγή γλώσσας
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+    setShowLanguageDropdown(false);
+    // Εδώ θα προσθέσεις λογική αλλαγής γλώσσας (i18n)
+  };
   return (
     <header className="top-header">
       <div className="menu-container">
@@ -56,6 +66,35 @@ export default function Menu() {
             <a href="#login" className="menu-btn menu-btn--login">Σύνδεση</a>
           </div>
 
+        <div className="language-selector">
+          <button 
+            className="language-button"
+            onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+            aria-label="Επιλογή γλώσσας"
+          >
+            🌐
+            <span className="current-language">
+              {language === "el" ? "ΕΛ" : "EN"}
+            </span>
+          </button>
+          
+          {showLanguageDropdown && (
+            <div className="language-dropdown">
+              <button 
+                className={`language-option ${language === "el" ? "active" : ""}`}
+                onClick={() => handleLanguageChange("el")}
+              >
+                🇬🇷 Ελληνικά
+              </button>
+              <button 
+                className={`language-option ${language === "en" ? "active" : ""}`}
+                onClick={() => handleLanguageChange("en")}
+              >
+                🇬🇧 English
+              </button>
+            </div>
+          )}
+        </div>
         </nav>
       </div>
     </header>
