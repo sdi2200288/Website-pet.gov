@@ -84,7 +84,7 @@ export default function Homepage() {
 
         </div>
       </section>
-
+      <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
       <section className=" lost-pets-grid">
         <div className="lost-pet-card">
           <img src={lostPet1} alt="Χαμένος σκύλος" className="lost-pet-image" />
@@ -119,6 +119,11 @@ export default function Homepage() {
               </div>
           </div>
       </section>
+      <div className="lost-pets-button-wrapper">
+        <Link to="/all-lost-pets" className="see-all-lost-pets-btn">
+          Δες όλα τα χαμένα κατοικίδια
+        </Link>
+      </div>
       {/* <section className="stats-section">
         <div className="stats-wrap">
           <div className="stats-title">Είμαι ...</div>
