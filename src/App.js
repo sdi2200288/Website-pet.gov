@@ -6,6 +6,7 @@ import AllLostPets from "./pages/HomePage/AllLostPets";
 import AdoptionPage from "./pages/HomePage/AdoptionPage";
 import Menu from "./components/Menu/Menu";
 import HomePage from "./pages/HomePage/HomePage";
+import Footer from "./components/Footer/Footer";
 import "./App.css";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/adoption" element={<AdoptionPage />} />
         </Routes>
       </main>
+      <Footer />
     </BrowserRouter>
   );
 }
