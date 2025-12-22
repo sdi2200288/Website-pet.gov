@@ -76,7 +76,7 @@
 
   font-size: 14px;
   line-height: 18px;
-  color:#222;
+  color:#2c3e50;
 }
 
 /* κρύβουμε το κείμενο “Αναζήτηση” στο κουμπί για να φαίνεται σαν icon */
@@ -88,9 +88,10 @@
 
 /* INFO SECTIONS */
 .info-sections {
-  max-width: 1200px;
+  padding: 34px 20px 48px;
   margin: 26px auto 0;
-  padding: 0 20px;
+  background: #f5f5f5;
+
 }
 
 .info-block {
@@ -131,22 +132,23 @@
 .info-text li { margin-bottom: 6px; }
 
 /* STATS (4 boxes) */
-.stats-section { padding: 22px 20px 34px; }
+.stats-section {
+  padding: 34px 20px 48px;
+  margin: 26px auto 0;
+  background: #f5f5f5;
+}
 
 .stats-wrap {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  background: #e9e5de;
-  border-radius: 18px;
-  padding: 22px 18px 26px;
 }
 
 .stats-title {
   text-align: center;
-  color: #6b6b6b;
+  color: #2c3e50;
   font-weight: 900;
   font-size: 1.35rem;
-  margin-bottom: 16px;
+  margin: 0 0 18px 0;
 }
 
 .stats-grid {
@@ -156,24 +158,26 @@
 }
 
 .stat-box {
-  background: #f3f0ea;
-  border: 1px solid rgba(0,0,0,0.12);
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
   border-radius: 12px;
   padding: 16px 14px;
   min-height: 120px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
 }
 
 .stat-value {
   font-size: 1.5rem;
   font-weight: 950;
-  color: #1e1e1e;
+  color: #2c3e50;
   margin-bottom: 6px;
 }
 
 .stat-label {
   font-size: 0.88rem;
   font-weight: 900;
-  color: #444;
+  color: #111113;
   margin-bottom: 6px;
 }
 
@@ -196,7 +200,7 @@
 }
 
 .vet-owner-button .arrow {
-  color: white; /* Άσπρο χρώμα */
+  color: white; 
   font-size: 1.4em;
   font-weight: 900;
   transition: transform 0.3s ease;
@@ -210,7 +214,7 @@
 /* LOST PETS */
 .lost-pets-section {
   padding: 40px 20px 60px;
-  background: #0152a3;
+  background: #ffffff;
 }
 
 .lost-pets-wrap {
@@ -220,10 +224,10 @@
 
 .lost-pets-title {
   text-align: center;
-  font-size: 28px/*1.8rem*/;
-  color: #111113;
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-size: 1.75rem;
+  color: #2c3e50;
+  font-weight: 900;
+  margin: 0 0 12px 0;
 }
 
 .lost-pets-subtitle {
@@ -312,11 +316,14 @@
   text-align: center;
 }
 
-.view-all-button {
-  display: inline-block;
+
+.see-all-lost-pets-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 12px 28px;
-  background: #e74c3c;
-  color: white;
+  background: #2c3e50;
+  color: #ffffff;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 700;
@@ -324,30 +331,7 @@
   transition: background 0.3s;
 }
 
-.view-all-button:hover {
-  background: #c0392b;
-}
-
-/* Responsive
-@media (max-width: 768px) {
-  .lost-pets-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (max-width: 520px) {
-  .lost-pets-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .lost-pets-title {
-    font-size: 1.5rem;
-  }
-} */
-
-
-/* responsive */
+.see-all-lost-pets-btn:hover { background: #1a2632; }
 @media (max-width: 1024px) {
   .info-block, .info-block.reverse {
     flex-direction: column;
