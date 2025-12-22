@@ -1,0 +1,64 @@
+.pet-card-x {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
+  max-width: 320px;
+}
+
+.pet-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.pet-img-wrap {
+  width: 100%;
+  height: 130px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.pet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-fields {
+  display: grid;
+  gap: 8px;
+}
+
+.pet-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.pet-row span {
+  color: #777;
+}
+
+.pet-row b {
+  font-weight: 700;
+}
+
+.pet-divider {
+  height: 1px;
+  background: #eaeaea;
+  margin: 12px 0;
+}
+
+.lost-yes {
+  color: #d32f2f;
+  font-weight: 800;
+}
+
+.lost-no {
+  color: #2e7d32;
+  font-weight: 800;
+}

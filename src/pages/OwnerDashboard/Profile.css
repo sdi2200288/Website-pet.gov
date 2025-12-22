@@ -104,14 +104,6 @@
   font-weight: 600;
 }
 
-.pets-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 20px;
-  align-items: center;
-}
-
 .pets-filters select,
 .pets-filters input[type="checkbox"] {
   padding: 6px 12px;
@@ -128,16 +120,58 @@
   font-size: 0.9rem;
   cursor: pointer;
 }
-.hero-search {
+
+.pets-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-item {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.hero-input {
-  padding: 6px 12px;
-  border-radius: 8px;
+.filter-label {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pets-filters select {
+  padding: 6px 10px;
+  border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
-  flex: 1;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* search stays aligned right-ish */
+.hero-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.hero-input {
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  width: 260px;
+}
+
+.hero-button {
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 600;
 }

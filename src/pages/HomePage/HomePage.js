@@ -3,6 +3,7 @@ import arxikieikona from "../../images/Arxiki_eikona.png";
 import lostPet1 from "../../images/lostPet1.png";
 import lostPet2 from "../../images/lostPet2.png";
 import lostPet3 from "../../images/lostPet3.png";
+import PetDetails from "../../components/Pet/Pet";
 import owner from "../../images/owner.png";
 import vet from "../../images/vet.png";
 import Footer from "../../components/Footer/Footer";
@@ -90,36 +91,15 @@ export default function Homepage() {
 
           <div className="lost-pets-grid">
             <div className="lost-pet-card">
-              <img src={lostPet1} alt="Χαμένος σκύλος" className="lost-pet-image" />
-              <div className="lost-pet-info">
-                <h3>Μαξ</h3>
-                <p className="pet-breed">Πομερανιανός</p>
-                <p className="pet-location">📍 Βρέθηκε: Αθήνα, Κέντρο</p>
-                <p className="pet-date">📅 15 Μαρτίου 2024</p>
-                <button className="pet-button">Περισσότερες Πληροφορίες</button>
-              </div>
+              <PetDetails mode={0} />
             </div>
 
             <div className="lost-pet-card">
-              <img src={lostPet2} alt="Χαμένη γάτα με ρίγες" className="lost-pet-image" />
-              <div className="lost-pet-info">
-                <h3>Μαξ</h3>
-                <p className="pet-breed">Ευρωπαϊκή Σταγόνα</p>
-                <p className="pet-location">📍 Βρέθηκε: Θεσσαλονίκη, Νεάπολη</p>
-                <p className="pet-date">📅 12 Μαρτίου 2024</p>
-                <button className="pet-button">Περισσότερες Πληροφορίες</button>
-              </div>
+              <PetDetails mode={0} />
             </div>
 
             <div className="lost-pet-card">
-              <img src={lostPet3} alt="Χαμένο κουνέλι" className="lost-pet-image" />
-              <div className="lost-pet-info">
-                <h3>Κουνελάκι</h3>
-                <p className="pet-breed">Λιονταράκι</p>
-                <p className="pet-location">📍 Βρέθηκε: Πάτρα, Δυτικά Προάστια</p>
-                <p className="pet-date">📅 10 Μαρτίου 2024</p>
-                <button className="pet-button">Περισσότερες Πληροφορίες</button>
-              </div>
+              <PetDetails mode={0} />
             </div>
           </div>
 

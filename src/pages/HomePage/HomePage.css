@@ -79,14 +79,13 @@
   color:#2c3e50;
 }
 
-/* κρύβουμε το κείμενο “Αναζήτηση” στο κουμπί για να φαίνεται σαν icon */
 .hero-button span{
   display:none;
 }
 
+.lost-pet-card { padding: 35px; }
 
 
-/* INFO SECTIONS */
 .info-sections {
   padding: 34px 20px 48px;
   margin: 26px auto 0;
