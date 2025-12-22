@@ -33,7 +33,7 @@ export default function Homepage() {
                 className="hero-input"
               />
               <button className="hero-button" aria-label="Αναζήτηση">
-              🔍<span>Αναζήτηση</span>
+                🔍<span>Αναζήτηση</span>
               </button>
 
             </div>
@@ -69,7 +69,7 @@ export default function Homepage() {
           </div>
 
           <div className="info-text">
-             <Link to="/owner-dashboard" className="vet-owner-button">
+            <Link to="/owner-dashboard" className="vet-owner-button">
               Είσαι ιδιοκτήτης;  <span className="arrow">→</span>
             </Link>
             <p>Ως συνδεδεμένος ιδιοκτήτης στην πλατφόρμα μπορείς να:</p>
@@ -84,31 +84,34 @@ export default function Homepage() {
 
         </div>
       </section>
-      <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
-      <section className=" lost-pets-grid">
-        <div className="lost-pet-card">
-          <img src={lostPet1} alt="Χαμένος σκύλος" className="lost-pet-image" />
-          <div className="lost-pet-info">
-            <h3>Μαξ</h3>
-            <p className="pet-breed">Πομερανιανός</p>
-            <p className="pet-location">📍 Βρέθηκε: Αθήνα, Κέντρο</p>
-            <p className="pet-date">📅 15 Μαρτίου 2024</p>
-            <button className="pet-button">Περισσότερες Πληροφορίες</button>
-          </div>
-        </div>
-       
-        <div className="lost-pet-card">
-          <img src={lostPet2} alt="Χαμένη γάτα με ρίγες" className="lost-pet-image" />
-          <div className="lost-pet-info">
-            <h3>Μαξ</h3>
-            <p className="pet-breed">Ευρωπαϊκή Σταγόνα</p>
-            <p className="pet-location">📍 Βρέθηκε: Θεσσαλονίκη, Νεάπολη</p>
-            <p className="pet-date">📅 12 Μαρτίου 2024</p>
-            <button className="pet-button">Περισσότερες Πληροφορίες</button>
-          </div>
-        </div>
+      <section className="lost-pets-section">
+        <div className="lost-pets-wrap">
+          <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
 
-        <div className="lost-pet-card">
+          <div className="lost-pets-grid">
+            <div className="lost-pet-card">
+              <img src={lostPet1} alt="Χαμένος σκύλος" className="lost-pet-image" />
+              <div className="lost-pet-info">
+                <h3>Μαξ</h3>
+                <p className="pet-breed">Πομερανιανός</p>
+                <p className="pet-location">📍 Βρέθηκε: Αθήνα, Κέντρο</p>
+                <p className="pet-date">📅 15 Μαρτίου 2024</p>
+                <button className="pet-button">Περισσότερες Πληροφορίες</button>
+              </div>
+            </div>
+
+            <div className="lost-pet-card">
+              <img src={lostPet2} alt="Χαμένη γάτα με ρίγες" className="lost-pet-image" />
+              <div className="lost-pet-info">
+                <h3>Μαξ</h3>
+                <p className="pet-breed">Ευρωπαϊκή Σταγόνα</p>
+                <p className="pet-location">📍 Βρέθηκε: Θεσσαλονίκη, Νεάπολη</p>
+                <p className="pet-date">📅 12 Μαρτίου 2024</p>
+                <button className="pet-button">Περισσότερες Πληροφορίες</button>
+              </div>
+            </div>
+
+            <div className="lost-pet-card">
               <img src={lostPet3} alt="Χαμένο κουνέλι" className="lost-pet-image" />
               <div className="lost-pet-info">
                 <h3>Κουνελάκι</h3>
@@ -117,16 +120,19 @@ export default function Homepage() {
                 <p className="pet-date">📅 10 Μαρτίου 2024</p>
                 <button className="pet-button">Περισσότερες Πληροφορίες</button>
               </div>
+            </div>
           </div>
+
+          <div className="lost-pets-cta">
+            <Link to="/all-lost-pets" className="see-all-lost-pets-btn">
+              Δες όλα τα χαμένα κατοικίδια
+            </Link>
+          </div>
+        </div>
       </section>
-      <div className="lost-pets-button-wrapper">
-        <Link to="/all-lost-pets" className="see-all-lost-pets-btn">
-          Δες όλα τα χαμένα κατοικίδια
-        </Link>
-      </div>
       <section className="stats-section">
         <div className="stats-wrap">
-          <div className="stats-title">Είμαι ...</div>
+          <div className="stats-title">Στατιστικά πλατφόρμας</div>
 
           <div className="stats-grid">
             <div className="stat-box">
@@ -155,7 +161,7 @@ export default function Homepage() {
           </div>
         </div>
       </section>
-      {/* <Footer /> */}
-    </div>
+
+    </div >
   );
 }
