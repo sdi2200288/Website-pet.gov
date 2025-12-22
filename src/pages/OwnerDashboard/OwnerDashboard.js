@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import ArxikiOwner from "../../images/ArxikiOwner.png";
 import "./OwnerDashboard.css";
-import { Link } from "react-router-dom";
+import { Link ,Outlet} from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -28,7 +28,7 @@ export default function OwnerDashboard() {
       
           <ul className="sidebar-menu">
             <li>
-              <Link to="/owner/profile">
+              <Link to="profile">
                 <FaUser className="menu-icon" /> <span>Το προφίλ μου</span>
               </Link>
             </li>
@@ -64,7 +64,9 @@ export default function OwnerDashboard() {
             </li>
           </ul>
         </aside>
-    
+      <main className="dashboard-content">
+        <Outlet />
+      </main>
     </div>
   </div>
 

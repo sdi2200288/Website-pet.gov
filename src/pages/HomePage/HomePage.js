@@ -124,7 +124,7 @@ export default function Homepage() {
           Δες όλα τα χαμένα κατοικίδια
         </Link>
       </div>
-      {/* <section className="stats-section">
+      <section className="stats-section">
         <div className="stats-wrap">
           <div className="stats-title">Είμαι ...</div>
 
@@ -154,7 +154,7 @@ export default function Homepage() {
             </div>
           </div>
         </div>
-      </section> */}
+      </section>
       {/* <Footer /> */}
     </div>
   );
