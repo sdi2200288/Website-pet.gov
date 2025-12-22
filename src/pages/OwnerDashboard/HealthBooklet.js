@@ -1,32 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import "./HealthBooklet.css";
 
 export default function HealthBooklet() {
+  const [step, setStep] = useState(1);
+
   return (
     <div className="health-booklet">
-      <h2>Προβολή - Εκτύπωση Βιβλιαρίου</h2>
-
-      <div className="steps">
-        <div className="step">
+      {/* STEPPER */}
+      <div className="stepper">
+        <div
+          className={`step ${step === 1 ? "active" : ""} ${step > 1 ? "clickable" : ""}`}
+          onClick={() => {
+            if (step > 1) setStep(1);
+          }}
+        >
           <div className="circle">1</div>
-          <p>
-            Στο πρώτο βήμα, θα επιλέξετε το κατοικίδιο που θέλετε να δείτε ή να
-            εκτυπώσετε το βιβλιάριο του και βρίσκεται υπό την προστασία σας.
-          </p>
+          <span>Επιλογή κατοικιδίου</span>
         </div>
 
         <div className="line" />
 
-        <div className="step">
+        <div className={`step ${step === 2 ? "active" : ""}`}>
           <div className="circle">2</div>
-          <p>
-            Στο δεύτερο και τελευταίο βήμα θα δείτε το βιβλιάριο και θα υπάρχει
-            διαθέσιμη η επιλογή της εκτύπωσης.
-          </p>
+          <span>Προβολή και εκτύπωση βιβλιαρίου</span>
         </div>
       </div>
 
-      <button className="next-btn">Συνέχεια</button>
+      {/* STEP 1 */}
+      {step === 1 && (
+        <>
+          <p className="step-description">
+            Στο πρώτο βήμα, θα επιλέξετε το κατοικίδιο που θέλετε να δείτε ή να
+            εκτυπώσετε το βιβλιάριο του και βρίσκεται υπό την προστασία σας.
+          </p>
+
+          <button className="next-btn" onClick={() => setStep(2)}>
+            Συνέχεια
+          </button>
+        </>
+      )}
+
+      {/* STEP 2 */}
+      {step === 2 && (
+        <>
+          <h3 style={{ marginTop: "40px" }}>Επιλέξτε κατοικίδιο</h3>
+
+          <button className="next-btn" onClick={() => setStep(3)}>
+            Συνέχεια
+          </button>
+        </>
+      )}
     </div>
   );
 }

@@ -3,69 +3,80 @@
   text-align: center;
 }
 
-.health-booklet h2 {
-  font-size: 28px;
-  margin-bottom: 60px;
-}
-
-/* Οριζόντια διάταξη */
-.steps {
+/* ===== STEPPER ===== */
+.stepper {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   gap: 40px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
-/* Κάθε βήμα */
 .step {
-  width: 280px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
 }
 
-/* Κύκλοι 1 & 2 */
 .circle {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background-color: #f4efe9;
+  background: #f1ede7;
   border: 2px solid #000;
-  font-size: 36px;
+  font-size: 28px;
   font-weight: bold;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin: 0 auto 20px;
+  margin-bottom: 10px;
 }
 
-/* Κείμενο κάτω από τον κύκλο */
-.step p {
+.step.active .circle {
+  background: #d4c5b2;
+}
+
+.step span {
   font-size: 14px;
-  line-height: 1.6;
-  color: #000;
+  text-align: center;
 }
 
-/* Γραμμή ανάμεσα στους κύκλους */
+/* Γραμμή */
 .line {
   width: 200px;
   height: 2px;
-  background-color: #000;
-  margin-top: 45px;
+  background: #000;
+  margin-top: 35px;
 }
 
-/* Κουμπί */
-.next-btn {
-  background-color: #2f6fed;
-  color: white;
-  border: none;
-  padding: 12px 40px;
-  border-radius: 8px;
-  font-size: 16px;
+/* STEP 1 text */
+.step-description {
+  max-width: 600px;
+  margin: 0 auto 30px;
+  font-size: 14px;
+}
+
+.step.clickable {
   cursor: pointer;
 }
 
-.next-btn:hover {
-  background-color: #1f56c1;
+.step.clickable .circle {
+  border-color: #2f6fed;
+}
+
+.step.clickable:hover .circle {
+  background: #e6eeff;
+}
+
+/* Button */
+.next-btn {
+  padding: 12px 40px;
+  background: #2f6fed;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
 }
