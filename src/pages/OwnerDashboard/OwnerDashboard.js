@@ -43,7 +43,7 @@ export default function OwnerDashboard() {
               </Link>
             </li>
             <li>
-              <Link to="/owner/health-booklet">
+              <Link to="health-booklet">
                 <FaBook className="menu-icon" /> <span>Προβολή Βιβλιαρίου</span>
               </Link>
             </li>

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import VetDashboard from "./pages/VetDashboard/VetDashboard";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import Profile from "./pages/OwnerDashboard/Profile";
+import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
 import Menu from "./components/Menu/Menu";
@@ -25,6 +26,7 @@ function App() {
           {/* OWNER DASHBOARD */}
           <Route path="/owner-dashboard" element={<OwnerDashboard />}>
             <Route path="profile" element={<Profile />} />
+            <Route path="health-booklet" element={<HealthBooklet />} />
           </Route>
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />

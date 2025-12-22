@@ -1,0 +1,71 @@
+.health-booklet {
+  padding: 40px;
+  text-align: center;
+}
+
+.health-booklet h2 {
+  font-size: 28px;
+  margin-bottom: 60px;
+}
+
+/* Οριζόντια διάταξη */
+.steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+
+/* Κάθε βήμα */
+.step {
+  width: 280px;
+  text-align: center;
+}
+
+/* Κύκλοι 1 & 2 */
+.circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: #f4efe9;
+  border: 2px solid #000;
+  font-size: 36px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 20px;
+}
+
+/* Κείμενο κάτω από τον κύκλο */
+.step p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #000;
+}
+
+/* Γραμμή ανάμεσα στους κύκλους */
+.line {
+  width: 200px;
+  height: 2px;
+  background-color: #000;
+  margin-top: 45px;
+}
+
+/* Κουμπί */
+.next-btn {
+  background-color: #2f6fed;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.next-btn:hover {
+  background-color: #1f56c1;
+}
