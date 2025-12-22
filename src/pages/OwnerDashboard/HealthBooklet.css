@@ -6,7 +6,7 @@
 /* ===== STEPPER ===== */
 .stepper {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: 40px;
   margin-bottom: 40px;
@@ -80,3 +80,75 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+.pet-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f9f7f2;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+.pet-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.pet-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.booklet-card {
+  background: #fdfbf6;
+  border: 2px solid #d4c5b2;
+  border-radius: 12px;
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.booklet-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #e0d8c5;
+}
+
+.booklet-label {
+  font-weight: bold;
+  color: #333;
+}
+
+.booklet-value {
+  color: #555;
+}
+
+.medical-actions-box {
+  margin-top: 15px;
+  padding: 10px;
+  border: 1px solid #d4c5b2;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.medical-actions-box h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.medical-actions-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.medical-actions-box li {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
