@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import VetDashboard from "./pages/HomePage/VetDashboard";
-import OwnerDashboard from "./pages/HomePage/OwnerDashboard";
-import AllLostPets from "./pages/HomePage/AllLostPets";
-import AdoptionPage from "./pages/HomePage/AdoptionPage";
+import VetDashboard from "./pages/VetDashboard/VetDashboard";
+import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
+import AllLostPets from "./pages/AllLostPets/AllLostPets";
+import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
 import Menu from "./components/Menu/Menu";
 import HomePage from "./pages/HomePage/HomePage";
 import Footer from "./components/Footer/Footer";

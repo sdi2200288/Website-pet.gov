@@ -15,19 +15,19 @@ export default function Footer() {
           </div>
 
           <div className="footer-icons">
-          <a href="#" className="icon" aria-label="Facebook">
-            <FaFacebookF />
-          </a>
-          <a href="#" className="icon" aria-label="X">
-            <FaXTwitter />
-          </a>
-          <a href="#" className="icon" aria-label="Instagram">
-            <FaInstagram />
-          </a>
-          <a href="#" className="icon" aria-label="LinkedIn">
-            <FaLinkedinIn />
-          </a>
-        </div>
+            <a href="#" className="icon" aria-label="Facebook">
+              <FaFacebookF />
+            </a>
+            <a href="#" className="icon" aria-label="X">
+              <FaXTwitter />
+            </a>
+            <a href="#" className="icon" aria-label="Instagram">
+              <FaInstagram />
+            </a>
+            <a href="#" className="icon" aria-label="LinkedIn">
+              <FaLinkedinIn />
+            </a>
+          </div>
 
         </div>
 

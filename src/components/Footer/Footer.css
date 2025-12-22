@@ -67,7 +67,6 @@
   border-top: 1px solid rgba(0,0,0,0.06);
 }
 
-/* responsive */
 @media (max-width: 900px) {
   .footer-inner {
     grid-template-columns: 1fr 1fr;

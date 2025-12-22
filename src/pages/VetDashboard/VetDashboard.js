@@ -99,7 +99,6 @@ export default function VetDashboard() {
             </li>
           </ul>
         </aside>
-    
     </div>
   </div>
 
