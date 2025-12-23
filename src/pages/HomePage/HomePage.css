@@ -1,6 +1,10 @@
 .Home { width: 100%; }
 
-.hero-section { width: 100%; position: relative; }
+.hero-section {
+  width: 100%;
+  position: relative;
+  padding-top: 90px; 
+}
 
 .hero-image-container {
   position: relative;

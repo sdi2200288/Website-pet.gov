@@ -13,9 +13,8 @@ export default function Menu() {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
+  const isLoggedIn = false;
   // Συνάρτηση για αλλαγή γλώσσας
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
@@ -79,61 +78,22 @@ export default function Menu() {
 
           {!isLoggedIn && (
             <div className="menu-actions">
-              <a href="#register" className="menu-btn menu-btn--register">Εγγραφή</a>
-              <a href="#login" className="menu-btn menu-btn--login">Σύνδεση</a>
+              <Link to="/register" className="menu-btn menu-btn--register">
+                Εγγραφή
+              </Link>
+              <Link to="/login" className="menu-btn menu-btn--login">
+                Σύνδεση
+              </Link>
             </div>
           )}
 
-
-          <div className="language-selector">
-            <button
-              type="button"
-              className="language-button"
-              onClick={() => setShowLanguageDropdown((v) => !v)}
-              aria-label="Επιλογή γλώσσας"
-            >
-              <span className="current-language">
-                <img
-                  src={language === "el" ? flagGR : flagGB}
-                  alt="language flag"
-                  className="flag-icon"
-                />
-              </span>
-
-            </button>
-
-
-            {showLanguageDropdown && (
-              <div className="language-dropdown">
-                <button
-                  className={`language-option ${language === "el" ? "active" : ""}`}
-                  onClick={() => handleLanguageChange("el")}
-                >
-                  <img src={flagGR} alt="GR" className="flag-icon" />
-                  Ελληνικά
-                </button>
-                <button
-                  className={`language-option ${language === "en" ? "active" : ""}`}
-                  onClick={() => handleLanguageChange("en")}
-                >
-                  <img src={flagGB} alt="GB" className="flag-icon" />
-                  English
-                </button>
-              </div>
-            )}
-          </div>
           {isLoggedIn && (
             <div
               className="profile-menu"
               onMouseEnter={() => setShowProfileDropdown(true)}
               onMouseLeave={() => setShowProfileDropdown(false)}
             >
-              <button
-                type="button"
-                className="profile-btn"
-                aria-label="Μενού προφίλ"
-                onClick={() => setShowProfileDropdown((v) => !v)}
-              >
+              <button className="profile-btn">
                 <FaUserCircle />
               </button>
 
@@ -158,6 +118,40 @@ export default function Menu() {
               )}
             </div>
           )}
+          <div className="language-selector">
+            <button
+              type="button"
+              className="language-button"
+              onClick={() => setShowLanguageDropdown((v) => !v)}
+              aria-label="Επιλογή γλώσσας"
+            >
+              <span className="current-language">
+                <img
+                  src={language === "el" ? flagGR : flagGB}
+                  alt="language flag"
+                  className="flag-icon"
+                />
+              </span>
+            </button>
+            {showLanguageDropdown && (
+              <div className="language-dropdown">
+                <button
+                  className={`language-option ${language === "el" ? "active" : ""}`}
+                  onClick={() => handleLanguageChange("el")}
+                >
+                  <img src={flagGR} alt="GR" className="flag-icon" />
+                  Ελληνικά
+                </button>
+                <button
+                  className={`language-option ${language === "en" ? "active" : ""}`}
+                  onClick={() => handleLanguageChange("en")}
+                >
+                  <img src={flagGB} alt="GB" className="flag-icon" />
+                  English
+                </button>
+              </div>
+            )}
+          </div>
         </nav>
       </div>
     </header>

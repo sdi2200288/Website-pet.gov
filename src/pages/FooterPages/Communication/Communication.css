@@ -1,0 +1,70 @@
+.communication-page {
+  width: 100%;
+}
+.communication-hero {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 90px);  
+  margin-top: 90px;           
+  overflow: hidden;
+}
+
+.communication-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.communication-card {
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: #ffffff;
+  padding: 16px 20px;
+  border-radius: 12px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.communication-card.left {
+  left: 40px;
+}
+
+.communication-card.right {
+  right: 40px;
+}
+
+.communication-title {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.communication-value {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .communication-hero {
+    height: auto;
+    margin-top: 90px;
+    padding: 14px 0 24px;
+  }
+
+  .communication-image {
+    height: 320px;
+  }
+
+  .communication-card {
+    position: static;
+    margin: 12px auto 0;
+    max-width: 92%;
+    justify-content: center;
+  }
+}

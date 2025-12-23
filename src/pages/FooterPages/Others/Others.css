@@ -1,0 +1,47 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.page-frame {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.page-breadcrumb {
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.page-breadcrumb a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.page-breadcrumb span {
+  color: #666;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.page-content {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #333;
+}
+
+.page-content p {
+  margin-bottom: 16px;
+}
