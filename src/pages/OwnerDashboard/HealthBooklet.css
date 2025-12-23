@@ -1,9 +1,15 @@
+/* ===============================
+   GENERAL
+================================ */
 .health-booklet {
   padding: 40px;
   text-align: center;
+  background: #fafafa;
 }
 
-/* ===== STEPPER ===== */
+/* ===============================
+   STEPPER
+================================ */
 .stepper {
   display: flex;
   align-items: flex-start;
@@ -27,7 +33,6 @@
   border: 2px solid #000;
   font-size: 28px;
   font-weight: bold;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,7 +48,6 @@
   text-align: center;
 }
 
-/* Γραμμή */
 .line {
   width: 200px;
   height: 2px;
@@ -51,104 +55,189 @@
   margin-top: 35px;
 }
 
-/* STEP 1 text */
-.step-description {
-  max-width: 600px;
-  margin: 0 auto 30px;
-  font-size: 14px;
-}
-
 .step.clickable {
   cursor: pointer;
-}
-
-.step.clickable .circle {
-  border-color: #2f6fed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .step.clickable:hover .circle {
   background: #e6eeff;
 }
 
-/* Button */
+
+/* ===============================
+   BUTTONS
+================================ */
 .next-btn {
+  margin-top: 25px;
   padding: 12px 40px;
   background: #2f6fed;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
 }
 
-.pet-card {
-  display: flex;
-  align-items: center;
+.next-btn:hover {
+  background: #244fc4;
+}
+
+/* ===============================
+   PET SELECTION
+================================ */
+.pets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  background: #f9f7f2;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  max-width: 400px;
-  margin: 20px auto;
+  margin: 20px 0;
 }
 
-.pet-info h4 {
-  margin: 0 0 8px 0;
-  font-size: 20px;
+/* ===============================
+   BOOKLET LAYOUT
+================================ */
+.booklet-layout {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.pet-info p {
-  margin: 4px 0;
+/* ===============================
+   HEADER (PHOTO + INFO)
+================================ */
+.booklet-header {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* ===============================
+   PHOTO
+================================ */
+.pet-photo {
+  background: #fff;
+  border-radius: 14px;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+.pet-photo img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* ===============================
+   TOP INFO BOXES
+================================ */
+.booklet-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ===============================
+   INFO BOX (COMMON)
+================================ */
+.info-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.info-box h4 {
+  margin-bottom: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.info-box p {
+  margin: 6px 0;
   font-size: 14px;
-}
-
-.booklet-card {
-  background: #fdfbf6;
-  border: 2px solid #d4c5b2;
-  border-radius: 12px;
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.booklet-row {
   display: flex;
   justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #e0d8c5;
 }
 
-.booklet-label {
-  font-weight: bold;
+.info-box p span {
+  font-weight: 600;
+  color: #444;
+}
+
+/* ===============================
+   BOTTOM SECTION
+================================ */
+.booklet-bottom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.info-box.large {
+  min-height: 180px;
+}
+
+/* ===============================
+   MEDICAL ACTIONS
+================================ */
+.medical-item {
+  background: #f6f6f6;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid #2f6fed;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.medical-text {
+  flex: 1;
   color: #333;
 }
 
-.booklet-value {
-  color: #555;
-}
-
-.medical-actions-box {
-  margin-top: 15px;
-  padding: 10px;
-  border: 1px solid #d4c5b2;
-  border-radius: 8px;
+/* Προβολή button */
+.medical-btn {
+  padding: 6px 14px;
+  font-size: 13px;
   background: #fff;
+  border: 1px solid #2f6fed;
+  color: #2f6fed;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.medical-actions-box h4 {
-  margin: 0 0 8px 0;
-  font-size: 16px;
+.medical-btn:hover {
+  background: #2f6fed;
+  color: #fff;
 }
 
-.medical-actions-box ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.medical-actions-box li {
-  margin-bottom: 4px;
+/* ===============================
+   EMPTY STATE
+================================ */
+.empty {
+  color: #999;
+  font-style: italic;
   font-size: 14px;
 }
 
+/* ===============================
+   WHITE BOOKLET CONTAINER
+================================ */
+.booklet-container {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 30px 30px 40px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
