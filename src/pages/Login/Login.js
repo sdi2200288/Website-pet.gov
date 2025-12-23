@@ -11,10 +11,8 @@ export default function LoginTabs({ onLogin }) {
   function onSubmit(e) {
     e.preventDefault();
 
-    // Εδώ κανονικά θα καλέσεις API κλπ.
     console.log("login:", { role, email, password });
 
-    // Αν όλα πάνε καλά:
     if (onLogin) {
       onLogin();
     }
@@ -26,7 +24,6 @@ export default function LoginTabs({ onLogin }) {
   }
 
   const title = role === "owner" ? "Σύνδεση Ιδιοκτήτη" : "Σύνδεση Κτηνιάτρου";
-
 
   return (
     <div className="loginPage">
