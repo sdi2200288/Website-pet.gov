@@ -7,23 +7,22 @@ import flagGB from "../../images/flags/england.png";
 
 import "./Menu.css";
 
-export default function Menu() {
+export default function Menu({ isLoggedIn, onLogout }) {
   // Προσθήκη state variables
   const [language, setLanguage] = useState("el");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
-  const isLoggedIn = false;
-  // Συνάρτηση για αλλαγή γλώσσας
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
     setShowLanguageDropdown(false);
   };
-
   const handleLogout = () => {
     setShowProfileDropdown(false);
+    if (onLogout) onLogout();
   };
+
 
 
   return (

@@ -1,18 +1,32 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import "./Login.css";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
-export default function LoginTabs() {
-  const [role, setRole] = useState("owner"); 
+
+export default function LoginTabs({ onLogin }) {
+  const [role, setRole] = useState("owner");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   function onSubmit(e) {
     e.preventDefault();
+
+    // Εδώ κανονικά θα καλέσεις API κλπ.
     console.log("login:", { role, email, password });
+
+    // Αν όλα πάνε καλά:
+    if (onLogin) {
+      onLogin();
+    }
+    if (role === "owner") {
+      navigate("/owner-dashboard");
+    } else if (role === "vet") {
+      navigate("/vet-dashboard");
+    }
   }
 
   const title = role === "owner" ? "Σύνδεση Ιδιοκτήτη" : "Σύνδεση Κτηνιάτρου";
+
 
   return (
     <div className="loginPage">

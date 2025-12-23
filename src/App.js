@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import VetDashboard from "./pages/VetDashboard/VetDashboard";
@@ -20,9 +20,18 @@ import Communication from "./pages/FooterPages/Communication/Communication";
 
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
   return (
     <BrowserRouter>
-      <Menu />
+      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} />
 
       <main className="main-content">
         <Routes>
@@ -39,7 +48,7 @@ function App() {
           <Route path="/all-lost-pets" element={<AllLostPets />} />
           <Route path="/adoption" element={<AdoptionPage />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register" element={<Register />} />
 
           <Route path="/Communication" element={<Communication />} />
