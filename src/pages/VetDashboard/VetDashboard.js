@@ -31,7 +31,7 @@ export default function VetDashboard() {
 
           <ul className="sidebar-menu">
             <li>
-              <Link to="/owner/profile">
+              <Link to="/vet/profile">
                 <FaUser className="menu-icon" /> <span>Το προφίλ μου</span>
               </Link>
             </li>
@@ -88,17 +88,17 @@ export default function VetDashboard() {
             </li>
 
             <li>
-              <Link to="/owner/bookings">
+              <Link to="/vet/bookings">
                 <FaCalendarAlt className="menu-icon" /> <span>Ενημέρωση Διαθεσιμότητας</span>
               </Link>
             </li>
             <li>
-              <Link to="/owner/history-bookings">
+              <Link to="/vet/history-bookings">
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
               </Link>
             </li>
             <li>
-              <Link to="/owner/future-bookings">
+              <Link to="/vet/future-bookings">
                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
               </Link>
             </li>
