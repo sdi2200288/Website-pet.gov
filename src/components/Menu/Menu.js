@@ -47,7 +47,7 @@ export default function Menu({ isLoggedIn, onLogout }) {
                 <li>Προβολή ηλεκτρονικού βιβλιαρίου</li>
                 <li>Κλείσιμο ραντεβού</li>
                 <li>Ιστορικό ραντεβού</li>
-                <li>Μετακίνηση ραντεβού</li>
+                <li>Μελλοντικά ραντεβού</li>
               </ul>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import Footer from "../../components/Footer/Footer";
 import ArxikiVet from "../../images/ArxikiVet.png";
 import "./VetDashboard.css";
@@ -18,7 +18,7 @@ export default function VetDashboard() {
   const [openAnimalRegister, setOpenAnimalRegister] = useState(false);
   return (
     <div className="VetDashboard">
-      
+
       <nav className="breadcrumb">
         <Link to="/">Αρχική</Link>
         <span className="separator"> &gt; </span>
@@ -28,7 +28,7 @@ export default function VetDashboard() {
       <div className="dashboard-layout">
         <aside className="sidebar">
           <h3>Επιλογές Κτηνίατρου</h3>
-      
+
           <ul className="sidebar-menu">
             <li>
               <Link to="/owner/profile">
@@ -61,7 +61,12 @@ export default function VetDashboard() {
                 </ul>
               )}
             </li>
-             <li>
+            <li>
+              <Link to="/vet/history-Statements">
+                <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώεων</span>
+              </Link>
+            </li>
+            <li>
               <button className="menu-button" onClick={() => setOpenAnimalRegister(!openAnimalRegister)}>
                 <FaFileAlt className="menu-icon" />
                 <span>Καταγραφή Ζώου</span>
@@ -99,8 +104,8 @@ export default function VetDashboard() {
             </li>
           </ul>
         </aside>
+      </div>
     </div>
-  </div>
 
   );
 }
