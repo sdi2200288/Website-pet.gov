@@ -7,11 +7,9 @@ import flagGB from "../../images/flags/england.png";
 
 import "./Menu.css";
 
-export default function Menu({ isLoggedIn, onLogout }) {
-  // Προσθήκη state variables
+export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu }) {
   const [language, setLanguage] = useState("el");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(1);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
   const handleLanguageChange = (lang) => {
@@ -77,7 +75,7 @@ export default function Menu({ isLoggedIn, onLogout }) {
 
           {!isLoggedIn && (
             <div className="menu-actions">
-              <Link to="/register" className="menu-btn menu-btn--register">
+              <Link to="/register/owner" className="menu-btn menu-btn--register">
                 Εγγραφή
               </Link>
               <Link to="/login" className="menu-btn menu-btn--login">

@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../../components/Footer/Footer";
 import ProsYiouesia from "../../images/ProsYiouesia.png";
 import "./AdoptionPage.css";
 import { Link } from "react-router-dom";

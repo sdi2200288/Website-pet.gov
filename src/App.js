@@ -1,26 +1,31 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Menu from "./components/Menu/Menu";
+import Footer from "./components/Footer/Footer";
+import ScrollTop from "./components/ScrollTop";
 
+import HomePage from "./pages/HomePage/HomePage";
 import VetDashboard from "./pages/VetDashboard/VetDashboard";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import Profile from "./pages/OwnerDashboard/Profile";
 import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
-import Menu from "./components/Menu/Menu";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
-import HomePage from "./pages/HomePage/HomePage";
-import Footer from "./components/Footer/Footer";
+import Login from "./pages/Login-Register/Login";
+import Register from "./pages/Login-Register/Register";
+
+
 import Cookies from "./pages/FooterPages/Others/Cookies";
 import AboutUs from "./pages/FooterPages/Others/AboutUs";
 import Privacy from "./pages/FooterPages/Others/Privacy";
 import TermsAndConditions from "./pages/FooterPages/Others/TermsAndConditions";
 import Communication from "./pages/FooterPages/Communication/Communication";
-
+import FAQOwner from "./pages/FooterPages/FAQ/FAQOwner";
+import FAQVet from "./pages/FooterPages/FAQ/FAQVet";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(1);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -31,7 +36,9 @@ function App() {
   };
   return (
     <BrowserRouter>
-      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} />
+      <ScrollTop />
+
+      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
 
       <main className="main-content">
         <Routes>
@@ -49,17 +56,22 @@ function App() {
           <Route path="/adoption" element={<AdoptionPage />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register/owner" element={<Register role="owner" />} />
+          <Route path="/register/vet" element={<Register role="vet" />} />
+
 
           <Route path="/Communication" element={<Communication />} />
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/privacy-policy" element={<Privacy />} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/FAQOwner" element={<FAQOwner />} />
+          <Route path="/FAQVet" element={<FAQVet />} />
+
         </Routes>
       </main>
 
-      <Footer />
+      <Footer setActiveMenu={setActiveMenu} />
     </BrowserRouter>
   );
 }

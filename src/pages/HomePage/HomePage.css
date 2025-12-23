@@ -1,9 +1,11 @@
-.Home { width: 100%; }
+.Home {
+  width: 100%;
+}
 
 .hero-section {
   width: 100%;
   position: relative;
-  padding-top: 90px; 
+  padding-top: 90px;
 }
 
 .hero-image-container {
@@ -13,81 +15,82 @@
   overflow: hidden;
 }
 
-.main-image { width: 100%; height: 100%; object-fit: cover; }
+.main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-.hero-card{
-  position:absolute;
-  top:18px;
-  left:18px;
+.hero-card {
+  position: absolute;
+  top: 18px;
+  left: 18px;
 
-  width: 420px;                
+  width: 420px;
   max-width: calc(100% - 36px);
 
-  background: rgba(255,255,255,0.35);   
+  background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(4px);
 
   padding: 12px 14px;
   border-radius: 8px;
 
-  border: 1px solid rgba(255,255,255,0.25);
-  box-shadow: none;            
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: none;
 }
 
-.hero-card h1{
+.hero-card h1 {
   font-size: 1.05rem;
   margin: 0 0 6px 0;
   font-weight: 800;
   color: #2c3e50;
 }
 
-.hero-desc, .hero-instr{
+.hero-desc,
+.hero-instr {
   font-size: 0.82rem;
   line-height: 1.25;
-  color:#2e2e2e;
+  color: #2e2e2e;
   margin: 0 0 6px 0;
 }
 
-.hero-search{
+.hero-search {
   position: relative;
-  margin-top: 6px;
-  display:flex;
-  align-items:center;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
 }
 
-.hero-input{
-  width: 100%;
+.hero-input {
+  flex: 1;
   height: 32px;
-  padding: 0 12px 0 34px;    
+  padding: 0 12px;
   border-radius: 999px;
-  border: 1px solid rgba(0,0,0,0.18);
+  border: 1px solid rgba(0, 0, 0, 0.18);
   font-size: 0.82rem;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   outline: none;
 }
 
-.hero-button{
-  position:absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: 18px;
-  height: 18px;
-  padding: 0;
-  border: none;
-  background: transparent;
+.hero-button {
+  width: 36px;
+  height: 32px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-
-  font-size: 14px;
-  line-height: 18px;
-  color:#2c3e50;
 }
 
-.hero-button span{
-  display:none;
+.hero-button:hover {
+  background: rgba(255, 255, 255, 1);
 }
 
-.lost-pet-card { padding: 35px; }
+.lost-pet-card {
+  padding: 35px;
+}
 
 
 .info-sections {
@@ -104,19 +107,28 @@
   margin: 26px 0;
 }
 
-.info-block.reverse { flex-direction: row-reverse; }
+.info-block.reverse {
+  flex-direction: row-reverse;
+}
 
-.info-image-wrap { width: 300px; flex-shrink: 0; display: flex; justify-content: center; }
+.info-image-wrap {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+}
 
 .info-image {
   width: 230px;
   height: 230px;
   object-fit: cover;
   border-radius: 14px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
 }
 
-.info-text { flex: 1; }
+.info-text {
+  flex: 1;
+}
 
 .info-text h3 {
   font-size: 0.95rem;
@@ -132,7 +144,9 @@
   line-height: 1.45;
 }
 
-.info-text li { margin-bottom: 6px; }
+.info-text li {
+  margin-bottom: 6px;
+}
 
 /* STATS (4 boxes) */
 .stats-section {
@@ -162,11 +176,11 @@
 
 .stat-box {
   background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   padding: 16px 14px;
   min-height: 120px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 
 }
 
@@ -203,7 +217,7 @@
 }
 
 .vet-owner-button .arrow {
-  color: white; 
+  color: white;
   font-size: 1.4em;
   font-weight: 900;
   transition: transform 0.3s ease;
@@ -253,13 +267,13 @@
   background: rgb(245, 245, 245);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .lost-pet-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .lost-pet-image {
@@ -287,7 +301,8 @@
   margin: 0 0 10px 0;
 }
 
-.pet-location, .pet-date {
+.pet-location,
+.pet-date {
   font-size: 0.85rem;
   color: #555;
   margin: 6px 0;
@@ -334,17 +349,36 @@
   transition: background 0.3s;
 }
 
-.see-all-lost-pets-btn:hover { background: #1a2632; }
+.see-all-lost-pets-btn:hover {
+  background: #1a2632;
+}
+
 @media (max-width: 1024px) {
-  .info-block, .info-block.reverse {
+
+  .info-block,
+  .info-block.reverse {
     flex-direction: column;
     text-align: left;
   }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 520px) {
-  .hero-image-container { height: 420px; }
-  .hero-card { position: relative; top: 0; left: 0; margin: -40px auto 0; }
-  .stats-grid { grid-template-columns: 1fr; }
+  .hero-image-container {
+    height: 420px;
+  }
+
+  .hero-card {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: -40px auto 0;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

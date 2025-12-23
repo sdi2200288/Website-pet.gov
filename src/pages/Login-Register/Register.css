@@ -1,0 +1,281 @@
+.registerSubtitle {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.loginCard {
+  width: 1100px;
+  max-width: calc(100% - 40px);
+  margin-top: 120px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.registerForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+  row-gap: 14px;
+  margin-top: 24px;
+}
+
+.registerFieldFull {
+  grid-column: 1 / -1;
+}
+
+.loginLabel {
+  display: block;
+  font-size: 12px;
+  color: #111827;
+}
+
+.loginInput,
+.loginSelect {
+  margin-top: 4px;
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  padding: 10px 16px;
+  font-size: 14px;
+  outline: none;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+.loginInput:focus,
+.loginSelect:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 1px #111827;
+}
+
+.loginSelect {
+  appearance: none;
+}
+
+.registerTerms {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.registerActions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.registerActions .loginButton {
+  flex: 1;
+  max-width: none;
+}
+
+.registerSecondaryButton {
+  flex: 1;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+.registerSecondaryButton:hover {
+  background-color: #d1d5db;
+}
+
+.loginFooter {
+  margin-top: 16px;
+}
+
+.loginFooterLine {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: #2c3e50;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: none;
+}
+
+.termsModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.termsModal {
+  background: #ffffff;
+  width: min(900px, 95vw);
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  padding: 24px 24px 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.termsModalBody {
+  margin-top: 8px;
+  padding-right: 8px;
+  max-height: calc(90vh - 70px);
+  overflow-y: auto;
+}
+
+.termsModalClose {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 6px 0 6px;
+  text-align: center;
+}
+
+.sectionHint {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.specializationsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+  padding: 8px 0 2px;
+}
+
+.specializationItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.vetServicesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 40px;
+  max-width: 900px;
+}
+
+
+.vetServiceCategoryTitle {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.vetServiceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+
+.vetServiceLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.vetServicePriceWrapper {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  padding: 2px 8px;
+  min-width: 86px;
+  justify-content: flex-end;
+  background: #f9fafb;
+}
+
+.vetServicePriceInput {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 54px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.vetServicePriceInput:disabled {
+  color: #9ca3af;
+}
+
+.vetServicePriceCurrency {
+  margin-left: 4px;
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.vvetScheduleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+}
+
+.vetScheduleRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.vetScheduleDayLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  min-width: 110px;
+}
+
+.vetScheduleTimes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.vetScheduleTimes input[type="time"] {
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  padding: 4px 8px;
+  font-size: 12px;
+  outline: none;
+}
+
+.vetScheduleTimes input[type="time"]:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+}

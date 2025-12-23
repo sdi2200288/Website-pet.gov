@@ -1,12 +1,9 @@
 import React from "react";
 import arxikieikona from "../../images/Arxiki_eikona.png";
-import lostPet1 from "../../images/lostPet1.png";
-import lostPet2 from "../../images/lostPet2.png";
-import lostPet3 from "../../images/lostPet3.png";
 import PetDetails from "../../components/Pet/Pet";
 import owner from "../../images/owner.png";
 import vet from "../../images/vet.png";
-import Footer from "../../components/Footer/Footer";
+import { FiSearch } from "react-icons/fi";
 import "./HomePage.css";
 import { Link } from "react-router-dom";
 
@@ -34,9 +31,8 @@ export default function Homepage() {
                 className="hero-input"
               />
               <button className="hero-button" aria-label="Αναζήτηση">
-                🔍<span>Αναζήτηση</span>
+                <FiSearch size={28} />
               </button>
-
             </div>
           </div>
         </div>

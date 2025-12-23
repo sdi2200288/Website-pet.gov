@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Footer from "../../components/Footer/Footer";
-import ArxikiOwner from "../../images/ArxikiOwner.png";
 import "./OwnerDashboard.css";
 import { Link, Outlet } from "react-router-dom";
 import {
