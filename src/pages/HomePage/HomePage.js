@@ -105,6 +105,29 @@ export default function Homepage() {
             </Link>
           </div>
         </div>
+
+      </section>
+      <section className="lost-pets-section">
+        <div className="lost-pets-wrap">
+          <p className="lost-pets-title">Οι καλύτεροι κτηνιατροί μας</p>
+
+          <div className="lost-pets-grid">
+            <div className="lost-pet-card">
+              {"Κτηνίατρος "}
+            </div>
+            <div className="lost-pet-card">
+              {"Κτηνίατρος "}
+            </div>
+            <div className="lost-pet-card">
+              {"Κτηνίατρος "}
+            </div>
+          </div>
+          <div className="lost-pets-cta">
+            <Link to="/" className="see-all-lost-pets-btn">
+              Δες όλους τους κτηνιάτρους μας
+            </Link>
+          </div>
+        </div>
       </section>
       <section className="stats-section">
         <div className="stats-wrap">

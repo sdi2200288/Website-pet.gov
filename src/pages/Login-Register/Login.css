@@ -81,18 +81,18 @@
 }
 
 .loginButton {
-  padding: 0;     
+  padding: 0;
   margin: 0;
-  width: 100%;                 
-  height: 44px;              
-  border-radius: 26px;      
+  width: 100%;
+  height: 44px;
+  border-radius: 26px;
   border: none;
   background: #2c3e50;
   color: #fff;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 
@@ -111,4 +111,26 @@
 
 .loginFooterLine a:hover {
   text-decoration: underline;
+}
+
+/* changecode.css */
+.loginPage--change {
+  background: #f3f4f6;
+}
+
+.changeCard {
+  width: 360px;
+  max-width: calc(100% - 40px);
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 28px 32px 22px;
+}
+
+.changeHint {
+  display: block;
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+  margin-bottom: 4px;
 }

@@ -14,9 +14,13 @@ import Found2 from "./pages/VetDashboard/Found2";
 import Loss2 from "./pages/VetDashboard/Loss2";
 import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
+import PetProfile from "./pages/AllLostPets/PetProfile";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
+
+
 import Login from "./pages/Login-Register/Login";
 import Register from "./pages/Login-Register/Register";
+import ChangeCode from "./pages/Login-Register/ChangeCode";
 
 
 import Cookies from "./pages/FooterPages/Others/Cookies";
@@ -62,11 +66,14 @@ function App() {
           </Route>
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />
+          <Route path="/PetProfile" element={<PetProfile />} />
           <Route path="/adoption" element={<AdoptionPage />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register/owner" element={<Register role="owner" />} />
           <Route path="/register/vet" element={<Register role="vet" />} />
+          <Route path="/changecode" element={<ChangeCode />} />
+
 
 
           <Route path="/Communication" element={<Communication />} />

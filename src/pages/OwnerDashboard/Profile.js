@@ -2,9 +2,7 @@ import React from "react";
 import "./Profile.css";
 import PetDetails from "../../components/Pet/Pet";
 import { FiSearch } from "react-icons/fi";
-
-
-
+import { Link } from "react-router-dom";
 export default function Profile() {
   return (
 
@@ -41,7 +39,7 @@ export default function Profile() {
 
         {/* Κουμπιά */}
         <div className="profile-actions">
-          <button className="secondary-btn">Αλλαγή κωδικού</button>
+          <button className="secondary-btn"> <Link to="/changecode"> Αλλαγή κωδικού</Link></button>
           <button className="primary-btn">Ενημέρωση στοιχείων</button>
         </div>
       </div>

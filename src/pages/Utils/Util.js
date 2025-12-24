@@ -1,3 +1,5 @@
+import petPhoto from "../../images/lostPet1.png";
+
 export const REGIONS = [
   "Αιτωλοακαρνανίας", "Αργολίδας", "Αρκαδίας", "Άρτας", "Αττικής", "Αχαΐας", "Βοιωτίας",
   "Γρεβενών", "Δράμας", "Δωδεκανήσου", "Έβρου", "Εύβοιας", "Ευρυτανίας", "Ζακύνθου",
@@ -305,3 +307,15 @@ export const faqsOwner = [
     ),
   },
 ];
+
+export const pet = {
+  name: "Barbie",
+  photoUrl: petPhoto,
+  microchip: "123456789",
+  species: "Σκύλος",
+  breed: "Golden Retriever",
+  gender: "Θηλυκό",
+  lastSeenDate: "12/10/2025",
+  region: "Αττική",
+  lastSeenAddress: "Σύνταγμα, Αθήνα",
+};

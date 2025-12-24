@@ -117,10 +117,12 @@ export default function AllLostPets() {
         <div className="lost-pets-grid">
           {pets.map((p) => (
             <div className="lost-pet-card" key={p}>
+              <Link to="/PetProfile">
               <PetDetails mode={0} />
+            </Link>
             </div>
           ))}
-        </div>
+    </div>
       </section >
     </div >
   );
