@@ -85,18 +85,6 @@ export default function AllLostPets() {
         <Link to="/">Αρχική /</Link>
         <span> Χαμένα Κατοικίδια</span>
       </nav>
-      <div className="top-search-wrapper">
-        <div className="hero-search">
-          <input
-            type="text"
-            placeholder="Εισάγετε αριθμό μικροτσίπ..."
-            className="hero-input"
-          />
-          <button className="hero-button" aria-label="Αναζήτηση">
-            <FiSearch size={18} />
-          </button>
-        </div>
-      </div>
 
       <section className="results-section">
         <div className="results-header">
@@ -112,7 +100,18 @@ export default function AllLostPets() {
             <h2>Αποτελέσματα ({pets.length})</h2>
           </div>
 
-          <div className="results-right" />
+          <div className="results-right">
+            <div className="hero-search">
+              <input
+                type="text"
+                placeholder="Εισάγετε αριθμό μικροτσίπ..."
+                className="hero-input"
+              />
+              <button className="hero-button" aria-label="Αναζήτηση">
+                <FiSearch size={18} />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="lost-pets-grid">
@@ -122,7 +121,7 @@ export default function AllLostPets() {
             </div>
           ))}
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }
