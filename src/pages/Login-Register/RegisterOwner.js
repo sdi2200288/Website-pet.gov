@@ -13,7 +13,7 @@ export default function RegisterOwner({ onOpenTerms }) {
 
   return (
     <form className="loginForm registerForm" onSubmit={handleSubmit}>
-=      <label className="loginLabel">
+      <label className="loginLabel">
         Όνομα: πχ ΜΑΡΙΑ με κεφαλαία
         <input type="text" className="loginInput" name="firstName" required />
       </label>

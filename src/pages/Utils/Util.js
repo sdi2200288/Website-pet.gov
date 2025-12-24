@@ -68,8 +68,48 @@ export const SERVICE_CATEGORIES = [
       { id: "xray", label: "Ακτινογραφίες" },
       { id: "ultrasound", label: "Υπερηχογράφημα" }
     ]
+  },
+  {
+    id: "surgery",
+    title: "Χειρουργικές Επεμβάσεις",
+    items: [
+      { id: "sterilization", label: "Στείρωση" },
+      { id: "cleansing", label: "Καθαρισμοί" },
+      { id: "tumor_removal", label: "Αφαίρεση όγκου" },
+      { id: "orthopedic", label: "Ορθοπεδικές επεμβάσεις" },
+      { id: "surgery_general", label: "Χειρουργείο" }
+    ]
+  },
+  {
+    id: "dentistry",
+    title: "Οδοντιατρική",
+    items: [
+      { id: "teeth_cleaning", label: "Καθαρισμός δοντιών" },
+      { id: "tooth_extraction", label: "Εξαγωγή δοντιού" },
+      { id: "gingivitis", label: "Θεραπεία ουλίτιδας" }
+    ]
+  },
+  {
+    id: "parasitological",
+    title: "Παρασιτολογικός Έλεγχος & Θεραπείες",
+    items: [
+      { id: "internal_deworming", label: "Εσωτερική αποπαρασίτωση" },
+      { id: "external_deworming", label: "Εξωτερική αποπαρασίτωση" },
+      { id: "heartworm_prevention", label: "Πρόληψη καρδιοσκώληκα" },
+      { id: "antiparasitic_treatment", label: "Αντιπαρασιτικές θεραπείες" }
+    ]
+  },
+  {
+    id: "dermatology",
+    title: "Δερματολογικές Υπηρεσίες",
+    items: [
+      { id: "skin_exam", label: "Εξέταση δέρματος" },
+      { id: "allergy_test", label: "Εξέταση αλλεργιών" },
+      { id: "skin_treatment", label: "Θεραπεία δερματικών λοιμώξεων" }
+    ]
   }
 ];
+
 
 export const faqsVet = [
   {
