@@ -309,7 +309,8 @@ export const faqsOwner = [
 ];
 
 export const pet = {
-  name: "Barbie",
+  name:
+   "Barbie",
   photoUrl: petPhoto,
   microchip: "123456789",
   species: "Σκύλος",
