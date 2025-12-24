@@ -2,7 +2,7 @@ import React from "react";
 import "./Pet.css";
 import petPhoto from "../../images/lostPet1.png";
 
-export default function PetDetails({ mode = 0 }) {
+export default function PetDetails({ mode = 0}) {
   const pet = {
     name: "Barbie",
     photoUrl: petPhoto,
@@ -18,7 +18,7 @@ export default function PetDetails({ mode = 0 }) {
 
   if (mode === 1) {
     return (
-      <div className="pet-card-x pet-card-profile">
+      <div className="pet-card-x pet-card-profile" >
         <div className="pet-title">{pet.name}</div>
 
         <div className="pet-img-wrap">
@@ -60,11 +60,10 @@ export default function PetDetails({ mode = 0 }) {
               <b>{pet.lastSeenDate}</b>
             </div>
           </>
-
         </div>
       </div>
     );
-  }
+   }
 
   return (
     <div className="pet-card-x pet-card-profile">

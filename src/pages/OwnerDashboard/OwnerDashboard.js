@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Footer from "../../components/Footer/Footer";
-import ArxikiOwner from "../../images/ArxikiOwner.png";
 import "./OwnerDashboard.css";
-import { Link ,Outlet} from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -16,7 +14,7 @@ import {
 export default function OwnerDashboard() {
   return (
     <div className="OwnerDashboard">
-      
+
       <nav className="breadcrumb">
         <Link to="/">Αρχική /</Link>
         <span>Dashboard Ιδιοκτήτη</span>
@@ -25,7 +23,7 @@ export default function OwnerDashboard() {
       <div className="dashboard-layout">
         <aside className="sidebar">
           <h3>Επιλογές Ιδιοκτήτη</h3>
-      
+
           <ul className="sidebar-menu">
             <li>
               <Link to="profile">
@@ -33,13 +31,18 @@ export default function OwnerDashboard() {
               </Link>
             </li>
             <li>
-              <Link to="/owner/statement-finding">
+              <Link to="Found">
                 <FaFileAlt className="menu-icon" /> <span>Δηλώσεις Εύρεσης</span>
               </Link>
             </li>
             <li>
-              <Link to="/owner/loss-declaration">
+              <Link to="Loss">
                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/owner/history-statement">
+                <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
               </Link>
             </li>
             <li>
@@ -64,11 +67,11 @@ export default function OwnerDashboard() {
             </li>
           </ul>
         </aside>
-      <main className="dashboard-content">
-        <Outlet />
-      </main>
+        <main className="dashboard-content">
+          <Outlet />
+        </main>
+      </div>
     </div>
-  </div>
 
   );
 }

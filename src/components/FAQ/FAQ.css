@@ -1,0 +1,9 @@
+.faq-triangle {
+    display: inline-block;
+    transition: transform 0.25s ease;
+    font-size: 12px;
+}
+
+.faq-triangle.open {
+    transform: rotate(180deg);
+}

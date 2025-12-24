@@ -1,7 +1,7 @@
-/* ===============================
+/* =============================== 
    GENERAL
 ================================ */
-.health-booklet {
+.found2 {
   padding: 40px;
   text-align: center;
   background: #fafafa;
@@ -39,11 +39,11 @@
   margin-bottom: 10px;
 }
 
-.step.active .circle {
+.step.active:not(.step-zero) .circle {
   background: #d4c5b2;
 }
 
-.step span {
+.step span, .step-title {
   font-size: 14px;
   text-align: center;
 }
@@ -66,14 +66,13 @@
   background: #e6eeff;
 }
 
-
 /* ===============================
    BUTTONS
 ================================ */
 .next-btn {
   margin-top: 25px;
   padding: 12px 40px;
-  background: #2f6fed;
+  background: #2f6fed; /* μπλε */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -82,7 +81,7 @@
 }
 
 .next-btn:hover {
-  background: #244fc4;
+  background: #244fc4; /* σκουρό μπλε στο hover */
 }
 
 /* ===============================
@@ -105,18 +104,15 @@
   cursor: pointer;
 }
 
-/* hover */
 .pet-card-wrapper:hover {
   transform: translateY(-4px);
 }
 
-/* selected state */
 .pet-card-wrapper.selected {
   border: 2px solid #2f6fed;
   box-shadow: 0 8px 20px rgba(47, 111, 237, 0.25);
   background: rgba(47, 111, 237, 0.04);
 }
-
 
 /* ===============================
    BOOKLET LAYOUT
@@ -229,7 +225,6 @@
   color: #333;
 }
 
-/* Προβολή button */
 .medical-btn {
   padding: 6px 14px;
   font-size: 13px;
@@ -263,4 +258,121 @@
   border-radius: 18px;
   padding: 30px 30px 40px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* ===============================
+   FORM
+================================ */
+.found-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.found-form h3 {
+  margin-bottom: 20px;
+}
+
+.found-form label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.found-form input,
+.found-form select,
+.found-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* ===============================
+   FORM BUTTONS (Step 2)
+================================ */
+.found-form .form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.found-form .form-buttons button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.found-form .form-buttons button:first-child {
+  background: #ddd; /* Ακύρωση */
+  color: #000;
+}
+
+.found-form .form-buttons button:first-child:hover {
+  background: #bbb; /* πιο σκούρο γκρι στο hover */
+}
+
+.found-form .form-buttons button:last-child {
+  background: #2f6fed; /* Συνέχεια μπλε */
+  color: #fff;
+}
+
+.found-form .form-buttons button:last-child:hover {
+  background: #244fc4; /* πιο σκουρό μπλε στο hover */
+}
+
+/* ===============================
+   FORM BUTTONS (Step 3)
+================================ */
+.booklet-container .form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.booklet-container .form-buttons button {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none; 
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.booklet-container .form-buttons button:first-child {
+  background: #ddd; /* Ακύρωση */
+  color: #000;
+}
+
+.booklet-container .form-buttons button:first-child:hover {
+  background: #bbb; /* πιο σκούρο γκρι */
+}
+
+.booklet-container .form-buttons button:nth-child(2) {
+  background: #2563EB; /* Προσωρινή Αποθήκευση */
+  color: #fff;
+}
+
+.booklet-container .form-buttons button:nth-child(2):hover {
+  background: #1d4ed8; /* πιο σκουρό μπλε */
+}
+
+.booklet-container .form-buttons button:last-child {
+  background: #16A34A; /* Οριστική Υποβολή */
+  color: #fff;
+}
+
+.booklet-container .form-buttons button:last-child:hover {
+  background: #15803d; /* πιο σκουρό πράσινο */
 }
