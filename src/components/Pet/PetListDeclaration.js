@@ -1,0 +1,30 @@
+import "./PetDeclaration.css";
+import React from "react";
+import PetDeclaration from "./PetDeclaration";
+
+export default function PetDeclarationsList({ type, declarations }) {
+  return (
+    <div className="petTabPanel">
+      <div className="petDeclarationsHeader">
+        <div className="petDeclarationsSort">
+          <span>Ταξινόμηση:</span>
+          <select>
+            <option>Πρόσφατες</option>
+            <option>Παλαιότερες</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div className="petDeclarationsList">
+        {declarations.map((item) => (
+          <PetDeclaration key={item.id} item={item} type={type} />
+        ))}
+      </div>
+
+      <div className="petDeclarationsMore">
+        <button className="petButtonSecondary">Περισσότερα</button>
+      </div>
+    </div>
+  );
+}

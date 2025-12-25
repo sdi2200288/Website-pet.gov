@@ -1,0 +1,199 @@
+
+.petProfilePage {
+  padding: 90px 40px 30px;
+  background: #f3f4f6;
+}
+
+
+.petBreadcrumb {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.petBreadcrumb a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.petBreadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.petBreadcrumb span {
+  color: #666;
+}
+
+
+.petProfileCard {
+  display: flex;
+  gap: 24px;
+  background: transparent;
+}
+
+.petProfileLeft {
+  flex: 0 0 320px;
+}
+
+.petProfilePhoto {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.petProfileRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  padding: 24px 28px;
+  gap: 24px;
+}
+
+
+.petProfileGrid.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.petProfileColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.petInfoRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.petInfoRow .label {
+  color: #666;
+}
+
+.petInfoRow .value {
+  font-weight: 500;
+}
+
+
+.petMissingAlert {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fff3f3;
+  border-left: 4px solid #e53935;
+  border-radius: 8px;
+}
+
+.petMissingTitle {
+  font-weight: 600;
+  color: #e53935;
+  margin-bottom: 12px;
+}
+
+.petMissingRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.petTabsWrapper {
+  margin-top: 24px;
+}
+
+.petTabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.petTab {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: none;
+  background: #ededed;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.petTab:hover {
+  background: #eaeaea;
+}
+
+.petTab.active {
+  background: #cfcfcf;
+  font-weight: 600;
+}
+
+.petTabPanel {
+  margin-top: 24px;
+}
+
+
+.booklet-layout {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.booklet-bottom {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.empty {
+  color: #999;
+  font-style: italic;
+  font-size: 14px;
+}
+
+
+.bookletPrintCenter {
+  display: flex;
+  justify-content: center; 
+  margin-top: 24px;
+}
+
+.next-btn {
+  width: 120px;        
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #2f6fed;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;     
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.next-btn:hover {
+  background: #244fc4;
+}
+
+@media (max-width: 900px) {
+  .petProfileCard {
+    flex-direction: column;
+  }
+
+  .booklet-bottom {
+    grid-template-columns: 1fr;
+  }
+}

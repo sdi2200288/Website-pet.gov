@@ -7,7 +7,7 @@ import flagGB from "../../images/flags/england.png";
 
 import "./Menu.css";
 
-export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu }) {
+export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, userRole }) {
   const [language, setLanguage] = useState("el");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -20,7 +20,7 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu }
     setShowProfileDropdown(false);
     if (onLogout) onLogout();
   };
-
+  const profilePath = userRole === "owner" ? "/ProfileOwner" : "/ProfileVet";
 
 
   return (
@@ -90,14 +90,17 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu }
               onMouseEnter={() => setShowProfileDropdown(true)}
               onMouseLeave={() => setShowProfileDropdown(false)}
             >
-              <button className="profile-btn">
+              <Link
+                to={profilePath}
+                className="profile-btn"
+                onClick={() => setShowProfileDropdown(false)} >
                 <FaUserCircle />
-              </button>
+              </Link >
 
               {showProfileDropdown && (
                 <div className="profile-dropdown">
                   <Link
-                    to="/profile"
+                    to={profilePath}
                     className="profile-item"
                     onClick={() => setShowProfileDropdown(false)}
                   >

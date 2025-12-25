@@ -26,11 +26,6 @@ export default function OwnerDashboard() {
 
           <ul className="sidebar-menu">
             <li>
-              <Link to="profile">
-                <FaUser className="menu-icon" /> <span>Το προφίλ μου</span>
-              </Link>
-            </li>
-            <li>
               <Link to="Found">
                 <FaFileAlt className="menu-icon" /> <span>Δηλώσεις Εύρεσης</span>
               </Link>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import XamenaKatoikidia from "../../images/XamenaKatoikidia.png";
 import PetDetails from "../../components/Pet/Pet";
-import { REGIONS, dogPopular, catPopular } from "../Utils/Util";
+import { SPECIES, REGIONS, dogPopular, catPopular } from "../Utils/Util";
 
 
 export default function AllLostPets() {
@@ -45,8 +45,9 @@ export default function AllLostPets() {
               <label>Είδος</label>
               <select value={species} onChange={handleSpeciesChange}>
                 <option value="">Όλα</option>
-                <option value="Σκύλος">Σκύλος</option>
-                <option value="Γάτα">Γάτα</option>
+                {SPECIES.map((r) => (
+                  <option key={r}>{r}</option>
+                ))}
               </select>
             </div>
             <div className="filter-field">
@@ -118,11 +119,11 @@ export default function AllLostPets() {
           {pets.map((p) => (
             <div className="lost-pet-card" key={p}>
               <Link to="/PetProfile">
-              <PetDetails mode={0} />
-            </Link>
+                <PetDetails mode={0} />
+              </Link>
             </div>
           ))}
-    </div>
+        </div>
       </section >
     </div >
   );

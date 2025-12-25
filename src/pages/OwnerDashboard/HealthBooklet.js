@@ -2,26 +2,12 @@ import React, { useState } from "react";
 import PetDetails from "../../components/Pet/Pet";
 import dog from "../../images/lostPet1.png";
 import "./HealthBooklet.css";
+import { pets } from "../Utils/Util"
+
 
 export default function HealthBooklet() {
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = βιβλιάριο
-  const [selectedPetId, setSelectedPetId] = useState(null);
-
-  const pets = [
-    {
-      id: 1,
-      name: "Barbie",
-      photoUrl: dog,
-      microchip: "123456789",
-      species: "Σκύλος",
-      breed: "Golden Retriever",
-      gender: "Θηλυκό",
-      lastSeenDate: "12/10/2025",
-      region: "Αττική",
-      lastSeenAddress: "Σύνταγμα, Αθήνα",
-    },
-  ];
-
+  const [selectedPetId, setSelectedPetId] = useState(pets?.[0]?.id ?? null);
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
   return (
@@ -75,14 +61,13 @@ export default function HealthBooklet() {
 
           <h3>Επιλέξτε κατοικίδιο</h3>
 
-          <div className="pets-grid">
+          <div className="pet-grid">
             {pets.map((pet) => (
               <div
                 key={pet.id}
                 onClick={() => setSelectedPetId(pet.id)}
-                className={`pet-card-wrapper ${
-                  selectedPetId === pet.id ? "selected" : ""
-                }`}
+                className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : ""
+                  }`}
               >
                 <PetDetails
                   pet={pet}

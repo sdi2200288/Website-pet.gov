@@ -28,12 +28,6 @@ export default function VetDashboard() {
 
           <ul className="sidebar-menu">
             <li>
-              <Link to="/vet/profile">
-                <FaUser className="menu-icon" /> <span>Το προφίλ μου</span>
-              </Link>
-            </li>
-
-            <li>
               <button
                 className="menu-button"
                 onClick={() => setOpenDeclarations(!openDeclarations)}

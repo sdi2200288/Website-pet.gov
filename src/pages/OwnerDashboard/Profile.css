@@ -1,6 +1,7 @@
 .owner-profile {
   flex: 1;
   padding: 32px;
+  margin-top: 80px;
 }
 
 /* Κεντρικό card */
@@ -11,9 +12,9 @@
   box-shadow: 0 6px 18px rgba(0,0,0,0.08);
   margin-bottom: 40px;
   width: 100%;
-  max-width: 1400px; /* ή ό,τι θέλεις */
+  max-width: 1400px;
   padding: 40px;
-  margin: 0 auto 40px; /* για κεντράρισμα */
+  margin: 0 auto 40px; 
 }
 
 /* Δύο στήλες */

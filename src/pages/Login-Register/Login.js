@@ -14,7 +14,7 @@ export default function LoginTabs({ onLogin }) {
     console.log("login:", { role, email, password });
 
     if (onLogin) {
-      onLogin();
+      onLogin(role);
     }
     if (role === "owner") {
       navigate("/owner-dashboard");
