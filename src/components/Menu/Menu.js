@@ -93,7 +93,10 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
               <Link
                 to={profilePath}
                 className="profile-btn"
-                onClick={() => setShowProfileDropdown(false)} >
+                onClick={() => {
+                  setShowProfileDropdown(false);
+                  setActiveMenu(5);
+                }}>
                 <FaUserCircle />
               </Link >
 
@@ -102,7 +105,11 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
                   <Link
                     to={profilePath}
                     className="profile-item"
-                    onClick={() => setShowProfileDropdown(false)}
+                    onClick={() => {
+                      setShowProfileDropdown(false);
+                      setActiveMenu(5);
+                    }
+                    }
                   >
                     Το προφίλ μου
                   </Link>
