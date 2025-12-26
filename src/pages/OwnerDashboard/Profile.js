@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Profile.css";
+import { useNavigate } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
 import { FiSearch } from "react-icons/fi";
-
-
+import { Link } from "react-router-dom";
+import { SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
 
 export default function Profile() {
+  const navigate = useNavigate();
+
+  const [selectedSpecies, setSelectedSpecies] = useState("");
+
+  const getBreeds = () => {
+    if (!selectedSpecies) {
+      return [...dogPopular, ...catPopular];
+    }
+    if (selectedSpecies === "Σκύλος") {
+      return dogPopular;
+    }
+    if (selectedSpecies === "Γάτα") {
+      return catPopular;
+    }
+    return [];
+  };
+  const breeds = getBreeds();
+
   return (
 
     <div className="owner-profile">
@@ -19,11 +38,12 @@ export default function Profile() {
           <div className="profile-section">
             <h3>Προσωπικά στοιχεία</h3>
             <ul>
-              <li><span>Όνομα</span><p>Μαρία</p></li>
-              <li><span>Επώνυμο</span><p>Παπαδοπούλου</p></li>
-              <li><span>Φύλο</span><p>Γυναίκα</p></li>
-              <li><span>ΑΦΜ</span><p>123456789</p></li>
-              <li><span>Ημερομηνία γέννησης</span><p>12/05/1998</p></li>
+  
+              <li className="profile-row"><span>Όνομα</span><p>Μαρία</p></li>
+              <li className="profile-row"><span>Επώνυμο</span><p>Παπαδοπούλου</p></li>
+              <li className="profile-row"><span>Φύλο</span><p>Γυναίκα</p></li>
+              <li className="profile-row"><span>ΑΦΜ</span><p>123456789</p></li>
+              <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>12/05/1998</p></li>
             </ul>
           </div>
 
@@ -31,9 +51,9 @@ export default function Profile() {
           <div className="profile-section">
             <h3>Στοιχεία επικοινωνίας</h3>
             <ul>
-              <li><span>Διεύθυνση</span><p>Αθήνα</p></li>
-              <li><span>Τηλέφωνο</span><p>6900000000</p></li>
-              <li><span>Email</span><p>maria@email.com</p></li>
+              <li className="profile-row"><span>Διεύθυνση</span><p>Αθήνα</p></li>
+              <li className="profile-row"><span>Τηλέφωνο</span><p>6900000000</p></li>
+              <li className="profile-row"><span>Email</span><p>maria@email.com</p></li>
             </ul>
           </div>
 
@@ -41,7 +61,7 @@ export default function Profile() {
 
         {/* Κουμπιά */}
         <div className="profile-actions">
-          <button className="secondary-btn">Αλλαγή κωδικού</button>
+          <button className="secondary-btn"> <Link to="/changecode"> Αλλαγή κωδικού</Link></button>
           <button className="primary-btn">Ενημέρωση στοιχείων</button>
         </div>
       </div>
@@ -62,11 +82,14 @@ export default function Profile() {
 
           <div className="filter-item">
             <span className="filter-label">Είδος:</span>
-            <select>
+            <select value={selectedSpecies}
+              onChange={(e) => setSelectedSpecies(e.target.value)}>
               <option value="">Όλα</option>
-              <option value="dog">Σκύλος</option>
-              <option value="cat">Γάτα</option>
-              <option value="other">Άλλο</option>
+              {SPECIES.map((sp) => (
+                <option key={sp} value={sp}>
+                  {sp}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -74,8 +97,12 @@ export default function Profile() {
             <span className="filter-label">Ράτσα:</span>
             <select>
               <option value="">Όλες</option>
-              <option value="retriever">Retriever</option>
-              <option value="shorthair">European Shorthair</option>
+              {breeds.map((b) => (
+                <option key={b} value={b}>
+                  {b}
+                </option>
+              ))}
+              <option value="">Άλλο</option>
             </select>
           </div>
 
@@ -83,8 +110,11 @@ export default function Profile() {
             <span className="filter-label">Φύλο:</span>
             <select>
               <option value="">Όλα</option>
-              <option value="male">Αρσενικό</option>
-              <option value="female">Θηλυκό</option>
+              {GENDERS.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -111,9 +141,21 @@ export default function Profile() {
         </div>
 
         <div className="pets-grid">
-          <PetDetails mode={0} />
-          <PetDetails mode={1} />
+          <div
+            className="pet-card-wrapper"
+            onClick={() => navigate("/ProfilePetOwner")}
+          >
+            <PetDetails mode={0} />
+          </div>
+
+          <div
+            className="pet-card-wrapper"
+            onClick={() => navigate("/ProfilePetOwner")}
+          >
+            <PetDetails mode={1} />
+          </div>
         </div>
+
       </div>
     </div>
   );

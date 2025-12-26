@@ -72,7 +72,7 @@
 .next-btn {
   margin-top: 25px;
   padding: 12px 40px;
-  background: #2f6fed; /* μπλε */
+  background: #2c3e50; /* μπλε */
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -81,7 +81,7 @@
 }
 
 .next-btn:hover {
-  background: #244fc4; /* σκουρό μπλε στο hover */
+  background: #2c3e50; /* σκουρό μπλε στο hover */
 }
 
 /* ===============================
@@ -323,12 +323,12 @@
 }
 
 .found-form .form-buttons button:last-child {
-  background: #2f6fed; /* Συνέχεια μπλε */
+  background: #2c3e50; /* Συνέχεια μπλε */
   color: #fff;
 }
 
 .found-form .form-buttons button:last-child:hover {
-  background: #244fc4; /* πιο σκουρό μπλε στο hover */
+  background: #2c3e50; /* πιο σκουρό μπλε στο hover */
 }
 
 /* ===============================
@@ -360,12 +360,12 @@
 }
 
 .booklet-container .form-buttons button:nth-child(2) {
-  background: #2563EB; /* Προσωρινή Αποθήκευση */
+  background: #2c3e50; /* Προσωρινή Αποθήκευση */
   color: #fff;
 }
 
 .booklet-container .form-buttons button:nth-child(2):hover {
-  background: #1d4ed8; /* πιο σκουρό μπλε */
+  background: #2c3e50; /* πιο σκουρό μπλε */
 }
 
 .booklet-container .form-buttons button:last-child {

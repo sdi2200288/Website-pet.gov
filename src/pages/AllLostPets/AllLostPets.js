@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import XamenaKatoikidia from "../../images/XamenaKatoikidia.png";
 import PetDetails from "../../components/Pet/Pet";
-import { REGIONS, dogPopular, catPopular } from "../Utils/Util";
+import { SPECIES, REGIONS, dogPopular, catPopular } from "../Utils/Util";
 
 
 export default function AllLostPets() {
@@ -45,8 +45,9 @@ export default function AllLostPets() {
               <label>Είδος</label>
               <select value={species} onChange={handleSpeciesChange}>
                 <option value="">Όλα</option>
-                <option value="Σκύλος">Σκύλος</option>
-                <option value="Γάτα">Γάτα</option>
+                {SPECIES.map((r) => (
+                  <option key={r}>{r}</option>
+                ))}
               </select>
             </div>
             <div className="filter-field">
@@ -85,18 +86,6 @@ export default function AllLostPets() {
         <Link to="/">Αρχική /</Link>
         <span> Χαμένα Κατοικίδια</span>
       </nav>
-      <div className="top-search-wrapper">
-        <div className="hero-search">
-          <input
-            type="text"
-            placeholder="Εισάγετε αριθμό μικροτσίπ..."
-            className="hero-input"
-          />
-          <button className="hero-button" aria-label="Αναζήτηση">
-            <FiSearch size={18} />
-          </button>
-        </div>
-      </div>
 
       <section className="results-section">
         <div className="results-header">
@@ -112,17 +101,30 @@ export default function AllLostPets() {
             <h2>Αποτελέσματα ({pets.length})</h2>
           </div>
 
-          <div className="results-right" />
+          <div className="results-right">
+            <div className="hero-search">
+              <input
+                type="text"
+                placeholder="Εισάγετε αριθμό μικροτσίπ..."
+                className="hero-input"
+              />
+              <button className="hero-button" aria-label="Αναζήτηση">
+                <FiSearch size={18} />
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="lost-pets-grid">
           {pets.map((p) => (
             <div className="lost-pet-card" key={p}>
-              <PetDetails mode={0} />
+              <Link to="/PetProfile">
+                <PetDetails mode={0} />
+              </Link>
             </div>
           ))}
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }

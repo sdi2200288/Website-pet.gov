@@ -1,19 +1,9 @@
 import React from "react";
 import "./Pet.css";
-import petPhoto from "../../images/lostPet1.png";
+import {pet} from "../../pages/Utils/Util"
 
 export default function PetDetails({ mode = 0}) {
-  const pet = {
-    name: "Barbie",
-    photoUrl: petPhoto,
-    microchip: "123456789",
-    species: "Σκύλος",
-    breed: "Golden Retriever",
-    gender: "Θηλυκό",
-    lastSeenDate: "12/10/2025",
-    region: "Αττική",
-    lastSeenAddress: "Σύνταγμα, Αθήνα",
-  };
+
   const isLost = mode === 0;
 
   if (mode === 1) {

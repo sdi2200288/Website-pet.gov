@@ -1,6 +1,5 @@
-import React, { useState } from "react";
 import "./OwnerDashboard.css";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -26,44 +25,74 @@ export default function OwnerDashboard() {
 
           <ul className="sidebar-menu">
             <li>
-              <Link to="profile">
-                <FaUser className="menu-icon" /> <span>Το προφίλ μου</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="Found">
+              <NavLink
+                to="found"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaFileAlt className="menu-icon" /> <span>Δηλώσεις Εύρεσης</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="Loss">
+              <NavLink
+                to="loss"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/owner/history-statement">
+              <NavLink
+                to="history-statement"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="health-booklet">
+              <NavLink
+                to="health-booklet"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaBook className="menu-icon" /> <span>Προβολή Βιβλιαρίου</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/owner/bookings">
+              <NavLink
+                to="/owner/bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaCalendarAlt className="menu-icon" /> <span>Κλείσιμο Ραντεβού</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/owner/history-bookings">
+              <NavLink
+                to="/owner/history-bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
-              </Link>
+              </NavLink>
             </li>
             <li>
-              <Link to="/owner/future-bookings">
+              <NavLink
+                to="future-bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </aside>

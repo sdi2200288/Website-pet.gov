@@ -25,7 +25,7 @@ export default function Loss() {
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
   return (
-    <div className="found">
+    <div className="loss">
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
@@ -142,7 +142,7 @@ export default function Loss() {
               <div className="step-title">Προεπισκόπηση & Υποβολή</div>
             </div>
           </div>
-    <div className="found-form">
+    <div className="loss-form">
           <h3>Στοιχεία Απώλειας</h3>
 
           <label>

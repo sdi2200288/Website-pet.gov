@@ -1,0 +1,183 @@
+
+.petTabPanel {
+  border-radius: 0 0 18px 18px;
+  border: 1px solid #d1d5db;
+  border-top: none;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  padding: 20px 24px 24px;
+}
+
+.petDeclarationsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.petDeclarationsSort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.petDeclarationsSort select {
+  padding: 4px 8px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+}
+
+
+.petDeclarationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.petDeclarationCard {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 14px 16px;
+  background: #ffffff;
+}
+
+.petDeclarationCard.status-final {
+  border-color: #bbf7d0;
+}
+
+.petDeclarationCard.status-draft {
+  border-color: #fecaca;
+}
+
+.petDeclarationMainRow {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+
+
+.petDeclarationPhoto img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+
+.petDeclarationInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.petDeclarationField {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.petDeclarationField .label {
+  width: 130px;
+  color: #6b7280;
+}
+
+.petDeclarationField .value {
+  font-weight: 500;
+  color: #111827;
+}
+
+
+.petDeclarationSide {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.petStatusRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.petStatusRow .label {
+  color: #6b7280;
+}
+
+.petStatusBadge {
+  min-width: 180px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.petStatusBadge--final {
+  border-color: #22c55e;
+  color: #15803d;
+  background: #dcfce7;
+}
+
+.petStatusBadge--draft {
+  border-color: #f97373;
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+
+.petDeclarationButtonsTop {
+  display: flex;
+  gap: 10px;
+}
+
+.petButtonSecondary,
+.petButtonPrimary,
+.petButtonDanger {
+  width: 160px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+.petButtonPrimary {
+  background: #22c55e;
+  color: #ffffff;
+}
+
+.petButtonSecondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.petButtonDanger {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.petDeclarationsMore {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .petDeclarationMainRow {
+    grid-template-columns: 1fr;
+  }
+}

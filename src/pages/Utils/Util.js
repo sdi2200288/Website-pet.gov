@@ -1,3 +1,5 @@
+import petPhoto from "../../images/lostPet1.png";
+
 export const REGIONS = [
   "Αιτωλοακαρνανίας", "Αργολίδας", "Αρκαδίας", "Άρτας", "Αττικής", "Αχαΐας", "Βοιωτίας",
   "Γρεβενών", "Δράμας", "Δωδεκανήσου", "Έβρου", "Εύβοιας", "Ευρυτανίας", "Ζακύνθου",
@@ -8,6 +10,8 @@ export const REGIONS = [
   "Ροδόπης", "Σάμου", "Σερρών", "Τρικάλων", "Φθιώτιδας", "Φλωρίνης", "Φωκίδας",
   "Χαλκιδικής", "Χανίων", "Χίου"
 ];
+
+export const SPECIES = ["Σκύλος", "Γάτα", "Άλλο"];
 
 export const GENDERS = ["Θηλυκό", "Αρσενικό", "Άλλο"];
 
@@ -303,5 +307,183 @@ export const faqsOwner = [
         Μόνο εσείς και ο κτηνίατρος που έχετε επιλέξει — όπως ορίζει η Πολιτική Απορρήτου.
       </p>
     ),
+  },
+];
+
+export const pet = {
+  name: "Barbie",
+  photoUrl: petPhoto,
+  microchip: "123456789",
+  species: "Σκύλος",
+  breed: "Golden Retriever",
+  gender: "Θηλυκό",
+  lastSeenDate: "12/10/2025",
+  region: "Αττική",
+  lastSeenAddress: "Σύνταγμα, Αθήνα",
+};
+
+export const lossDeclarations = [
+  {
+    id: 1,
+    status: "draft",
+    statusLabel: "Προσωρινή Αποθήκευση",
+    date: "12/12/2024",
+    address: "Λεωφόρος Κηφισίας 102",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    note: "Η δήλωση δεν έχει οριστικοποιηθεί ακόμα. Μπορεί να διαγραφεί ή να οριστικοποιηθεί.",
+  },
+  {
+    id: 2,
+    status: "final",
+    statusLabel: "Οριστικοποιημένη",
+    date: "05/12/2024",
+    address: "Πλατεία Αγίου Γεωργίου",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    note: "Η δήλωση έχει οριστικοποιηθεί. Επιτρέπεται μόνο προβολή και εκτύπωση.",
+  },
+  {
+    id: 3,
+    status: "draft",
+    statusLabel: "Προσωρινή Αποθήκευση",
+    date: "20/11/2024",
+    address: "Οδός Δελφών 14",
+    region: "Θεσσαλονίκη",
+    photo: pet.photoUrl,
+    note: "Απαιτείται επιβεβαίωση στοιχείων πριν την οριστικοποίηση.",
+  },
+];
+
+export const foundDeclarations = [
+  {
+    id: 1,
+    status: "draft",
+    statusLabel: "Προσωρινή Αποθήκευση",
+    date: "15/01/2025",
+    address: "Πλατεία Συντάγματος",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Το ζώο βρέθηκε σε καλή κατάσταση. Αναρτήθηκε στη δημόσια πλατφόρμα.",
+    noteRight:
+      "Υιοθεσία:\nΚατάσταση: σε εξέλιξη\nΑιτήσεις: 2\nΤελευταία ενημέρωση: 16/01/2025",
+  },
+  {
+    id: 2,
+    status: "final",
+    statusLabel: "Οριστικοποιημένη",
+    date: "10/01/2025",
+    address: "Περιοχή Αμπελόκηποι",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Το ζώο βρέθηκε έξω από εμπορικό κατάστημα. Καταγράφηκε από δημοτική υπηρεσία.",
+    noteRight:
+      "Υιοθεσία:\nΚατάσταση: ολοκληρωμένη\nΑπό: Μαρία Γ.\nΗμερομηνία: 12/01/2025",
+  },
+  {
+    id: 3,
+    status: "final",
+    statusLabel: "Οριστικοποιημένη",
+    date: "20/12/2024",
+    address: "Πάρκο Εθνικής Αντιστάσεως",
+    region: "Πάτρα",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Εντοπίστηκε να περιφέρεται στο πάρκο. Μεταφέρθηκε σε αρμόδιο καταφύγιο.",
+    noteRight:
+      "Υιοθεσία:\nΚατάσταση: ακυρωμένη\nΣχόλιο: Ο ιδιοκτήτης εντοπίστηκε.",
+  },
+];
+
+export const foundByOthers = [
+  {
+    id: 1,
+    status: "draft",
+    statusLabel: "Προσωρινή Αποθήκευση",
+    date: "18/01/2025",
+    address: "Οδός Ελευθερίου Βενιζέλου 45",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Ο πολίτης δήλωσε ότι βρήκε το ζώο κοντά σε είσοδο πολυκατοικίας.",
+    noteRight:
+      "Σημείωση:\nΤο ζώο φιλοξενείται προσωρινά.\nΑναμένεται επιβεβαίωση.",
+  },
+  {
+    id: 2,
+    status: "final",
+    statusLabel: "Οριστικοποιημένη",
+    date: "10/01/2025",
+    address: "Λιμάνι Πειραιά",
+    region: "Αττική",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Ο πολίτης ανέφερε πως είδε το ζώο να περιφέρεται κοντά στο λιμάνι.",
+    noteRight:
+      "Σημείωση:\nΗ δήλωση στάλθηκε στις αρμόδιες υπηρεσίες.",
+  },
+  {
+    id: 3,
+    status: "draft",
+    statusLabel: "Προσωρινή Αποθήκευση",
+    date: "05/01/2025",
+    address: "Οδός Κανάρη 11",
+    region: "Λάρισα",
+    photo: pet.photoUrl,
+    noteLeft:
+      "Το ζώο ήταν φοβισμένο. Ο πολίτης το κράτησε προσωρινά στο σπίτι του.",
+    noteRight:
+      "Σημείωση:\nΑναμένεται αντιστοίχιση με υπάρχουσες δηλώσεις.",
+  },
+];
+
+
+export const pets = [
+  {
+    id: 1,
+    name: "Barbie",
+    photoUrl: petPhoto,
+    microchip: "123456789",
+    species: "Σκύλος",
+    breed: "Golden Retriever",
+    gender: "Θηλυκό",
+    lastSeenDate: "12/10/2025",
+    region: "Αττική",
+    lastSeenAddress: "Σύνταγμα, Αθήνα",
+
+    owner: {
+      name: "Ελένη Τόντου",
+      afm: "123456789",
+      address: "Ζωγράφου 6, Αττική",
+      phone: "2100000000",
+    },
+
+    medicalActs: [],
+    incidents: [],
+  },
+
+  {
+    id: 2,
+    name: "Luna",
+    photoUrl: petPhoto,
+    microchip: "987654321",
+    species: "Γάτα",
+    breed: "British Shorthair",
+    gender: "Θηλυκό",
+    lastSeenDate: "05/09/2025",
+    region: "Αττική",
+    lastSeenAddress: "Παγκράτι, Αθήνα",
+
+    owner: {
+      name: "Νίκος Παπαδόπουλος",
+      afm: "987654321",
+      address: "Παγκράτι 12, Αθήνα",
+      phone: "2101111111",
+    },
+
+    medicalActs: [],
+    incidents: [],
   },
 ];

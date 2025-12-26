@@ -7,7 +7,6 @@ import ScrollTop from "./components/ScrollTop";
 import HomePage from "./pages/HomePage/HomePage";
 import VetDashboard from "./pages/VetDashboard/VetDashboard";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
-import Profile from "./pages/OwnerDashboard/Profile";
 import Found from "./pages/OwnerDashboard/Found";
 import Loss from "./pages/OwnerDashboard/Loss";
 import Found2 from "./pages/VetDashboard/Found2";
@@ -18,9 +17,19 @@ import Transfer from "./pages/VetDashboard/Transfer";
 import Identity from "./pages/VetDashboard/Identity";
 import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
+import PetProfile from "./pages/AllLostPets/PetProfile";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
+
+
+import ProfileOwner from "./pages/OwnerDashboard/Profile";
+import ProfileVet from "./pages/VetDashboard/Profile";
+import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
+
+import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
+
 import Login from "./pages/Login-Register/Login";
 import Register from "./pages/Login-Register/Register";
+import ChangeCode from "./pages/Login-Register/ChangeCode";
 
 
 import Cookies from "./pages/FooterPages/Others/Cookies";
@@ -34,9 +43,11 @@ import FAQVet from "./pages/FooterPages/FAQ/FAQVet";
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
+  const [userRole, setUserRole] = useState(null);
 
-  const handleLogin = () => {
+  const handleLogin = (role) => {
     setIsLoggedIn(true);
+    setUserRole(role);
   };
 
   const handleLogout = () => {
@@ -46,7 +57,7 @@ function App() {
     <BrowserRouter>
       <ScrollTop />
 
-      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
+      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} activeMenu={activeMenu} setActiveMenu={setActiveMenu} userRole={userRole} />
 
       <main className="main-content">
         <Routes>
@@ -63,18 +74,25 @@ function App() {
 
           {/* OWNER DASHBOARD */}
           <Route path="/owner-dashboard" element={<OwnerDashboard />}>
-            <Route path="profile" element={<Profile />} />
             <Route path="health-booklet" element={<HealthBooklet />} />
             <Route path="found" element={<Found />} />
             <Route path="loss" element={<Loss />} />
+            <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
+          <Route path="ProfileOwner" element={<ProfileOwner />} />
+          <Route path="ProfileVet" element={<ProfileVet />} />
+          <Route path="/ProfilePetOwner" element={<ProfilePetOwner />} />
+
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />
+          <Route path="/PetProfile" element={<PetProfile />} />
           <Route path="/adoption" element={<AdoptionPage />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register/owner" element={<Register role="owner" />} />
           <Route path="/register/vet" element={<Register role="vet" />} />
+          <Route path="/changecode" element={<ChangeCode />} />
+
 
 
           <Route path="/Communication" element={<Communication />} />
