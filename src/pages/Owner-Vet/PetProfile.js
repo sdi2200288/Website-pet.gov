@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import "./PetProfile.css";
 import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
-import HealthBooklet from "../../pages/OwnerDashboard/HealthBooklet";
-import {
-    pet,
-    lossDeclarations,
-    foundDeclarations,
-    foundByOthers,
-} from "../Utils/Util";
+import { pet, lossDeclarations,  foundDeclarations,  foundByOthers} from "../Utils/Util";
 
 export default function PetProfile() {
     const isMissing = true;

@@ -1,6 +1,6 @@
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 import "./VetDashboard.css";
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -72,21 +72,36 @@ export default function VetDashboard() {
             </li>
 
             <li>
-              <Link to="/vet/bookings">
+              <NavLink
+                to="/vet/bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaCalendarAlt className="menu-icon" /> <span>Ενημέρωση Διαθεσιμότητας</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li>
-              <Link to="/vet/history-bookings">
+              <NavLink
+                to="/vet/history-bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li>
-              <Link to="/vet/future-bookings">
+              <NavLink
+                to="/vet/future-bookings"
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
-              </Link>
+              </NavLink>
             </li>
           </ul>
         </aside>

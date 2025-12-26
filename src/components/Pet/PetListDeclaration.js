@@ -2,7 +2,7 @@ import "./PetDeclaration.css";
 import React from "react";
 import PetDeclaration from "./PetDeclaration";
 
-export default function PetDeclarationsList({ type, declarations }) {
+export default function PetDeclarationsList({ type, declarations =[]}) {
   return (
     <div className="petTabPanel">
       <div className="petDeclarationsHeader">
@@ -13,7 +13,6 @@ export default function PetDeclarationsList({ type, declarations }) {
             <option>Παλαιότερες</option>
           </select>
         </div>
-
       </div>
 
       <div className="petDeclarationsList">

@@ -9,12 +9,12 @@
   background: #fff;
   border-radius: 16px;
   padding: 32px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   margin-bottom: 40px;
   width: 100%;
   max-width: 1400px;
   padding: 40px;
-  margin: 0 auto 40px; 
+  margin: 0 auto 40px;
 }
 
 /* Δύο στήλες */
@@ -58,7 +58,7 @@
 }
 
 .primary-btn {
-  background: #6db2f8;
+  background: #2c3e50;
   color: white;
   border: none;
   padding: 10px 18px;
@@ -73,20 +73,36 @@
   padding: 10px 18px;
   border-radius: 20px;
   cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .primary-btn:hover {
-  background: #4a90e2; /* πιο σκούρο μπλε */
+  background: #4a90e2;
+  /* πιο σκούρο μπλε */
+}
+.secondary-btn a {
+  color: black;
+  text-decoration: none;
+  font-weight: 600;
+  display: block;       
+}
+
+.secondary-btn a:visited {
+  color: black;          
 }
 
 .secondary-btn:hover {
-  background: #f0f0f0; /* πιο σκούρο γκρι */
-  border-color: #999; /* πιο σκούρο περίγραμμα */
+  background: #f0f0f0;
+  /* πιο σκούρο γκρι */
+  border-color: #999;
+  /* πιο σκούρο περίγραμμα */
 }
 
 /* Κατοικίδια */
 .pets-section h3 {
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .pets-grid {
@@ -99,7 +115,7 @@
   background: #fff;
   height: 220px;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,7 +169,6 @@
   background: #fff;
 }
 
-/* search stays aligned right-ish */
 .hero-search {
   display: flex;
   align-items: center;
@@ -176,4 +191,21 @@
   background: #fff;
   cursor: pointer;
   font-weight: 600;
+}
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-row span {
+  font-size: 0.9rem;
+  color: #777;
+  font-weight: 600;
+}
+
+.profile-row p {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
 }

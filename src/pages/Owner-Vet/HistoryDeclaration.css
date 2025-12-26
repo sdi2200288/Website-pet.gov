@@ -1,0 +1,59 @@
+.history-page {
+  width: 100%;
+  margin-top: 40px;
+  background-color: #ffffff;
+  color: #111;
+}
+
+.history-title {
+  font-size: 1.1rem;
+  margin: 10px 0 18px;
+}
+
+.pets-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+
+.history-filters-panel {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 18px 18px 0 0;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  padding: 16px 18px;
+  margin-bottom: 0;
+}
+
+.history-list-panel .petTabPanel {
+  border-radius: 0 0 18px 18px;
+}
+
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pets-filters select,
+.pets-filters input[type="date"] {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.history-chip-filter select {
+  min-width: 320px;
+}

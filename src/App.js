@@ -19,8 +19,9 @@ import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
 
 import ProfileOwner from "./pages/OwnerDashboard/Profile";
 import ProfileVet from "./pages/VetDashboard/Profile";
-import ProfilePetOwner from "./pages/PetProfile/PetProfile";
+import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
 
+import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
 
 import Login from "./pages/Login-Register/Login";
 import Register from "./pages/Login-Register/Register";
@@ -68,6 +69,7 @@ function App() {
             <Route path="health-booklet" element={<HealthBooklet />} />
             <Route path="found" element={<Found />} />
             <Route path="loss" element={<Loss />} />
+            <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
           <Route path="ProfileOwner" element={<ProfileOwner />} />
           <Route path="ProfileVet" element={<ProfileVet />} />

@@ -62,7 +62,7 @@
   width: 260px;
   /* πιο μικρή */
   background-color: #ffffff;
-  color: rgb(11, 11, 11);
+  color: black;
   padding: 24px 20px;
   border-right: 1px solid #eee;
   /* border-radius: 0;          ΟΧΙ καρτέλα */
@@ -115,4 +115,29 @@
   font-size: 1.1rem;
   color: #666;
   min-width: 18px;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: #222;
+  text-decoration: none;
+  font-size: 0.95rem;
+  position: relative;
+}
+
+.sidebar-link:hover {
+  background-color: #f5f6f8;
+}
+
+.sidebar-link.active {
+  background-color: #eaf3ff;
+  font-weight: 700;
+}
+
+.sidebar-link.active .menu-icon {
+  color: black; 
 }

@@ -38,11 +38,12 @@ export default function Profile() {
           <div className="profile-section">
             <h3>Προσωπικά στοιχεία</h3>
             <ul>
-              <li><span>Όνομα</span><p>Μαρία</p></li>
-              <li><span>Επώνυμο</span><p>Παπαδοπούλου</p></li>
-              <li><span>Φύλο</span><p>Γυναίκα</p></li>
-              <li><span>ΑΦΜ</span><p>123456789</p></li>
-              <li><span>Ημερομηνία γέννησης</span><p>12/05/1998</p></li>
+  
+              <li className="profile-row"><span>Όνομα</span><p>Μαρία</p></li>
+              <li className="profile-row"><span>Επώνυμο</span><p>Παπαδοπούλου</p></li>
+              <li className="profile-row"><span>Φύλο</span><p>Γυναίκα</p></li>
+              <li className="profile-row"><span>ΑΦΜ</span><p>123456789</p></li>
+              <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>12/05/1998</p></li>
             </ul>
           </div>
 
@@ -50,9 +51,9 @@ export default function Profile() {
           <div className="profile-section">
             <h3>Στοιχεία επικοινωνίας</h3>
             <ul>
-              <li><span>Διεύθυνση</span><p>Αθήνα</p></li>
-              <li><span>Τηλέφωνο</span><p>6900000000</p></li>
-              <li><span>Email</span><p>maria@email.com</p></li>
+              <li className="profile-row"><span>Διεύθυνση</span><p>Αθήνα</p></li>
+              <li className="profile-row"><span>Τηλέφωνο</span><p>6900000000</p></li>
+              <li className="profile-row"><span>Email</span><p>maria@email.com</p></li>
             </ul>
           </div>
 
