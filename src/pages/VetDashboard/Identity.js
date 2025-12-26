@@ -224,29 +224,47 @@ export default function Identity() {
                                  <div  className="info-pair">
                                     <p className="label">Microchip</p>
                                     <p className="value">{petInfo.microchip}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Όνομα</p>
                                     <p className="value">{petInfo.name}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Είδος</p>
                                     <p className="value">{petInfo.species}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Ράτσα</p>
                                     <p className="value">{petInfo.breed}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Φύλο</p>
                                     <p className="value">{petInfo.gender}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Ηλικία</p>
                                     <p className="value">{petInfo.age}</p>
+                                  </div>
+                                  <div  className="info-pair">
                                     <p className="label">Προς Υιοθεσία</p>
                                     <p className="value">{petInfo.forAdoption}</p>
                                 </div>
 
-                                {petInfo.forAdoption === "Όχι" && (
+                                {petInfo.forAdoption === "Ναι" && (
+                                  <div  className="info-box">
                                     <div  className="info-pair">
-                                    <p className="label">ΑΦΜ</p>
-                                    <p className="value">{ownerInfo.afm}</p>
-                                    <p className="label">Email</p>
-                                    <p className="value">{ownerInfo.email}</p>
+                                      <p className="label">ΑΦΜ</p>
+                                      <p className="value">{ownerInfo.afm}</p>
+                                    </div>
+                                    <div  className="info-pair">
+                                      <p className="label">Email</p>
+                                      <p className="value">{ownerInfo.email}</p>
+                                    </div>
+                                    <div  className="info-pair">
                                     <p className="label">Τηλέφωνο</p>
                                     <p className="value">{ownerInfo.phone}</p>
                                     </div>
+                                  </div>
                                 )}
                             </div>
                         </div>
