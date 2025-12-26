@@ -46,9 +46,9 @@ export default function VetDashboard() {
                 <ul className="submenu">
                   <li><Link to="found2">Δήλωση Εύρεσης</Link></li>
                   <li><Link to="loss2">Δήλωση Απώλειας</Link></li>
-                  <li><Link to="/vet/declarations/import">Δήλωση Υιοθεσίας</Link></li>
-                  <li><Link to="/vet/declarations/import">Δήλωση Αναδοχής</Link></li>
-                  <li><Link to="/vet/declarations/import">Δήλωση Μεταβίβασης</Link></li>
+                  <li><Link to="adopt">Δήλωση Υιοθεσίας</Link></li>
+                  <li><Link to="anadoxi">Δήλωση Αναδοχής</Link></li>
+                  <li><Link to="transfer">Δήλωση Μεταβίβασης</Link></li>
                 </ul>
               )}
             </li>
@@ -70,7 +70,7 @@ export default function VetDashboard() {
               </button>
               {openAnimalRegister && (
                 <ul className="submenu">
-                  <li><Link to="/vet/declarations/finding">Καταγραφή Ταυτότητας</Link></li>
+                  <li><Link to="identity">Καταγραφή Ταυτότητας</Link></li>
                   <li><Link to="/vet/declarations/loss">Ενημέρωση Ιατρικών Πράξεων</Link></li>
                   <li><Link to="/vet/declarations/import">Προβολή Βιβλιαρίου</Link></li>
                 </ul>
@@ -105,3 +105,4 @@ export default function VetDashboard() {
     </div>
   );
 }
+

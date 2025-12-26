@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import PetDetails from "../../components/Pet/Pet";
 import dog from "../../images/lostPet1.png";
-import "./Loss2.css";
+import "./Anadoxi.css";
 
-export default function Loss2() {
+export default function Anadoxi() {
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [selectedPetId] = useState(1); // προσωρινά, δείχνουμε Barbie πάντα
 
-  const [foundInfo, setFoundInfo] = useState({
-    date: "",
-    region: "",
-    address: "",
-    condition: "",
-  });
+    const [ownerInfo, setOwnerInfo] = useState({
+    afm: "",
+    email: "",
+    phone: "",
+    });
+
 
   const pets = [
     {
@@ -33,7 +33,7 @@ export default function Loss2() {
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
   return (
-    <div className="found">
+    <div className="anadoxi">
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
@@ -41,7 +41,7 @@ export default function Loss2() {
             <div className="step step-zero">
               <div className="circle">1</div>
               <span>
-                Στο πρώτο βημα, θα εισάγετε το microchip του κατοικίδιου που χάθηκε.
+                Στο πρώτο βημα, θα επιλέξετε το microchip του κατοικίδιου που είναι προς υιοθεσία και βρίσκεται υπό την προστασία σας.
               </span>
             </div>
 
@@ -59,7 +59,7 @@ export default function Loss2() {
             <div className="step step-zero">
               <div className="circle">3</div>
               <span>
-                Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία της απώλειας (ημερομηνία, τοποθεσία, φωτογραφία).
+                Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία του αναδόχου (ΑΦΜ, όνομα, τηλέφωνο).
               </span>
             </div>
 
@@ -99,7 +99,7 @@ export default function Loss2() {
 
             <div className="step">
               <div className="circle">3</div>
-              <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
+              <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
 
             <div className="line" />
@@ -154,7 +154,7 @@ export default function Loss2() {
 
             <div className="step">
               <div className="circle">3</div>
-              <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
+              <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
 
             <div className="line" />
@@ -231,7 +231,7 @@ export default function Loss2() {
 
             <div className="step active">
               <div className="circle">3</div>
-              <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
+              <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
 
              <div className="line" />
@@ -243,58 +243,44 @@ export default function Loss2() {
           </div>
           
          <div className="found-form">
-          <h3>Στοιχεία Εύρεσης</h3>
+          <h3>Στοιχεία Αναδόχου</h3>
 
           <label>
-            Ημερομηνία
-             <input
-              type="date"
-              value={foundInfo.date}
-              onChange={(e) =>
-                setFoundInfo({ ...foundInfo, date: e.target.value })
-              }
-            />
-          </label>
-
-          <label>
-            Περιοχή (Νομός)
-            <select
-              value={foundInfo.region}
-              onChange={(e) =>
-                setFoundInfo({ ...foundInfo, region: e.target.value })
-              }
-            >
-              <option value="">Επιλέξτε...</option>
-              <option value="Αττική">Αττική</option>
-              <option value="Θεσσαλονίκη">Θεσσαλονίκη</option>
-              {/* Περισσότερες περιοχές */}
-            </select>
-          </label>
-
-          <label>
+            ΑΦΜ
             <input
-              type="text"
-              placeholder="Π.χ. Σύνταγμα"
-              value={foundInfo.address}
-              onChange={(e) =>
-                setFoundInfo({ ...foundInfo, address: e.target.value })
-              }/>
-          </label>
+                type="text"
+                value={ownerInfo.afm}
+                onChange={(e) =>
+                setOwnerInfo({ ...ownerInfo, afm: e.target.value })
+                }
+                placeholder="ΑΦΜ"
+            />
+            </label>
 
-          <label>
-           <textarea
-              placeholder="Π.χ. Υγιές, φοβισμένο..."
-              rows={4}
-              value={foundInfo.condition}
-              onChange={(e) =>
-                setFoundInfo({ ...foundInfo, condition: e.target.value })
-              }
-            ></textarea>
-          </label>
+            <label>
+            Email
+            <input
+                type="email"
+                value={ownerInfo.email}
+                onChange={(e) =>
+                setOwnerInfo({ ...ownerInfo, email: e.target.value })
+                }
+                placeholder="example@mail.com"
+            />
+            </label>
 
-          <div>
-            <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
-          </div>
+            <label>
+            Τηλέφωνο
+            <input
+                type="tel"
+                value={ownerInfo.phone}
+                onChange={(e) =>
+                setOwnerInfo({ ...ownerInfo, phone: e.target.value })
+                }
+                placeholder="69XXXXXXXX"
+            />
+            </label>
+
 
           <div className="form-buttons">
             <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
@@ -331,7 +317,7 @@ export default function Loss2() {
               onClick={() => setStep(3)}
             >
               <div className="circle">3</div>
-              <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
+              <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
 
             <div className="line" />
@@ -355,33 +341,24 @@ export default function Loss2() {
                 </div>
 
                 <div className="booklet-top">
-                  <div className="info-box">
-                    <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
-                    <p><span>Όνομα:</span> {selectedPet.name}</p>
-                    <p><span>Είδος:</span> {selectedPet.species}</p>
-                    <p><span>Ράτσα:</span> {selectedPet.breed}</p>
-                    <p><span>Φύλο:</span> {selectedPet.gender}</p>
-                    <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
-                    <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                    <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p>
-                  </div>
+                    <div className="info-box">
+                        <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
+                        <p><span>Όνομα:</span> {selectedPet.name}</p>
+                        <p><span>Είδος:</span> {selectedPet.species}</p>
+                        <p><span>Ράτσα:</span> {selectedPet.breed}</p>
+                        <p><span>Φύλο:</span> {selectedPet.gender}</p>
+                        <p><span>Microchip:</span> {selectedPet.microchip}</p>
+                        <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
+                        <p><span>Περιοχή:</span> {selectedPet.region}</p>
+                        <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p>
+                    </div>
 
-                  <div className="info-box">
-                    <h4>Στοιχεία Ιδιοκτήτη</h4>
-                    <p><span>Όνομα:</span> Ελένη Τόντου</p>
-                    <p><span>ΑΦΜ:</span> 123456789</p>
-                    <p><span>Διεύθυνση:</span> Ζωγράφου 6, Αττική</p>
-                    <p><span>Τηλέφωνο:</span> 123456789</p>
-                  </div>
-
-                  <div className="info-box">
-                    <h4>Στοιχεία Απώλειας</h4>
-                    <p><span>Ημερομηνία:</span> {foundInfo.date}</p>
-                    <p><span>Περιοχή:</span> {foundInfo.region}</p>
-                    <p><span>Διεύθυνση:</span> {foundInfo.address}</p>
-                    <p><span>Κατάσταση Ζώου:</span> {foundInfo.condition}</p>
-                  </div>
+                    <div className="info-box">
+                        <h4>Στοιχεία Αναδόχου</h4>
+                        <p><span>ΑΦΜ:</span> {ownerInfo.afm}</p>
+                        <p><span>Email:</span> {ownerInfo.email}</p>
+                        <p><span>Τηλέφωνο:</span> {ownerInfo.phone}</p>
+                    </div>
                 </div>
               </div>
 

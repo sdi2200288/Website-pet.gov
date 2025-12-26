@@ -1,7 +1,7 @@
 /* =============================== 
    GENERAL
 ================================ */
-.found2 {
+.identity {
   padding: 40px;
   text-align: center;
   background: #fafafa;
@@ -428,4 +428,20 @@
   font-size: 16px;
   color: #000;
   margin-bottom: 12px;
+}
+
+.info-pair {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-pair .label {
+  font-weight: 500;
+  color: #555;
+}
+
+.info-pair .value {
+  font-weight: bold;
+  color: #000;
 }

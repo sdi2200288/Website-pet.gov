@@ -86,7 +86,7 @@ export default function Loss() {
             </div>
           </div>
 
-          <h3>Επιλέξτε κατοικίδιο που βρέθηκε</h3>
+          <h3>Επιλέξτε κατοικίδιο που χάθηκε</h3>
 
           <div className="pets-grid">
             {pets.map((pet) => (

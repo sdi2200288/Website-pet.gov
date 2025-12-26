@@ -12,6 +12,10 @@ import Found from "./pages/OwnerDashboard/Found";
 import Loss from "./pages/OwnerDashboard/Loss";
 import Found2 from "./pages/VetDashboard/Found2";
 import Loss2 from "./pages/VetDashboard/Loss2";
+import Adopt from "./pages/VetDashboard/Adopt";
+import Anadoxi from "./pages/VetDashboard/Anadoxi";
+import Transfer from "./pages/VetDashboard/Transfer";
+import Identity from "./pages/VetDashboard/Identity";
 import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
@@ -51,6 +55,10 @@ function App() {
           <Route path="/vet-dashboard" element={<VetDashboard />}>
             <Route path="found2" element={<Found2 />} />
             <Route path="loss2" element={<Loss2 />} />
+            <Route path="adopt" element={<Adopt />} />
+            <Route path="anadoxi" element={<Anadoxi />} />
+            <Route path="transfer" element={<Transfer />} />
+            <Route path="identity" element={<Identity />} />
           </Route>
 
           {/* OWNER DASHBOARD */}
