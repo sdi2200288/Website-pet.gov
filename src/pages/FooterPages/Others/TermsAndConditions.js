@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Others.css";
 
-export default function Terms() {
+export default function TermsAndConditions() {
     return (
         <div className="page">
             <main className="page-main">

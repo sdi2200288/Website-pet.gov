@@ -1,41 +1,10 @@
 {
-  "owners": [
-    {
-      "id": "3d04",
-      "name": "Αλτανη Αντωνιου",
-      "email": "altani@example.com",
-      "afm": "123456789",
-      "address": "Ζωγράφου 6, Αττική",
-      "phone": "123456789",
-      "pets": [123456789]
-    }
-  ],
-
-  "pets":[
-    {
-      "id": 123456789,
-      "microchip": 123456789,
-      "name": "Barbie",
-      "species": "Σκύλος",
-      "breed": "Golden Retriever",
-      "gender": "Θηλυκό",
-      "birthdate": "2024-12-12",
-      "ownerId": "3d04"
-    },
-    {
-      "id": 987654321,
-      "microchip": 987654321,
-      "name": "Rocky",
-      "species": "Σκύλος",
-      "breed": "Πομεράνιαν",
-      "gender": "Αρσενικό",
-      "birthdate": "2023-05-15",
-      "ownerId": "3d04"
-    }
-  ],
+  "owners": [],
+  "vets": [],
+  "pets": [],
   "lostReports": [
-     {
-      "id": 1,
+    {
+      "id": "1",
       "petId": 123456789,
       "date": "2025-01-15",
       "region": "Αττική",
@@ -45,10 +14,10 @@
       "createdAt": "2025-01-14T10:30:00Z",
       "ownerId": "3d04"
     }
-  ],  
+  ],
   "foundReports": [
     {
-      "id": 1,
+      "id": "1",
       "petId": 123456789,
       "date": "2025-01-05",
       "region": "Αττική",

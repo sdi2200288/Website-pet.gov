@@ -6,7 +6,7 @@ import RegisterOwner from "./RegisterOwner";
 import RegisterVet from "./RegisterVet";
 import TermsAndConditions from "../FooterPages/Others/TermsAndConditions";
 
-export default function Register({ role }) {
+export default function Register({ role, onRegister }) {
   const navigate = useNavigate();
   const isOwner = role === "owner";
   const [showTermsModal, setShowTermsModal] = useState(false);
@@ -39,9 +39,9 @@ export default function Register({ role }) {
           <p className="registerSubtitle">Όλα τα πεδία είναι ΥΠΟΧΡΕΩΤΙΚΑ</p>
 
           {isOwner ? (
-            <RegisterOwner onOpenTerms={openTerms} />
+            <RegisterOwner onOpenTerms={openTerms} onRegister={onRegister} />
           ) : (
-            <RegisterVet onOpenTerms={openTerms} />
+            <RegisterVet onOpenTerms={openTerms} onRegister={onRegister} />
           )}
         </div>
       </div>
@@ -52,15 +52,9 @@ export default function Register({ role }) {
             className="termsModal"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              type="button"
-              className="termsModalClose"
-              onClick={closeTerms}
-              aria-label="Κλείσιμο"
-            >
+            <button type="button" className="termsModalClose" onClick={closeTerms} aria-label="Κλείσιμο">
               ×
             </button>
-
             <div className="termsModalBody">
               <TermsAndConditions />
             </div>

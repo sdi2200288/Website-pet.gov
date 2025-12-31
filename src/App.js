@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Menu from "./components/Menu/Menu";
 import Footer from "./components/Footer/Footer";
 import ScrollTop from "./components/ScrollTop";
@@ -44,14 +44,20 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
   const [userRole, setUserRole] = useState(null);
+  const [userData, setUserData] = useState(null);
 
-  const handleLogin = (role) => {
+  const handleLogin = (user) => {
     setIsLoggedIn(true);
-    setUserRole(role);
+    setUserRole(user.role);
+    setUserData(user);
+    localStorage.setItem("user", JSON.stringify(user));
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserRole(null);
+    setUserData(null);
+    localStorage.removeItem("user");
   };
   return (
     <BrowserRouter>
@@ -89,8 +95,18 @@ function App() {
           <Route path="/adoption" element={<AdoptionPage />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="/register/owner" element={<Register role="owner" />} />
-          <Route path="/register/vet" element={<Register role="vet" />} />
+          <Route path="/register/owner" element={
+            <Register
+              role="owner"
+              onRegister={(user) => handleLogin(user)}
+            />
+          } />
+          <Route path="/register/vet" element={
+            <Register
+              role="vet"
+              onRegister={(user) => handleLogin(user)}
+            />
+          } />
           <Route path="/changecode" element={<ChangeCode />} />
 
 

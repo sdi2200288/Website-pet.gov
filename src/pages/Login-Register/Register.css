@@ -50,8 +50,15 @@
   box-shadow: 0 0 0 1px #111827;
 }
 
-.loginSelect {
-  appearance: none;
+.inputError {
+  border-color: #ef4444;
+  background-color: #ffffff;
+}
+
+.fieldError {
+  color: #ef4444;
+  font-size: 11px;
+  margin-top: 4px;
 }
 
 .registerTerms {
@@ -240,7 +247,7 @@
   color: #4b5563;
 }
 
-.vvetScheduleGrid {
+.vetScheduleGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px 24px;
@@ -267,7 +274,7 @@
   font-size: 12px;
 }
 
-.vetScheduleTimes input[type="time"] {
+.vetScheduleTimes input[type=time] {
   border-radius: 9999px;
   border: 1px solid #d1d5db;
   padding: 4px 8px;
@@ -275,7 +282,17 @@
   outline: none;
 }
 
-.vetScheduleTimes input[type="time"]:disabled {
+.vetScheduleTimes input[type=time]:disabled {
   background: #f9fafb;
   color: #9ca3af;
+}
+
+.button-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
