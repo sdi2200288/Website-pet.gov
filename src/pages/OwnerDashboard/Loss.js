@@ -31,7 +31,6 @@ export default function Found() {
     fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
       .then((res) => res.json())
       .then((data) => {
-      console.log("Pets from DB:", data); // <-- ΕΔΩ
       setPets(data);
     })
       .catch(() => setPets([]));

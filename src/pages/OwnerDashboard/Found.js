@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiSearch } from "react-icons/fi";
+// import { FiSearch } from "react-icons/fi";
 import PetDetails from "../../components/Pet/Pet";
 //import dog from "../../images/lostPet1.png";
 import "./PetReport.css";
@@ -15,25 +15,25 @@ export default function Found() {
     address: "",
     condition: "",
   });
-
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
   // Προστασία route
-    useEffect(() => {
-      if(!user || user.role !== "owner"){
-        window.location.href = "/login";
-      }
-    }, [user]);
+  useEffect(() => {
+    if(!user || user.role !== "owner"){
+      window.location.href = "/login";
+      return null;
+    }
+   }, [user]);
   
-    // Fetch pets του ιδιοκτήτη
-    useEffect(() => {
-      if (!user) return;
+  // Fetch pets του ιδιοκτήτη
+  useEffect(() => {
+    if (!user) return;
   
-      fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
-        .then((res) => res.json())
-        .then((data) => setPets(data))
-        .catch(() => setPets([]));
+    fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
+      .then((res) => res.json())
+      .then((data) => setPets(data))
+      .catch(() => setPets([]));
     }, [user]);
     
     const handleSubmit = async (status) => {

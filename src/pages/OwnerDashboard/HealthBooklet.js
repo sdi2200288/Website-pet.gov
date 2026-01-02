@@ -1,14 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PetDetails from "../../components/Pet/Pet";
 import dog from "../../images/lostPet1.png";
 import "./HealthBooklet.css";
-import { pets } from "../Utils/Util"
+// import { pets } from "../Utils/Util"
 
 
 export default function HealthBooklet() {
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = βιβλιάριο
-  const [selectedPetId, setSelectedPetId] = useState(pets?.[0]?.id ?? null);
+  const [pets, setPets] = useState([]);
+  const [selectedPetId, setSelectedPetId] = useState(null);
+  
+  const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
+
+  useEffect(() => {
+    if(!user || user.role !== "owner"){
+      window.location.href = "/login";
+    }
+  }, [user]);
+  
+  // Fetch pets του ιδιοκτήτη
+  useEffect(() => {
+  if (!user) return;
+
+  fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setPets(data);
+
+      if (data.length > 0) {
+        setSelectedPetId(data[0].id); 
+      }
+    })
+    .catch(() => setPets([]));
+}, [user]);
+
 
   return (
     <div className="health-booklet">
@@ -23,7 +49,6 @@ export default function HealthBooklet() {
                 εκτυπώσετε το βιβλιάριό του.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -48,7 +73,6 @@ export default function HealthBooklet() {
               <div className="circle">1</div>
               <div className="step-title">Επιλογή κατοικιδίου</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -61,19 +85,15 @@ export default function HealthBooklet() {
 
           <h3>Επιλέξτε κατοικίδιο</h3>
 
-          <div className="pet-grid">
+          <div className="pets-grid">
+            {pets.length === 0 && <p>Δεν έχετε κατοικίδια.</p>}
             {pets.map((pet) => (
               <div
                 key={pet.id}
-                onClick={() => setSelectedPetId(pet.id)}
-                className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : ""
-                  }`}
+                className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : "" }`}
+                onClick={() => setSelectedPetId(pet.id)}           
               >
-                <PetDetails
-                  pet={pet}
-                  mode={0}
-                  selected={selectedPetId === pet.id}
-                />
+                <PetDetails pet={pet} mode={0} selected={selectedPetId === pet.id} />
               </div>
             ))}
           </div>
@@ -92,14 +112,10 @@ export default function HealthBooklet() {
       {step === 2 && selectedPet && (
         <>
           <div className="stepper">
-            <div
-              className="step clickable"
-              onClick={() => setStep(1)}
-            >
+            <div className="step clickable" onClick={() => setStep(1)}>
               <div className="circle">1</div>
               <div className="step-title">Επιλογή κατοικιδίου</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
@@ -116,10 +132,7 @@ export default function HealthBooklet() {
             <div className="booklet-layout">
               <div className="booklet-header">
                 <div className="pet-photo">
-                  <img
-                    src={selectedPet.photoUrl}
-                    alt={selectedPet.name}
-                  />
+                   <img src={selectedPet.photoUrl} alt={selectedPet.name} />
                 </div>
 
                 <div className="booklet-top">
@@ -130,17 +143,17 @@ export default function HealthBooklet() {
                     <p><span>Ράτσα:</span> {selectedPet.breed}</p>
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
+                    {/* <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
                     <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                    <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p>
+                    <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p> */}
                   </div>
 
                   <div className="info-box">
                     <h4>Στοιχεία Ιδιοκτήτη</h4>
-                    <p><span>Όνομα:</span> Ελένη Τόντου</p>
-                    <p><span>ΑΦΜ:</span> 123456789</p>
-                    <p><span>Διεύθυνση:</span> Ζωγράφου 6, Αττική</p>
-                    <p><span>Τηλέφωνο:</span> 123456789</p>
+                    <p><span>Όνομα:</span>{user.firstname} {user.lastname}</p>
+                    <p><span>ΑΦΜ:</span> {user.afm}</p>
+                    <p><span>Διεύθυνση:</span> {user.phone}</p>
+                    <p><span>Τηλέφωνο:</span> {user.address}</p>
                   </div>
                 </div>
               </div>
