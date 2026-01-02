@@ -7,20 +7,49 @@ export default function LoginTabs({ onLogin }) {
   const [role, setRole] = useState("owner");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  function onSubmit(e) {
+
+  async function onSubmit(e) {
     e.preventDefault();
+    setError("");
 
-    console.log("login:", { role, email, password });
+    const endpoint = 
+      role === "owner"
+        ? "http://localhost:3001/owners"
+        : "http://localhost:3001/vets";
+    
+    try{
+      const res = await fetch(`${endpoint}?email=${email}&password=${password}`);
+      const data = await res.json();
 
-    if (onLogin) {
-      onLogin(role);
+      if(data.length === 0){
+        setError("Λάθος email ή κωδικός");
+        return;
+      }
+
+      const user = data[0];
+      if(onLogin){
+        onLogin({ ...user, role });
+      }
+      if(role === "owner"){
+        navigate("/owner-dashboard");
+      }else{
+        navigate("/vet-dashboard");
+      }
+    } catch(err){
+      setError("Σφάλμα σύνδεσης. Προσπαθήστε ξανά.");
     }
-    if (role === "owner") {
-      navigate("/owner-dashboard");
-    } else if (role === "vet") {
-      navigate("/vet-dashboard");
-    }
+    // console.log("login:", { role, email, password });
+
+    // if (onLogin) {
+    //   onLogin(role);
+    // }
+    // if (role === "owner") {
+    //   navigate("/owner-dashboard");
+    // } else if (role === "vet") {
+    //   navigate("/vet-dashboard");
+    // }
   }
 
   const title = role === "owner" ? "Σύνδεση Ιδιοκτήτη" : "Σύνδεση Κτηνιάτρου";
@@ -66,6 +95,7 @@ export default function LoginTabs({ onLogin }) {
               required
             />
           </label>
+          {error && <div className="fieldError">{error}</div>}
           <button className="loginButton" type="submit">
             Σύνδεση
           </button>

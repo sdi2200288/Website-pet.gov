@@ -1,5 +1,18 @@
 {
-  "owners": [],
+  "owners": [
+    {
+      "id": "631b",
+      "firstname": "ΑΛΤΑΝΗ",
+      "lastname": "ΤΟΝΤΟΥ",
+      "afm": "2325788990",
+      "gender": "female",
+      "address": "Αθανασίου Διάκου 7",
+      "birthdate": "2004-06-25",
+      "phone": "6942781851",
+      "email": "sdi2200288@uoa.gr",
+      "password": "Altani1!"
+    }
+  ],
   "vets": [],
   "pets": [],
   "lostReports": [
