@@ -1,15 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Profile.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
 import { FiSearch } from "react-icons/fi";
-import { Link } from "react-router-dom";
 import { SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
 
 export default function Profile() {
   const navigate = useNavigate();
 
+  //logged-in user
+  const user = JSON.parse(localStorage.getItem("user"));
+  //προστασια σελιδας
+  useEffect(() => {
+    if(! user || user.role != "owner"){
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  //pets
+  const [pets, setPets] = useState([]);
   const [selectedSpecies, setSelectedSpecies] = useState("");
+
+  useEffect(() => {
+    if(!user) return;
+
+    fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
+      .then((res) => res.json())
+      .then((data) => setPets(data))
+      .catch(() => setPets([]));
+  }, [user]);
 
   const getBreeds = () => {
     if (!selectedSpecies) {
@@ -25,6 +44,8 @@ export default function Profile() {
   };
   const breeds = getBreeds();
 
+  if (!user) return null;
+
   return (
 
     <div className="owner-profile">
@@ -39,11 +60,11 @@ export default function Profile() {
             <h3>Προσωπικά στοιχεία</h3>
             <ul>
   
-              <li className="profile-row"><span>Όνομα</span><p>Μαρία</p></li>
-              <li className="profile-row"><span>Επώνυμο</span><p>Παπαδοπούλου</p></li>
-              <li className="profile-row"><span>Φύλο</span><p>Γυναίκα</p></li>
-              <li className="profile-row"><span>ΑΦΜ</span><p>123456789</p></li>
-              <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>12/05/1998</p></li>
+              <li className="profile-row"><span>Όνομα</span><p>{user.firstname}</p></li>
+              <li className="profile-row"><span>Επώνυμο</span><p>{user.lastname}</p></li>
+              <li className="profile-row"><span>Φύλο</span><p>{user.gender}</p></li>
+              <li className="profile-row"><span>ΑΦΜ</span><p>{user.afm}</p></li>
+              <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>{user.birthdate}</p></li>
             </ul>
           </div>
 
@@ -51,9 +72,9 @@ export default function Profile() {
           <div className="profile-section">
             <h3>Στοιχεία επικοινωνίας</h3>
             <ul>
-              <li className="profile-row"><span>Διεύθυνση</span><p>Αθήνα</p></li>
-              <li className="profile-row"><span>Τηλέφωνο</span><p>6900000000</p></li>
-              <li className="profile-row"><span>Email</span><p>maria@email.com</p></li>
+              <li className="profile-row"><span>Διεύθυνση</span><p>{user.address}</p></li>
+              <li className="profile-row"><span>Τηλέφωνο</span><p>{user.phone}</p></li>
+              <li className="profile-row"><span>Email</span><p>{user.email}</p></li>
             </ul>
           </div>
 
@@ -68,7 +89,7 @@ export default function Profile() {
 
       {/* ΚΑΤΟΙΚΙΔΙΑ */}
       <div className="pets-section">
-        <h3>Τα κατοικίδιά μου (2)</h3>
+        <h3>Τα κατοικίδιά μου ({pets.length})</h3>
 
         <div className="pets-filters">
           <div className="filter-item">
@@ -141,19 +162,24 @@ export default function Profile() {
         </div>
 
         <div className="pets-grid">
-          <div
+          {pets.length === 0 && (
+            <p>Δεν έχετε καταχωρίσει κατοικίδια.</p>
+          )}
+          {pets.map((pet) => (
+            <div
+            key = {pet.id}
             className="pet-card-wrapper"
-            onClick={() => navigate("/ProfilePetOwner")}
+            onClick={() => navigate(`/ProfilePetOwner/${pet.id}`)}
           >
-            <PetDetails mode={0} />
+            <PetDetails pet={pet} />
           </div>
-
-          <div
+          ))}
+          {/* <div
             className="pet-card-wrapper"
             onClick={() => navigate("/ProfilePetOwner")}
           >
             <PetDetails mode={1} />
-          </div>
+          </div> */}
         </div>
 
       </div>

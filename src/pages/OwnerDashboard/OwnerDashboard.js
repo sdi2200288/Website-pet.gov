@@ -1,16 +1,29 @@
 import "./OwnerDashboard.css";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import {
   FaUser,
   FaFileAlt,
   FaExclamationCircle,
   FaBook,
   FaCalendarAlt,
-  FaHistory
+  FaHistory,
+  FaSignOutAlt
 } from "react-icons/fa";
 
 
 export default function OwnerDashboard() {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if(!user || user.role != "owner"){
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  if (!user) return null;
+
   return (
     <div className="OwnerDashboard">
 
@@ -26,7 +39,7 @@ export default function OwnerDashboard() {
           <ul className="sidebar-menu">
             <li>
               <NavLink
-                to="found"
+                to= {`found?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -36,7 +49,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="loss"
+                to={`loss?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -46,7 +59,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="history-statement"
+                to={`history-statement?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -56,7 +69,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="health-booklet"
+                to={`health-booklet?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -66,7 +79,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="/owner/bookings"
+                to={`bookings?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -76,7 +89,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="/owner/history-bookings"
+                to={`history-bookings?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
@@ -86,7 +99,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                to="future-bookings"
+                to={`future-bookings?ownerId=${user.id}`}
                 className={({ isActive }) =>
                   `sidebar-link ${isActive ? "active" : ""}`
                 }
