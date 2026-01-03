@@ -177,7 +177,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ.");
         return;
       }
-      const submitData = { ...form };
+      const submitData = { ...form,  reviewCount: 0, totalScore: 0};
       delete submitData.confirmPassword;
 
       const res = await fetch(API_URL, {
@@ -200,29 +200,29 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
   }
 
   return (
-    <form noValidate className="registerForm">
+    <form noValidate className="registerForm" onSubmit={handleSubmit}>
       <label className="loginLabel">
-        Όνομα: πχ ΜΑΡΙΑ με κεφαλαία
-        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange} required />
+        Όνομα: πχ ΜΑΡΙΑ με κεφαλαία *
+        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange}   />
         {errors.firstname && <div className="fieldError">{errors.firstname}</div>}
       </label>
 
       <label className="loginLabel">
-        Επώνυμο: πχ ΑΝΤΩΝΙΟΥ με κεφαλαία
-        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange} required />
+        Επώνυμο: πχ ΑΝΤΩΝΙΟΥ με κεφαλαία *
+        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange}   />
         {errors.lastname && <div className="fieldError">{errors.lastname}</div>}
       </label>
 
       <label className="loginLabel">
         ΑΦΜ
         <input type="number" className={`loginInput ${errors.afm ? "inputError" : ""}`}
-          name="afm" value={form.afm} onChange={handleChange} required />
+          name="afm" value={form.afm} onChange={handleChange}   />
         {errors.afm && <div className="fieldError">{errors.afm}</div>}
       </label>
 
       <label className="loginLabel">
-        Φύλο
-        <select className="loginSelect" name="gender" value={form.gender} onChange={handleChange} required>
+        Φύλο *
+        <select className="loginSelect" name="gender" value={form.gender} onChange={handleChange}  >
           <option value="" hidden>Επιλέξτε φύλο</option>
           <option value="male">Άνδρας</option>
           <option value="female">Γυναίκα</option>
@@ -233,11 +233,11 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
 
       <div className="loginLabel registerFieldFull">
-        <div className="sectionTitle">Ειδικεύσεις (επιλέξτε μία ή περισσότερες)</div>
+        <div className="sectionTitle">Ειδικεύσεις (επιλέξτε μία ή περισσότερες) *</div>
         <div className="specializationsGrid">
           {VET_SPECIALIZATIONS.map((s) => (
             <label key={s} className="specializationItem">
-              <input  type="checkbox" checked={form.specializations.includes(s)} onChange={() => toggleSpecialization(s)} />
+              <input type="checkbox" checked={form.specializations.includes(s)} onChange={() => toggleSpecialization(s)} />
               {s}
             </label>
           ))}
@@ -246,14 +246,14 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
       </div>
       <label className="loginLabel">
-        Ημερομηνία γέννησης
+        Ημερομηνία γέννησης *
         <input type="date" className={`loginInput ${errors.birthdate ? "inputError" : ""}`}
-          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]} required />
+          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]}   />
         {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
       </label>
       <label className="loginLabel">
-        Περιοχή (Νομός)
-        <select className="loginSelect" name="region" value={form.region} onChange={handleChange} required>
+        Περιοχή (Νομός) *
+        <select className="loginSelect" name="region" value={form.region} onChange={handleChange}  >
           <option value="">Επιλέξτε νομό</option>
           {REGIONS.map((r) => (
             <option key={r} value={r}>
@@ -265,14 +265,14 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       {errors.region && <div className="fieldError">{errors.region}</div>}
 
       <label className="loginLabel">
-        Διεύθυνση (Οδός αριθμός Πόλη Χώρα)
+        Διεύθυνση (Οδός αριθμός Πόλη Χώρα) *
         <input type="text" className={`loginInput ${errors.address ? "inputError" : ""}`}
-          name="address" value={form.address} onChange={handleChange} required />
+          name="address" value={form.address} onChange={handleChange}   />
         {errors.address && <div className="fieldError">{errors.address}</div>}
       </label>
       <label className="loginLabel">
-        Επίπεδο σπουδών
-        <select className="loginSelect" name="studyLevel" value={form.studyLevel} onChange={handleChange} required >
+        Επίπεδο σπουδών *
+        <select className="loginSelect" name="studyLevel" value={form.studyLevel} onChange={handleChange}   >
           <option value="">Επιλέξτε επίπεδο</option>
           {STUDY_LEVELS.map((s) => (
             <option key={s} value={s}>
@@ -284,29 +284,29 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
       </label>
       <label className="loginLabel">
-        Εμπειρία (Έτη)
-        <input className="loginInput" type="number" min="0" name="experienceYears" value={form.experienceYears} onChange={handleChange} required />
+        Εμπειρία (Έτη) *
+        <input className="loginInput" type="number" min="0" name="experienceYears" value={form.experienceYears} onChange={handleChange}   />
         {errors.experienceYears && <div className="fieldError">{errors.experienceYears}</div>}
 
       </label>
       <label className="loginLabel">
-        Τηλέφωνο
+        Τηλέφωνο *
         <input type="number" className={`loginInput ${errors.phone ? "inputError" : ""}`}
-          name="phone" value={form.phone} onChange={handleChange} required />
+          name="phone" value={form.phone} onChange={handleChange}   />
         {errors.phone && <div className="fieldError">{errors.phone}</div>}
       </label>
       <label className="loginLabel">
-        Email πχ. name@email.com
+        Email πχ. name@email.com *
         <input type="email" className={`loginInput ${errors.email ? "inputError" : ""}`}
-          name="email" value={form.email} onChange={handleChange} required />
+          name="email" value={form.email} onChange={handleChange}   />
         {errors.email && <div className="fieldError">{errors.email}</div>}
       </label>
       <label className="loginLabel">
-        Κωδικός (τουλάχιστον 8 ψηφία)
+        Κωδικός (τουλάχιστον 8 ψηφία) *
         <div style={{ position: "relative" }}>
           <input type={showPassword ? "text" : "password"}
             className={`loginInput ${errors.password ? "inputError" : ""}`} name="password" value={form.password}
-            onChange={handleChange} minLength={8} required />
+            onChange={handleChange} minLength={8}   />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
@@ -318,11 +318,11 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         {errors.password && <div className="fieldError">{errors.password}</div>}
       </label>
       <label className="loginLabel">
-        Επιβεβαίωση κωδικού
+        Επιβεβαίωση κωδικού *
         <div style={{ position: "relative" }}>
           <input type={showConfirmPassword ? "text" : "password"} className={`loginInput ${errors.confirmPassword ? "inputError" : ""}`}
             name="confirmPassword" value={form.confirmPassword} onChange={handleChange}
-            minLength={8} required
+            minLength={8}  
           />
           <button
             className="button-password"
@@ -338,7 +338,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       <div className="registerFieldFull">
         <input type="file" accept="image/*" ref={photoInputRef} onChange={handlePhotoChange} style={{ display: "none" }}
         />
-        <button type="button" className="registerSecondaryButton"onClick={() => photoInputRef.current?.click()}
+        <button type="button" className="registerSecondaryButton" onClick={() => photoInputRef.current?.click()}
         >
           Προσθήκη Φωτογραφίας
         </button>
@@ -441,7 +441,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
           <button type="button" className="registerSecondaryButton" onClick={handleClear}>
             Απαλοιφή όλων
           </button>
-          <button className="loginButton" type="submit"  onSubmit={handleSubmit}>
+          <button className="loginButton" type="submit" >
             Eγγραφή
           </button>
         </div>

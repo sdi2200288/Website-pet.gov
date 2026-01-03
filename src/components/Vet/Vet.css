@@ -1,0 +1,64 @@
+.vet-card-x {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
+  max-width: 320px;
+}
+
+.vet-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.vet-img-wrap {
+  width: 100%;
+  height: 130px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.vet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vet-fields {
+  display: grid;
+  gap: 8px;
+}
+
+.vet-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.vet-row span {
+  color: #777;
+}
+
+.vet-row b {
+  font-weight: 700;
+}
+
+.vet-divider {
+  height: 1px;
+  background: #eaeaea;
+  margin: 12px 0;
+}
+
+.lost-yes {
+  color: #d32f2f;
+  font-weight: 800;
+}
+
+.lost-no {
+  color: #2e7d32;
+  font-weight: 800;
+}

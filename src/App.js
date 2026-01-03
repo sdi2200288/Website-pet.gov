@@ -20,7 +20,6 @@ import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import PetProfile from "./pages/AllLostPets/PetProfile";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
 
-
 import ProfileOwner from "./pages/OwnerDashboard/Profile";
 import ProfileVet from "./pages/VetDashboard/Profile";
 import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
@@ -85,8 +84,8 @@ function App() {
             <Route path="loss" element={<Loss />} />
             <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
-          <Route path="ProfileOwner" element={<ProfileOwner />} />
-          <Route path="ProfileVet" element={<ProfileVet />} />
+          <Route path="ProfileOwner" element={userRole === "owner" ? <ProfileOwner /> : <HomePage />} />
+          <Route path="ProfileVet" element={userRole === "vet" ? <ProfileVet /> : <HomePage />} />
           <Route path="/ProfilePetOwner" element={<ProfilePetOwner />} />
 
 

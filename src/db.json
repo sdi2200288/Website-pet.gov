@@ -10,10 +10,175 @@
       "birthdate": "2004-06-25",
       "phone": "6942781851",
       "email": "sdi2200288@uoa.gr",
-      "password": "Altani1!"
+      "password": "Altani1!!"
     }
   ],
-  "vets": [],
+  "vets": [
+    {
+      "id": "3742",
+      "firstname": "ELENI",
+      "lastname": "ANTONIOU",
+      "afm": "1234567890",
+      "gender": "female",
+      "birthdate": "2026-01-01",
+      "email": "e.antoniou2016@gmail.com",
+      "address": "Μακρίσια",
+      "phone": "6980426710",
+      "password": "12345678",
+      "specializations": [
+        "Άλλο"
+      ],
+      "region": "Αττικής",
+      "studyLevel": "Διδακτορικό",
+      "experienceYears": "5",
+      "photoFile": {},
+      "services": {
+        "clinical_exam": {
+          "enabled": false,
+          "price": ""
+        },
+        "vaccination": {
+          "enabled": false,
+          "price": ""
+        },
+        "microchip_place": {
+          "enabled": false,
+          "price": ""
+        },
+        "health_book": {
+          "enabled": false,
+          "price": ""
+        },
+        "declaration": {
+          "enabled": false,
+          "price": ""
+        },
+        "blood_tests": {
+          "enabled": false,
+          "price": ""
+        },
+        "biochemical_tests": {
+          "enabled": false,
+          "price": ""
+        },
+        "urine_tests": {
+          "enabled": false,
+          "price": ""
+        },
+        "feces_tests": {
+          "enabled": false,
+          "price": ""
+        },
+        "xray": {
+          "enabled": false,
+          "price": ""
+        },
+        "ultrasound": {
+          "enabled": false,
+          "price": ""
+        },
+        "sterilization": {
+          "enabled": false,
+          "price": ""
+        },
+        "cleansing": {
+          "enabled": false,
+          "price": ""
+        },
+        "tumor_removal": {
+          "enabled": false,
+          "price": ""
+        },
+        "orthopedic": {
+          "enabled": false,
+          "price": ""
+        },
+        "surgery_general": {
+          "enabled": false,
+          "price": ""
+        },
+        "teeth_cleaning": {
+          "enabled": false,
+          "price": ""
+        },
+        "tooth_extraction": {
+          "enabled": false,
+          "price": ""
+        },
+        "gingivitis": {
+          "enabled": false,
+          "price": ""
+        },
+        "internal_deworming": {
+          "enabled": false,
+          "price": ""
+        },
+        "external_deworming": {
+          "enabled": false,
+          "price": ""
+        },
+        "heartworm_prevention": {
+          "enabled": false,
+          "price": ""
+        },
+        "antiparasitic_treatment": {
+          "enabled": false,
+          "price": ""
+        },
+        "skin_exam": {
+          "enabled": false,
+          "price": ""
+        },
+        "allergy_test": {
+          "enabled": false,
+          "price": ""
+        },
+        "skin_treatment": {
+          "enabled": false,
+          "price": ""
+        }
+      },
+      "schedule": {
+        "mon": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "tue": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "wed": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "thu": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "fri": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "sat": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "sun": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        }
+      },
+      "reviewCount": 10,
+      "totalScore": 50
+    }
+  ],
   "pets": [],
   "lostReports": [
     {

@@ -247,6 +247,14 @@
   margin: 0 0 12px 0;
 }
 
+.empty-message {
+  text-align: center;
+  color: #797777;
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-align: center;
+}
+
 .lost-pets-subtitle {
   text-align: center;
   color: #666;

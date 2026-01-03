@@ -22,7 +22,6 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
   };
   const profilePath = userRole === "owner" ? "/ProfileOwner" : "/ProfileVet";
 
-
   return (
     <header className="top-header">
       <div className="menu-container">
@@ -102,23 +101,23 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
 
               {showProfileDropdown && (
                 <div className="profile-dropdown">
-                  <Link
-                    to={profilePath}
-                    className="profile-item"
-                    onClick={() => {
+                  {userRole === "owner" && (
+                    <Link to="/ProfileOwner" className="profile-item" onClick={() => {
                       setShowProfileDropdown(false);
                       setActiveMenu(5);
-                    }
-                    }
-                  >
-                    Το προφίλ μου
-                  </Link>
-
-                  <button
-                    type="button"
-                    className="profile-item logout"
-                    onClick={handleLogout}
-                  >
+                    }}>
+                      Το προφίλ μου
+                    </Link>
+                  )}
+                  {userRole === "vet" && (
+                    <Link to="/ProfileVet" className="profile-item" onClick={() => {
+                      setShowProfileDropdown(false);
+                      setActiveMenu(5);
+                    }}>
+                      Το προφίλ μου
+                    </Link>
+                  )}
+                  <button className="profile-item logout" onClick={handleLogout}>
                     Αποσύνδεση
                   </button>
                 </div>

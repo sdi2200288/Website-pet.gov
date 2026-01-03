@@ -103,27 +103,27 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
   return (
     <form noValidate className="loginForm registerForm">
       <label className="loginLabel">
-        Όνομα: πχ ΜΑΡΙΑ με κεφαλαία
-        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange} required />
+        Όνομα:  πχ ΜΑΡΙΑ με κεφαλαία *
+        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange}   />
         {errors.firstname && <div className="fieldError">{errors.firstname}</div>}
       </label>
 
       <label className="loginLabel">
-        Επώνυμο: πχ ΑΝΤΩΝΙΟΥ με κεφαλαία
-        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange} required />
+        Επώνυμο: πχ ΑΝΤΩΝΙΟΥ με κεφαλαία *
+        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange}   />
         {errors.lastname && <div className="fieldError">{errors.lastname}</div>}
       </label>
 
       <label className="loginLabel">
-        ΑΦΜ
+        ΑΦΜ *
         <input type="number" className={`loginInput ${errors.afm ? "inputError" : ""}`}
-          name="afm" value={form.afm} onChange={handleChange} required />
+          name="afm" value={form.afm} onChange={handleChange}   />
         {errors.afm && <div className="fieldError">{errors.afm}</div>}
       </label>
 
       <label className="loginLabel">
-        Φύλο
-        <select className="loginSelect" name="gender" value={form.gender} onChange={handleChange} required>
+        Φύλο *
+        <select className="loginSelect" name="gender" value={form.gender} onChange={handleChange}  >
           <option value="" hidden>
             Επιλέξτε φύλο
           </option>
@@ -134,35 +134,35 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
       </label>
 
       <label className="loginLabel">
-        Διεύθυνση (Οδός αριθμός Πόλη Χώρα)
+        Διεύθυνση (Οδός αριθμός Πόλη Χώρα) *
         <input type="text" className={`loginInput ${errors.address ? "inputError" : ""}`}
-          name="address" value={form.address} onChange={handleChange} required />
+          name="address" value={form.address} onChange={handleChange}   />
         {errors.address && <div className="fieldError">{errors.address}</div>}
       </label>
 
       <label className="loginLabel">
-        Ημερομηνία γέννησης
+        Ημερομηνία γέννησης *
         <input type="date" className={`loginInput ${errors.birthdate ? "inputError" : ""}`}
-          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]} required />
+          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]}   />
         {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
       </label>
 
       <label className="loginLabel">
-        Τηλέφωνο
+        Τηλέφωνο *
         <input type="number" className={`loginInput ${errors.phone ? "inputError" : ""}`}
-          name="phone" value={form.phone} onChange={handleChange} required />
+          name="phone" value={form.phone} onChange={handleChange}   />
         {errors.phone && <div className="fieldError">{errors.phone}</div>}
       </label>
 
       <label className="loginLabel">
-        Email πχ. name@email.com
+        Email πχ. name@email.com *
         <input type="email" className={`loginInput ${errors.email ? "inputError" : ""}`}
-          name="email" value={form.email} onChange={handleChange} required />
+          name="email" value={form.email} onChange={handleChange}   />
         {errors.email && <div className="fieldError">{errors.email}</div>}
       </label>
 
       <label className="loginLabel">
-        Κωδικός (τουλάχιστον 8 ψηφία)
+        Κωδικός (τουλάχιστον 8 ψηφία) *
         <div style={{ position: "relative" }}>
           <input
             type={showPassword ? "text" : "password"}
@@ -171,7 +171,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
             value={form.password}
             onChange={handleChange}
             minLength={8}
-            required
+             
           />
           <button
             type="button"
@@ -185,7 +185,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
       </label>
 
       <label className="loginLabel">
-        Επιβεβαίωση κωδικού
+        Επιβεβαίωση κωδικού *
         <div style={{ position: "relative" }}>
 
           <input
@@ -195,7 +195,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
             value={form.confirmPassword}
             onChange={handleChange}
             minLength={8}
-            required
+             
           />
           <button
             className="button-password"

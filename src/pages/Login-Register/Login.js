@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export default function LoginTabs({ onLogin }) {
@@ -13,11 +13,7 @@ export default function LoginTabs({ onLogin }) {
   async function onSubmit(e) {
     e.preventDefault();
     setError("");
-
-    const endpoint = 
-      role === "owner"
-        ? "http://localhost:3001/owners"
-        : "http://localhost:3001/vets";
+    const endpoint =  role === "owner"?"http://localhost:3001/owners": "http://localhost:3001/vets";
     
     try{
       const res = await fetch(`${endpoint}?email=${email}&password=${password}`);
@@ -40,16 +36,6 @@ export default function LoginTabs({ onLogin }) {
     } catch(err){
       setError("Σφάλμα σύνδεσης. Προσπαθήστε ξανά.");
     }
-    // console.log("login:", { role, email, password });
-
-    // if (onLogin) {
-    //   onLogin(role);
-    // }
-    // if (role === "owner") {
-    //   navigate("/owner-dashboard");
-    // } else if (role === "vet") {
-    //   navigate("/vet-dashboard");
-    // }
   }
 
   const title = role === "owner" ? "Σύνδεση Ιδιοκτήτη" : "Σύνδεση Κτηνιάτρου";
