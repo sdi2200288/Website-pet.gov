@@ -134,7 +134,7 @@ export default function AllLostPets() {
             <label>Ταξινόμηση</label>
             <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
               <option value="recent">Πιο πρόσφατα</option>
-              <option value="oldest">Παλαιότερα</option>
+              <option value="oldest">Πιο παλιά</option>
             </select>
           </div>
 
