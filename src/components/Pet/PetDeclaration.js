@@ -1,9 +1,16 @@
 import React from "react";
 import "./PetDeclaration.css";
 
-export default function PetDeclaration({ item, type }) {
-  const isLoss = type === "loss";
-  const isFinal = item.status === "final";
+export default function PetDeclaration({ item, type, onDeleteDeclaration }) {
+  const isLoss = type === "lost";
+  const isFinal = item.status === "submitted";
+  const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά Αποθηκευμένη";
+
+  const handleDelete = () => {
+    if (onDeleteDeclaration) {
+      onDeleteDeclaration(item.id, item.type);
+    }
+  };
 
   return (
     <article className={`petDeclarationCard ${isFinal ? "status-final" : "status-draft"}`}>
@@ -32,8 +39,8 @@ export default function PetDeclaration({ item, type }) {
         <div className="petDeclarationSide">
           <div className="petStatusRow">
             <span className="label">Κατάσταση</span>
-            <span className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"}`}>
-              {item.statusLabel}
+              <span className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"}`}>
+                {statusLabel}
             </span>
           </div>
 
@@ -45,7 +52,7 @@ export default function PetDeclaration({ item, type }) {
               </>
             ) : (
               <>
-                <button className="petButtonDanger">Διαγραφή</button>
+                <button className="petButtonDanger"  onClick={handleDelete}>Διαγραφή</button>
                 <button className="petButtonPrimary">Επεξεργασία</button>
               </>
             )}

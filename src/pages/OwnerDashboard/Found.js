@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from "react";
-// import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
-//import dog from "../../images/lostPet1.png";
 import "./PetReport.css";
+import { REGIONS} from "../Utils/Util";
 
 export default function Found() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [selectedPetId, setSelectedPetId] = useState(null); // προσωρινά, δείχνουμε Barbie πάντα
   const [pets, setPets] = useState([]);
-
   const [foundInfo, setFoundInfo] = useState({
     date: "",
     region: "",
     address: "",
     condition: "",
   });
+
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
-  // Προστασία route
-  useEffect(() => {
-    if(!user || user.role !== "owner"){
-      window.location.href = "/login";
-      return null;
+  const goToStep = (targetStep) => {
+    if (!user) {
+      window.location.href = "/login"; // redirect αν δεν υπάρχει user
+      return;
     }
-   }, [user]);
+    setStep(targetStep);
+  };
+  
+  // // Προστασία route
+  // useEffect(() => {
+  //   if(!user || user.role !== "owner"){
+  //     window.location.href = "/login";
+  //     return null;
+  //   }
+  //  }, [user]);
   
   // Fetch pets του ιδιοκτήτη
   useEffect(() => {
@@ -67,6 +76,9 @@ export default function Found() {
           setStep(0);
           setSelectedPetId(null);
           setFoundInfo({ date: "", region: "", address: "", condition: "" });
+          
+          // Μετάβαση στην αρχικη
+          navigate("/owner-dashboard");
         }
       }catch (err) {
         alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
@@ -103,7 +115,7 @@ export default function Found() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -147,14 +159,14 @@ export default function Found() {
           
           <button
             className="next-btn"
-            onClick={() => setStep(2)}
+            onClick={() =>  goToStep(2)}
           >
             Συνέχεια
           </button>
         </>
       )}
 
-      {/* ================= STEP 3 ================= */}
+      {/* ================= STEP 2 ================= */}
       {step === 2 && selectedPet &&  (
         <>
           <div className="stepper">
@@ -164,13 +176,13 @@ export default function Found() {
             </div>
             <div className="line" />
 
-            <div className="step clickable"  onClick={() => setStep(2)}>
+            <div className="step active" >
               <div className="circle">2</div>
               <div className="step-title">Εισαγωγή στοιχείων εύρεσης</div>
             </div>
             <div className="line" />
 
-            <div className="step active">
+            <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
             </div>
@@ -199,59 +211,11 @@ export default function Found() {
               }
             >
             <option value="">Επιλέξτε...</option>
-              <optgroup label="Μακεδονια & Θράκη">
-                <option value="Θεσσαλονίκη">Θεσσαλονίκη</option>
-                <option value="Σέρρες">Σέρρες</option>
-                <option value="Καβάλα">Καβάλα</option>
-                <option value="Δράμα">Δράμα</option>
-                <option value="Ξάνθη">Ξάνθη</option>
-                <option value="Κοζάνη">Κοζάνη</option>
-                <option value="Φλώρινα">Φλώρινα</option>
-              </optgroup>
-              <optgroup label="Θεσσαλία & Στερεά Ελλάδα">
-                <option value="Λάρισα">Λάρισα</option>
-                <option value="Βόλος">Βόλος</option>
-                <option value="Τρίκαλα">Τρίκαλα</option>
-                <option value="Καρδίτσα">Καρδίτσα</option>
-                <option value="Λαμία">Λαμία</option>
-              </optgroup>
-              <optgroup label="Ηπείρος & Ιόνια">
-                <option value="Άρτα">Άρτα</option>
-                <option value="Κέρκυρα">Κέρκυρα</option>
-                <option value="Ζάκυνθος">Ζάκυνθος</option>
-                <option value="Κεφαλλονιά">Κεφαλλονιά</option>
-              </optgroup>
-              <optgroup label="Πελοπόννησος & Δυτική Ελλάδα">
-                <option value="Πάτρα">Πάτρα</option>
-                <option value="Πύργος">Πύργος</option>
-                <option value="Τρίπολη">Τρίπολη</option>
-                <option value="Καλαμάτα">Καλαμάτα</option>
-                <option value="Σπάρτη">Σπάρτη</option>              
-                <option value="Κόρινθος">Κόρινθος</option>
-                <option value="Αιτωλοακαρνία">Αιτωλοακαρνία</option>
-              </optgroup>
-              <optgroup label="Αττική">
-                <option value="Αθήνα">Αθήνα (Κέντρο)</option>
-                <option value="Βόρεια Προάστεια">Βόρεια Προάστεια</option>
-                <option value="Νότια Προάστεια">Νότια Προάστεια</option>
-                <option value="Δυτικά Προάστεια">Δυτικά Προάστεια</option>
-                <option value="Πειραιάς">Πειραιάς</option>       
-              </optgroup>
-              <optgroup label="Νησιά Αιγαίου">
-                <option value="Χίος">Χίος</option>
-                <option value="Λέσβος">Λέσβος</option>
-                <option value="Σάμος">Σάμος</option>
-                <option value="Ρόδος">Ρόδος</option>
-                <option value="Κως">Κως</option>
-                <option value="Μύκονος">Μύκονος</option>
-                <option value="Σαντορίνη">Σαντορίνη</option>
-            </optgroup>
-            <optgroup label="Κρήτη">
-              <option value="Ηράκλειο">Ηράκλειο</option>
-              <option value="Χανιά">Χανιά</option>
-              <option value="Ρέθυμνο">Ρέθυμνο</option>
-              <option value="Λασίθι">Λασίθι (Αγ. Νικόλαος)</option>
-            </optgroup>
+               {REGIONS.map((region) => (
+                  <option key={region} value={region}>
+                    {region}
+                  </option>
+                ))}
             </select>
           </label>
 
@@ -283,8 +247,8 @@ export default function Found() {
           </div>
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
           </div>
         </div>
       </>
@@ -304,7 +268,7 @@ export default function Found() {
             </div>
             <div className="line" />
 
-            <div className="step clickable" onClick={() => setStep(3)}>
+            <div className="step active">
               <div className="circle">3</div>
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
             </div>
@@ -352,9 +316,9 @@ export default function Found() {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
-              <button type="button">Προσωρινή Αποθήκευση</button>
-              <button type="button">Οριστική Υποβολή</button>
+              <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+              <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
+              <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
         </>

@@ -2,7 +2,7 @@ import "./PetDeclaration.css";
 import React from "react";
 import PetDeclaration from "./PetDeclaration";
 
-export default function PetDeclarationsList({ type, declarations =[]}) {
+export default function PetDeclarationsList({ type, declarations =[],  onDeleteDeclaration }) {
   return (
     <div className="petTabPanel">
       <div className="petDeclarationsHeader">
@@ -16,8 +16,8 @@ export default function PetDeclarationsList({ type, declarations =[]}) {
       </div>
 
       <div className="petDeclarationsList">
-        {declarations.map((item) => (
-          <PetDeclaration key={item.id} item={item} type={type} />
+        {declarations.map(item => (
+          <PetDeclaration key={item.id} item={item} type={item.type} onDeleteDeclaration={onDeleteDeclaration} />
         ))}
       </div>
 

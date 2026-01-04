@@ -1,36 +1,151 @@
-import React, { useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import React, { useEffect,useState } from "react";
+// import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
-import dog from "../../images/lostPet1.png";
+// import dog from "../../images/lostPet1.png";
 import "./Anadoxi.css";
 
 export default function Anadoxi() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId] = useState(1); // προσωρινά, δείχνουμε Barbie πάντα
-
-    const [ownerInfo, setOwnerInfo] = useState({
+  const [microchip, setMicrochip] = useState("");
+  const [selectedPet, setSelectedPet] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [fosterInfo, setFosterInfo] = useState({
     afm: "",
     email: "",
     phone: "",
-    });
+  });
 
+  const vet = JSON.parse(localStorage.getItem("user"));
+  // const selectedPet = pets.find((p) => p.id === selectedPetId);
 
-  const pets = [
-    {
-      id: 1,
-      name: "Barbie",
-      photoUrl: dog,
-      microchip: "123456789",
-      species: "Σκύλος",
-      breed: "Golden Retriever",
-      gender: "Θηλυκό",
-      lastSeenDate: "12/10/2025",
-      region: "Αττική",
-      lastSeenAddress: "Σύνταγμα, Αθήνα",
-    },
-  ];
+  const goToStep = (targetStep) => {
+    if (!vet) {
+      window.location.href = "/login";
+      return;
+    }
 
-  const selectedPet = pets.find((p) => p.id === selectedPetId);
+    if (vet.role !== "vet") {
+      window.location.href = "/login";
+      return;
+    }
+    setStep(targetStep);
+  };
+
+  const handleSearchByMicrochip = async () => {
+    if (!microchip) {
+      alert("Εισάγετε αριθμό microchip");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/pets?microchip=${microchip}`
+      );
+      const data = await res.json();
+
+      if (!data.length) {
+        alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
+        setSelectedPet(null);
+        setLoading(false);
+        return;
+      }
+
+      setSelectedPet(data[0]);
+      setStep(2);
+    } catch (err) {
+      alert("Σφάλμα αναζήτησης");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Συνάρτηση για υπολογισμό ηλικίας από ημερομηνία γέννησης
+  const calculateAge = (birthdate) => {
+    if (!birthdate) return "Άγνωστη";
+    
+    const birth = new Date(birthdate);
+    const today = new Date();
+    let years = today.getFullYear() - birth.getFullYear();
+    const months = today.getMonth() - birth.getMonth();
+    
+    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
+      years--;
+    }
+    
+    return `${years} ετών`;
+  };
+
+   // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
+  const validateAFM = (afm) => {
+    const afmRegex = /^\d{9}$/;
+    return afmRegex.test(afm);
+  };
+
+  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
+  const validatePhone = (phone) => {
+    const phoneRegex = /^69\d{8}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // Έλεγχος αν όλα τα υποχρεωτικά πεδία είναι συμπληρωμένα
+  const isFormValid = () => {
+    return (
+      fosterInfo.afm.trim() !== "" &&
+      fosterInfo.email.trim() !== "" &&
+      fosterInfo.phone.trim() !== "" &&
+      validateAFM(fosterInfo.afm) &&
+      validatePhone(fosterInfo.phone)
+    );
+  };
+
+   const handleSubmit = async (status) => {
+    if (!selectedPet) return;
+
+    const report = {
+      petId: selectedPet.id,
+      microchip: selectedPet.microchip,
+      vetId: vet.id,
+      fosterAfm: fosterInfo.afm,
+      fosterEmail: fosterInfo.email,
+      fosterPhone: fosterInfo.phone,
+      status, // draft | submitted
+      startDate: new Date().toISOString().split('T')[0],
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch("http://localhost:3001/fosterReports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(report),
+      });
+
+      if (res.ok) {
+        alert(
+          `Η δήλωση αναδοχής ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`
+        );
+        // Reset
+        setStep(0);
+        setSelectedPet(null);
+        setMicrochip("");
+        setFosterInfo({ afm: "", email: "", phone: "" });
+        setError("");
+
+        // Μετάβαση στην αρχική
+        navigate("/vet-dashboard");
+      } else {
+        throw new Error("Σφάλμα στην αποθήκευση");
+      }
+    } catch {
+      alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
+    }
+  };
 
   return (
     <div className="anadoxi">
@@ -44,7 +159,6 @@ export default function Anadoxi() {
                 Στο πρώτο βημα, θα επιλέξετε το microchip του κατοικίδιου που είναι προς υιοθεσία και βρίσκεται υπό την προστασία σας.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -53,7 +167,6 @@ export default function Anadoxi() {
                 Στο δεύτερο βήμα θα επιβεβαιώσετε τα στοιχεία του κατοικίδιου, όπως είναι καταχωρημένα στη βάση δεδομένων.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -62,7 +175,6 @@ export default function Anadoxi() {
                 Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία του αναδόχου (ΑΦΜ, όνομα, τηλέφωνο).
               </span>
             </div>
-
              <div className="line" />
 
             <div className="step step-zero">
@@ -73,7 +185,7 @@ export default function Anadoxi() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -87,21 +199,18 @@ export default function Anadoxi() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -111,8 +220,28 @@ export default function Anadoxi() {
           </div>
 
           <h3>Εισάγετε τον αριθμό microchip τπυ κατοικιδίου</h3>
-
           <div className="chip-search">
+            <input
+              className="chip-input"
+              value={microchip}
+              onChange={(e) => setMicrochip(e.target.value)}
+              placeholder="Εισάγετε αριθμό microchip..."
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          {loading && <p>Αναζήτηση...</p>}
+          
+          <div style={{ marginTop: '20px' }}>
+            <button
+              className="next-btn"
+              onClick={handleSearchByMicrochip}
+              disabled={loading || !microchip.trim()}
+            >
+              {loading ? 'Αναζήτηση...' : 'Συνέχεια'}
+              {/* Συνέχεια */}
+            </button>
+          </div>
+          {/* <div className="chip-search">
             <input
               type="text"
               placeholder="Εισάγετε αριθμό microchip..."
@@ -127,7 +256,7 @@ export default function Anadoxi() {
             onClick={() => setStep(2)}
           >
             Συνέχεια
-          </button>
+          </button> */}
         </>
       )}
 
@@ -142,21 +271,18 @@ export default function Anadoxi() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -176,7 +302,7 @@ export default function Anadoxi() {
             <p className="value">{selectedPet.gender}</p>
 
             <p className="label">Ηλικία</p>
-            <p className="value">5 ετών</p>
+            <p className="value">{calculateAge(selectedPet.birthdate)}</p>
           </div>
 
           <div>
@@ -187,19 +313,22 @@ export default function Anadoxi() {
             <p className="value">{selectedPet.breed}</p>
 
             <p className="label">Ημερ. Γέννησης</p>
-            <p className="value">12/12/2004</p>
+            <p className="value">{selectedPet.birthdate}</p>
           </div>
 
           <div>
             <p className="label">Microchip</p>
             <p className="value">{selectedPet.microchip}</p>
+
+            <p className="label">Περιοχή</p>
+            <p className="value">{selectedPet.region || "Άγνωστη"}</p>
           </div>
         </div>
 
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
           </div>
         </div>
             </>
@@ -216,7 +345,6 @@ export default function Anadoxi() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -226,14 +354,12 @@ export default function Anadoxi() {
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
-
              <div className="line" />
 
             <div className="step">
@@ -249,21 +375,25 @@ export default function Anadoxi() {
             ΑΦΜ
             <input
                 type="text"
-                value={ownerInfo.afm}
+                value={fosterInfo.afm}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, afm: e.target.value })
+                setFosterInfo({ ...fosterInfo, afm: e.target.value })
                 }
                 placeholder="ΑΦΜ"
+                maxLength="9"
             />
+            {fosterInfo.afm && !validateAFM(fosterInfo.afm) && (
+                <span className="error-text">Ο ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία</span>
+            )}
             </label>
 
             <label>
             Email
             <input
                 type="email"
-                value={ownerInfo.email}
+                value={fosterInfo.email}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, email: e.target.value })
+                setFosterInfo({ ...fosterInfo, email: e.target.value })
                 }
                 placeholder="example@mail.com"
             />
@@ -273,18 +403,22 @@ export default function Anadoxi() {
             Τηλέφωνο
             <input
                 type="tel"
-                value={ownerInfo.phone}
+                value={fosterInfo.phone}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, phone: e.target.value })
+                setFosterInfo({ ...fosterInfo, phone: e.target.value })
                 }
                 placeholder="69XXXXXXXX"
+                maxLength="10"
             />
+            {fosterInfo.phone && !validatePhone(fosterInfo.phone) && (
+                <span className="error-text">Το τηλέφωνο πρέπει να ξεκινάει με 69 και να έχει 10 ψηφία</span>
+              )}
             </label>
 
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(4)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(4)}>Συνέχεια</button>
           </div>
         </div>
       </>
@@ -299,7 +433,6 @@ export default function Anadoxi() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -309,7 +442,6 @@ export default function Anadoxi() {
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -319,7 +451,6 @@ export default function Anadoxi() {
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων αναδοχής</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
@@ -355,9 +486,9 @@ export default function Anadoxi() {
 
                     <div className="info-box">
                         <h4>Στοιχεία Αναδόχου</h4>
-                        <p><span>ΑΦΜ:</span> {ownerInfo.afm}</p>
-                        <p><span>Email:</span> {ownerInfo.email}</p>
-                        <p><span>Τηλέφωνο:</span> {ownerInfo.phone}</p>
+                        <p><span>ΑΦΜ:</span> {fosterInfo.afm}</p>
+                        <p><span>Email:</span> {fosterInfo.email}</p>
+                        <p><span>Τηλέφωνο:</span> {fosterInfo.phone}</p>
                     </div>
                 </div>
               </div>
@@ -365,9 +496,9 @@ export default function Anadoxi() {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(3)}>Ακύρωση</button>
-              <button type="button">Προσωρινή Αποθήκευση</button>
-              <button type="button">Οριστική Υποβολή</button>
+              <button type="button" onClick={() => goToStep(3)}>Ακύρωση</button>
+              <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
+              <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
         </>

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { REGIONS } from "../Utils/Util";
 import PetDetails from "../../components/Pet/Pet";
-//import dog from "../../images/lostPet1.png";
 import "./PetReport.css";
 
-export default function Found() {
+export default function Loss() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [selectedPetId, setSelectedPetId] = useState(null); // προσωρινά, δείχνουμε Barbie πάντα
   const [pets, setPets] = useState([]);
-  const [foundInfo, setFoundInfo] = useState({
+  const [lossInfo, setLossInfo] = useState({
     date: "",
     region: "",
     address: "",
@@ -16,13 +17,21 @@ export default function Found() {
   });
 
   const user = JSON.parse(localStorage.getItem("user"));
- 
-  // Προστασία route
-  useEffect(() => {
-    if(!user || user.role !== "owner"){
-      window.location.href = "/login";
+  const selectedPet = pets.find((p) => p.id === selectedPetId);
+  
+  const goToStep = (targetStep) => {
+    if (!user) {
+      window.location.href = "/login"; // redirect αν δεν υπάρχει user
+      return;
     }
-  }, [user]);
+    setStep(targetStep);
+  };
+  // // Προστασία route
+  // useEffect(() => {
+  //   if(!user || user.role !== "owner"){
+  //     window.location.href = "/login";
+  //   }
+  // }, [user]);
 
   // Fetch pets του ιδιοκτήτη
   useEffect(() => {
@@ -36,8 +45,6 @@ export default function Found() {
       .catch(() => setPets([]));
   }, [user]);
 
-  const selectedPet = pets.find((p) => p.id === selectedPetId);
-
   const handleSubmit = async (status) => {
     if(!selectedPet){
       alert("Επιλέξτε πρώτα ένα κατοικίδιο!");
@@ -46,10 +53,10 @@ export default function Found() {
 
     const report = {
       petId: selectedPet.id,
-      date: foundInfo.date,
-      region: foundInfo.region,
-      address: foundInfo.address,
-      condition: foundInfo.condition,
+      date: lossInfo.date,
+      region: lossInfo.region,
+      address: lossInfo.address,
+      condition: lossInfo.condition,
       status, // 'draft' ή 'submitted'
       ownerId: user.id,
       createdAt: new Date().toISOString(),
@@ -68,7 +75,10 @@ export default function Found() {
         // Reset
         setStep(0);
         setSelectedPetId(null);
-        setFoundInfo({ date: "", region: "", address: "", condition: "" });
+        setLossInfo({ date: "", region: "", address: "", condition: "" });
+
+        // Μετάβαση στο ιστορικό δηλώσεων
+        navigate("/owner-dashboard");
       }
     }catch (err) {
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
@@ -107,7 +117,7 @@ export default function Found() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -149,10 +159,7 @@ export default function Found() {
               ))}
             </div>
           
-          <button
-            className="next-btn"
-            onClick={() => setStep(2)}
-          >
+          <button className="next-btn" onClick={() => goToStep(2)}>
             Συνέχεια
           </button>
         </>
@@ -168,13 +175,13 @@ export default function Found() {
             </div>
             <div className="line" />
 
-            <div className="step clickable" onClick={() => setStep(2)}>
+            <div className="step active">
               <div className="circle">2</div>
               <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
             </div>
             <div className="line" />
 
-            <div className="step active">
+            <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
             </div>
@@ -187,9 +194,9 @@ export default function Found() {
             Ημερομηνία
              <input
               type="date"
-              value={foundInfo.date}
+              value={lossInfo.date}
               onChange={(e) =>
-                setFoundInfo({ ...foundInfo, date: e.target.value })
+                setLossInfo({ ...lossInfo, date: e.target.value })
               }
             />
           </label>
@@ -197,65 +204,17 @@ export default function Found() {
           <label>
             Περιοχή (Νομός)
             <select
-              value={foundInfo.region}
+              value={lossInfo.region}
               onChange={(e) =>
-                setFoundInfo({ ...foundInfo, region: e.target.value })
+                setLossInfo({ ...lossInfo, region: e.target.value })
               }
             >
             <option value="">Επιλέξτε...</option>
-              <optgroup label="Μακεδονια & Θράκη">
-                <option value="Θεσσαλονίκη">Θεσσαλονίκη</option>
-                <option value="Σέρρες">Σέρρες</option>
-                <option value="Καβάλα">Καβάλα</option>
-                <option value="Δράμα">Δράμα</option>
-                <option value="Ξάνθη">Ξάνθη</option>
-                <option value="Κοζάνη">Κοζάνη</option>
-                <option value="Φλώρινα">Φλώρινα</option>
-              </optgroup>
-              <optgroup label="Θεσσαλία & Στερεά Ελλάδα">
-                <option value="Λάρισα">Λάρισα</option>
-                <option value="Βόλος">Βόλος</option>
-                <option value="Τρίκαλα">Τρίκαλα</option>
-                <option value="Καρδίτσα">Καρδίτσα</option>
-                <option value="Λαμία">Λαμία</option>
-              </optgroup>
-              <optgroup label="Ηπείρος & Ιόνια">
-                <option value="Άρτα">Άρτα</option>
-                <option value="Κέρκυρα">Κέρκυρα</option>
-                <option value="Ζάκυνθος">Ζάκυνθος</option>
-                <option value="Κεφαλλονιά">Κεφαλλονιά</option>
-              </optgroup>
-              <optgroup label="Πελοπόννησος & Δυτική Ελλάδα">
-                <option value="Πάτρα">Πάτρα</option>
-                <option value="Πύργος">Πύργος</option>
-                <option value="Τρίπολη">Τρίπολη</option>
-                <option value="Καλαμάτα">Καλαμάτα</option>
-                <option value="Σπάρτη">Σπάρτη</option>              
-                <option value="Κόρινθος">Κόρινθος</option>
-                <option value="Αιτωλοακαρνία">Αιτωλοακαρνία</option>
-              </optgroup>
-              <optgroup label="Αττική">
-                <option value="Αθήνα">Αθήνα (Κέντρο)</option>
-                <option value="Βόρεια Προάστεια">Βόρεια Προάστεια</option>
-                <option value="Νότια Προάστεια">Νότια Προάστεια</option>
-                <option value="Δυτικά Προάστεια">Δυτικά Προάστεια</option>
-                <option value="Πειραιάς">Πειραιάς</option>       
-              </optgroup>
-              <optgroup label="Νησιά Αιγαίου">
-                <option value="Χίος">Χίος</option>
-                <option value="Λέσβος">Λέσβος</option>
-                <option value="Σάμος">Σάμος</option>
-                <option value="Ρόδος">Ρόδος</option>
-                <option value="Κως">Κως</option>
-                <option value="Μύκονος">Μύκονος</option>
-                <option value="Σαντορίνη">Σαντορίνη</option>
-            </optgroup>
-            <optgroup label="Κρήτη">
-              <option value="Ηράκλειο">Ηράκλειο</option>
-              <option value="Χανιά">Χανιά</option>
-              <option value="Ρέθυμνο">Ρέθυμνο</option>
-              <option value="Λασίθι">Λασίθι (Αγ. Νικόλαος)</option>
-            </optgroup>
+              {REGIONS.map((region) => (
+                <option key={region} value={region}>
+                  {region}
+                </option>
+              ))}
             </select>
           </label>
 
@@ -264,9 +223,9 @@ export default function Found() {
             <input
               type="text"
               placeholder="Π.χ. Σύνταγμα"
-              value={foundInfo.address}
+              value={lossInfo.address}
               onChange={(e) =>
-                setFoundInfo({ ...foundInfo, address: e.target.value })
+                setLossInfo({ ...lossInfo, address: e.target.value })
               }/>
           </label>
 
@@ -275,9 +234,9 @@ export default function Found() {
            <textarea
               placeholder="Π.χ. Υγιές, φοβισμένο..."
               rows={4}
-              value={foundInfo.condition}
+              value={lossInfo.condition}
               onChange={(e) =>
-                setFoundInfo({ ...foundInfo, condition: e.target.value })
+                setLossInfo({ ...lossInfo, condition: e.target.value })
               }
             ></textarea>
           </label>
@@ -287,8 +246,8 @@ export default function Found() {
           </div>
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
           </div>
         </div>
       </>
@@ -308,7 +267,7 @@ export default function Found() {
             </div>
             <div className="line" />
 
-            <div className="step clickable"  onClick={() => setStep(3)}>
+            <div className="step active">
               <div className="circle">3</div>
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
             </div>
@@ -346,19 +305,19 @@ export default function Found() {
 
                   <div className="info-box">
                     <h4>Στοιχεία Απώλειας</h4>
-                    <p><span>Ημερομηνία:</span> {foundInfo.date}</p>
-                    <p><span>Περιοχή:</span> {foundInfo.region}</p>
-                    <p><span>Διεύθυνση:</span> {foundInfo.address}</p>
-                    <p><span>Κατάσταση Ζώου:</span> {foundInfo.condition}</p>
+                    <p><span>Ημερομηνία:</span> {lossInfo.date}</p>
+                    <p><span>Περιοχή:</span> {lossInfo.region}</p>
+                    <p><span>Διεύθυνση:</span> {lossInfo.address}</p>
+                    <p><span>Κατάσταση Ζώου:</span> {lossInfo.condition}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
-              <button type="button">Προσωρινή Αποθήκευση</button>
-              <button type="button">Οριστική Υποβολή</button>
+              <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+              <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
+              <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
         </>

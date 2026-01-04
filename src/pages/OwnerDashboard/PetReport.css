@@ -70,9 +70,10 @@
    BUTTONS
 ================================ */
 .next-btn {
-  margin-top: 25px;
+  display: block;
+  margin: 25px auto 0;   /* ⬅️ αυτό είναι το κλειδί */
   padding: 12px 40px;
-  background: #2f6fed; /* μπλε */
+  background: #2f6fed;
   color: #fff;
   border: none;
   border-radius: 8px;

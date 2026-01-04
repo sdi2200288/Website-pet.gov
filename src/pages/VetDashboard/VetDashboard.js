@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./VetDashboard.css";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet, useNavigate  } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -10,8 +10,26 @@ import {
 } from "react-icons/fa";
 
 export default function VetDashboard() {
+  const navigate = useNavigate();
   const [openDeclarations, setOpenDeclarations] = useState(false);
   const [openAnimalRegister, setOpenAnimalRegister] = useState(false);
+
+  const vet = JSON.parse(localStorage.getItem("user"));
+
+  // Προστασία route - μόνο για κτηνιάτρους
+  useEffect(() => {
+    if (!vet || vet.role !== "vet") {
+      navigate("/login");
+    }
+  }, [vet, navigate]);
+
+  // Συνάρτηση logout
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
+  if (!vet) return null;
 
   return (
     <div className="VetDashboard">
@@ -38,19 +56,19 @@ export default function VetDashboard() {
               </button>
               {openDeclarations && (
                 <ul className="submenu">
-                  <li><Link to="found2">Δήλωση Εύρεσης</Link></li>
-                  <li><Link to="loss2">Δήλωση Απώλειας</Link></li>
-                  <li><Link to="adopt">Δήλωση Υιοθεσίας</Link></li>
-                  <li><Link to="anadoxi">Δήλωση Αναδοχής</Link></li>
-                  <li><Link to="transfer">Δήλωση Μεταβίβασης</Link></li>
+                  <li><NavLink  to="found2" className={({ isActive }) => isActive ? "active" : ""}>Δήλωση Εύρεσης</NavLink ></li>
+                  <li><NavLink  to="loss2" className={({ isActive }) => isActive ? "active" : ""}>Δήλωση Απώλειας</NavLink ></li>
+                  <li><NavLink  to="adopt" className={({ isActive }) => isActive ? "active" : ""}>Δήλωση Υιοθεσίας</NavLink ></li>
+                  <li><NavLink  to="anadoxi" className={({ isActive }) => isActive ? "active" : ""}>Δήλωση Αναδοχής</NavLink ></li>
+                  <li><NavLink  to="transfer" className={({ isActive }) => isActive ? "active" : ""}>Δήλωση Μεταβίβασης</NavLink ></li>
                 </ul>
               )}
             </li>
 
             <li>
-              <Link to="/vet/history-statements">
+              <NavLink to="/vet/history-statements"  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}>
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
-              </Link>
+              </NavLink>
             </li>
 
             <li>
@@ -64,9 +82,9 @@ export default function VetDashboard() {
               </button>
               {openAnimalRegister && (
                 <ul className="submenu">
-                  <li><Link to="identity">Καταγραφή Ταυτότητας</Link></li>
-                  <li><Link to="/vet/declarations/loss">Ενημέρωση Ιατρικών Πράξεων</Link></li>
-                  <li><Link to="/vet/declarations/import">Προβολή Βιβλιαρίου</Link></li>
+                  <li><NavLink  to="identity"  className={({ isActive }) => isActive ? "active" : ""}>Καταγραφή Ταυτότητας</NavLink ></li>
+                  <li><NavLink  to="/vet/declarations/loss" className={({ isActive }) => isActive ? "active" : ""}>Ενημέρωση Ιατρικών Πράξεων</NavLink ></li>
+                  <li><NavLink  to="/vet/declarations/import" className={({ isActive }) => isActive ? "active" : ""}>Προβολή Βιβλιαρίου</NavLink ></li>
                 </ul>
               )}
             </li>

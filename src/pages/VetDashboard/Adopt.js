@@ -1,36 +1,150 @@
-import React, { useState } from "react";
-import { FiSearch } from "react-icons/fi";
-import PetDetails from "../../components/Pet/Pet";
+import React, { useEffect,useState } from "react";
+// import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+// import PetDetails from "../../components/Pet/Pet";0
 import dog from "../../images/lostPet1.png";
 import "./Adopt.css";
 
 export default function Adopt() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId] = useState(1); // προσωρινά, δείχνουμε Barbie πάντα
-
-    const [ownerInfo, setOwnerInfo] = useState({
+  const [microchip, setMicrochip] = useState("");
+  const [selectedPet, setSelectedPet] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [ownerInfo, setOwnerInfo] = useState({
     afm: "",
     email: "",
     phone: "",
-    });
+  });
 
+  const vet = JSON.parse(localStorage.getItem("user"));
+  // const selectedPet = pets.find((p) => p.id === selectedPetId);
 
-  const pets = [
-    {
-      id: 1,
-      name: "Barbie",
-      photoUrl: dog,
-      microchip: "123456789",
-      species: "Σκύλος",
-      breed: "Golden Retriever",
-      gender: "Θηλυκό",
-      lastSeenDate: "12/10/2025",
-      region: "Αττική",
-      lastSeenAddress: "Σύνταγμα, Αθήνα",
-    },
-  ];
+  const goToStep = (targetStep) => {
+    if (!vet) {
+      window.location.href = "/login";
+      return;
+    }
 
-  const selectedPet = pets.find((p) => p.id === selectedPetId);
+    if (vet.role !== "vet") {
+      window.location.href = "/login";
+      return;
+    }
+    setStep(targetStep);
+  };
+
+  const handleSearchByMicrochip = async () => {
+    if (!microchip) {
+      alert("Εισάγετε αριθμό microchip");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/pets?microchip=${microchip}`
+      );
+      const data = await res.json();
+
+      if (!data.length) {
+        alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
+        setSelectedPet(null);
+        setLoading(false);
+        return;
+      }
+
+      setSelectedPet(data[0]);
+      setStep(2);
+    } catch (err) {
+      alert("Σφάλμα αναζήτησης");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (status) => {
+    if (!selectedPet) return;
+
+    const report = {
+      petId: selectedPet.id,
+      microchip: selectedPet.microchip,
+      vetId: vet.id,
+      ownerAfm: ownerInfo.afm,
+      ownerEmail: ownerInfo.email,
+      ownerPhone: ownerInfo.phone,
+      status, // draft | submitted
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch("http://localhost:3001/lostReports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(report),
+      });
+
+      if (res.ok) {
+        alert(
+          `Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`
+        );
+        // Reset
+        setStep(0);
+        setSelectedPet(null);
+        setMicrochip("");
+        setOwnerInfo({ afm: "", email: "", phone: "" });
+        setError("");
+
+        // Μετάβαση στην αρχικη
+        navigate("/vet-dashboard");
+      } else {
+        throw new Error("Σφάλμα στην αποθήκευση");
+      }
+    } catch {
+      alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
+    }
+  };
+
+  // Συνάρτηση για υπολογισμό ηλικίας από ημερομηνία γέννησης
+  const calculateAge = (birthdate) => {
+    if (!birthdate) return "Άγνωστη";
+    
+    const birth = new Date(birthdate);
+    const today = new Date();
+    let years = today.getFullYear() - birth.getFullYear();
+    const months = today.getMonth() - birth.getMonth();
+    
+    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
+      years--;
+    }
+    
+    return `${years} ετών`;
+  };
+
+  // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
+  const validateAFM = (afm) => {
+    const afmRegex = /^\d{9}$/;
+    return afmRegex.test(afm);
+  };
+
+  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
+  const validatePhone = (phone) => {
+    const phoneRegex = /^69\d{8}$/;
+    return phoneRegex.test(phone);
+  };
+
+  // Έλεγχος αν όλα τα υποχρεωτικά πεδία είναι συμπληρωμένα
+  const isFormValid = () => {
+    return (
+      ownerInfo.afm.trim() !== "" &&
+      ownerInfo.email.trim() !== "" &&
+      ownerInfo.phone.trim() !== "" &&
+      validateAFM(ownerInfo.afm) &&
+      validatePhone(ownerInfo.phone)
+    );
+  };
 
   return (
     <div className="adopt">
@@ -44,7 +158,6 @@ export default function Adopt() {
                 Στο πρώτο βημα, θα επιλέξετε το microchip του κατοικίδιου που είναι προς υιοθεσία και βρίσκεται υπό την προστασία σας.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -53,7 +166,6 @@ export default function Adopt() {
                 Στο δεύτερο βήμα θα επιβεβαιώσετε τα στοιχεία του κατοικίδιου, όπως είναι καταχωρημένα στη βάση δεδομένων.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -62,7 +174,6 @@ export default function Adopt() {
                 Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία του ιδιοκτήτη (ΑΦΜ, όνομα, τηλέφωνο).
               </span>
             </div>
-
              <div className="line" />
 
             <div className="step step-zero">
@@ -73,7 +184,7 @@ export default function Adopt() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -87,21 +198,18 @@ export default function Adopt() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων ιδιοκτήτη</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -112,7 +220,7 @@ export default function Adopt() {
 
           <h3>Εισάγετε τον αριθμό microchip τπυ κατοικιδίου</h3>
 
-          <div className="chip-search">
+          {/* <div className="chip-search">
             <input
               type="text"
               placeholder="Εισάγετε αριθμό microchip..."
@@ -127,7 +235,28 @@ export default function Adopt() {
             onClick={() => setStep(2)}
           >
             Συνέχεια
-          </button>
+          </button> */}
+          <div className="chip-search">
+            <input
+              className="chip-input"
+              value={microchip}
+              onChange={(e) => setMicrochip(e.target.value)}
+              placeholder="Εισάγετε αριθμό microchip..."
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          {loading && <p>Αναζήτηση...</p>}
+          
+          <div style={{ marginTop: '20px' }}>
+            <button
+              className="next-btn"
+              onClick={handleSearchByMicrochip}
+              disabled={loading || !microchip.trim()}
+            >
+              {loading ? 'Αναζήτηση...' : 'Συνέχεια'}
+              {/* Συνέχεια */}
+            </button>
+          </div>
         </>
       )}
 
@@ -142,21 +271,18 @@ export default function Adopt() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων ιδιοκτήτη</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -176,7 +302,7 @@ export default function Adopt() {
             <p className="value">{selectedPet.gender}</p>
 
             <p className="label">Ηλικία</p>
-            <p className="value">5 ετών</p>
+            <p className="value">{calculateAge(selectedPet.birthdate)}</p>
           </div>
 
           <div>
@@ -193,13 +319,16 @@ export default function Adopt() {
           <div>
             <p className="label">Microchip</p>
             <p className="value">{selectedPet.microchip}</p>
+
+            <p className="label">Περιοχή</p>
+            <p className="value">{selectedPet.region || "Άγνωστη"}</p>
           </div>
         </div>
 
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
           </div>
         </div>
             </>
@@ -216,7 +345,6 @@ export default function Adopt() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -226,14 +354,12 @@ export default function Adopt() {
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων ιδιοκτήτη</div>
             </div>
-
              <div className="line" />
 
             <div className="step">
@@ -254,7 +380,11 @@ export default function Adopt() {
                 setOwnerInfo({ ...ownerInfo, afm: e.target.value })
                 }
                 placeholder="ΑΦΜ"
+                maxLength="9"
             />
+            {ownerInfo.afm && !validateAFM(ownerInfo.afm) && (
+                <span className="error-text">Ο ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία</span>
+            )}
             </label>
 
             <label>
@@ -278,13 +408,17 @@ export default function Adopt() {
                 setOwnerInfo({ ...ownerInfo, phone: e.target.value })
                 }
                 placeholder="69XXXXXXXX"
+                 maxLength="10"
             />
+             {ownerInfo.phone && !validatePhone(ownerInfo.phone) && (
+                <span className="error-text">Το τηλέφωνο πρέπει να ξεκινάει με 69 και να έχει 10 ψηφία</span>
+              )}
             </label>
 
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(4)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(4)}>Συνέχεια</button>
           </div>
         </div>
       </>
@@ -299,7 +433,6 @@ export default function Adopt() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -309,7 +442,6 @@ export default function Adopt() {
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div
@@ -319,7 +451,6 @@ export default function Adopt() {
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων ιδιοκτήτη</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
@@ -365,9 +496,9 @@ export default function Adopt() {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(3)}>Ακύρωση</button>
-              <button type="button">Προσωρινή Αποθήκευση</button>
-              <button type="button">Οριστική Υποβολή</button>
+              <button type="button" onClick={() => goToStep(3)}>Ακύρωση</button>
+              <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
+              <button type="button"nClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
         </>

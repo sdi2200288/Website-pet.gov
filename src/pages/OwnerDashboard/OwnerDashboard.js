@@ -13,16 +13,16 @@ import {
 
 
 export default function OwnerDashboard() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  useEffect(() => {
-    if(!user || user.role != "owner"){
-      navigate("/login");
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if(!user || user.role != "owner"){
+  //     navigate("/login");
+  //   }
+  // }, [user, navigate]);
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <div className="OwnerDashboard">
@@ -39,70 +39,70 @@ export default function OwnerDashboard() {
           <ul className="sidebar-menu">
             <li>
               <NavLink
-                to= {`found?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+                to={`found?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaFileAlt className="menu-icon" /> <span>Δηλώσεις Εύρεσης</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`loss?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+                to={`loss?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`history-statement?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+               to={`history-statement?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`health-booklet?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+                to={`health-booklet?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaBook className="menu-icon" /> <span>Προβολή Βιβλιαρίου</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`bookings?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+               to={`bookings?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaCalendarAlt className="menu-icon" /> <span>Κλείσιμο Ραντεβού</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`history-bookings?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
-              >
+                to={`history-bookings?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
+            >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
               </NavLink>
             </li>
             <li>
               <NavLink
-                to={`future-bookings?ownerId=${user.id}`}
-                className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+               to={`future-bookings?ownerId=${user?.id || ""}`}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
               >
                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
               </NavLink>

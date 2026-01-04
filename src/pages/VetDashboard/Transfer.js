@@ -1,45 +1,167 @@
-import React, { useState } from "react";
-import { FiSearch } from "react-icons/fi";
+import React, { useEffect,useState } from "react";
+// import { FiSearch } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
-import dog from "../../images/lostPet1.png";
+// import dog from "../../images/lostPet1.png";
 import "./Transfer.css";
 
 export default function Transfer() {
-  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId] = useState(1); // προσωρινά, δείχνουμε Barbie πάντα
+   const navigate = useNavigate();
+   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+   const [microchip, setMicrochip] = useState("");
+   const [currentOwner, setCurrentOwner] = useState(null);
+   const [selectedPet, setSelectedPet] = useState(null);
+   const [loading, setLoading] = useState(false);
+   const [error, setError] = useState("");
+   const [newOwnerInfo, setNewOwnerInfo] = useState({
+     afm: "",
+     email: "",
+     phone: "",
+   });
+ 
+   const vet = JSON.parse(localStorage.getItem("user"));
+   // const selectedPet = pets.find((p) => p.id === selectedPetId);
+ 
+  const goToStep = (targetStep) => {
+    if (!vet) {
+     window.location.href = "/login";
+     return;
+    }
+ 
+    if (vet.role !== "vet") {
+      window.location.href = "/login";
+      return;
+    }
+    setStep(targetStep);
+   };
+ 
+  // Συνάρτηση για φόρτωση του τρέχοντος ιδιοκτήτη
+  const loadCurrentOwner = async (ownerId) => {
+    try {
+      const res = await fetch(`http://localhost:3001/owners/${ownerId}`);
+      if (res.ok) {
+        const ownerData = await res.json();
+        setCurrentOwner(ownerData);
+      } else {
+        setCurrentOwner(null);
+      }
+    } catch (error) {
+      console.error("Σφάλμα φόρτωσης ιδιοκτήτη:", error);
+      setCurrentOwner(null);
+    }
+  };
+  const handleSearchByMicrochip = async () => {
+    if (!microchip) {
+      alert("Εισάγετε αριθμό microchip");
+      return;
+    }
 
-    const [ownerInfo, setOwnerInfo] = useState({
-    afm: "",
-    email: "",
-    phone: "",
-    });
+    setLoading(true);
+    setError("");
+    setSelectedPet(null);
+    setCurrentOwner(null);
 
+    try {
+      const res = await fetch(
+        `http://localhost:3001/pets?microchip=${microchip}`
+      );
+      const data = await res.json();
 
-  const pets = [
-    {
-      id: 1,
-      name: "Barbie",
-      photoUrl: dog,
-      microchip: "123456789",
-      species: "Σκύλος",
-      breed: "Golden Retriever",
-      gender: "Θηλυκό",
-      lastSeenDate: "12/10/2025",
-      region: "Αττική",
-      lastSeenAddress: "Σύνταγμα, Αθήνα",
-    },
-  ];
+      if (!data.length) {
+        alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
+        setSelectedPet(null);
+        setLoading(false);
+        return;
+      }
 
-  const currentOwner = {
-    firstname: "Γιώργος",
-    lastname: "Παπαδόπουλος",
-    afm: "012345678",
-    email: "owner@mail.com",
-    phone: "6987654321",
+      const foundPet = data[0];
+      setSelectedPet(foundPet);
+      
+      // Φόρτωση του τρέχοντος ιδιοκτήτη
+      await loadCurrentOwner(foundPet.ownerId);
+      setStep(2);
+    } catch (err) {
+      alert("Σφάλμα αναζήτησης");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const selectedPet = pets.find((p) => p.id === selectedPetId);
+  // Συνάρτηση για υπολογισμό ηλικίας από ημερομηνία γέννησης
+  const calculateAge = (birthdate) => {
+    if (!birthdate) return "Άγνωστη";
+    
+    const birth = new Date(birthdate);
+    const today = new Date();
+    let years = today.getFullYear() - birth.getFullYear();
+    const months = today.getMonth() - birth.getMonth();
+    
+    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
+      years--;
+    }
+    
+    return `${years} ετών`;
+  };
 
+  // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
+  const validateAFM = (afm) => {
+    const afmRegex = /^\d{9}$/;
+    return afmRegex.test(afm);
+  };
+
+  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
+  const validatePhone = (phone) => {
+    const phoneRegex = /^69\d{8}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const handleSubmit = async (status) => {
+    if (!selectedPet || !currentOwner) return;
+
+    const report = {
+      petId: selectedPet.id,
+      microchip: selectedPet.microchip,
+      vetId: vet.id,
+      currentOwnerId: currentOwner.id,
+      currentOwnerAfm: currentOwner.afm,
+      currentOwnerEmail: currentOwner.email,
+      currentOwnerPhone: currentOwner.phone,
+      newOwnerAfm: newOwnerInfo.afm,
+      newOwnerEmail: newOwnerInfo.email,
+      newOwnerPhone: newOwnerInfo.phone,
+      transferDate: new Date().toISOString().split('T')[0],
+      status, // draft | submitted
+      createdAt: new Date().toISOString(),
+    };
+
+    try {
+      const res = await fetch("http://localhost:3001/transferReports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(report),
+      });
+
+      if (res.ok) {
+        alert(
+          `Η δήλωση μεταβίβασης ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`
+        );
+        // Reset
+        setStep(0);
+        setSelectedPet(null);
+        setCurrentOwner(null);
+        setMicrochip("");
+        setNewOwnerInfo({ afm: "", email: "", phone: "" });
+        setError("");
+
+        // Μετάβαση στην αρχική
+        navigate("/vet-dashboard");
+      } else {
+        throw new Error("Σφάλμα στην αποθήκευση");
+      }
+    } catch {
+      alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
+    }
+  };
   return (
     <div className="transfer">
       {/* ================= STEP 0 ================= */}
@@ -52,7 +174,6 @@ export default function Transfer() {
                 Στο πρώτο βημα, θα εισάγετε το microchip του κατοικίδιου που είναι προς υιοθεσία και βρίσκεται υπό την προστασία σας.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -61,7 +182,6 @@ export default function Transfer() {
                 Στο δεύτερο βήμα θα επιβεβαιώσετε τα στοιχεία του κατοικίδιου και του ιδιοκτήτη, όπως είναι καταχωρημένα στη βάση δεδομένων.
               </span>
             </div>
-
             <div className="line" />
 
             <div className="step step-zero">
@@ -70,7 +190,6 @@ export default function Transfer() {
                 Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία του νέου ιδιοκτήτη (ΑΦΜ, όνομα, τηλέφωνο).
               </span>
             </div>
-
              <div className="line" />
 
             <div className="step step-zero">
@@ -81,7 +200,7 @@ export default function Transfer() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -95,21 +214,18 @@ export default function Transfer() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων μεταβίβασης</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -119,7 +235,28 @@ export default function Transfer() {
           </div>
 
           <h3>Εισάγετε τον αριθμό microchip του κατοικιδίου</h3>
-
+           <div className="chip-search">
+            <input
+              className="chip-input"
+              value={microchip}
+              onChange={(e) => setMicrochip(e.target.value)}
+              placeholder="Εισάγετε αριθμό microchip..."
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          {loading && <p>Αναζήτηση...</p>}
+          
+          <div style={{ marginTop: '20px' }}>
+            <button
+              className="next-btn"
+              onClick={handleSearchByMicrochip}
+              disabled={loading || !microchip.trim()}
+            >
+              {loading ? 'Αναζήτηση...' : 'Συνέχεια'}
+              {/* Συνέχεια */}
+            </button>
+          </div>
+          {/* 
           <div className="chip-search">
             <input
               type="text"
@@ -135,7 +272,7 @@ export default function Transfer() {
             onClick={() => setStep(2)}
           >
             Συνέχεια
-          </button>
+          </button> */}
         </>
       )}
 
@@ -150,21 +287,18 @@ export default function Transfer() {
               <div className="circle">1</div>
               <div className="step-title">Εισαγωγή microchip</div>
             </div>
-
             <div className="line" />
 
             <div className="step active">
               <div className="circle">2</div>
               <div className="step-title">Προβολή προφίλ</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Εισαγωγή στοιχείων μεταβίβασης</div>
             </div>
-
             <div className="line" />
 
             <div className="step">
@@ -184,7 +318,7 @@ export default function Transfer() {
             <p className="value">{selectedPet.gender}</p>
 
             <p className="label">Ηλικία</p>
-            <p className="value">5 ετών</p>
+            <p className="value">{calculateAge(selectedPet.birthdate)}</p>
           </div>
 
           <div>
@@ -195,12 +329,15 @@ export default function Transfer() {
             <p className="value">{selectedPet.breed}</p>
 
             <p className="label">Ημερ. Γέννησης</p>
-            <p className="value">12/12/2004</p>
+            <p className="value">{selectedPet.birthdate}</p>
           </div>
 
           <div>
             <p className="label">Microchip</p>
             <p className="value">{selectedPet.microchip}</p>
+
+            <p className="label">Περιοχή</p>
+            <p className="value">{selectedPet.region || "Άγνωστη"}</p>
           </div>
         </div>
             <h3>Τρέχων Ιδιοκτήτης</h3>
@@ -223,8 +360,8 @@ export default function Transfer() {
             </div>
             </div>
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
           </div>
           </div>
         </>
@@ -274,21 +411,25 @@ export default function Transfer() {
             ΑΦΜ
             <input
                 type="text"
-                value={ownerInfo.afm}
+                value={newOwnerInfo.afm}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, afm: e.target.value })
+                setNewOwnerInfo({ ...newOwnerInfo, afm: e.target.value })
                 }
                 placeholder="ΑΦΜ"
+                maxLength="9"
             />
+            {newOwnerInfo.afm && !validateAFM(newOwnerInfo.afm) && (
+                <span className="error-text">Ο ΑΦΜ πρέπει να έχει ακριβώς 9 ψηφία</span>
+              )}
             </label>
 
             <label>
             Email
             <input
                 type="email"
-                value={ownerInfo.email}
+                value={newOwnerInfo.email}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, email: e.target.value })
+                setNewOwnerInfo({ ...newOwnerInfo, email: e.target.value })
                 }
                 placeholder="example@mail.com"
             />
@@ -298,18 +439,22 @@ export default function Transfer() {
             Τηλέφωνο
             <input
                 type="tel"
-                value={ownerInfo.phone}
+                value={newOwnerInfo.phone}
                 onChange={(e) =>
-                setOwnerInfo({ ...ownerInfo, phone: e.target.value })
+                setNewOwnerInfo({ ...newOwnerInfo, phone: e.target.value })
                 }
                 placeholder="69XXXXXXXX"
+                  maxLength="10"
             />
+            {newOwnerInfo.phone && !validatePhone(newOwnerInfo.phone) && (
+                <span className="error-text">Το τηλέφωνο πρέπει να ξεκινάει με 69 και να έχει 10 ψηφία</span>
+              )}
             </label>
 
 
           <div className="form-buttons">
-            <button type="button" onClick={() => setStep(2)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(4)}>Συνέχεια</button>
+            <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+            <button type="button" onClick={() => goToStep(4)}>Συνέχεια</button>
           </div>
         </div>
       </>
@@ -380,9 +525,9 @@ export default function Transfer() {
 
                     <div className="info-box">
                         <h4>Στοιχεία Νέου Ιδιοκτήτη</h4>
-                        <p><span>ΑΦΜ:</span> {ownerInfo.afm}</p>
-                        <p><span>Email:</span> {ownerInfo.email}</p>
-                        <p><span>Τηλέφωνο:</span> {ownerInfo.phone}</p>
+                        <p><span>ΑΦΜ:</span> {newOwnerInfo.afm}</p>
+                        <p><span>Email:</span> {newOwnerInfo.email}</p>
+                        <p><span>Τηλέφωνο:</span> {newOwnerInfo.phone}</p>
                     </div>
                 </div>
               </div>
@@ -390,9 +535,9 @@ export default function Transfer() {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(3)}>Ακύρωση</button>
-              <button type="button">Προσωρινή Αποθήκευση</button>
-              <button type="button">Οριστική Υποβολή</button>
+              <button type="button" onClick={() => goToStep(3)}>Ακύρωση</button>
+              <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
+              <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
         </>
