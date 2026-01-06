@@ -17,14 +17,26 @@
     {
       "id": "v001",
       "firstname": "ΓΙΩΡΓΟΣ",
-      "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
-      "afm": "123456789",
-      "clinicName": "Κτηνιατρικό Κέντρο Αθήνας",
-      "address": "Πατησίων 120, Αθήνα",
-      "phone": "2101234567",
-      "email": "vet@clinic.gr",
-      "password": "Vet123!",
-      "role": "vet"
+      "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "afm": "1112223334",
+      "gender": "male",
+      "address": "Πατησίων 100",
+      "birthdate": "1988-01-18",
+      "phone": "6900000100",
+      "email": "vetgiorgos@example.com",
+      "password": "Vet1!!"
+    },
+    {
+      "id": "v202",
+      "firstname": "ΕΛΕΝΗ",
+      "lastname": "ΝΙΚΟΛΑΟΥ",
+      "afm": "2223334445",
+      "gender": "female",
+      "address": "Εγνατία 55",
+      "birthdate": "1990-07-07",
+      "phone": "6900000200",
+      "email": "veteleni@example.com",
+      "password": "Vet2!!"
     }
   ],
   "pets": [
