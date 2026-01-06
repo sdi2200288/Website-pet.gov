@@ -7,42 +7,50 @@ import { SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
 
 export default function Profile() {
   const navigate = useNavigate();
+  const [pets, setPets] = useState([]);
+  const [species, setSpecies] = useState("");
+  const [breed, setBreed] = useState("");
+  const [gender, setGender] = useState("");
+  const [lost, setLost] = useState("");
+  const [chipInput, setChipInput] = useState("");
+  const [chipSearch, setChipSearch] = useState("");
 
-  //logged-in user
   const user = JSON.parse(localStorage.getItem("user"));
-  //προστασια σελιδας
+
   useEffect(() => {
-    if(! user || user.role != "owner"){
+    if (!user || user.role !== "owner" && user.role !== "vet") {
       navigate("/login");
     }
   }, [user, navigate]);
 
-  //pets
-  const [pets, setPets] = useState([]);
-  const [selectedSpecies, setSelectedSpecies] = useState("");
-
   useEffect(() => {
-    if(!user) return;
-
+    if (!user) return;
     fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
       .then((res) => res.json())
       .then((data) => setPets(data))
-      .catch(() => setPets([]));
-  }, [user]);
+      .catch(console.error);
+  }, []);
 
-  const getBreeds = () => {
-    if (!selectedSpecies) {
-      return [...dogPopular, ...catPopular];
-    }
-    if (selectedSpecies === "Σκύλος") {
-      return dogPopular;
-    }
-    if (selectedSpecies === "Γάτα") {
-      return catPopular;
-    }
-    return [];
+  const handleSpeciesChange = (e) => {
+    setSpecies(e.target.value);
+    setBreed("");
   };
-  const breeds = getBreeds();
+
+  const breedOptions = species === "Σκύλος" ? dogPopular : species === "Γάτα" ? catPopular : [];
+
+
+  const filteredPets = pets.filter((p) => {
+    if (species && p.species !== species) return false;
+    if (breed && p.breed !== breed) return false;
+    if (gender && p.gender !== gender) return false;
+
+    if (lost) {
+      if (lost === "1" && !p.lost) return false;
+      if (lost === "0" && p.lost) return false;
+    }
+    if (chipSearch && !p.microchip?.includes(chipSearch)) return false;
+    return true;
+  });
 
   if (!user) return null;
 
@@ -53,13 +61,17 @@ export default function Profile() {
       {/* ΚΑΡΤΑ ΠΡΟΦΙΛ */}
       <div className="profile-card">
 
+        <h2 className="profile-title">
+          {user.role === "vet" ? "Προφίλ Κτηνιάτρου" : "Προφίλ Ιδιοκτήτη"}
+        </h2>
+        
         <div className="profile-columns">
 
           {/* Αριστερή στήλη */}
           <div className="profile-section">
             <h3>Προσωπικά στοιχεία</h3>
             <ul>
-  
+
               <li className="profile-row"><span>Όνομα</span><p>{user.firstname}</p></li>
               <li className="profile-row"><span>Επώνυμο</span><p>{user.lastname}</p></li>
               <li className="profile-row"><span>Φύλο</span><p>{user.gender}</p></li>
@@ -89,22 +101,12 @@ export default function Profile() {
 
       {/* ΚΑΤΟΙΚΙΔΙΑ */}
       <div className="pets-section">
-        <h3>Τα κατοικίδιά μου ({pets.length})</h3>
+        <h3>Τα κατοικίδιά μου ({filteredPets.length})</h3>
 
         <div className="pets-filters">
           <div className="filter-item">
-            <span className="filter-label">Ταξινόμηση:</span>
-            <select>
-              <option value="">Αλφαβητικά</option>
-              <option value="name">Όνομα (Α-Ω)</option>
-              <option value="age">Ηλικία (Μικρότερο-Μεγαλύτερο)</option>
-            </select>
-          </div>
-
-          <div className="filter-item">
             <span className="filter-label">Είδος:</span>
-            <select value={selectedSpecies}
-              onChange={(e) => setSelectedSpecies(e.target.value)}>
+            <select value={species} onChange={handleSpeciesChange}>
               <option value="">Όλα</option>
               {SPECIES.map((sp) => (
                 <option key={sp} value={sp}>
@@ -116,9 +118,13 @@ export default function Profile() {
 
           <div className="filter-item">
             <span className="filter-label">Ράτσα:</span>
-            <select>
+            <select
+              value={breed}
+              onChange={(e) => setBreed(e.target.value)}
+              disabled={!species}
+            >
               <option value="">Όλες</option>
-              {breeds.map((b) => (
+              {breedOptions.map((b) => (
                 <option key={b} value={b}>
                   {b}
                 </option>
@@ -129,7 +135,7 @@ export default function Profile() {
 
           <div className="filter-item">
             <span className="filter-label">Φύλο:</span>
-            <select>
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
               <option value="">Όλα</option>
               {GENDERS.map((g) => (
                 <option key={g} value={g}>
@@ -141,7 +147,7 @@ export default function Profile() {
 
           <div className="filter-item">
             <span className="filter-label">Εξαφανισμένο:</span>
-            <select>
+            <select value={lost} onChange={(e) => setLost(e.target.value)}>
               <option value="">Όλα</option>
               <option value="0">Όχι</option>
               <option value="1">Ναι</option>
@@ -153,8 +159,19 @@ export default function Profile() {
               type="text"
               placeholder="Εισάγετε αριθμό μικροτσίπ..."
               className="hero-input"
+              value={chipInput}
+              onChange={(e) => setChipInput(e.target.value)}
             />
-            <button className="hero-button" aria-label="Αναζήτηση">
+            <button className="hero-button" aria-label="Αναζήτηση"
+              onClick={() => {
+                const q = chipInput.trim();
+                setSpecies("");
+                setBreed("");
+                setGender("");
+                setLost("");
+                setChipSearch(q);
+              }}
+            >
               <FiSearch size={18} />
             </button>
 
@@ -162,26 +179,15 @@ export default function Profile() {
         </div>
 
         <div className="pets-grid">
-          {pets.length === 0 && (
+          {filteredPets.length === 0 && (
             <p>Δεν έχετε καταχωρίσει κατοικίδια.</p>
           )}
-          {pets.map((pet) => (
-            <div
-            key = {pet.id}
-            className="pet-card-wrapper"
-            onClick={() => navigate(`/ProfilePetOwner/${pet.id}`)}
-          >
-            <PetDetails pet={pet} />
-          </div>
+          {filteredPets.map((pet) => (
+            <div key={pet.id} className="pet-card-wrapper" onClick={() => navigate(`/ProfilePetOwner/${pet.id}`)} >
+              <PetDetails pet={pet} mode={pet.lost ? 0 : 1} />
+            </div>
           ))}
-          {/* <div
-            className="pet-card-wrapper"
-            onClick={() => navigate("/ProfilePetOwner")}
-          >
-            <PetDetails mode={1} />
-          </div> */}
         </div>
-
       </div>
     </div>
   );

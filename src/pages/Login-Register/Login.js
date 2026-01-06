@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Register.css";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,34 +8,50 @@ export default function LoginTabs({ onLogin }) {
   const [role, setRole] = useState("owner");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
+
+  const validate = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = "Πρέπει να συμπληρωθεί το email";
+    else if (!email.includes("@")) newErrors.email = "Μη έγκυρο email";
+    if (!password) newErrors.password = "Πρέπει να συμπληρωθεί ο κωδικός";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   async function onSubmit(e) {
     e.preventDefault();
-    setError("");
-    const endpoint =  role === "owner"?"http://localhost:3001/owners": "http://localhost:3001/vets";
-    
-    try{
-      const res = await fetch(`${endpoint}?email=${email}&password=${password}`);
+    setServerError("");
+    setErrors({});
+    if (!validate()) return;
+
+    const endpoint = role === "owner" ? "http://localhost:3001/owners" : "http://localhost:3001/vets";
+
+    try {
+      const res = await fetch(`${endpoint}?email=${email}`);
       const data = await res.json();
 
-      if(data.length === 0){
-        setError("Λάθος email ή κωδικός");
+      if (data.length === 0) {
+        setServerError("Δεν υπάρχει χρήστης με αυτό το email");
         return;
       }
 
       const user = data[0];
-      if(onLogin){
-        onLogin({ ...user, role });
+      if (user.password !== password) {
+        setServerError("Λάθος κωδικός");
+        return;
       }
-      if(role === "owner"){
+      onLogin({ ...user, role });
+      if (role === "owner") {
         navigate("/owner-dashboard");
-      }else{
+      } else {
         navigate("/vet-dashboard");
       }
-    } catch(err){
-      setError("Σφάλμα σύνδεσης. Προσπαθήστε ξανά.");
+    } catch (err) {
+      setServerError("Σφάλμα σύνδεσης. Προσπαθήστε ξανά.");
     }
   }
 
@@ -47,41 +64,66 @@ export default function LoginTabs({ onLogin }) {
           <button
             type="button"
             className={`loginTab ${role === "owner" ? "isActive" : ""}`}
-            onClick={() => setRole("owner")}
+            onClick={() => {
+              if (role === "vet") {
+                setEmail("")
+                setPassword("")
+                setErrors({})
+                setServerError("")
+                setRole("owner")
+              }
+            }}
           >
             Ιδιοκτήτης
           </button>
           <button
             type="button"
             className={`loginTab ${role === "vet" ? "isActive" : ""}`}
-            onClick={() => setRole("vet")}
+           onClick={() => {
+              if (role === "owner") {
+                setEmail("")
+                setPassword("")
+                setErrors({})
+                setServerError("")
+                setRole("vet")
+              }
+            }}
           >
             Κτηνίατρος
           </button>
         </div>
         <h2 className="loginTitle">{title}</h2>
-        <form className="loginForm" onSubmit={onSubmit}>
+        <form className="loginForm" onSubmit={onSubmit} noValidate>
           <label className="loginLabel">
-            Email
+            Email *
             <input
-              className="loginInput"
+              className={`loginInput ${errors.email ? "inputError" : ""}`}
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
+            {errors.email && <div className="fieldError">{errors.email}</div>}
           </label>
           <label className="loginLabel">
-            Κωδικός
-            <input
-              className="loginInput"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            Κωδικός *
+            <div style={{ position: "relative" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                className={`loginInput ${errors.password ? "inputError" : ""}`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="button-password"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+            {errors.password && <div className="fieldError">{errors.password}</div>}
           </label>
-          {error && <div className="fieldError">{error}</div>}
+          {serverError && <div className="fieldError">{serverError}</div>}
           <button className="loginButton" type="submit">
             Σύνδεση
           </button>

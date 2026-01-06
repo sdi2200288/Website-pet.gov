@@ -68,8 +68,14 @@
   outline: none;
 }
 
+.filter-field select.filtered,
+.filter-field input.filtered {
+  border: 2px solid #7a7f85;
+  background: #e6f0ff;
+}
+
 .filter-field select:focus {
-  border-color: #6db2f8;
+  border-color: #3c3e41;
 }
 
 
@@ -219,8 +225,8 @@
 
 .lost-pets-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .lost-pet-card {
@@ -235,7 +241,7 @@
 .lost-pet-card a {
   text-decoration: none;
   color: inherit;
-  display: block;       
+  display: block;
 }
 
 .lost-pet-card:hover {

@@ -21,11 +21,12 @@ export default function Homepage() {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    if (!searchChip.trim()) {
+    const chip = searchChip.trim();
+    if (!chip) {
       alert("Παρακαλώ εισάγετε τον αριθμό μικροτσίπ για αναζήτηση");
       return;
     }
-    const pet = petData.find(p => p.micorchip === searchChip);
+    const pet = petData.find(p => p.microchip === chip);
     if (!pet) {
       alert("Δεν βρέθηκε κατοικίδιο με αυτόν τον αριθμό μικροτσίπ");
       return;
@@ -35,7 +36,7 @@ export default function Homepage() {
       return;
     }
     else {
-      navigate(`/PetProfile/${pet.id}`);
+      navigate(`/all-lost-pets/PetProfile/${pet.id}`);
     }
   };
 
@@ -137,68 +138,60 @@ export default function Homepage() {
 
         </div>
       </section>
-      <section className="lost-pets-section">
-        <div className="lost-pets-wrap">
-          <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
-          <div className="lost-pets-grid">
-            {
-              lostPets.length === 0 ? (
-                <p className="empty-message">
-                  Δεν υπάρχουν δηλωμένα χαμένα κατοικίδια αυτή τη στιγμή
-                </p>
-              ) :
-                (
-                  lostPets.map((pet) => (
-                    <div className="lost-pet-card" key={pet.id}>
-                      <PetDetails pet={pet} mode={0} />
-                    </div>
-                  ))
-                )
-            }
-          </div>
-          {
-            lostPets.length !== 0 ? (
+      {
+        lostPets.length === 0 ? (
+          null
+        ) : (
+          <section className="lost-pets-section">
+            <div className="lost-pets-wrap">
+              <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
+
+              <div className="lost-pets-grid">
+                {lostPets.map((p) => (
+                  <div className="lost-pet-card" key={p.id}>
+                    <Link to={`/all-lost-pets/PetProfile/${p.id}`}>
+                      <PetDetails pet={p} mode={0} />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+
               <div className="lost-pets-cta">
                 <Link to="/all-lost-pets" className="see-all-lost-pets-btn">
                   Δες όλα τα χαμένα κατοικίδια
                 </Link>
               </div>
-            ) : null
-          }
-        </div>
+            </div>
+          </section>
+        )
+      }
+      {
+        topVets.length === 0 ? (
+          null
+        ) : (
+          <section className="lost-pets-section">
+            <div className="lost-pets-wrap">
+              <p className="lost-pets-title">Οι καλύτεροι κτηνιατροί μας</p>
 
-      </section>
-      <section className="lost-pets-section">
-        <div className="lost-pets-wrap">
-          <p className="lost-pets-title">Οι καλύτεροι κτηνιατροί μας</p>
-          <div className="lost-pets-grid">
-            {
-              topVets.length === 0 ? (
-                <p className="empty-message">
-                  Δεν υπάρχουν αξιολογημένοι κτηνίατροι
-                </p>
-              ) :
-                (
-                  topVets.map((vet) => (
-                    <div className="lost-pet-card" key={vet.id}>
-                      <VetDetails vet={vet} />
-                    </div>
-                  ))
-                )
-            }
-          </div>
-          {
-            topVets.length !== 0 ? (
+              <div className="lost-pets-grid">
+                {topVets.map((vet) => (
+                  <div className="lost-pet-card" key={vet.id}>
+                    <VetDetails vet={vet} />
+                  </div>
+                ))
+                }
+              </div>
+
               <div className="lost-pets-cta">
                 <Link to="/all-vets" className="see-all-lost-pets-btn">
                   Δες όλoυς τους κτηνιάτρους μας
                 </Link>
               </div>
-            ) : null
-          }
-        </div>
+            </div>
+          </section>
+        )
+      }
 
-      </section >
       <section className="stats-section">
         <div className="stats-wrap">
           <div className="stats-title">Στατιστικά πλατφόρμας</div>

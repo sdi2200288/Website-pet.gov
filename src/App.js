@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import Menu from "./components/Menu/Menu";
 import Footer from "./components/Footer/Footer";
@@ -25,9 +26,11 @@ import HealthBookletVet from "./pages/VetDashboard/HealthBookletVet";
 
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import PetProfile from "./pages/AllLostPets/PetProfile";
+import FoundLost from "./pages/AllLostPets/found";
 
 import ProfileOwner from "./pages/OwnerDashboard/Profile";
 import ProfileVet from "./pages/VetDashboard/Profile";
+
 import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
 import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
 
@@ -45,6 +48,8 @@ import FAQOwner from "./pages/FooterPages/FAQ/FAQOwner";
 import FAQVet from "./pages/FooterPages/FAQ/FAQVet";
 
 function App() {
+  const location = useLocation();
+  const showMenuFooter = !location.pathname.startsWith("/foundLostPet/");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
   const [userRole, setUserRole] = useState(null);
@@ -64,10 +69,9 @@ function App() {
     localStorage.removeItem("user");
   };
   return (
-    <BrowserRouter>
+    <>
       <ScrollTop />
-
-      <Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} activeMenu={activeMenu} setActiveMenu={setActiveMenu} userRole={userRole} />
+      {showMenuFooter && (<Menu isLoggedIn={isLoggedIn} onLogout={handleLogout} activeMenu={activeMenu} setActiveMenu={setActiveMenu} userRole={userRole} />)}
 
       <main className="main-content">
         <Routes>
@@ -91,13 +95,12 @@ function App() {
             <Route path="loss" element={<Loss />} />
             <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
-          <Route path="/ProfileOwner" element={userRole === "owner" ? <ProfileOwner /> : <HomePage />} />
-          <Route path="/ProfileVet" element={userRole === "vet" ? <ProfileVet /> : <HomePage />} />
-          <Route path="/ProfilePetOwner" element={<ProfilePetOwner />} />
-
+          <Route path="/ProfileOwner" element={<ProfileOwner/> }/>
+          <Route path="/ProfilePetOwner/:id" element={<ProfilePetOwner />} />
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />
-          <Route path="/PetProfile" element={<PetProfile />} />
+          <Route path="/all-lost-pets/PetProfile/:id" element={<PetProfile />} />
+          <Route path="/foundLostPet/:id" element={<FoundLost isLoggedIn={isLoggedIn} userData={userData} />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register/owner" element={
@@ -126,8 +129,8 @@ function App() {
         </Routes>
       </main>
 
-      <Footer setActiveMenu={setActiveMenu} />
-    </BrowserRouter>
+      {showMenuFooter && <Footer setActiveMenu={setActiveMenu} />}
+    </>
   );
 }
 

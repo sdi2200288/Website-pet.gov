@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 
-export default function PetProfile({ setActiveMenu }) {
+export default function PetProfile() {
   const { id } = useParams();
   const [pet, setPet] = useState(null);
   const [owner, setOwner] = useState(null);
@@ -17,8 +17,9 @@ export default function PetProfile({ setActiveMenu }) {
         if (!res.ok) throw new Error("Το κατοικίδιο δεν βρέθηκε");
         const data = await res.json();
         if (!data.lost) throw new Error("Το συγκεκριμένο κατοικίδιο δεν είναι χαμένο");
-
-        const resOwner = await fetch(`http://localhost:3001/owners/${data.ownerId}`);
+        if (!data.ownerId) throw new Error("Λείπει ownerId από το κατοικίδιο.");
+        let resOwner = await fetch(`http://localhost:3001/owners/${data.ownerId}`);
+        if (!resOwner.ok) resOwner = await fetch(`http://localhost:3001/vets/${data.ownerId}`);
         if (!resOwner.ok) throw new Error("Δεν βρέθηκε ο ιδιοκτήτης.");
         const ownerData = await resOwner.json();
 
@@ -33,7 +34,7 @@ export default function PetProfile({ setActiveMenu }) {
   }, [id]);
 
   if (error) return <p>{error}</p>;
-  if (!pet || !owner) return null;
+  if (!pet || !owner) return <p>Φόρτωση...</p>;
 
   return (
     <div className="petProfilePage">
@@ -102,12 +103,12 @@ export default function PetProfile({ setActiveMenu }) {
               <div className="petSectionGrid">
                 <div className="petField">
                   <span className="label">Διεύθυνση</span>
-                  <span className="value">{pet.lostAddress}</span>
+                  <span className="value">{pet.lastSeenAddress}</span>
                 </div>
 
                 <div className="petField">
                   <span className="label">Ημερομηνία</span>
-                  <span className="value">{pet.lostDate}</span>
+                  <span className="value">{pet.lastSeenDate}</span>
                 </div>
 
                 <div className="petField">
@@ -147,7 +148,7 @@ export default function PetProfile({ setActiveMenu }) {
               </div>
             </section>
           </div>
-          <button className="petPrimaryButton" onClick={() => navigate(`/found/${pet.id}`)}>
+          <button className="petPrimaryButton" onClick={() => navigate(`/foundLostPet/${pet.id}`)}>
             Δήλωση Εύρεσης
           </button>
         </div>

@@ -4,8 +4,7 @@ import { Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import XamenaKatoikidia from "../../images/XamenaKatoikidia.png";
 import PetDetails from "../../components/Pet/Pet";
-import { SPECIES, REGIONS, dogPopular, catPopular } from "../Utils/Util";
-
+import { GENDERS, SPECIES, REGIONS, dogPopular, catPopular } from "../Utils/Util";
 
 export default function AllLostPets() {
   const [lostPets, setLostPets] = useState([]);
@@ -34,6 +33,37 @@ export default function AllLostPets() {
     fetchData();
   }, []);
 
+  const handleSearch = () => {
+    if (!chipSearch.trim()) {
+      alert("Παρακαλώ εισάγετε τον αριθμό μικροτσίπ για αναζήτηση");
+      return;
+    }
+    const result = allLostPets.filter(p => p.microchip?.includes(chipSearch));
+    setLostPets(result);
+  };
+
+  useEffect(() => {
+    setLostPets(prev => [...prev].sort((a, b) => sortOrder === "recent" ? new Date(b.lostDate) - new Date(a.lostDate) : new Date(a.lostDate) - new Date(b.lostDate)));
+  }, [sortOrder]);
+
+  const applyFiltersAndSort = () => {
+    let result = [...allLostPets];
+    if (region) result = result.filter(p => p.region === region);
+    if (species) result = result.filter(p => p.species === species);
+    if (breed) result = result.filter(p => p.breed === breed);
+    if (gender) result = result.filter(p => p.gender === gender);
+    result.sort((a, b) => sortOrder === "recent" ? new Date(b.lastSeenDate) - new Date(a.lastSeenDate) : new Date(a.lastSeenDate) - new Date(b.lastSeenDate));
+    setLostPets(result);
+  };
+
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [sortOrder]);
+
+  const doFilters = () => {
+    applyFiltersAndSort();
+  };
+
   const handleSpeciesChange = (e) => {
     const value = e.target.value;
     setSpecies(value);
@@ -43,27 +73,15 @@ export default function AllLostPets() {
     else { setBreedOptions([]); }
   };
 
-  const doFilters = () => {
-    let filtered = [...allLostPets];
-    if (region) filtered = filtered.filter((p) => p.region === region);
-    if (species) filtered = filtered.filter((p) => p.species === species);
-    if (breed) filtered = filtered.filter((p) => p.breed === breed);
-    if (gender) filtered = filtered.filter((p) => p.gender === gender);
-    if (chipSearch) filtered = filtered.filter((p) => p.microchipNumber.includes(chipSearch));
-    if (sortOrder === "recent") { filtered.sort((a, b) => new Date(b.lostDate) - new Date(a.lostDate)); }
-    else { filtered.sort((a, b) => new Date(a.lostDate) - new Date(b.lostDate)); }
-    setAllLostPets(filtered);
-  };
-
   const clearFilters = () => {
     setRegion("");
     setSpecies("");
     setBreed("");
     setGender("");
     setChipSearch("");
-    setSortOrder("recent");
     setBreedOptions([]);
-    setLostPets(allLostPets);
+    const sorted = [...allLostPets].sort((a, b) => sortOrder === "recent" ? new Date(b.lostDate) - new Date(a.lostDate) : new Date(a.lostDate) - new Date(b.lostDate));
+    setLostPets(sorted);
   };
 
   return (
@@ -75,16 +93,16 @@ export default function AllLostPets() {
           <div className="hero-filters-row">
             <div className="filter-field">
               <label>Περιοχή (Νομός)</label>
-              <select value={region} onChange={(e) => setRegion(e.target.value)}> 
-                <option value="">Όλες οι περιοχές</option> 
-                {REGIONS.map((r) => ( 
-                  <option key={r} value={r}>{r}</option> 
-                ))}  
-              </select>  
-            </div>  
+              <select value={region} className={region ? "filtered" : ""} onChange={(e) => setRegion(e.target.value)}>
+                <option value="">Όλες οι περιοχές</option>
+                {REGIONS.map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+            </div>
             <div className="filter-field">
               <label>Είδος</label>
-              <select value={species} onChange={handleSpeciesChange}>
+              <select value={species} className={species ? "filtered" : ""} onChange={handleSpeciesChange}>
                 <option value="">Όλα</option>
                 {SPECIES.map((r) => (
                   <option key={r} value={r}>{r}</option>
@@ -93,16 +111,16 @@ export default function AllLostPets() {
             </div>
             <div className="filter-field">
               <label>Φύλο</label>
-              <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <select value={gender} className={gender ? "filtered" : ""} onChange={(e) => setGender(e.target.value)}>
                 <option value="">Όλα</option>
-                <option value="male">Αρσενικό</option>
-                <option value="female">Θηλυκό</option>
-                <option value="other">Άλλο</option>
+                {GENDERS.map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
               </select>
             </div>
             <div className="filter-field">
               <label>Ράτσα</label>
-              <select value={breed} onChange={(e) => setBreed(e.target.value)} disabled={!species}>
+              <select value={breed} className={breed ? "filtered" : ""} onChange={(e) => setBreed(e.target.value)} disabled={!species}>
                 <option value="">Όλες</option>
                 {breedOptions.map((b) => (
                   <option key={b} value={b}>{b}</option>
@@ -151,20 +169,19 @@ export default function AllLostPets() {
                 className="hero-input"
                 onChange={(e) => setChipSearch(e.target.value)}
               />
-              <button className="hero-button" aria-label="Αναζήτηση">
+              <button className="hero-button" aria-label="Αναζήτηση" onClick={handleSearch}>
                 <FiSearch size={18} />
               </button>
             </div>
           </div>
         </div>
-
         <div className="lost-pets-grid">
           {lostPets.length === 0 ? (
-            <p className="empty-message">Δεν υπάρχουν δηλωμένα χαμένα κατοικίδια.</p>
+            <p className="empty-message"></p>
           ) : (
             lostPets.map((p) => (
               <div className="lost-pet-card" key={p.id}>
-                <Link to={`/PetProfile/${p.id}`} >
+                <Link to={`/all-lost-pets/PetProfile/${p.id}`}>
                   <PetDetails pet={p} mode={0} />
                 </Link>
               </div>

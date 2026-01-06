@@ -1,12 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./PetProfile.css";
 import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
-import { pet, lossDeclarations,  foundDeclarations,  foundByOthers} from "../Utils/Util";
 
-export default function PetProfile() {
-    const isMissing = true;
-
+export default function ProfilePetOwner() {
+    const { id } = useParams();
+    const [pet, setPet] = useState(null);
+    const [lossDeclarations, setLossDeclarations] = useState([]);
+    const [foundDeclarations, setFoundDeclarations] = useState([]);
+    const [foundByOthers, setFoundByOthers] = useState([]);
     const [activeTab, setActiveTab] = useState("booklet");
+
+    useEffect(() => {
+        fetch(`http://localhost:3001/pets/${id}`)
+            .then((res) => res.json())
+            .then((data) => setPet(data));
+        fetch(`http://localhost:3001/lostReports?petId=${id}`)
+            .then((res) => res.json())
+            .then(setLossDeclarations);
+
+        fetch(`http://localhost:3001/foundReports?petId=${id}`)
+            .then((res) => res.json())
+            .then(setFoundDeclarations);
+
+        fetch(`http://localhost:3001/foundReports?petId=${id}`)
+            .then((res) => res.json())
+            .then(setFoundByOthers);
+    }, [id]);
+    if (!pet) return <p>Φόρτωση κατοικιδίου...</p>;
 
     return (
         <div className="petProfilePage">
@@ -71,7 +92,7 @@ export default function PetProfile() {
                                 </div>
                             </div>
                         </div>
-                        {isMissing && (
+                        {pet.lost && (
                             <div className="petMissingAlert">
                                 <div className="petMissingTitle">
                                     Κατοικίδιο Εξαφανισμένο
@@ -79,14 +100,17 @@ export default function PetProfile() {
 
                                 <div className="petMissingRow">
                                     <span>Ημερομηνία εξαφάνισης:</span>
-                                    <strong>{pet.missingDate || "-"}</strong>
+                                    <strong>{pet.lastSeenDate || "-"}</strong>
                                 </div>
 
                                 <div className="petMissingRow">
                                     <span>Διεύθυνση:</span>
-                                    <strong>{pet.missingAddress || "-"}</strong>
+                                    <strong>{pet.lastSeenAddress || "-"}</strong>
                                 </div>
-
+                                <div className="petMissingRow">
+                                    <span>Περιοχή (Νομός):</span>
+                                    <strong>{pet.region || "-"}</strong>
+                                </div>
                                 <div className="petMissingRow">
                                     <span>Κατάσταση:</span>
                                     <strong>Εξαφανισμένο</strong>
