@@ -1,16 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { FaUserCircle } from "react-icons/fa";
 import flagGR from "../../images/flags/greece.png";
 import flagGB from "../../images/flags/england.png";
-
 import "./Menu.css";
 
 export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, userRole }) {
   const [language, setLanguage] = useState("el");
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/") {
+      setActiveMenu(1);
+    }
+    else if (path.startsWith("/owner-dashboard")) {
+      setActiveMenu(2);
+    }
+    else if (path.startsWith("/vet-dashboard") || path.startsWith("/ProfileVet")) {
+      setActiveMenu(3);
+    }
+    else if (path.startsWith("/all-lost-pets")) {
+      setActiveMenu(4);
+    }
+    else {
+      setActiveMenu(5);
+    }
+  }, [location.pathname, setActiveMenu]);
+
 
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
@@ -25,23 +46,20 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
   return (
     <header className="top-header">
       <div className="menu-container">
-        <Link to="/" className="logo-link" aria-label="Home" onClick={() => setActiveMenu(1)}>
+        <Link to="/" className="logo-link" aria-label="Home">
           <img src={logo} className="header-logo" alt="PetCare Logo" />
         </Link>
 
         <nav className="main-menu">
-          <Link to="/" className={`menu-item ${activeMenu === 1 ? "active" : ""}`}
-            onClick={() => setActiveMenu(1)}>Αρχική</Link>
-
+          <Link to="/" className={`menu-item ${activeMenu === 1 ? "active" : ""}`}>Αρχική</Link>
           <div className="menu-dropdown">
-            <Link to="/owner-dashboard" className={`menu-item ${activeMenu === 2 ? "active" : ""}`}
-              onClick={() => setActiveMenu(2)}>Ιδιοκτήτης</Link>
+            <Link to="/owner-dashboard" className={`menu-item ${activeMenu === 2 ? "active" : ""}`}>Ιδιοκτήτης</Link>
             <div className="dropdown-panel">
               <ul>
-                <li>Δήλωση εύρεσης κατοικιδίου</li>
-                <li>Δήλωση απώλειας κατοικιδίου</li>
-                <li>Ιστορικό δηλώσεων</li>
-                <li>Προβολή ηλεκτρονικού βιβλιαρίου</li>
+                <li><Link to="/owner-dashboard/found" className="dropdown-link">Δήλωση εύρεσης κατοικιδίου </Link></li>
+                <li><Link to="/owner-dashboard/loss" className="dropdown-link">Δήλωση απώλειας κατοικιδίου</Link></li>
+                <li><Link to="/owner-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων </Link></li>
+                <li><Link to="/owner-dashboard/health-booklet" className="dropdown-link">Προβολή ηλεκτρονικού βιβλιαρίου</Link></li>
                 <li>Κλείσιμο ραντεβού</li>
                 <li>Ιστορικό ραντεβού</li>
                 <li>Μελλοντικά ραντεβού</li>
@@ -50,16 +68,15 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
           </div>
 
           <div className="menu-dropdown">
-            <Link to="/vet-dashboard" className={`menu-item ${activeMenu === 3 ? "active" : ""}`}
-              onClick={() => setActiveMenu(3)}>Κτηνίατρος</Link>
+            <Link to="/vet-dashboard" className={`menu-item ${activeMenu === 3 ? "active" : ""}`}>Κτηνίατρος</Link>
             <div className="dropdown-panel">
               <ul>
-                <li>Δήλωση εύρεσης κατοικιδίου</li>
-                <li>Δήλωση απώλειας κατοικιδίου</li>
-                <li>Δήλωση υιοθεσίας κατοικιδίου</li>
-                <li>Δήλωση αναδοχής κατοικιδίου</li>
-                <li>Δήλωση μεταβίβασης κατοικιδίου</li>
-                <li>Ιστορικό δηλώσεων</li>
+                <li><Link to="/vet-dashboard/found2" className="dropdown-link">Δήλωση εύρεσης κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/loss2" className="dropdown-link">Δήλωση απώλειας κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/adoption" className="dropdown-link">Δήλωση υιοθεσίας κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/identity" className="dropdown-link">Δήλωση αναδοχής κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/transfer" className="dropdown-link">Δήλωση μεταβίβασης κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων</Link></li>
                 <li>Καταχώριση ταυτότητας κατοικιδίου</li>
                 <li>Ενημέρωση ιατρικών πράξεων</li>
                 <li>Προβολή ηλεκτρονικού βιβλιαρίου</li>
@@ -69,9 +86,7 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
             </div>
           </div>
 
-          <Link to="/all-lost-pets" className={`menu-item ${activeMenu === 4 ? "active" : ""}`}
-            onClick={() => setActiveMenu(4)}>Χαμένα Κατοικίδια</Link>
-
+          <Link to="/all-lost-pets" className={`menu-item ${activeMenu === 4 ? "active" : ""}`}>Χαμένα Κατοικίδια</Link>
           {!isLoggedIn && (
             <div className="menu-actions">
               <Link to="/register/owner" className="menu-btn menu-btn--register">
@@ -94,7 +109,6 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
                 className="profile-btn"
                 onClick={() => {
                   setShowProfileDropdown(false);
-                  setActiveMenu(5);
                 }}>
                 <FaUserCircle />
               </Link >
@@ -104,7 +118,6 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
                   {userRole === "owner" && (
                     <Link to="/ProfileOwner" className="profile-item" onClick={() => {
                       setShowProfileDropdown(false);
-                      setActiveMenu(5);
                     }}>
                       Το προφίλ μου
                     </Link>
@@ -112,7 +125,6 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
                   {userRole === "vet" && (
                     <Link to="/ProfileVet" className="profile-item" onClick={() => {
                       setShowProfileDropdown(false);
-                      setActiveMenu(5);
                     }}>
                       Το προφίλ μου
                     </Link>

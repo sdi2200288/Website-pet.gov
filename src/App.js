@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Menu from "./components/Menu/Menu";
 import Footer from "./components/Footer/Footer";
 import ScrollTop from "./components/ScrollTop";
@@ -7,25 +8,27 @@ import ScrollTop from "./components/ScrollTop";
 import HomePage from "./pages/HomePage/HomePage";
 import VetDashboard from "./pages/VetDashboard/VetDashboard";
 import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
+
 import Found from "./pages/OwnerDashboard/Found";
 import Loss from "./pages/OwnerDashboard/Loss";
+import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
+
 import Found2 from "./pages/VetDashboard/Found2";
 import Loss2 from "./pages/VetDashboard/Loss2";
-import Adopt from "./pages/VetDashboard/Adopt";
 import Anadoxi from "./pages/VetDashboard/Anadoxi";
 import Transfer from "./pages/VetDashboard/Transfer";
 import Identity from "./pages/VetDashboard/Identity";
+
 import MedicalActions from "./pages/VetDashboard/MedicalActions";
 import HealthBookletOwner from "./pages/OwnerDashboard/HealthBookletOwner";
 import HealthBookletVet from "./pages/VetDashboard/HealthBookletVet";
+
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import PetProfile from "./pages/AllLostPets/PetProfile";
-import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
 
 import ProfileOwner from "./pages/OwnerDashboard/Profile";
 import ProfileVet from "./pages/VetDashboard/Profile";
 import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
-
 import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
 
 import Login from "./pages/Login-Register/Login";
@@ -73,7 +76,6 @@ function App() {
           <Route path="/vet-dashboard" element={<VetDashboard />}>
             <Route path="found2" element={<Found2 />} />
             <Route path="loss2" element={<Loss2 />} />
-            <Route path="adopt" element={<Adopt />} />
             <Route path="anadoxi" element={<Anadoxi />} />
             <Route path="transfer" element={<Transfer />} />
             <Route path="identity" element={<Identity />} />
@@ -89,14 +91,13 @@ function App() {
             <Route path="loss" element={<Loss />} />
             <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
-          <Route path="ProfileOwner" element={userRole === "owner" ? <ProfileOwner /> : <HomePage />} />
-          <Route path="ProfileVet" element={userRole === "vet" ? <ProfileVet /> : <HomePage />} />
+          <Route path="/ProfileOwner" element={userRole === "owner" ? <ProfileOwner /> : <HomePage />} />
+          <Route path="/ProfileVet" element={userRole === "vet" ? <ProfileVet /> : <HomePage />} />
           <Route path="/ProfilePetOwner" element={<ProfilePetOwner />} />
 
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />
           <Route path="/PetProfile" element={<PetProfile />} />
-          <Route path="/adoption" element={<AdoptionPage />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register/owner" element={
@@ -111,9 +112,8 @@ function App() {
               onRegister={(user) => handleLogin(user)}
             />
           } />
+
           <Route path="/changecode" element={<ChangeCode />} />
-
-
 
           <Route path="/Communication" element={<Communication />} />
           <Route path="/cookies" element={<Cookies />} />

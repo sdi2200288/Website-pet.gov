@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import arxikieikona from "../../images/Arxiki_eikona.png";
 import PetDetails from "../../components/Pet/Pet";
 import VetDetails from "../../components/Vet/Vet";
@@ -16,6 +17,27 @@ export default function Homepage() {
   const [petData, setPetData] = useState([]);
   const [lostPets, setLostPets] = useState([]);
   const [topVets, setTopVets] = useState([]);
+  const [searchChip, setSearchChip] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (!searchChip.trim()) {
+      alert("Παρακαλώ εισάγετε τον αριθμό μικροτσίπ για αναζήτηση");
+      return;
+    }
+    const pet = petData.find(p => p.micorchip === searchChip);
+    if (!pet) {
+      alert("Δεν βρέθηκε κατοικίδιο με αυτόν τον αριθμό μικροτσίπ");
+      return;
+    }
+    if (!pet.lost) {
+      alert("Το συγκεκριμένο κατοικίδιο δεν είναι δηλωμένο ως χαμένο");
+      return;
+    }
+    else {
+      navigate(`/PetProfile/${pet.id}`);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,8 +85,9 @@ export default function Homepage() {
                 type="text"
                 placeholder="Εισάγετε αριθμό μικροτσίπ..."
                 className="hero-input"
+                onChange={(e) => setSearchChip(e.target.value)}
               />
-              <button className="hero-button" aria-label="Αναζήτηση">
+              <button className="hero-button" aria-label="Αναζήτηση" onClick={handleSearch}>
                 <FiSearch size={28} />
               </button>
             </div>
@@ -196,7 +219,7 @@ export default function Homepage() {
             <div className="stat-box">
               <div className="stat-value">{formatNumber(petData.length)}</div>
               <div className="stat-label">Κατοικίδια</div>
-              <div className="stat-sub">Δηλώσεις, βιβλιάρια και ραντεβού</div>
+              <div className="stat-sub">Καταχωρημένα και διαθέσιμα για όλες τις λειτουργίες </div>
             </div>
 
             <div className="stat-box">
