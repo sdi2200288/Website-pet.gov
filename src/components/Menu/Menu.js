@@ -21,7 +21,7 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
     else if (path.startsWith("/owner-dashboard")) {
       setActiveMenu(2);
     }
-    else if (path.startsWith("/vet-dashboard") || path.startsWith("/ProfileVet")) {
+    else if (path.startsWith("/vet-dashboard")) {
       setActiveMenu(3);
     }
     else if (path.startsWith("/all-lost-pets")) {

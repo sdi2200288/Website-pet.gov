@@ -12,7 +12,6 @@ import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 
 import Found from "./pages/OwnerDashboard/Found";
 import Loss from "./pages/OwnerDashboard/Loss";
-import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
 
 import Found2 from "./pages/VetDashboard/Found2";
 import Loss2 from "./pages/VetDashboard/Loss2";
