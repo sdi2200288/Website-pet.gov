@@ -57,3 +57,18 @@
 .history-chip-filter select {
   min-width: 320px;
 }
+
+/* HistoryDeclaration.css - προσθήκη */
+.no-declarations {
+  text-align: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+  margin: 20px 0;
+}
+
+.no-declarations p {
+  font-size: 18px;
+  color: #6c757d;
+}

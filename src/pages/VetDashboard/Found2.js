@@ -541,9 +541,8 @@ const handleSubmit = async (status) => {
                     <p><span>Ράτσα:</span> {pet.breed}</p>
                     <p><span>Φύλο:</span> {pet.gender}</p>
                     <p><span>Microchip:</span> {pet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {pet.lastSeenDate}</p>
+                    <p><span>Ημερομηνία:</span> {pet.birthdate}</p>
                     <p><span>Περιοχή:</span> {pet.region}</p>
-                    <p><span>Διεύθυνση:</span> {pet.lastSeenAddress}</p>
                   </div>
 
                   <div className="info-box">
@@ -560,7 +559,6 @@ const handleSubmit = async (status) => {
                     <p><span>Ημερομηνία:</span> {foundInfo.date}</p>
                     <p><span>Περιοχή:</span> {foundInfo.region}</p>
                     <p><span>Διεύθυνση:</span> {foundInfo.address}</p>
-                    <p><span>Κατάσταση Ζώου:</span> {foundInfo.condition}</p>
                   </div>
                 </div>
               </div>

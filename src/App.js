@@ -15,7 +15,9 @@ import Adopt from "./pages/VetDashboard/Adopt";
 import Anadoxi from "./pages/VetDashboard/Anadoxi";
 import Transfer from "./pages/VetDashboard/Transfer";
 import Identity from "./pages/VetDashboard/Identity";
-import HealthBooklet from "./pages/OwnerDashboard/HealthBooklet";
+import MedicalActions from "./pages/VetDashboard/MedicalActions";
+import HealthBookletOwner from "./pages/OwnerDashboard/HealthBookletOwner";
+import HealthBookletVet from "./pages/VetDashboard/HealthBookletVet";
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import PetProfile from "./pages/AllLostPets/PetProfile";
 import AdoptionPage from "./pages/AdoptionPage/AdoptionPage";
@@ -75,11 +77,14 @@ function App() {
             <Route path="anadoxi" element={<Anadoxi />} />
             <Route path="transfer" element={<Transfer />} />
             <Route path="identity" element={<Identity />} />
+            <Route path="history-statement" element={<HistoryDeclaration />} />
+            <Route path="medical" element={<MedicalActions />} />
+            <Route path="booklet" element={<HealthBookletVet />} />
           </Route>
 
           {/* OWNER DASHBOARD */}
           <Route path="/owner-dashboard" element={<OwnerDashboard />}>
-            <Route path="health-booklet" element={<HealthBooklet />} />
+            <Route path="health-booklet" element={<HealthBookletOwner />} />
             <Route path="found" element={<Found />} />
             <Route path="loss" element={<Loss />} />
             <Route path="history-statement" element={<HistoryDeclaration />} />

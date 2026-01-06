@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import PetDetails from "../../components/Pet/Pet";
-import dog from "../../images/lostPet1.png";
-import "./HealthBooklet.css";
+// import dog from "../../images/lostPet1.png";
+import "./HealthBookletOwner.css";
 // import { pets } from "../Utils/Util"
 
 
-export default function HealthBooklet() {
+export default function HealthBookletOwner() {
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = βιβλιάριο
   const [pets, setPets] = useState([]);
   const [selectedPetId, setSelectedPetId] = useState(null);
@@ -13,11 +13,19 @@ export default function HealthBooklet() {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
-  useEffect(() => {
-    if(!user || user.role !== "owner"){
-      window.location.href = "/login";
+  const goToStep = (targetStep) => {
+    if (!user) {
+      window.location.href = "/login"; // redirect αν δεν υπάρχει user
+      return;
     }
-  }, [user]);
+    setStep(targetStep);
+  };
+
+  // useEffect(() => {
+  //   if(!user || user.role !== "owner"){
+  //     window.location.href = "/login";
+  //   }
+  // }, [user]);
   
   // Fetch pets του ιδιοκτήτη
   useEffect(() => {
@@ -59,7 +67,7 @@ export default function HealthBooklet() {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -101,7 +109,7 @@ export default function HealthBooklet() {
           <button
             className="next-btn"
             disabled={!selectedPetId}
-            onClick={() => setStep(2)}
+            onClick={() => goToStep(2)}
           >
             Συνέχεια
           </button>
@@ -152,8 +160,8 @@ export default function HealthBooklet() {
                     <h4>Στοιχεία Ιδιοκτήτη</h4>
                     <p><span>Όνομα:</span>{user.firstname} {user.lastname}</p>
                     <p><span>ΑΦΜ:</span> {user.afm}</p>
-                    <p><span>Διεύθυνση:</span> {user.phone}</p>
-                    <p><span>Τηλέφωνο:</span> {user.address}</p>
+                    <p><span>Διεύθυνση:</span> {user.address}</p>
+                    <p><span>Τηλέφωνο:</span> {user.phone}</p>
                   </div>
                 </div>
               </div>

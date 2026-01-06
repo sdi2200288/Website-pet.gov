@@ -13,123 +13,182 @@
       "password": "Altani1!!"
     }
   ],
-  "vets": [],
-  "pets": [],
-  "lostReports": [
+  "vets": [
     {
-      "id": "1",
-      "petId": 123456789,
-      "date": "2025-01-15",
-      "region": "Αττική",
-      "address": "Σύνταγμα",
-      "condition": "Φοβισμένο",
-      "status": "draft",
-      "createdAt": "2025-01-14T10:30:00Z",
-      "ownerId": "3d04"
-    },
-    {
-      "id": "b1aa",
-      "petId": "p001",
-      "date": "2020-09-05",
-      "region": "Κεφαλλονιά",
-      "address": "",
-      "condition": "Ηταν στην ακρη του δρομου και φοβισμενο",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T10:21:39.507Z"
+      "id": "v001",
+      "firstname": "ΓΙΩΡΓΟΣ",
+      "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
+      "afm": "123456789",
+      "clinicName": "Κτηνιατρικό Κέντρο Αθήνας",
+      "address": "Πατησίων 120, Αθήνα",
+      "phone": "2101234567",
+      "email": "vet@clinic.gr",
+      "password": "Vet123!",
+      "role": "vet"
     }
   ],
-  "foundReports": [
+  "pets": [
     {
-      "id": "1",
-      "petId": 123456789,
-      "date": "2025-01-05",
+      "id": "vp001",
+      "ownerId": "631b",
+      "name": "Ρεξ",
+      "species": "Σκύλος",
+      "breed": "Ημίαιμο",
+      "gender": "male",
+      "microchip": "555111222",
+      "birthdate": "2021-04-12",
+      "photoUrl": "/images/rex.png",
       "region": "Αττική",
-      "address": "Κηφισιά",
-      "condition": "Υγιές",
-      "status": "submitted",
-      "createdAt": "2025-01-04T14:15:00Z",
-      "ownerId": "3d04"
+      "status": "foster",
+      "notes": "Βρέθηκε τραυματισμένος – έτοιμος για αναδοχή"
     },
     {
-      "id": "c431",
-      "petId": "p001",
-      "date": "2024-02-02",
-      "region": "Αθήνα",
-      "address": "Συνταγμα",
-      "condition": "Ηταν φοβισμενο",
-      "status": "submitted",
+      "id": "vp002",
       "ownerId": "631b",
-      "createdAt": "2026-01-03T09:25:55.243Z"
+      "name": "Μίλα",
+      "species": "Γάτα",
+      "breed": "Αδέσποτη",
+      "gender": "female",
+      "microchip": "555333444",
+      "birthdate": "2022-06-01",
+      "photoUrl": "/images/mila.png",
+      "region": "Αττική",
+      "status": "adoption",
+      "notes": "Υγιής – εμβολιασμένη"
     },
     {
-      "id": "445c",
-      "petId": "p001",
-      "date": "2024-02-02",
-      "region": "Λαμία",
-      "address": "",
-      "condition": "Ηταν φοβισμενο",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T09:27:23.218Z"
+      "id": "vp4xvizyyww",
+      "ownerId": null,
+      "name": "Λιλα",
+      "species": "Σκυλος",
+      "breed": "Tsiouaoua",
+      "gender": "female",
+      "microchip": "123456789",
+      "birthdate": "2008-02-02",
+      "photoUrl": "",
+      "region": "",
+      "status": "adoption",
+      "notes": ""
     },
     {
-      "id": "c95d",
-      "petId": "p002",
-      "date": "2024-02-14",
-      "region": "Βόλος",
-      "address": "",
-      "condition": "",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T09:30:08.265Z"
-    },
+      "id": "vp1oef588ze",
+      "ownerId": null,
+      "name": "λιλα",
+      "species": "Σκύλος",
+      "breed": "Labrador Retriever",
+      "gender": "female",
+      "microchip": "123456789",
+      "birthdate": null,
+      "photoUrl": "",
+      "region": "",
+      "status": "adoption",
+      "notes": ""
+    }
+  ],
+  "lostReports": [
     {
-      "id": "0935",
-      "petId": "p001",
-      "date": "2023-08-02",
-      "region": "Δράμα",
-      "address": "",
-      "condition": "Ηταν καλα",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T10:01:41.262Z"
-    },
-    {
-      "id": "ee2a",
-      "petId": "p001",
-      "date": "2025-02-15",
-      "region": "Φλώρινα",
-      "address": "",
-      "condition": "",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T10:11:03.811Z"
-    },
-    {
-      "id": "0d67",
-      "petId": "p002",
-      "vetId": "631b",
-      "date": "2002-02-01",
+      "id": "920d",
+      "petId": "vp001",
+      "vetId": "v001",
+      "date": "2025-05-07",
       "region": "Δράμας",
       "address": "",
       "condition": "",
       "status": "submitted",
-      "createdAt": "2026-01-03T15:11:06.574Z"
-    },
+      "createdAt": "2026-01-04T16:31:09.658Z"
+    }
+  ],
+  "foundReports": [
     {
-      "id": "6baf",
+      "id": "6e32",
+      "petId": "vp002",
       "vetId": "v001",
-      "date": "",
-      "region": "",
+      "date": "2024-02-05",
+      "region": "Ηλείας",
       "address": "",
       "condition": "",
       "status": "submitted",
-      "createdAt": "2026-01-03T15:29:21.248Z"
+      "createdAt": "2026-01-04T16:10:31.289Z"
+    },
+    {
+      "id": "c682",
+      "petId": "vp002",
+      "vetId": "v001",
+      "date": "2002-05-08",
+      "region": "Ζακύνθου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "createdAt": "2026-01-05T12:35:55.588Z"
     }
   ],
-  "adoptionReports": [],
-  "fosterReports": [],
-  "transferReports": []
-  
+  "adoptionReports": [
+    {
+      "id": "8651",
+      "petId": "vp001",
+      "microchip": "555111222",
+      "vetId": "v001",
+      "ownerAfm": "456789123",
+      "ownerEmail": "altanitontou1@gmail.com",
+      "ownerPhone": "6948512669",
+      "status": "draft",
+      "createdAt": "2026-01-05T12:31:55.445Z"
+    }
+  ],
+  "fosterReports": [
+    {
+      "id": "b7bd",
+      "petId": "vp002",
+      "microchip": "555333444",
+      "vetId": "v001",
+      "fosterAfm": "123456789",
+      "fosterEmail": "altanitontou1@gmail.com",
+      "fosterPhone": "6948512669",
+      "status": "submitted",
+      "startDate": "2026-01-04",
+      "createdAt": "2026-01-04T16:19:31.179Z"
+    }
+  ],
+  "transferReports": [
+    {
+      "id": "2a93",
+      "petId": "vp001",
+      "microchip": "555111222",
+      "vetId": "v001",
+      "currentOwnerId": "631b",
+      "currentOwnerAfm": "2325788990",
+      "currentOwnerEmail": "sdi2200288@uoa.gr",
+      "currentOwnerPhone": "6942781851",
+      "newOwnerAfm": "123457678",
+      "newOwnerEmail": "altanitontou1@gmail.com",
+      "newOwnerPhone": "6948512669",
+      "transferDate": "2026-01-04",
+      "status": "submitted",
+      "createdAt": "2026-01-04T16:31:35.817Z"
+    }
+  ],
+  "medicalReports": [
+  {
+    "id": "m001",
+    "petId": "vp001",
+    "vetId": "v001",
+    "date": "2025-06-15",
+    "type": "Εμβολιασμός",
+    "description": "Ετήσιος εμβολιασμός κατά λύσσας και λοιμώξεων.",
+    "medications": "Rabies Vaccine, DHPP Vaccine",
+    "status": "completed",
+    "createdAt": "2025-06-15T10:30:00.000Z"
+  },
+  {
+    "id": "m002",
+    "petId": "vp001",
+    "vetId": "v001",
+    "date": "2025-12-01",
+    "type": "Τακτικός έλεγχος",
+    "description": "Γενικός κτηνιατρικός έλεγχος, όλα φυσιολογικά.",
+    "medications": "",
+    "status": "completed",
+    "createdAt": "2025-12-01T11:45:00.000Z"
+  }
+]
 }

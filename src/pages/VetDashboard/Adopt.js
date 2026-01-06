@@ -80,7 +80,7 @@ export default function Adopt() {
     };
 
     try {
-      const res = await fetch("http://localhost:3001/lostReports", {
+      const res = await fetch("http://localhost:3001/adoptionReports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(report),
@@ -313,7 +313,7 @@ export default function Adopt() {
             <p className="value">{selectedPet.breed}</p>
 
             <p className="label">Ημερ. Γέννησης</p>
-            <p className="value">12/12/2004</p>
+            <p className="value">{selectedPet.birthdate}</p>
           </div>
 
           <div>
@@ -479,9 +479,8 @@ export default function Adopt() {
                         <p><span>Ράτσα:</span> {selectedPet.breed}</p>
                         <p><span>Φύλο:</span> {selectedPet.gender}</p>
                         <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                        <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
+                        <p><span>Ημερομηνία:</span> {selectedPet.birthdate}</p>
                         <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                        <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p>
                     </div>
 
                     <div className="info-box">

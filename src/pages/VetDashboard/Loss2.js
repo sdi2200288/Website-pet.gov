@@ -7,17 +7,17 @@ import "./Loss2.css";
 
 export default function Loss2() {
   const navigate = useNavigate();
-    const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-    const [microchip, setMicrochip] = useState("");
-    const [pet, setPet] = useState(null);
-     const [owner, setOwner] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [lossInfo, setLossInfo] = useState({
-      date: "",
-      region: "",
-      address: "",
-      condition: "",
-    });
+  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+  const [microchip, setMicrochip] = useState("");
+  const [pet, setPet] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [lossInfo, setLossInfo] = useState({
+    date: "",
+    region: "",
+    address: "",
+    condition: "",
+  });
   
 
   // const selectedPet = pets.find((p) => p.id === selectedPetId);
@@ -165,7 +165,7 @@ const handleSubmit = async (status) => {
             </div>
           </div>
 
-          <button className="next-btn" onClick={() => setStep(1)}>
+          <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
         </>
@@ -475,9 +475,8 @@ const handleSubmit = async (status) => {
                     <p><span>Ράτσα:</span> {pet.breed}</p>
                     <p><span>Φύλο:</span> {pet.gender}</p>
                     <p><span>Microchip:</span> {pet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {pet.lastSeenDate}</p>
+                    <p><span>Ημερομηνία:</span> {pet.birthdate}</p>
                     <p><span>Περιοχή:</span> {pet.region}</p>
-                    <p><span>Διεύθυνση:</span> {pet.lastSeenAddress}</p>
                   </div>
 
                   <div className="info-box">
@@ -500,7 +499,6 @@ const handleSubmit = async (status) => {
                     <p><span>Ημερομηνία:</span> {lossInfo.date}</p>
                     <p><span>Περιοχή:</span> {lossInfo.region}</p>
                     <p><span>Διεύθυνση:</span> {lossInfo.address}</p>
-                    <p><span>Κατάσταση Ζώου:</span> {lossInfo.condition}</p>
                   </div>
                 </div>
               </div>

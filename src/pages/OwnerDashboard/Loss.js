@@ -290,9 +290,9 @@ export default function Loss() {
                     <p><span>Ράτσα:</span> {selectedPet.breed}</p>
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
+                    <p><span>Ημερομηνία:</span> {selectedPet.data}</p>
                     <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                    <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p>
+                    <p><span>Διεύθυνση:</span> {selectedPet.address}</p>
                   </div>
 
                   <div className="info-box">

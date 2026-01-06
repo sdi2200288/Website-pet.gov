@@ -22,6 +22,19 @@ export const REGIONS = [
   "Χαλκιδικής", "Χανίων", "Χίου"
 ];
 
+export const MEDICAL_ACTS = [
+  { id: "clinical_exam", label: "Κλινική εξέταση" },
+  { id: "vaccination", label: "Εμβολιασμός" },
+  { id: "surgery", label: "Χειρουργική επέμβαση" },
+  { id: "dental_care", label: "Οδοντιατρική φροντίδα" },
+  { id: "dermatology_treatment", label: "Δερματολογική θεραπεία" },
+  { id: "diagnostic_tests", label: "Διαγνωστικές εξετάσεις" },
+  { id: "parasite_control", label: "Αντιπαρασιτική αγωγή" },
+  { id: "microchip", label: "Τοποθέτηση microchip" },
+  { id: "health_book", label: "Έκδοση βιβλιαρίου υγείας" },
+  { id: "other", label: "Άλλη πράξη" },
+];
+
 export const SPECIES = ["Σκύλος", "Γάτα", "Άλλο"];
 
 export const GENDERS = ["Θηλυκό", "Αρσενικό", "Άλλο"];
