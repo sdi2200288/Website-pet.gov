@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 import Menu from "./components/Menu/Menu";
@@ -53,6 +53,16 @@ function App() {
   const [userRole, setUserRole] = useState(null);
   const [userData, setUserData] = useState(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+      setIsLoggedIn(true);
+      setUserRole(user.role);
+      setUserData(user);
+    }
+  }, []);
+
   const handleLogin = (user) => {
     setIsLoggedIn(true);
     setUserRole(user.role);
@@ -93,7 +103,7 @@ function App() {
             <Route path="loss" element={<Loss />} />
             <Route path="history-statement" element={<HistoryDeclaration />} />
           </Route>
-          <Route path="/ProfileOwner" element={<ProfileOwner/> }/>
+          <Route path="/ProfileOwner" element={<ProfileOwner />} />
           <Route path="/ProfilePetOwner/:id" element={<ProfilePetOwner />} />
 
           <Route path="/all-lost-pets" element={<AllLostPets />} />
