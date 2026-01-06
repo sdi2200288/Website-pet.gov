@@ -11,6 +11,30 @@
       "phone": "6942781851",
       "email": "sdi2200288@uoa.gr",
       "password": "Altani1!!"
+    },
+    {
+      "id": "o101",
+      "firstname": "ΝΙΚΟΣ",
+      "lastname": "ΠΑΠΑΔΟΠΟΥΛΟΣ",
+      "afm": "1234567890",
+      "gender": "male",
+      "address": "Ερμού 10",
+      "birthdate": "1992-03-11",
+      "phone": "6900000001",
+      "email": "nikos@example.com",
+      "password": "Nikos1!!"
+    },
+    {
+      "id": "o102",
+      "firstname": "ΜΑΡΙΑ",
+      "lastname": "ΓΕΩΡΓΙΟΥ",
+      "afm": "9876543210",
+      "gender": "female",
+      "address": "Τσιμισκή 22",
+      "birthdate": "1995-09-02",
+      "phone": "6900000002",
+      "email": "maria@example.com",
+      "password": "Maria1!!"
     }
   ],
   "vets": [
@@ -24,7 +48,23 @@
       "birthdate": "1988-01-18",
       "phone": "6900000100",
       "email": "vetgiorgos@example.com",
-      "password": "Vet1!!"
+      "password": "Vet1!!",
+      "totalScore": "100",
+      "reviewCount": "10"
+    },
+    {
+      "id": "v201",
+      "firstname": "ΓΙΩΡΓΟΣ",
+      "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "afm": "1112223334",
+      "gender": "male",
+      "address": "Πατησίων 100",
+      "birthdate": "1988-01-18",
+      "phone": "6900000100",
+      "email": "vetgiorgos1@example.com",
+      "password": "Vet1!!!",
+      "totalScore": "80",
+      "reviewCount": "10"
     },
     {
       "id": "v202",
@@ -36,7 +76,9 @@
       "birthdate": "1990-07-07",
       "phone": "6900000200",
       "email": "veteleni@example.com",
-      "password": "Vet2!!"
+      "password": "Vet2!!",
+      "totalScore": "80",
+      "reviewCount": "8"
     }
   ],
   "pets": [
@@ -96,8 +138,240 @@
       "status": "adoption",
       "notes": ""
     }
+ {
+      "id": "1",
+      "name": "Μπέλα",
+      "photoUrl": "https://placedog.net/400/300?id=1",
+      "microchip": "1234567890",
+      "species": "Σκύλος",
+      "breed": "Labrador Retriever",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-12-20",
+      "region": "Αττικής",
+      "lastSeenAddress": "Αθήνα, Κέντρο",
+      "ownerId": "631b"
+    },
+    {
+      "id": "2",
+      "name": "Τίγρης",
+      "photoUrl": "https://placekitten.com/400/300",
+      "microchip": "0987654321",
+      "species": "Γάτα",
+      "breed": "Siamese",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-11-10",
+      "region": "Θεσσαλονίκης",
+      "lastSeenAddress": "Θεσσαλονίκη, Λιμάνι",
+      "ownerId": "o101"
+    },
+    {
+      "id": "3",
+      "name": "Ρεξ",
+      "photoUrl": "https://placedog.net/400/300?id=2",
+      "microchip": "1122334455",
+      "species": "Σκύλος",
+      "breed": "German Shepherd",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-12-01",
+      "region": "Ηρακλείου",
+      "lastSeenAddress": "Ηράκλειο, Παγκρήτιο",
+      "ownerId": "v201"
+    },
+    {
+      "id": "4",
+      "name": "Λούνα",
+      "photoUrl": "https://placekitten.com/401/301",
+      "microchip": "2233445566",
+      "species": "Γάτα",
+      "breed": "Persian",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-12-02",
+      "region": "Αχαΐας",
+      "lastSeenAddress": "Πάτρα, Κέντρο",
+      "ownerId": "o102"
+    },
+    {
+      "id": "5",
+      "name": "Μάξιμος",
+      "photoUrl": "https://placedog.net/400/300?id=3",
+      "microchip": "3344556677",
+      "species": "Σκύλος",
+      "breed": "Bulldog",
+      "gender": "Αρσενικό",
+      "lost": false,
+      "lastSeenDate": "2025-10-15",
+      "region": "Λάρισας",
+      "lastSeenAddress": "Λάρισα, Κέντρο",
+      "ownerId": "o101"
+    },
+    {
+      "id": "6",
+      "name": "Νάγια",
+      "photoUrl": "https://placekitten.com/402/302",
+      "microchip": "4455667788",
+      "species": "Γάτα",
+      "breed": "Maine Coon",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-11-25",
+      "region": "Ημαθίας",
+      "lastSeenAddress": "Βέροια, Κέντρο",
+      "ownerId": "v202"
+    },
+    {
+      "id": "7",
+      "name": "Άτλας",
+      "photoUrl": "https://placedog.net/400/300?id=4",
+      "microchip": "5566778899",
+      "species": "Σκύλος",
+      "breed": "Golden Retriever",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-12-05",
+      "region": "Κοζάνης",
+      "lastSeenAddress": "Κοζάνη, Κέντρο",
+      "ownerId": "631b"
+    },
+    {
+      "id": "8",
+      "name": "Σούζυ",
+      "photoUrl": "https://placekitten.com/403/303",
+      "microchip": "6677889900",
+      "species": "Γάτα",
+      "breed": "Ragdoll",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-12-03",
+      "region": "Αρκαδίας",
+      "lastSeenAddress": "Τρίπολη, Κέντρο",
+      "ownerId": "o102"
+    },
+    {
+      "id": "9",
+      "name": "Μπρούνο",
+      "photoUrl": "https://placedog.net/400/300?id=5",
+      "microchip": "7788990011",
+      "species": "Σκύλος",
+      "breed": "Poodle",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-11-28",
+      "region": "Ροδόπης",
+      "lastSeenAddress": "Κομοτηνή, Κέντρο",
+      "ownerId": "v201"
+    },
+    {
+      "id": "10",
+      "name": "Λίλυ",
+      "photoUrl": "https://placekitten.com/404/304",
+      "microchip": "8899001122",
+      "species": "Γάτα",
+      "breed": "British Shorthair",
+      "gender": "Θηλυκό",
+      "lost": false,
+      "lastSeenDate": "2025-10-20",
+      "region": "Ξάνθης",
+      "lastSeenAddress": "Ξάνθη, Κέντρο",
+      "ownerId": "o101"
+    },
+    {
+      "id": "11",
+      "name": "Ράσμους",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "microchip": "9900112233",
+      "species": "Σκύλος",
+      "breed": "Beagle",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-12-07",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Αμαλιάδα, Κέντρο",
+      "ownerId": "631b"
+    },
+    {
+      "id": "12",
+      "name": "Μίνα",
+      "photoUrl": "https://placekitten.com/405/305",
+      "microchip": "1011121314",
+      "species": "Γάτα",
+      "breed": "Sphynx",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-11-30",
+      "region": "Ζακύνθου",
+      "lastSeenAddress": "Ζάκυνθος, Κέντρο",
+      "ownerId": "v202"
+    },
+    {
+      "id": "13",
+      "name": "Άρης",
+      "photoUrl": "https://placedog.net/400/300?id=7",
+      "microchip": "1112131415",
+      "species": "Σκύλος",
+      "breed": "Rottweiler",
+      "gender": "Αρσενικό",
+      "lost": true,
+      "lastSeenDate": "2025-12-08",
+      "region": "Βοιωτίας",
+      "lastSeenAddress": "Λιβαδειά, Κέντρο",
+      "ownerId": "o102"
+    },
+    {
+      "id": "14",
+      "name": "Φλώρα",
+      "photoUrl": "https://placekitten.com/406/306",
+      "microchip": "1213141516",
+      "species": "Γάτα",
+      "breed": "Russian Blue",
+      "gender": "Θηλυκό",
+      "lost": true,
+      "lastSeenDate": "2025-12-06",
+      "region": "Ρεθύμνης",
+      "lastSeenAddress": "Ρέθυμνο, Κέντρο",
+      "ownerId": "v201"
+    },
+    {
+      "id": "15",
+      "name": "Τόμι",
+      "photoUrl": "https://placedog.net/400/300?id=8",
+      "microchip": "1314151617",
+      "species": "Σκύλος",
+      "breed": "Dachshund",
+      "gender": "Αρσενικό",
+      "lost": false,
+      "lastSeenDate": "2025-10-05",
+      "region": "Κιλκίς",
+      "lastSeenAddress": "Κιλκίς, Κέντρο",
+      "ownerId": "631b"
+    }
   ],
   "lostReports": [
+    {
+      "id": "1",
+      "petId": 123456789,
+      "date": "2025-01-15",
+      "region": "Αττική",
+      "address": "Σύνταγμα",
+      "condition": "Φοβισμένο",
+      "status": "draft",
+      "createdAt": "2025-01-14T10:30:00Z",
+      "ownerId": "3d04"
+    },
+    {
+      "id": "b1aa",
+      "petId": "p001",
+      "date": "2020-09-05",
+      "region": "Κεφαλλονιά",
+      "address": "",
+      "condition": "Ηταν στην ακρη του δρομου και φοβισμενο",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-03T10:21:39.507Z"
+    },
     {
       "id": "920d",
       "petId": "vp001",
@@ -180,27 +454,27 @@
     }
   ],
   "medicalReports": [
-  {
-    "id": "m001",
-    "petId": "vp001",
-    "vetId": "v001",
-    "date": "2025-06-15",
-    "type": "Εμβολιασμός",
-    "description": "Ετήσιος εμβολιασμός κατά λύσσας και λοιμώξεων.",
-    "medications": "Rabies Vaccine, DHPP Vaccine",
-    "status": "completed",
-    "createdAt": "2025-06-15T10:30:00.000Z"
-  },
-  {
-    "id": "m002",
-    "petId": "vp001",
-    "vetId": "v001",
-    "date": "2025-12-01",
-    "type": "Τακτικός έλεγχος",
-    "description": "Γενικός κτηνιατρικός έλεγχος, όλα φυσιολογικά.",
-    "medications": "",
-    "status": "completed",
-    "createdAt": "2025-12-01T11:45:00.000Z"
-  }
-]
+    {
+      "id": "m001",
+      "petId": "vp001",
+      "vetId": "v001",
+      "date": "2025-06-15",
+      "type": "Εμβολιασμός",
+      "description": "Ετήσιος εμβολιασμός κατά λύσσας και λοιμώξεων.",
+      "medications": "Rabies Vaccine, DHPP Vaccine",
+      "status": "completed",
+      "createdAt": "2025-06-15T10:30:00.000Z"
+    },
+    {
+      "id": "m002",
+      "petId": "vp001",
+      "vetId": "v001",
+      "date": "2025-12-01",
+      "type": "Τακτικός έλεγχος",
+      "description": "Γενικός κτηνιατρικός έλεγχος, όλα φυσιολογικά.",
+      "medications": "",
+      "status": "completed",
+      "createdAt": "2025-12-01T11:45:00.000Z"
+    }
+  ]
 }
