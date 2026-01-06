@@ -28,7 +28,6 @@ import PetProfile from "./pages/AllLostPets/PetProfile";
 import FoundLost from "./pages/AllLostPets/found";
 
 import ProfileOwner from "./pages/OwnerDashboard/Profile";
-import ProfileVet from "./pages/VetDashboard/Profile";
 
 import ProfilePetOwner from "./pages/Owner-Vet/PetProfile";
 import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
