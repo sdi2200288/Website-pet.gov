@@ -343,8 +343,6 @@
       "status": "adoption",
       "notes": ""
     }
-  ],
-  "lostReports": [
     {
       "id": "920d",
       "petId": "vp001",
@@ -426,9 +424,6 @@
       "createdAt": "2026-01-04T16:31:35.817Z"
     }
   ],
-  "adoptionReports": [],
-  "fosterReports": [],
-  "transferReports": [],
   "medicalReports": [
     {
       "id": "m001",
