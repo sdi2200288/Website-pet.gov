@@ -48,7 +48,9 @@
       "birthdate": "1988-01-18",
       "phone": "6900000100",
       "email": "vetgiorgos@example.com",
-      "password": "Vet1!!"
+      "password": "Vet1!!",
+      "totalScore": "100",
+      "reviewCount": "10"
     },
     {
       "id": "v202",
@@ -60,7 +62,9 @@
       "birthdate": "1990-07-07",
       "phone": "6900000200",
       "email": "veteleni@example.com",
-      "password": "Vet2!!"
+      "password": "Vet2!!",
+      "totalScore": "100",
+      "reviewCount": "10"
     }
   ],
   "pets": [
