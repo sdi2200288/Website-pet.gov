@@ -43,206 +43,54 @@
       "firstname": "ΓΙΩΡΓΟΣ",
       "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
       "afm": "1112223334",
-      "gender": "Άνδρας",
-      "address": "Πατησίων 100",
+      "gender": "male",
+      "address": "Πατησίων 100, Αθήνα",
       "birthdate": "1988-01-18",
       "phone": "6900000100",
       "email": "vetgiorgos@example.com",
       "password": "Vet1!!",
       "totalScore": "100",
-      "reviewCount": "10"
+      "reviewCount": "10",
+      "region": "Αττικής",
+      "experience": 8,
+      "specialization": "Μικρά ζώα",
+      "education": "Μεταπτυχιακό",
+      "availability": [
+        {
+          "date": "2024-01-20",
+          "times": ["09:00", "09:30", "10:00", "10:30"]
+        },
+        {
+          "date": "2024-01-21", 
+          "times": ["08:00", "08:30", "10:00", "10:30"]
+        }
+      ],
+      "image": "/images/vets/vet1.jpg"
     },
     {
-      "id": "v201",
-      "firstname": "ΓΙΩΡΓΟΣ",
-      "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "afm": "1112223334",
-      "gender": "Άνδρασ",
-      "address": "Πατησίων 100",
-      "birthdate": "1988-01-18",
-      "phone": "6900000100",
-      "email": "vetgiorgos1@example.com",
-      "password": "Vet1!!!",
-      "totalScore": "80",
-      "reviewCount": "10"
-    },
-    {
-      "id": "v202",
+    "id": "v202",
       "firstname": "ΕΛΕΝΗ",
       "lastname": "ΝΙΚΟΛΑΟΥ",
       "afm": "2223334445",
-      "gender": "Γυναίκα",
-      "address": "Εγνατία 55",
+      "gender": "female",
+      "address": "Εγνατία 55, Θεσσαλονίκη",
       "birthdate": "1990-07-07",
       "phone": "6900000200",
       "email": "veteleni@example.com",
       "password": "Vet2!!",
       "totalScore": "80",
-      "reviewCount": "8"
-    },
-    {
-      "id": "1eae",
-      "firstname": "ΕΛΕΝΗ",
-      "lastname": "ΑΝΤΩΝΙΟΥ",
-      "afm": "1234567891",
-      "gender": "Γυναίκα",
-      "birthdate": "2026-01-01",
-      "email": "e.antoniou2016@gmail.com",
-      "address": "Ilektras 8",
-      "phone": "6980426700",
-      "password": "",
-      "specializations": [
-        "Οδοντιατρική"
+      "reviewCount": "8",
+      "region": "Θεσσαλονίκης",
+      "experience": 10,
+      "specialization": "Πτηνά",
+      "education": "Διδακτορικό",
+      "availability": [
+        {
+          "date": "2024-01-21",
+          "times": ["09:00", "09:30", "10:00", "10:30"]
+        }
       ],
-      "region": "Ηλείας",
-      "studyLevel": "Διδακτορικό",
-      "experienceYears": "4",
-      "photoFile": null,
-      "services": {
-        "clinical_exam": {
-          "enabled": true,
-          "price": "10"
-        },
-        "vaccination": {
-          "enabled": true,
-          "price": "10"
-        },
-        "microchip_place": {
-          "enabled": false,
-          "price": ""
-        },
-        "health_book": {
-          "enabled": false,
-          "price": ""
-        },
-        "declaration": {
-          "enabled": false,
-          "price": ""
-        },
-        "blood_tests": {
-          "enabled": true,
-          "price": "10"
-        },
-        "biochemical_tests": {
-          "enabled": true,
-          "price": "10"
-        },
-        "urine_tests": {
-          "enabled": true,
-          "price": "10"
-        },
-        "feces_tests": {
-          "enabled": true,
-          "price": "10"
-        },
-        "xray": {
-          "enabled": true,
-          "price": "10"
-        },
-        "ultrasound": {
-          "enabled": true,
-          "price": "10"
-        },
-        "sterilization": {
-          "enabled": false,
-          "price": ""
-        },
-        "cleansing": {
-          "enabled": false,
-          "price": ""
-        },
-        "tumor_removal": {
-          "enabled": false,
-          "price": ""
-        },
-        "orthopedic": {
-          "enabled": false,
-          "price": ""
-        },
-        "surgery_general": {
-          "enabled": false,
-          "price": ""
-        },
-        "teeth_cleaning": {
-          "enabled": false,
-          "price": ""
-        },
-        "tooth_extraction": {
-          "enabled": false,
-          "price": ""
-        },
-        "gingivitis": {
-          "enabled": false,
-          "price": ""
-        },
-        "internal_deworming": {
-          "enabled": false,
-          "price": ""
-        },
-        "external_deworming": {
-          "enabled": false,
-          "price": ""
-        },
-        "heartworm_prevention": {
-          "enabled": false,
-          "price": ""
-        },
-        "antiparasitic_treatment": {
-          "enabled": false,
-          "price": ""
-        },
-        "skin_exam": {
-          "enabled": false,
-          "price": ""
-        },
-        "allergy_test": {
-          "enabled": false,
-          "price": ""
-        },
-        "skin_treatment": {
-          "enabled": false,
-          "price": ""
-        }
-      },
-      "schedule": {
-        "mon": {
-          "enabled": true,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "tue": {
-          "enabled": false,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "wed": {
-          "enabled": true,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "thu": {
-          "enabled": false,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "fri": {
-          "enabled": true,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "sat": {
-          "enabled": false,
-          "from": "09:00",
-          "to": "17:00"
-        },
-        "sun": {
-          "enabled": false,
-          "from": "09:00",
-          "to": "17:00"
-        }
-      },
-      "reviewCount": 2,
-      "totalScore": 9
+      "image": "/images/vets/vet3.jpg"
     }
   ],
   "pets": [
@@ -483,31 +331,14 @@
       "region": "Κιλκίς",
       "lastSeenAddress": "Κιλκίς, Κέντρο",
       "ownerId": "631b"
+    },
+    {
+      "id": "33eb",
+      "ownerId": "631b",
+      "name": "Test"
     }
   ],
   "lostReports": [
-    {
-      "id": "1",
-      "petId": 123456789,
-      "date": "2025-01-15",
-      "region": "Αττική",
-      "address": "Σύνταγμα",
-      "condition": "Φοβισμένο",
-      "status": "draft",
-      "createdAt": "2025-01-14T10:30:00Z",
-      "ownerId": "3d04"
-    },
-    {
-      "id": "b1aa",
-      "petId": "p001",
-      "date": "2020-09-05",
-      "region": "Κεφαλλονιά",
-      "address": "",
-      "condition": "Ηταν στην ακρη του δρομου και φοβισμενο",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T10:21:39.507Z"
-    },
     {
       "id": "920d",
       "petId": "vp001",
@@ -610,24 +441,6 @@
       "description": "Γενικός κτηνιατρικός έλεγχος, όλα φυσιολογικά.",
       "medications": "",
       "status": "completed",
-      "createdAt": "2025-12-01T11:45:00.000Z"
-    }
-  ],
-  "reviews": [
-    {
-      "id": "1",
-      "ownerId": "631b",
-      "vetId": "1eae",
-      "stars": "4",
-      "text": "Πολύ καλός γιατρός, ευγενικός και επεξηγηματικός",
-      "createdAt": "2025-12-01T11:45:00.000Z"
-    },
-    {
-      "id": "2",
-      "ownerId": "631b",
-      "vetId": "1eae",
-      "stars": "5",
-      "text": "",
       "createdAt": "2025-12-01T11:45:00.000Z"
     }
   ]
