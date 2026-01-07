@@ -144,7 +144,7 @@ export default function VetDashboard() {
 
   const vet = JSON.parse(localStorage.getItem("user"));
 
-  if (!vet || vet.role !== "vet") return <div>Access denied</div>; // απλή προστασία route
+  if (vet && vet.role !== "vet") return <div>Access denied</div>; // απλή προστασία route
 
   return (
     <div className="VetDashboard">

@@ -44,41 +44,53 @@
       "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
       "afm": "1112223334",
       "gender": "male",
-      "address": "Πατησίων 100",
+      "address": "Πατησίων 100, Αθήνα",
       "birthdate": "1988-01-18",
       "phone": "6900000100",
       "email": "vetgiorgos@example.com",
       "password": "Vet1!!",
       "totalScore": "100",
-      "reviewCount": "10"
+      "reviewCount": "10",
+      "region": "Αττικής",
+      "experience": 8,
+      "specialization": "Μικρά ζώα",
+      "education": "Μεταπτυχιακό",
+      "availability": [
+        {
+          "date": "2024-01-20",
+          "times": ["09:00", "09:30", "10:00", "10:30"]
+        },
+        {
+          "date": "2024-01-21", 
+          "times": ["08:00", "08:30", "10:00", "10:30"]
+        }
+      ],
+      "image": "/images/vets/vet1.jpg"
     },
     {
-      "id": "v201",
-      "firstname": "ΓΙΩΡΓΟΣ",
-      "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "afm": "1112223334",
-      "gender": "male",
-      "address": "Πατησίων 100",
-      "birthdate": "1988-01-18",
-      "phone": "6900000100",
-      "email": "vetgiorgos1@example.com",
-      "password": "Vet1!!!",
-      "totalScore": "80",
-      "reviewCount": "10"
-    },
-    {
-      "id": "v202",
+    "id": "v202",
       "firstname": "ΕΛΕΝΗ",
       "lastname": "ΝΙΚΟΛΑΟΥ",
       "afm": "2223334445",
       "gender": "female",
-      "address": "Εγνατία 55",
+      "address": "Εγνατία 55, Θεσσαλονίκη",
       "birthdate": "1990-07-07",
       "phone": "6900000200",
       "email": "veteleni@example.com",
       "password": "Vet2!!",
       "totalScore": "80",
-      "reviewCount": "8"
+      "reviewCount": "8",
+      "region": "Θεσσαλονίκης",
+      "experience": 10,
+      "specialization": "Πτηνά",
+      "education": "Διδακτορικό",
+      "availability": [
+        {
+          "date": "2024-01-21",
+          "times": ["09:00", "09:30", "10:00", "10:30"]
+        }
+      ],
+      "image": "/images/vets/vet3.jpg"
     }
   ],
   "pets": [
@@ -319,31 +331,14 @@
       "region": "Κιλκίς",
       "lastSeenAddress": "Κιλκίς, Κέντρο",
       "ownerId": "631b"
+    },
+    {
+      "id": "33eb",
+      "ownerId": "631b",
+      "name": "Test"
     }
   ],
   "lostReports": [
-    {
-      "id": "1",
-      "petId": 123456789,
-      "date": "2025-01-15",
-      "region": "Αττική",
-      "address": "Σύνταγμα",
-      "condition": "Φοβισμένο",
-      "status": "draft",
-      "createdAt": "2025-01-14T10:30:00Z",
-      "ownerId": "3d04"
-    },
-    {
-      "id": "b1aa",
-      "petId": "p001",
-      "date": "2020-09-05",
-      "region": "Κεφαλλονιά",
-      "address": "",
-      "condition": "Ηταν στην ακρη του δρομου και φοβισμενο",
-      "status": "submitted",
-      "ownerId": "631b",
-      "createdAt": "2026-01-03T10:21:39.507Z"
-    },
     {
       "id": "920d",
       "petId": "vp001",

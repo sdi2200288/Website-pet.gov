@@ -39,125 +39,57 @@ export default function HistoryDeclaration() {
 
    // Φόρτωση κατοικιδίων (διαφορετικά για owner και vet)
    useEffect(() => {
-    if (!user) return;
+  if (!user) return;
 
-    const fetchAll = async () => {
-      try {
-        const petsReq = fetch("http://localhost:3001/pets").then(r => r.json());
+  const fetchAll = async () => {
+    try {
+      const petsReq = fetch("http://localhost:3001/pets").then(r => r.json());
 
-        if (isOwner) {
-          const [pets, found, lost] = await Promise.all([
-            petsReq,
-            fetch(`http://localhost:3001/foundReports?ownerId=${user.id}`).then(r => r.json()),
-            fetch(`http://localhost:3001/lostReports?ownerId=${user.id}`).then(r => r.json()),
-          ]);
+      if (isOwner) {
+        const [pets, found, lost] = await Promise.all([
+          petsReq,
+          fetch(`http://localhost:3001/foundReports?ownerId=${user.id}`).then(r => r.json()),
+          fetch(`http://localhost:3001/lostReports?ownerId=${user.id}`).then(r => r.json()),
+        ]);
 
-          setAllPets(pets);
-          setFoundDeclarations(found);
-          setLossDeclarations(lost);
-        }
-
-        if (isVet) {
-          const [
-            pets,
-            found,
-            lost,
-            adoption,
-            foster,
-            transfer
-          ] = await Promise.all([
-            petsReq,
-            fetch("http://localhost:3001/foundReports").then(r => r.json()),
-            fetch("http://localhost:3001/lostReports").then(r => r.json()),
-            fetch("http://localhost:3001/adoptionReports").then(r => r.json()),
-            fetch("http://localhost:3001/fosterReports").then(r => r.json()),
-            fetch("http://localhost:3001/transferReports").then(r => r.json()),
-          ]);
-
-          setAllPets(pets);
-          setFoundDeclarations(found.filter(r => r.vetId === user.id));
-          setLossDeclarations(lost.filter(r => r.vetId === user.id));
-          setAdoptionDeclarations(adoption.filter(r => r.vetId === user.id));
-          setFosterDeclarations(foster.filter(r => r.vetId === user.id));
-          setTransferDeclarations(transfer.filter(r => r.vetId === user.id));
-        }
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
+        setAllPets(pets);
+        setFoundDeclarations(found);
+        setLossDeclarations(lost);
       }
-    };
 
-    fetchAll();
-  }, []); 
+      if (isVet) {
+        const [
+          pets,
+          found,
+          lost,
+          adoption,
+          foster,
+          transfer
+        ] = await Promise.all([
+          petsReq,
+          fetch(`http://localhost:3001/foundReports?vetId=${user.id}`).then(r => r.json()),
+          fetch(`http://localhost:3001/lostReports?vetId=${user.id}`).then(r => r.json()),
+          fetch(`http://localhost:3001/adoptionReports?vetId=${user.id}`).then(r => r.json()),
+          fetch(`http://localhost:3001/fosterReports?vetId=${user.id}`).then(r => r.json()),
+          fetch(`http://localhost:3001/transferReports?vetId=${user.id}`).then(r => r.json()),
+        ]);
 
-  // // Φόρτωση δηλώσεων (διαφορετικά για owner και vet) και auto-refresh
-  // const fetchDeclarations = () => {
-  //   if (!user) return;
-    
-  //   if (isOwner) {
-  //     fetch(`http://localhost:3001/foundReports?ownerId=${user.id}`)
-  //     .then(res => res.json())
-  //     .then(data => setFoundDeclarations(data))
-  //     .catch(() => setFoundDeclarations([]));
+        setAllPets(pets);
+        setFoundDeclarations(found);
+        setLossDeclarations(lost);
+        setAdoptionDeclarations(adoption);
+        setFosterDeclarations(foster);
+        setTransferDeclarations(transfer);
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  //     fetch(`http://localhost:3001/lostReports?ownerId=${user.id}`)
-  //     .then(res => res.json())
-  //     .then(data => setLossDeclarations(data))
-  //     .catch(() => setLossDeclarations([]));
-  //   }
-  //   // Για VET: βρες reports με vetId
-  //   else if (isVet) {
-  //     // Found reports με vetId
-  //     fetch(`http://localhost:3001/foundReports`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const vetFound = data.filter(report => report.vetId === user.id);
-  //         setFoundDeclarations(vetFound);
-  //       })
-  //       .catch(() => setFoundDeclarations([]));
-
-  //     // Lost reports με vetId
-  //     fetch(`http://localhost:3001/lostReports`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const vetLost = data.filter(report => report.vetId === user.id);
-  //         setLossDeclarations(vetLost);
-  //       })
-  //       .catch(() => setLossDeclarations([]));
-
-  //     // Adoption reports
-  //     fetch(`http://localhost:3001/adoptionReports`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const vetAdoption = data.filter(report => report.vetId === user.id);
-  //         setAdoptionDeclarations(vetAdoption);
-  //       })
-  //       .catch(() => setAdoptionDeclarations([]));
-
-  //     // Foster reports
-  //     fetch(`http://localhost:3001/fosterReports`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const vetFoster = data.filter(report => report.vetId === user.id);
-  //         setFosterDeclarations(vetFoster);
-  //       })
-  //       .catch(() => setFosterDeclarations([]));
-
-  //     // Transfer reports
-  //     fetch(`http://localhost:3001/transferReports`)
-  //       .then(res => res.json())
-  //       .then(data => {
-  //         const vetTransfer = data.filter(report => report.vetId === user.id);
-  //         setTransferDeclarations(vetTransfer);
-  //       })
-  //       .catch(() => setTransferDeclarations([]));
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchDeclarations();
-  // }, [user, isOwner, isVet]);
+  fetchAll();
+}, []);
 
   // Συνάρτηση για εύρεση κατοικίδιου με βάση το petId
   const findPetById = (petId) => {
@@ -363,124 +295,230 @@ const historyDeclarations = useMemo(() => {
     </div>
   );
 }
+
 // import React, { useEffect, useState, useMemo } from "react";
 // import "./HistoryDeclaration.css";
 // import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
 // import { REGIONS, SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
 
 // export default function HistoryDeclaration() {
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   const isVet = user?.role === "vet";
-
+//   // Filters
 //   const [selectedSpecies, setSelectedSpecies] = useState("");
 //   const [selectedBreed, setSelectedBreed] = useState("");
 //   const [selectedGender, setSelectedGender] = useState("");
 //   const [selectedRegion, setSelectedRegion] = useState("");
 //   const [selectedChip, setSelectedChip] = useState("");
+
+//   // Data
+//   const [allPets, setAllPets] = useState([]);
+//   const [foundDeclarations, setFoundDeclarations] = useState([]);
+//   const [lossDeclarations, setLossDeclarations] = useState([]);
+//   const [adoptionDeclarations, setAdoptionDeclarations] = useState([]);
+//   const [fosterDeclarations, setFosterDeclarations] = useState([]);
+//   const [transferDeclarations, setTransferDeclarations] = useState([]);
   
+//   const [loading, setLoading] = useState(true);
 
-//   const [pets, setPets] = useState([]);
-//   const [reports, setReports] = useState([]);
+//   const [user] = useState(() => JSON.parse(localStorage.getItem("user")));
+//   const isOwner = user?.role === "owner";
+//   const isVet = user?.role === "vet";
 
-//   /* =========================
-//      ΦΟΡΤΩΣΗ ΚΑΤΟΙΚΙΔΙΩΝ
-//      ========================= */
-//   useEffect(() => {
-//     if (!user) return;
-
-//     const url = isVet
-//       ? "http://localhost:3001/pets"
-//       : `http://localhost:3001/pets?ownerId=${user.id}`;
-
-//     fetch(url)
-//       .then(res => res.json())
-//       .then(setPets)
-//       .catch(() => setPets([]));
-//   }, [user, isVet]);
-
-//   /* =========================
-//      ΦΟΡΤΩΣΗ ΟΛΩΝ ΤΩΝ ΔΗΛΩΣΕΩΝ
-//      ========================= */
-//   const fetchDeclarations = () => {
-//     if (!user) return;
-
-//     const query = isVet
-//       ? `vetId=${user.id}`
-//       : `ownerId=${user.id}`;
-
-//     const endpoints = [
-//       { type: "lost", url: "lostReports" },
-//       { type: "found", url: "foundReports" },
-//       { type: "adoption", url: "adoptionReports" },
-//       { type: "foster", url: "fosterReports" },
-//       { type: "transfer", url: "transferReports" }
-//     ];
-
-//      Promise.all(
-//       endpoints.map(e => {
-//         let query = "";
-//         if (!isVet) {
-//           // owners βλέπουν μόνο τις δικές τους δηλώσεις
-//           if (["lost", "found"].includes(e.type)) {
-//             query = `?ownerId=${user.id}`;
-//           } else {
-//             return Promise.resolve([]); // owners δεν βλέπουν adoption/foster/transfer
-//           }
-//         } else {
-//           query = `?vetId=${user.id}`;
-//         }
-
-//         return fetch(`http://localhost:3001/${e.url}${query}`)
-//           .then(res => res.json())
-//           .then(data => data.map(r => ({ ...r, type: e.type })))
-//           .catch(() => []);
-//       })
-//     ).then(results => setReports(results.flat()));
+//   // Χάρτης για gender αντιστοίχιση
+//   const mapGender = (gender) => {
+//     if (gender === "male") return "Αρσενικό";
+//     if (gender === "female") return "Θηλυκό";
+//     return gender;
 //   };
 
+//   // Συνάρτηση για εύρεση κατοικίδιου
+//   const findPetById = (petId) => {
+//     return allPets.find(p => p.id === String(petId)) || null;
+//   };
+
+//   // Βοηθητική συνάρτηση για εύρεση κατοικίδιων ανά ιδιοκτήτη
+//   const findPetsByOwner = (ownerId) => {
+//     return allPets.filter(pet => pet.ownerId === ownerId);
+//   };
+
+//   // Φόρτωση δεδομένων
 //   useEffect(() => {
-//     fetchDeclarations();
-//     // const interval = setInterval(fetchDeclarations, 10000);
-//     // return () => clearInterval(interval);
-//   }, [user, isVet]);
+//     if (!user) return;
 
-//   /* =========================
-//      HELPERS
-//      ========================= */
-//   const findPetById = (petId) =>
-//     pets.find(p => p.id === petId) || null;
+//     const fetchAll = async () => {
+//       try {
+//         // Φόρτωση όλων των κατοικιδίων
+//         const pets = await fetch("http://localhost:3001/pets").then(r => r.json());
+//         setAllPets(pets);
 
-//   /* =========================
-//      ΕΝΩΜΕΝΟ ΙΣΤΟΡΙΚΟ
-//      ========================= */
+//         if (isOwner) {
+//           // Ιδιοκτήτης: βρες τα κατοικίδιά του
+//           const ownerPets = findPetsByOwner(user.id);
+//           const ownerPetIds = ownerPets.map(p => p.id);
+          
+//           // Φόρτωση lostReports για τα κατοικίδιά του
+//           const lostRes = await fetch("http://localhost:3001/lostReports").then(r => r.json());
+//           const ownerLost = lostRes.filter(report => 
+//             ownerPetIds.includes(String(report.petId)) || report.ownerId === user.id
+//           );
+//           setLossDeclarations(ownerLost);
+          
+//           // Φόρτωση foundReports για τα κατοικίδιά του
+//           const foundRes = await fetch("http://localhost:3001/foundReports").then(r => r.json());
+//           const ownerFound = foundRes.filter(report => 
+//             ownerPetIds.includes(String(report.petId)) || report.ownerId === user.id
+//           );
+//           setFoundDeclarations(ownerFound);
+//         }
+
+//         if (isVet) {
+//           // Κτηνίατρος: βρες ΟΛΕΣ τις δηλώσεις που ΕΚΑΝΕ ο ίδιος
+          
+//           // Φόρτωση lostReports που έκανε ο κτηνίατρος
+//           const lostRes = await fetch(`http://localhost:3001/lostReports?vetId=${user.id}`).then(r => r.json());
+//           setLossDeclarations(lostRes);
+          
+//           // Φόρτωση foundReports που έκανε ο κτηνίατρος
+//           const foundRes = await fetch(`http://localhost:3001/foundReports?vetId=${user.id}`).then(r => r.json());
+//           setFoundDeclarations(foundRes);
+          
+//           // Φόρτωση adoptionReports που έκανε ο κτηνίατρος
+//           const adoptionRes = await fetch(`http://localhost:3001/adoptionReports?vetId=${user.id}`).then(r => r.json());
+//           setAdoptionDeclarations(adoptionRes);
+          
+//           // Φόρτωση fosterReports που έκανε ο κτηνίατρος
+//           const fosterRes = await fetch(`http://localhost:3001/fosterReports?vetId=${user.id}`).then(r => r.json());
+//           setFosterDeclarations(fosterRes);
+          
+//           // Φόρτωση transferReports που έκανε ο κτηνίατρος
+//           const transferRes = await fetch(`http://localhost:3001/transferReports?vetId=${user.id}`).then(r => r.json());
+//           setTransferDeclarations(transferRes);
+//         }
+//       } catch (err) {
+//         console.error("Fetch error:", err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchAll();
+//   }, [user, isOwner, isVet]);
+
+//   // Δημιουργία ιστορικού δηλώσεων
 //   const historyDeclarations = useMemo(() => {
-//     return reports.map(report => {
-//       const pet = findPetById(report.petId);
+//     const combined = [];
 
-//       return {
-//         ...report,
-//         microchip: pet?.microchip || "—",
-//         species: pet?.species,
-//         breed: pet?.breed,
-//         gender: pet?.gender,
-//         photo: pet?.photoUrl,
+//     // Lost declarations
+//     lossDeclarations.forEach(r => {
+//       const pet = findPetById(r.petId);
+//       combined.push({
+//         ...r,
+//         type: "lost",
+//         displayDate: r.date || r.createdAt,
 //         petName: pet?.name || "Άγνωστο",
-//         region: report.region || pet?.region
-//       };
+//         microchip: pet?.microchip || r.microchip || "Άγνωστο",
+//         species: pet?.species || "Άγνωστο",
+//         breed: pet?.breed || "Άγνωστο",
+//         gender: mapGender(pet?.gender) || "Άγνωστο",
+//         photo: pet?.photoUrl || "",
+//         region: r.region || pet?.region || "Άγνωστο",
+//         address: r.address || pet?.lastSeenAddress || "",
+//       });
 //     });
-//   }, [reports, pets]);
 
-//   /* =========================
-//      FILTERS
-//      ========================= */
-//   const breeds =
-//     selectedSpecies === "Σκύλος"
-//       ? dogPopular
-//       : selectedSpecies === "Γάτα"
-//       ? catPopular
-//       : [...dogPopular, ...catPopular];
+//     // Found declarations
+//     foundDeclarations.forEach(r => {
+//       const pet = findPetById(r.petId);
+//       combined.push({
+//         ...r,
+//         type: "found",
+//         displayDate: r.date || r.createdAt,
+//         petName: pet?.name || "Άγνωστο",
+//         microchip: pet?.microchip || "Άγνωστο",
+//         species: pet?.species || "Άγνωστο",
+//         breed: pet?.breed || "Άγνωστο",
+//         gender: mapGender(pet?.gender) || "Άγνωστο",
+//         photo: pet?.photoUrl || "",
+//         region: r.region || pet?.region || "Άγνωστο",
+//         address: r.address || "",
+//       });
+//     });
 
-//   const filteredDeclarations = historyDeclarations.filter(d => {
+//     if (isVet) {
+//       // Adoption declarations
+//       adoptionDeclarations.forEach(r => {
+//         const pet = findPetById(r.petId);
+//         combined.push({
+//           ...r,
+//           type: "adoption",
+//           displayDate: r.createdAt,
+//           petName: pet?.name || "Άγνωστο",
+//           microchip: pet?.microchip || r.microchip || "Άγνωστο",
+//           species: pet?.species || "Άγνωστο",
+//           breed: pet?.breed || "Άγνωστο",
+//           gender: mapGender(pet?.gender) || "Άγνωστο",
+//           photo: pet?.photoUrl || "",
+//           region: pet?.region || "Άγνωστο",
+//           address: "", // Δεν υπάρχει για adoption
+//         });
+//       });
+
+//       // Foster declarations
+//       fosterDeclarations.forEach(r => {
+//         const pet = findPetById(r.petId);
+//         combined.push({
+//           ...r,
+//           type: "foster",
+//           displayDate: r.startDate || r.createdAt,
+//           petName: pet?.name || "Άγνωστο",
+//           microchip: pet?.microchip || r.microchip || "Άγνωστο",
+//           species: pet?.species || "Άγνωστο",
+//           breed: pet?.breed || "Άγνωστο",
+//           gender: mapGender(pet?.gender) || "Άγνωστο",
+//           photo: pet?.photoUrl || "",
+//           region: pet?.region || "Άγνωστο",
+//           address: "", // Δεν υπάρχει για foster
+//         });
+//       });
+
+//       // Transfer declarations
+//       transferDeclarations.forEach(r => {
+//         const pet = findPetById(r.petId);
+//         combined.push({
+//           ...r,
+//           type: "transfer",
+//           displayDate: r.transferDate || r.createdAt,
+//           petName: pet?.name || "Άγνωστο",
+//           microchip: pet?.microchip || r.microchip || "Άγνωστο",
+//           species: pet?.species || "Άγνωστο",
+//           breed: pet?.breed || "Άγνωστο",
+//           gender: mapGender(pet?.gender) || "Άγνωστο",
+//           photo: pet?.photoUrl || "",
+//           region: pet?.region || "Άγνωστο",
+//           address: "", // Δεν υπάρχει για transfer
+//         });
+//       });
+//     }
+
+//     // Ταξινόμηση από νεότερο προς παλαιότερο
+//     return combined.sort((a, b) => new Date(b.displayDate) - new Date(a.displayDate));
+//   }, [
+//     lossDeclarations,
+//     foundDeclarations,
+//     adoptionDeclarations,
+//     fosterDeclarations,
+//     transferDeclarations,
+//     allPets,
+//     isVet
+//   ]);
+
+//   const breeds = selectedSpecies === "Σκύλος" 
+//     ? dogPopular 
+//     : selectedSpecies === "Γάτα" 
+//     ? catPopular 
+//     : [...dogPopular, ...catPopular];
+
+//   // Φιλτράρισμα δηλώσεων
+//   const filteredDeclarations = historyDeclarations.filter((d) => {
 //     if (selectedChip && String(d.microchip) !== String(selectedChip)) return false;
 //     if (selectedSpecies && d.species !== selectedSpecies) return false;
 //     if (selectedBreed && d.breed !== selectedBreed) return false;
@@ -489,105 +527,130 @@ const historyDeclarations = useMemo(() => {
 //     return true;
 //   });
 
-//   const uniqueMicrochips = useMemo(() => {
-//     const chips = new Set();
-//     historyDeclarations.forEach(d => {
-//       if (d.microchip && d.microchip !== "—") chips.add(d.microchip);
-//     });
-//     return Array.from(chips);
-//   }, [historyDeclarations]);
+//   // Μοναδικά microchips για το dropdown
+//   const uniqueMicrochips = [...new Set(
+//     historyDeclarations
+//       .map(d => d.microchip)
+//       .filter(m => m && m !== "Άγνωστο")
+//   )];
 
-//   /* =========================
-//      DELETE
-//      ========================= */
+//   // Συνάρτηση διαγραφής δήλωσης
 //   const handleDeleteDeclaration = async (id, type) => {
-//     if (!window.confirm("Είστε σίγουρος ότι θέλετε να διαγράψετε αυτή τη δήλωση;")) return;
+//     if (!window.confirm("Σίγουρα θέλετε να διαγράψετε αυτή τη δήλωση;")) return;
 
 //     const endpointMap = {
 //       lost: "lostReports",
 //       found: "foundReports",
 //       adoption: "adoptionReports",
 //       foster: "fosterReports",
-//       transfer: "transferReports"
+//       transfer: "transferReports",
 //     };
 
 //     try {
-//       const res = await fetch(
-//         `http://localhost:3001/${endpointMap[type]}/${id}`,
-//         { method: "DELETE" }
-//       );
-
-//       if (!res.ok) throw new Error();
-
-//       setReports(prev => prev.filter(r => r.id !== id));
-//       alert("Η δήλωση διαγράφηκε επιτυχώς!");
-//     } catch {
-//       alert("Σφάλμα κατά τη διαγραφή της δήλωσης.");
+//       await fetch(`http://localhost:3001/${endpointMap[type]}/${id}`, {
+//         method: "DELETE"
+//       });
+//       window.location.reload();
+//     } catch (error) {
+//       console.error("Error deleting declaration:", error);
+//       alert("Σφάλμα κατά τη διαγραφή της δήλωσης");
 //     }
 //   };
 
-//   /* =========================
-//      RENDER
-//      ========================= */
+//   if (loading) {
+//     return <div className="loading-container">Φόρτωση ιστορικού...</div>;
+//   }
+
+//   if (!user) {
+//     return <div className="error-container">Πρέπει να συνδεθείτε για να δείτε το ιστορικό</div>;
+//   }
+
 //   return (
 //     <div className="history-page">
-//       <h3 className="history-title">Ιστορικό Δηλώσεων</h3>
+//       <h3 className="history-title">
+//         Ιστορικό Δηλώσεων {isVet ? "(Κτηνίατρος)" : "(Ιδιοκτήτης)"}
+//       </h3>
 
+//       {/* Φίλτρα */}
 //       <div className="pets-filters history-filters-panel">
-
 //         <div className="filter-item">
 //           <span className="filter-label">Είδος:</span>
-//           <select value={selectedSpecies} onChange={e => setSelectedSpecies(e.target.value)}>
+//           <select
+//             value={selectedSpecies}
+//             onChange={(e) => setSelectedSpecies(e.target.value)}
+//           >
 //             <option value="">Όλα</option>
-//             {SPECIES.map(sp => <option key={sp}>{sp}</option>)}
+//             {SPECIES.map((sp) => (
+//               <option key={sp} value={sp}>{sp}</option>
+//             ))}
 //           </select>
 //         </div>
 
 //         <div className="filter-item">
 //           <span className="filter-label">Ράτσα:</span>
-//           <select value={selectedBreed} onChange={e => setSelectedBreed(e.target.value)}>
+//           <select 
+//             value={selectedBreed} 
+//             onChange={(e) => setSelectedBreed(e.target.value)}
+//             disabled={!selectedSpecies && !breeds.length}
+//           >
 //             <option value="">Όλες</option>
-//             {breeds.map(b => <option key={b}>{b}</option>)}
+//             {breeds.map((b) => (
+//               <option key={b} value={b}>{b}</option>
+//             ))}
 //           </select>
 //         </div>
 
 //         <div className="filter-item">
 //           <span className="filter-label">Φύλο:</span>
-//           <select value={selectedGender} onChange={e => setSelectedGender(e.target.value)}>
+//           <select 
+//             value={selectedGender} 
+//             onChange={(e) => setSelectedGender(e.target.value)}
+//           >
 //             <option value="">Όλα</option>
-//             {GENDERS.map(g => <option key={g}>{g}</option>)}
+//             {GENDERS.map((g) => (
+//               <option key={g} value={g}>{g}</option>
+//             ))}
 //           </select>
 //         </div>
 
 //         <div className="filter-item">
 //           <span className="filter-label">Περιοχή:</span>
-//           <select value={selectedRegion} onChange={e => setSelectedRegion(e.target.value)}>
+//           <select 
+//             value={selectedRegion} 
+//             onChange={(e) => setSelectedRegion(e.target.value)}
+//           >
 //             <option value="">Όλες</option>
-//             {REGIONS.map(r => <option key={r}>{r}</option>)}
+//             {REGIONS.map((r) => (
+//               <option key={r} value={r}>{r}</option>
+//             ))}
 //           </select>
 //         </div>
 
-//         <div className="filter-item history-chip-filter">
+//         <div className="filter-item">
 //           <span className="filter-label">Κατοικίδιο:</span>
-//           <select value={selectedChip} onChange={e => setSelectedChip(e.target.value)}>
+//           <select 
+//             value={selectedChip} 
+//             onChange={(e) => setSelectedChip(e.target.value)}
+//           >
 //             <option value="">Όλα</option>
-//             {uniqueMicrochips.map(chip => {
-//               const pet = pets.find(p => p.microchip === chip);
+//             {uniqueMicrochips.map(microchip => {
+//               const pet = allPets.find(p => p.microchip === microchip);
 //               return (
-//                 <option key={chip} value={chip}>
-//                   {chip} - {pet?.name || "Χωρίς όνομα"} - {pet?.breed || "Άγνωστη ράτσα"}
+//                 <option key={microchip} value={microchip}>
+//                   {microchip} - {pet?.name || "Άγνωστο όνομα"}
 //                 </option>
 //               );
 //             })}
 //           </select>
 //         </div>
-
 //       </div>
 
+//       {/* Λίστα δηλώσεων */}
 //       <div className="history-list-panel">
-//         <PetDeclarationsList
-//           declarations={filteredDeclarations}
-//           onDeleteDeclaration={handleDeleteDeclaration}
+//         <PetDeclarationsList 
+//           declarations={filteredDeclarations} 
+//           onDeleteDeclaration={handleDeleteDeclaration} 
+//           isVet={isVet}
 //         />
 //       </div>
 //     </div>

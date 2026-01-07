@@ -1,0 +1,46 @@
+.roleMismatchOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.roleMismatchModal {
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.roleMismatchModal h2 {
+  margin-bottom: 15px;
+}
+
+.roleMismatchButtons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.roleMismatchButtons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.yesButton {
+  background-color: #28a745;
+  color: white;
+}
+
+.noButton {
+  background-color: #dc3545;
+  color: white;
+}

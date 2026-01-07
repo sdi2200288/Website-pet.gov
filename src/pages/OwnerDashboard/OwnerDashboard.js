@@ -1,6 +1,6 @@
 import "./OwnerDashboard.css";
+import React from "react";
 import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import {
   FaUser,
   FaFileAlt,
@@ -79,7 +79,7 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-               to={`bookings?ownerId=${user?.id || ""}`}
+               to={`book-date?ownerId=${user?.id || ""}`}
               className={({ isActive }) =>
                 `sidebar-link ${isActive ? "active" : ""}`
               }

@@ -22,6 +22,12 @@ export const REGIONS = [
   "Χαλκιδικής", "Χανίων", "Χίου"
 ];
 
+// Util.js
+export const EXPERIENCE_OPTIONS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"];
+export const SPECIALIZATION_OPTIONS = ["Μικρά ζώα", "Μεγάλα ζώα", "Πτηνά", "Εξωτικά"];
+export const EDUCATION_OPTIONS = ["Πτυχίο", "Μεταπτυχιακό", "Διδακτορικό"];
+export const VET_GENDERS = ["Άνδρας", "Γυναίκα", "Άλλο"];
+
 export const MEDICAL_ACTS = [
   { id: "clinical_exam", label: "Κλινική εξέταση" },
   { id: "vaccination", label: "Εμβολιασμός" },
