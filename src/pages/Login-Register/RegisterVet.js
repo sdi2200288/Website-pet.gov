@@ -56,6 +56,18 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
     setErrors({ ...errors, [e.target.name]: "" });
   }
 
+  function handleAfmChange(e) {
+    const v = e.target.value.replace(/\D/g, "").slice(0, 10); // μόνο ψηφία, max 10
+    setForm((prev) => ({ ...prev, afm: v }));
+    setErrors((prev) => ({ ...prev, afm: "" }));
+  }
+
+  function handlePhoneChange(e) {
+    const v = e.target.value.replace(/\D/g, "").slice(0, 15); // μόνο ψηφία, max 15
+    setForm((prev) => ({ ...prev, phone: v }));
+    setErrors((prev) => ({ ...prev, phone: "" }));
+  }
+
   function handleClear() {
     setForm({
       firstname: "",
@@ -126,12 +138,13 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
     if (!form.lastname.trim()) newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
     if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
     if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
-    if (!/^\d{10}$/.test(form.afm)) newErrors.afm = "Το ΑΦΜ πρέπει να έχει 10 αριθμούς";
     if (!form.gender) newErrors.gender = "Πρέπει να επιλέξετε φύλο";
     if (!form.birthdate) newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
     if (!form.address.trim()) newErrors.address = "Πρέπει να συμπληρωθεί η διεύθυνση";
-    if (!/^\d{10,15}$/.test(form.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι αριθμός 10-15 ψηφίων";
-    if (!form.email.includes("@")) newErrors.email = "Μη έγκυρο email";
+    if (!form.afm) newErrors.afm = "Πρέπει να συμπληρωθεί το ΑΦΜ";
+    else if (!/^\d{10}$/.test(form.afm)) newErrors.afm = "Το ΑΦΜ πρέπει να έχει ακριβώς 10 ψηφία";
+    if (!form.phone) newErrors.phone = "Πρέπει να συμπληρωθεί το τηλέφωνο";
+    else if (!/^\d{10,15}$/.test(form.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι 10–15 ψηφία"; if (!form.email.includes("@")) newErrors.email = "Μη έγκυρο email";
     if (form.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
     if (!form.specializations || form.specializations.length === 0) {
@@ -214,25 +227,25 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       </label>
 
       <label className="loginLabel">
-        ΑΦΜ
-        <input type="number" className={`loginInput ${errors.afm ? "inputError" : ""}`}
-          name="afm" value={form.afm} onChange={handleChange} />
+        ΑΦΜ *
+        <input type="text" inputMode="numeric" pattern="\d*" maxLength={10}
+          className={`loginInput ${errors.afm ? "inputError" : ""}`} name="afm" value={form.afm} onChange={handleAfmChange} />
         {errors.afm && <div className="fieldError">{errors.afm}</div>}
       </label>
 
       <label className="loginLabel">
         Φύλο *
         <select className="loginSelect" name="gender" value={form.gender} onChange={handleChange}  >
-          <option value="" hidden>Επιλέξτε φύλο</option>
-          <option value="male">Άνδρας</option>
-          <option value="female">Γυναίκα</option>
-          <option value="other">Άλλο</option>
+          <option value="" >Επιλέξτε φύλο</option>
+          <option value="Άνδρας">Άνδρας</option>
+          <option value="Γυναίκα">Γυναίκα</option>
+          <option value="Άλλο">Άλλο</option>
         </select>
         {errors.gender && <div className="fieldError">{errors.gender}</div>}
       </label>
 
 
-      <div className="loginLabel registerFieldFull">
+      <label className="loginLabel registerFieldFull">
         <div className="sectionTitle">Ειδικεύσεις (επιλέξτε μία ή περισσότερες) *</div>
         <div className="specializationsGrid">
           {VET_SPECIALIZATIONS.map((s) => (
@@ -243,14 +256,15 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
           ))}
         </div>
         {errors.specializations && <div className="fieldError">{errors.specializations}</div>}
+      </label>
 
-      </div>
       <label className="loginLabel">
         Ημερομηνία γέννησης *
         <input type="date" className={`loginInput ${errors.birthdate ? "inputError" : ""}`}
           name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]} />
         {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
       </label>
+
       <label className="loginLabel">
         Περιοχή (Νομός) *
         <select className="loginSelect" name="region" value={form.region} onChange={handleChange}  >
@@ -261,8 +275,8 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
             </option>
           ))}
         </select>
+        {errors.region && <div className="fieldError">{errors.region}</div>}
       </label>
-      {errors.region && <div className="fieldError">{errors.region}</div>}
 
       <label className="loginLabel">
         Διεύθυνση (Οδός αριθμός Πόλη Χώρα) *
@@ -281,26 +295,30 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
           ))}
         </select>
         {errors.studyLevel && <div className="fieldError">{errors.studyLevel}</div>}
-
       </label>
+
       <label className="loginLabel">
         Εμπειρία (Έτη) *
         <input className="loginInput" type="number" min="0" name="experienceYears" value={form.experienceYears} onChange={handleChange} />
         {errors.experienceYears && <div className="fieldError">{errors.experienceYears}</div>}
-
       </label>
+
       <label className="loginLabel">
         Τηλέφωνο *
-        <input type="number" className={`loginInput ${errors.phone ? "inputError" : ""}`}
-          name="phone" value={form.phone} onChange={handleChange} />
+        <input type="text" inputMode="numeric" pattern="\d*"
+          maxLength={15} className={`loginInput ${errors.phone ? "inputError" : ""}`}
+          name="phone" value={form.phone} onChange={handlePhoneChange}
+        />
         {errors.phone && <div className="fieldError">{errors.phone}</div>}
       </label>
+
       <label className="loginLabel">
         Email πχ. name@email.com *
         <input type="email" className={`loginInput ${errors.email ? "inputError" : ""}`}
           name="email" value={form.email} onChange={handleChange} />
         {errors.email && <div className="fieldError">{errors.email}</div>}
       </label>
+
       <label className="loginLabel">
         Κωδικός (τουλάχιστον 8 ψηφία) *
         <div style={{ position: "relative" }}>
@@ -334,6 +352,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         </div>
         {errors.confirmPassword && <div className="fieldError">{errors.confirmPassword}</div>}
       </label>
+      
       {serverError && <div className="fieldError">{serverError}</div>}
       <div className="registerFieldFull">
         <input type="file" accept="image/*" ref={photoInputRef} onChange={handlePhotoChange} style={{ display: "none" }}

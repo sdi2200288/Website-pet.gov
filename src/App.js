@@ -41,7 +41,7 @@ import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
 import Login from "./pages/Login-Register/Login";
 import Register from "./pages/Login-Register/Register";
 import ChangeCode from "./pages/Login-Register/ChangeCode";
-
+import UpdateProfile from "./pages/Login-Register/UpdateProfile";
 
 import Cookies from "./pages/FooterPages/Others/Cookies";
 import AboutUs from "./pages/FooterPages/Others/AboutUs";
@@ -144,6 +144,7 @@ function App() {
           } />
 
           <Route path="/changecode" element={<ChangeCode />} />
+          <Route path="/updateprofile" element={<UpdateProfile />} />
 
           <Route path="/Communication" element={<Communication />} />
           <Route path="/cookies" element={<Cookies />} />

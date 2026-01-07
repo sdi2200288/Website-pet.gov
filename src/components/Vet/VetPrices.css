@@ -1,0 +1,39 @@
+.prices-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 26px 40px;
+}
+
+.price-col-title {
+    font-size: 1rem;
+    font-weight: 950;
+    margin-bottom: 12px;
+    color: #1f2d3a;
+}
+
+.price-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.price-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eef1f4;
+}
+
+.price-item-name {
+    color: #1f2d3a;
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.price-item-price {
+    color: #1f2d3a;
+    font-weight: 950;
+    white-space: nowrap;
+}

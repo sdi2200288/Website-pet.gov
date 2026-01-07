@@ -8,7 +8,7 @@ export default function ChangeCode() {
   const [password0, setPassword0] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [show0, setShow0] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -16,33 +16,35 @@ export default function ChangeCode() {
   const navigate = useNavigate();
   const title = "Αλλαγή Κωδικού Προστασίας";
 
+
+  const validate = (user) => {
+    const newErrors = {};
+    if (!password0) newErrors.password0 = "Συμπλήρωσε τον τρέχοντα κωδικό";
+    if (!password1) newErrors.password1 = "Συμπλήρωσε νέο κωδικό";
+    if (!password2) newErrors.password2 = "Επιβεβαίωσε τον νέο κωδικό";
+    if (password1 && password1.length < 8) {
+      newErrors.password1 = "Ο νέος κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
+    }
+    if (password1 && password2 && password1 !== password2) {
+      newErrors.password2 = "Οι νέοι κωδικοί δεν ταιριάζουν";
+    }
+    if (user && password0 && password0 !== user.password) {
+      newErrors.password0 = "Ο τρέχων κωδικός είναι λάθος";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
+    setErrors({});
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) {
-      setError("Δεν υπάρχει συνδεδεμένος χρήστης");
+      setErrors({ general: "Δεν βρέθηκε συνδεδεμένος χρήστης." });
       return;
     }
 
-    //έλεγχος τρέχοντος κωδικού
-    if (password0 != user.password) {
-      setError("Ο τρέχων κωδικός είναι λάθος");
-      return;
-    }
-
-    //έλεγχος νέων κωδικών
-    if (password1.length < 8) {
-      setError("Ο νέος κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες");
-      return;
-    }
-
-    if (password1 != password2) {
-      setError("Οι νέοι κωδικοί δεν ταιριάζουν");
-      return;
-    }
-
+    if (!validate(user)) return;
     const endpoint = user.role === "owner" ? `http://localhost:3001/owners/${user.id}` : `http://localhost:3001/vets/${user.id}`;
 
     try {
@@ -53,7 +55,7 @@ export default function ChangeCode() {
       });
 
       if (!res.ok) {
-        setError("Αποτυχία αλλαγής κωδικού");
+        setErrors({ general: "Αποτυχία αλλαγής κωδικού" });
         return;
       }
 
@@ -62,7 +64,7 @@ export default function ChangeCode() {
       alert("Ο κωδικός άλλαξε επιτυχώς");
       navigate(-1);
     } catch (err) {
-      setError("Σφάλμα. Προσπαθήστε ξανά.");
+      setErrors({ general: "Σφάλμα. Προσπαθήστε ξανά." });
     }
   };
 
@@ -83,7 +85,6 @@ export default function ChangeCode() {
                 type={show0 ? "text" : "password"}
                 value={password0}
                 onChange={(e) => setPassword0(e.target.value)}
-                required
               />
               <button
                 type="button"
@@ -93,6 +94,8 @@ export default function ChangeCode() {
                 {show0 ? "Hide" : "Show"}
               </button>
             </div>
+            {errors.password0 && <div className="fieldError">{errors.password0}</div>}
+
           </label>
 
           <label className="loginLabel">
@@ -104,7 +107,6 @@ export default function ChangeCode() {
                 type={show1 ? "text" : "password"}
                 value={password1}
                 onChange={(e) => setPassword1(e.target.value)}
-                required
               />
               <button
                 type="button"
@@ -114,6 +116,7 @@ export default function ChangeCode() {
                 {show1 ? "Hide" : "Show"}
               </button>
             </div>
+            {errors.password1 && <div className="fieldError">{errors.password1}</div>}
           </label>
 
           <label className="loginLabel">
@@ -124,7 +127,6 @@ export default function ChangeCode() {
                 type={show2 ? "text" : "password"}
                 value={password2}
                 onChange={(e) => setPassword2(e.target.value)}
-                required
               />
               <button
                 type="button"
@@ -134,9 +136,11 @@ export default function ChangeCode() {
                 {show2 ? "Hide" : "Show"}
               </button>
             </div>
+            {errors.password2 && <div className="fieldError">{errors.password2}</div>}
+
           </label>
 
-          {error && <div className="fieldError">{error}</div>}
+          {errors.general && <div className="fieldError">{errors.general}</div>}
 
           <div className="registerActions">
             <button

@@ -3,7 +3,11 @@ import "./Profile.css";
 import { useNavigate, Link } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
 import { FiSearch } from "react-icons/fi";
-import { SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
+import { SPECIES, GENDERS, DAYS, dogPopular, catPopular, buildEnabledServicesByCategory, Stars, calculateMO } from "../Utils/Util";
+import VetInfo from "../../components/Vet/VetInfo";
+import VetPrices from "../../components/Vet/VetPrices";
+import VetReview from "../../components/Vet/VetReview";
+
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -15,16 +19,63 @@ export default function Profile() {
   const [chipInput, setChipInput] = useState("");
   const [chipSearch, setChipSearch] = useState("");
 
+  // VET's
+  const [activeTab, setActiveTab] = useState("info");
+  const [reviews, setReviews] = useState([]);
+
   const user = JSON.parse(localStorage.getItem("user"));
+  const isVet = user.role === "vet";
+  const enabledServicesByCategory = buildEnabledServicesByCategory(user);
 
   useEffect(() => {
-    if (!user || user.role !== "owner" && user.role !== "vet") {
+    if (!isVet || !user.id) return;
+
+    (async () => {
+      try {
+        const res = await fetch(`http://localhost:3001/reviews?vetId=${user.id}`);
+        const data = await res.json();
+        const arr = Array.isArray(data) ? data : [];
+        const ownerIds = [...new Set(arr.map((r) => r.ownerId).filter(Boolean))];
+        const owners = await Promise.all(
+          ownerIds.map(async (id) => {
+            const oRes = await fetch(`http://localhost:3001/owners?id=${id}`);
+            const oData = await oRes.json();
+            return Array.isArray(oData) ? oData[0] : null;
+          })
+        );
+
+        const ownersById = {};
+        owners.forEach((o) => {
+          if (!o.id) return;
+          ownersById[o.id] = `${o.firstname ?? ""} ${o.lastname ?? ""}`.trim();
+        });
+        const mapped = arr.map((r) => ({
+          ...r,
+          stars: Number(r.stars) || 0,
+          text: r.text || "",
+          author: ownersById[r.ownerId] || "Ανώνυμος",
+          date: r.createdAt ? new Date(r.createdAt).toLocaleDateString("el-GR") : "",
+        }));
+        setReviews(mapped);
+      } catch (err) {
+        console.error(err);
+        setReviews([]);
+      }
+    })();
+  }, [isVet, user.id]);
+
+
+
+  useEffect(() => {
+    if (!user || (user.role !== "owner" && user.role !== "vet")) {
       navigate("/login");
     }
   }, [user, navigate]);
 
   useEffect(() => {
-    if (!user) return;
+    if (user === null || user === undefined || user.id === undefined) {
+      return;
+    }
     fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
       .then((res) => res.json())
       .then((data) => setPets(data))
@@ -35,9 +86,7 @@ export default function Profile() {
     setSpecies(e.target.value);
     setBreed("");
   };
-
   const breedOptions = species === "Σκύλος" ? dogPopular : species === "Γάτα" ? catPopular : [];
-
 
   const filteredPets = pets.filter((p) => {
     if (species && p.species !== species) return false;
@@ -48,56 +97,93 @@ export default function Profile() {
       if (lost === "1" && !p.lost) return false;
       if (lost === "0" && p.lost) return false;
     }
-    if (chipSearch && !p.microchip?.includes(chipSearch)) return false;
+    if (chipSearch && !p.microchip.includes(chipSearch)) return false;
     return true;
   });
 
   if (!user) return null;
 
+  const schedule = user.schedule || {};
+  const formatHours = (d) => {
+    if (!d || !d.enabled) return "   Κλειστό";
+    if (!d.from || !d.to) return " — ";
+    return `   ${d.from} - ${d.to}`;
+  };
+
+
   return (
-
     <div className="owner-profile">
-
       {/* ΚΑΡΤΑ ΠΡΟΦΙΛ */}
-      <div className="profile-card">
-
-        <h2 className="profile-title">
-          {user.role === "vet" ? "Προφίλ Κτηνιάτρου" : "Προφίλ Ιδιοκτήτη"}
-        </h2>
-        
-        <div className="profile-columns">
-
-          {/* Αριστερή στήλη */}
-          <div className="profile-section">
-            <h3>Προσωπικά στοιχεία</h3>
-            <ul>
-
-              <li className="profile-row"><span>Όνομα</span><p>{user.firstname}</p></li>
-              <li className="profile-row"><span>Επώνυμο</span><p>{user.lastname}</p></li>
-              <li className="profile-row"><span>Φύλο</span><p>{user.gender}</p></li>
-              <li className="profile-row"><span>ΑΦΜ</span><p>{user.afm}</p></li>
-              <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>{user.birthdate}</p></li>
-            </ul>
+      {!isVet && (
+        <div className="profile-card">
+          <div className="profile-columns">
+            {/* Αριστερή στήλη */}
+            <div className="profile-section">
+              <h3>Προσωπικά στοιχεία</h3>
+              <ul>
+                <li className="profile-row"><span>Όνομα</span><p>{user.firstname}</p></li>
+                <li className="profile-row"><span>Επώνυμο</span><p>{user.lastname}</p></li>
+                <li className="profile-row"><span>Φύλο</span><p>{user.gender}</p></li>
+                <li className="profile-row"><span>ΑΦΜ</span><p>{user.afm}</p></li>
+                <li className="profile-row"><span>Ημερομηνία γέννησης</span><p>{user.birthdate}</p></li>
+              </ul>
+            </div>
+            {/* Δεξιά στήλη */}
+            <div className="profile-section">
+              <h3>Στοιχεία επικοινωνίας</h3>
+              <ul>
+                <li className="profile-row"><span>Διεύθυνση</span><p>{user.address}</p></li>
+                <li className="profile-row"><span>Τηλέφωνο</span><p>{user.phone}</p></li>
+                <li className="profile-row"><span>Email</span><p>{user.email}</p></li>
+              </ul>
+            </div>
           </div>
-
-          {/* Δεξιά στήλη */}
-          <div className="profile-section">
-            <h3>Στοιχεία επικοινωνίας</h3>
-            <ul>
-              <li className="profile-row"><span>Διεύθυνση</span><p>{user.address}</p></li>
-              <li className="profile-row"><span>Τηλέφωνο</span><p>{user.phone}</p></li>
-              <li className="profile-row"><span>Email</span><p>{user.email}</p></li>
-            </ul>
+          {/* Κουμπιά */}
+          <div className="profile-actions">
+            <button className="primary-btn"> <Link to="/updateprofile"> Ενημέρωση στοιχείων</Link></button>
+            <button className="secondary-btn"> <Link to="/changecode"> Αλλαγή κωδικού</Link></button>
           </div>
+        </div>
+      )}
+
+      {isVet && (<>
+        <div className="profile-card profile-card-top">
+          <div className="vet-top">
+            <div className="vet-top-left">
+              <div className="vet-avatar">
+                <img src={user.photoUrl} alt="Φωτογραφία προφίλ" />
+              </div>
+
+              <div className="vet-identity">
+                <div className="vet-name">
+                  {user.firstname} {user.lastname}
+                </div>
+                <div className="vet-subtitle"> {"Κτηνίατρος"}
+                </div>
+              </div>
+            </div>
+
+            <div className="vet-top-actions">
+              <button className="primary-btn"> <Link to="/updateprofile"> Ενημέρωση στοιχείων</Link></button>
+              <button className="secondary-btn"> <Link to="/changecode">Αλλαγή κωδικού</Link> </button>
+            </div>
+          </div>
+        </div>
+        <div className="vet-tabs">
+          <button className={`vet-tab ${activeTab === "info" ? "active" : ""}`} onClick={() => setActiveTab("info")} type="button" > Προσωπικά στοιχεία - εκπαίδευση </button>
+          <button className={`vet-tab ${activeTab === "prices" ? "active" : ""}`} onClick={() => setActiveTab("prices")} type="button"  > Τιμοκατάλογος </button>
+          <button className={`vet-tab ${activeTab === "reviews" ? "active" : ""}`} onClick={() => setActiveTab("reviews")} type="button"> Αξιολογήσεις </button>
+        </div>
+        <div className="profile-card vet-tab-card">
+          {activeTab === "info" && <VetInfo user={user} />}
+          {activeTab === "prices" && (<VetPrices schedule={schedule} days={DAYS} formatHours={formatHours} enabledServicesByCategory={enabledServicesByCategory} />)}
+          {activeTab === "reviews" && (<VetReview reviews={reviews} avgRating={Number(calculateMO(user.totalScore, user.reviewCount || 0))} reviewCount={user.reviewCount || 0} Stars={Stars} />
+          )}
 
         </div>
-
-        {/* Κουμπιά */}
-        <div className="profile-actions">
-          <button className="secondary-btn"> <Link to="/changecode"> Αλλαγή κωδικού</Link></button>
-          <button className="primary-btn">Ενημέρωση στοιχείων</button>
-        </div>
-      </div>
+      </>
+      )
+      }
 
       {/* ΚΑΤΟΙΚΙΔΙΑ */}
       <div className="pets-section">
@@ -189,6 +275,6 @@ export default function Profile() {
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

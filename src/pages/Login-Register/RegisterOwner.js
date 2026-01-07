@@ -6,9 +6,9 @@ const API_URL = "http://localhost:3001/owners";
 
 export default function RegisterOwner({ onOpenTerms, onRegister }) {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [form, setForm] = useState({
     firstname: "",
@@ -51,11 +51,13 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
     if (!form.lastname.trim()) newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
     if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
     if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
-    if (!/^\d{10}$/.test(form.afm)) newErrors.afm = "Το ΑΦΜ πρέπει να έχει 10 αριθμούς";
+    if (!form.afm) newErrors.afm = "Πρέπει να συμπληρωθεί το ΑΦΜ";
+    else if (!/^\d{10}$/.test(form.afm)) newErrors.afm = "Το ΑΦΜ πρέπει να έχει ακριβώς 10 ψηφία";
+    if (!form.phone) newErrors.phone = "Πρέπει να συμπληρωθεί το τηλέφωνο";
+    else if (!/^\d{10,15}$/.test(form.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι 10–15 ψηφία";
     if (!form.gender) newErrors.gender = "Πρέπει να επιλέξετε φύλο";
     if (!form.address.trim()) newErrors.address = "Πρέπει να συμπληρωθεί η διεύθυνση";
     if (!form.birthdate) newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
-    if (!/^\d{10,15}$/.test(form.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι αριθμός 10-15 ψηφίων";
     if (!form.email.includes("@")) newErrors.email = "Μη έγκυρο email";
     if (form.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
@@ -100,26 +102,40 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
     }
   }
 
+  function handleAfmChange(e) {
+    const v = e.target.value.replace(/\D/g, "").slice(0, 10); // μόνο ψηφία, max 10
+    setForm((prev) => ({ ...prev, afm: v }));
+    setErrors((prev) => ({ ...prev, afm: "" }));
+  }
+
+  function handlePhoneChange(e) {
+    const v = e.target.value.replace(/\D/g, "").slice(0, 15); // μόνο ψηφία, max 15
+    setForm((prev) => ({ ...prev, phone: v }));
+    setErrors((prev) => ({ ...prev, phone: "" }));
+  }
+
+
   return (
     <form noValidate className="loginForm registerForm">
       <label className="loginLabel">
         Όνομα:  πχ ΜΑΡΙΑ με κεφαλαία *
-        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange}   />
+        <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange} />
         {errors.firstname && <div className="fieldError">{errors.firstname}</div>}
       </label>
 
       <label className="loginLabel">
         Επώνυμο: πχ ΑΝΤΩΝΙΟΥ με κεφαλαία *
-        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange}   />
+        <input type="text" className={`loginInput ${errors.lastname ? "inputError" : ""}`} name="lastname" value={form.lastname} onChange={handleChange} />
         {errors.lastname && <div className="fieldError">{errors.lastname}</div>}
       </label>
 
       <label className="loginLabel">
         ΑΦΜ *
-        <input type="number" className={`loginInput ${errors.afm ? "inputError" : ""}`}
-          name="afm" value={form.afm} onChange={handleChange}   />
+        <input type="text" inputMode="numeric" pattern="\d*" maxLength={10}
+          className={`loginInput ${errors.afm ? "inputError" : ""}`} name="afm" value={form.afm} onChange={handleAfmChange} />
         {errors.afm && <div className="fieldError">{errors.afm}</div>}
       </label>
+
 
       <label className="loginLabel">
         Φύλο *
@@ -127,37 +143,40 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
           <option value="" hidden>
             Επιλέξτε φύλο
           </option>
-          <option value="male">Άνδρας</option>
-          <option value="female">Γυναίκα</option>
-          <option value="other">Άλλο</option>
+          <option value="Άνδρας">Άνδρας</option>
+          <option value="Γυναίκα">Γυναίκα</option>
+          <option value="Άλλο">Άλλο</option>
         </select>
+        {errors.gender && <div className="fieldError">{errors.gender}</div>}
       </label>
 
       <label className="loginLabel">
         Διεύθυνση (Οδός αριθμός Πόλη Χώρα) *
         <input type="text" className={`loginInput ${errors.address ? "inputError" : ""}`}
-          name="address" value={form.address} onChange={handleChange}   />
+          name="address" value={form.address} onChange={handleChange} />
         {errors.address && <div className="fieldError">{errors.address}</div>}
       </label>
 
       <label className="loginLabel">
         Ημερομηνία γέννησης *
         <input type="date" className={`loginInput ${errors.birthdate ? "inputError" : ""}`}
-          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]}   />
+          name="birthdate" value={form.birthdate} onChange={handleChange} max={new Date().toISOString().split("T")[0]} />
         {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
       </label>
 
       <label className="loginLabel">
         Τηλέφωνο *
-        <input type="number" className={`loginInput ${errors.phone ? "inputError" : ""}`}
-          name="phone" value={form.phone} onChange={handleChange}   />
+        <input type="text" inputMode="numeric" pattern="\d*"
+          maxLength={15} className={`loginInput ${errors.phone ? "inputError" : ""}`}
+          name="phone" value={form.phone} onChange={handlePhoneChange}
+        />
         {errors.phone && <div className="fieldError">{errors.phone}</div>}
       </label>
 
       <label className="loginLabel">
         Email πχ. name@email.com *
         <input type="email" className={`loginInput ${errors.email ? "inputError" : ""}`}
-          name="email" value={form.email} onChange={handleChange}   />
+          name="email" value={form.email} onChange={handleChange} />
         {errors.email && <div className="fieldError">{errors.email}</div>}
       </label>
 
@@ -171,7 +190,6 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
             value={form.password}
             onChange={handleChange}
             minLength={8}
-             
           />
           <button
             type="button"
@@ -195,7 +213,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
             value={form.confirmPassword}
             onChange={handleChange}
             minLength={8}
-             
+
           />
           <button
             className="button-password"
@@ -207,8 +225,8 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
         </div>
         {errors.confirmPassword && <div className="fieldError">{errors.confirmPassword}</div>}
       </label>
-      {serverError && <div className="fieldError">{serverError}</div>}
 
+      {serverError && <div className="fieldError">{serverError}</div>}
       <div className="registerFieldFull registerTerms">
         Κάνοντας εγγραφή αποδέχεστε τους{" "}
         <button

@@ -6,9 +6,39 @@ export function formatNumber(num) {
   return num.toString();
 }
 
-export function calculateMO(score,num) {
+export function calculateMO(score, num) {
   if (num === 0) return "0.0";
   return (score / num).toFixed(1);
+}
+
+export function Stars({ value = 0 }) {
+  const v = Number(value);
+  const full = Math.floor(v);
+  const half = v - full >= 0.5 ? 1 : 0;
+  const empty = 5 - full - half;
+  const stars = [];
+  for (let i = 0; i < full; i++) stars.push(<span key={`full-${i}`} className="star star-filled">★</span>);
+  if (half) stars.push(<span key="half" className="star star-half">★</span>);
+  for (let i = 0; i < empty; i++) stars.push(<span key={`empty-${i}`} className="star">★</span>);
+  return <div className="stars">{stars}</div>;
+}
+
+export function buildEnabledServicesByCategory(user) {
+  const services = user?.services || {};
+  const result = [];
+  for (const cat of SERVICE_CATEGORIES) {
+    const enabledItems = [];
+    for (const it of cat.items) {
+      const st = services[it.id];
+      if (!st || !st.enabled) continue;
+      const price = st.price !== "" && st.price != null ? String(st.price) : "";
+      enabledItems.push({ ...it, price });
+    }
+    if (enabledItems.length > 0) {
+      result.push({ ...cat, enabledItems });
+    }
+  }
+  return result;
 }
 
 export const REGIONS = [
@@ -43,7 +73,7 @@ export const MEDICAL_ACTS = [
 
 export const SPECIES = ["Σκύλος", "Γάτα", "Άλλο"];
 
-export const GENDERS = ["Θηλυκό", "Αρσενικό", "Άλλο"];
+export const GENDERS = ["Θηλυκό", "Αρσενικό"];
 
 export const STUDY_LEVELS = ["Πτυχίο", "Μεταπτυχιακό", "Διδακτορικό"];
 
