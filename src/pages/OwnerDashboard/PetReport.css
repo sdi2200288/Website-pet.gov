@@ -443,3 +443,9 @@
   border: 1px solid #ef4444;
   background-color: #ffffff;
 }
+
+.error-text {
+  color: #ef4444;
+  font-size: 11px;
+  margin-top: 4px;
+}

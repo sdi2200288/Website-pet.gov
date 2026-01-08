@@ -117,9 +117,10 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
   function changeServicePrice(serviceId, value) {
     if (value === "" || /^\d+(\.\d{0,2})?$/.test(value)) {
+      const normalized = value === "" ? "" : value.replace(/^0+(?=\d)/, "");
       setForm((prev) => ({
         ...prev,
-        services: { ...prev.services, [serviceId]: { ...prev.services[serviceId], price: value, }, },
+        services: { ...prev.services, [serviceId]: { ...prev.services[serviceId], price: normalized, }, },
       }));
     }
   }

@@ -9,6 +9,7 @@ export default function Loss() {
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [selectedPetId, setSelectedPetId] = useState(null); // προσωρινά, δείχνουμε Barbie πάντα
   const [pets, setPets] = useState([]);
+  const [errors, setErrors] = useState({});
   const [lossInfo, setLossInfo] = useState({
     date: "",
     region: "",
@@ -18,7 +19,7 @@ export default function Loss() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
-  
+
   const goToStep = (targetStep) => {
     if (!user) {
       window.location.href = "/login"; // redirect αν δεν υπάρχει user
@@ -26,28 +27,20 @@ export default function Loss() {
     }
     setStep(targetStep);
   };
-  // // Προστασία route
-  // useEffect(() => {
-  //   if(!user || user.role !== "owner"){
-  //     window.location.href = "/login";
-  //   }
-  // }, [user]);
 
-  // Fetch pets του ιδιοκτήτη
   useEffect(() => {
     if (!user) return;
 
-    fetch(`http://localhost:3001/pets?ownerId=${user.id}`)
+    fetch(`http://localhost:3001/pets?ownerId=${user.id}&lost=false`)
       .then((res) => res.json())
       .then((data) => {
-      setPets(data);
-    })
+        setPets(data);
+      })
       .catch(() => setPets([]));
   }, [user]);
 
   const handleSubmit = async (status) => {
-    if(!selectedPet){
-      alert("Επιλέξτε πρώτα ένα κατοικίδιο!");
+    if (!selectedPet) {
       return;
     }
 
@@ -63,26 +56,83 @@ export default function Loss() {
     }
 
     try {
-       const res = await fetch("http://localhost:3001/lostReports", {
+      const res = await fetch("http://localhost:3001/lostReports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(report),
       });
-      if (res.ok) {
-        alert(
-          `Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`
-        );
-        // Reset
-        setStep(0);
-        setSelectedPetId(null);
-        setLossInfo({ date: "", region: "", address: "", condition: "" });
+      if (!res.ok) throw new Error("POST lostReports failed");
 
-        // Μετάβαση στο ιστορικό δηλώσεων
-        navigate("/owner-dashboard");
+      if (status === "submitted") {
+        const petUpdate = await fetch(
+          `http://localhost:3001/pets/${selectedPet.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              lost: true,
+              lastSeenDate: lossInfo.date,
+              region: lossInfo.region,
+              lastSeenAddress: lossInfo.address,
+              condition: lossInfo.condition,
+            }),
+          }
+        );
+        if (!petUpdate.ok) throw new Error("PATCH pet failed");
       }
-    }catch (err) {
+      alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
+      // Reset
+      setStep(0);
+      setSelectedPetId(null);
+      setLossInfo({ date: "", region: "", address: "", condition: "" });
+
+      // Μετάβαση στο ιστορικό δηλώσεων
+      navigate("/owner-dashboard");
+    } catch (err) {
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
     }
+  };
+
+
+  const validate1 = () => {
+    if (!selectedPetId) {
+      return;
+    }
+    goToStep(2);
+  };
+
+
+  const validate2 = () => {
+    const newErrors = {};
+    if (!lossInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
+    if (!lossInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
+    if (lossInfo.date && selectedPet?.lastSeenDate) {
+      const lossDate = new Date(lossInfo.date);
+      const lastSeenDate = new Date(selectedPet.lastSeenDate);
+      if (lossDate < lastSeenDate) {
+        newErrors.date = "Η ημερομηνία πρέπει να είναι μετά την τελευταία εμφάνιση του κατοικιδίου";
+      }
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    goToStep(3);
+  };
+
+
+  const handleCancel = () => {
+    const confirmLeave = window.confirm(
+      "Αν ακυρώσετε, τα στοιχεία της δήλωσης δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
+    );
+    if (!confirmLeave) return;
+    setStep(0);
+    setSelectedPetId(null);
+    setLossInfo({
+      date: "",
+      region: "",
+      address: "",
+      condition: "",
+    });
+    setErrors({});
   };
 
   return (
@@ -112,7 +162,7 @@ export default function Loss() {
             <div className="step step-zero">
               <div className="circle">3</div>
               <span>
-               Στο τρίτο και τελευταίο βήμα θα ελέγξετε την προεπισκόπηση της δήλωσης σας και θα επιλέξετε προσωρινή αποθήκευση, υποβολή ή διαγραφή. Με την υποβολή η δήλωση κλειδώνει ενώ οι προσωρινά αποθηκευμένες δηλώσεις εμφανίζονται στο ιστορικό δηλώσεων για μελλοντική επεξεργασία ή υποβολή.
+                Στο τρίτο και τελευταίο βήμα θα ελέγξετε την προεπισκόπηση της δήλωσης σας και θα επιλέξετε προσωρινή αποθήκευση, υποβολή ή διαγραφή. Με την υποβολή η δήλωση κλειδώνει ενώ οι προσωρινά αποθηκευμένες δηλώσεις εμφανίζονται στο ιστορικό δηλώσεων για μελλοντική επεξεργασία ή υποβολή.
               </span>
             </div>
           </div>
@@ -142,24 +192,32 @@ export default function Loss() {
             <div className="step">
               <div className="circle">3</div>
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
-            </div>     
+            </div>
           </div>
 
           <h3>Επιλέξτε το κατοικίδιο που χάθηκε</h3>
-           <div className="pets-grid">
-              {pets.length === 0 && <p>Δεν έχετε καταχωρίσει κατοικίδια.</p>}
-                {pets.map((pet) => (
-                  <div
-                    key={pet.id}
-                    className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : ""}`}
-                    onClick={() => { setSelectedPetId(pet.id) }}
-                  >
-                  <PetDetails pet={pet} mode={0} selected={selectedPetId === pet.id} />
+          <div className="pets-grid">
+            {pets.length === 0 && <p>Δεν έχετε καταχωρίσει κατοικίδια.</p>}
+            {pets.map((pet) => (
+              <div
+                key={pet.id}
+                className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : ""}`}
+                onClick={() => { setSelectedPetId(pet.id) }}
+              >
+                <PetDetails pet={pet} mode={0} selected={selectedPetId === pet.id} />
               </div>
-              ))}
-            </div>
-          
-          <button className="next-btn" onClick={() => goToStep(2)}>
+            ))}
+          </div>
+
+          {!selectedPetId && (
+            <p className="error-text">
+              Πρέπει να επιλέξετε κάποιο κατοικίδιο για να συνεχίσετε
+            </p>
+          )}
+          <button
+            className="next-btn"
+            onClick={validate1}
+          >
             Συνέχεια
           </button>
         </>
@@ -186,73 +244,79 @@ export default function Loss() {
               <div className="step-title">Προεπισκόπηση και Υποβολή</div>
             </div>
           </div>
-          
-         <div className="found-form">
-          <h3>Στοιχεία Απώλειας</h3>
 
-          <label>
-            Ημερομηνία
-             <input
-              type="date"
-              value={lossInfo.date}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, date: e.target.value })
-              }
-            />
-          </label>
+          <div className="found-form">
+            <h3>Στοιχεία Απώλειας</h3>
 
-          <label>
-            Περιοχή (Νομός)
-            <select
-              value={lossInfo.region}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, region: e.target.value })
-              }
-            >
-            <option value="">Επιλέξτε...</option>
-              {REGIONS.map((region) => (
-                <option key={region} value={region}>
-                  {region}
-                </option>
-              ))}
-            </select>
-          </label>
+            <label>
+              Ημερομηνία *
+              <input
+                type="date"
+                value={lossInfo.date}
+                max={new Date().toISOString().split("T")[0]}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, date: e.target.value })
+                }
+              />
+              {errors.date && <p className="error-text">{errors.date}</p>}
+            </label>
 
-          <label>
-            Διεύθυνση
-            <input
-              type="text"
-              placeholder="Π.χ. Σύνταγμα"
-              value={lossInfo.address}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, address: e.target.value })
-              }/>
-          </label>
+            <label>
+              Περιοχή (Νομός) *
+              <select
+                value={lossInfo.region}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, region: e.target.value })
+                }
+              >
+                <option value="">Επιλέξτε...</option>
+                {REGIONS.map((region) => (
+                  <option key={region} value={region}>
+                    {region}
+                  </option>
+                ))}
+              </select>
+              {errors.region && <p className="error-text">{errors.region}</p>}
 
-          <label>
-            Κατάσταση Ζώου
-           <textarea
-              placeholder="Π.χ. Υγιές, φοβισμένο..."
-              rows={4}
-              value={lossInfo.condition}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, condition: e.target.value })
-              }
-            ></textarea>
-          </label>
+            </label>
 
-          <div>
-            <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+            <label>
+              Διεύθυνση
+              <input
+                type="text"
+                placeholder="Π.χ. Σύνταγμα"
+                value={lossInfo.address}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, address: e.target.value })
+                } />
+            </label>
+
+            <label>
+              Κατάσταση Ζώου
+              <textarea
+                placeholder="Π.χ. Υγιές, φοβισμένο..."
+                rows={4}
+                value={lossInfo.condition}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, condition: e.target.value })
+                }
+              ></textarea>
+            </label>
+
+            <div>
+              <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+            </div>
+
+            <div className="form-buttons">
+              <button onClick={handleCancel}>
+                Ακύρωση
+              </button>
+              <button type="button" onClick={validate2}>Συνέχεια</button>
+            </div>
           </div>
-
-          <div className="form-buttons">
-            <button type="button" onClick={() => goToStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
-          </div>
-        </div>
-      </>
+        </>
       )}
-      {step === 3 && selectedPet &&  (
+      {step === 3 && selectedPet && (
         <>
           <div className="stepper">
             <div className="step clickable" onClick={() => setStep(1)}>
@@ -261,7 +325,7 @@ export default function Loss() {
             </div>
             <div className="line" />
 
-            <div className="step clickable"  onClick={() => setStep(2)}>
+            <div className="step clickable" onClick={() => setStep(2)}>
               <div className="circle">2</div>
               <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
             </div>
@@ -291,8 +355,6 @@ export default function Loss() {
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
                     <p><span>Ημερομηνία:</span> {selectedPet.data}</p>
-                    <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                    <p><span>Διεύθυνση:</span> {selectedPet.address}</p>
                   </div>
 
                   <div className="info-box">
@@ -315,7 +377,9 @@ export default function Loss() {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
+              <button onClick={handleCancel}>
+                Ακύρωση
+              </button>
               <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
               <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>

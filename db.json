@@ -105,21 +105,22 @@
     },
     {
       "id": "844c",
-      "firstname": "ELENII",
-      "lastname": "ANTONIOUU",
+      "firstname": "ELENI",
+      "lastname": "ANTONIOU",
       "afm": "1234567891",
       "gender": "Γυναίκα",
       "birthdate": "2026-01-01",
-      "email": "e.antoniou2016@gmail.com",
+      "email": "e.antoniou@gmail.com",
       "address": "Makrisia",
       "phone": "69804267100",
-      "password": "",
+      "password": "123456789",
       "specializations": [
-        "Άλλο"
+        "Άλλο",
+        "Κτηνιατρική Μικρών Ζώων"
       ],
       "region": "Ηλείας",
       "studyLevel": "Πτυχίο",
-      "experienceYears": "5",
+      "experienceYears": "50",
       "photoFile": null,
       "services": {
         "clinical_exam": {
@@ -144,23 +145,23 @@
         },
         "blood_tests": {
           "enabled": true,
-          "price": "10"
+          "price": "100"
         },
         "biochemical_tests": {
           "enabled": true,
-          "price": "10"
+          "price": "100"
         },
         "urine_tests": {
           "enabled": true,
-          "price": "10"
+          "price": "100"
         },
         "feces_tests": {
           "enabled": true,
-          "price": "10"
+          "price": "100"
         },
         "xray": {
           "enabled": true,
-          "price": "10"
+          "price": "00100"
         },
         "ultrasound": {
           "enabled": true,
@@ -187,16 +188,16 @@
           "price": ""
         },
         "teeth_cleaning": {
-          "enabled": false,
-          "price": ""
+          "enabled": true,
+          "price": "09"
         },
         "tooth_extraction": {
-          "enabled": false,
-          "price": ""
+          "enabled": true,
+          "price": "9"
         },
         "gingivitis": {
-          "enabled": false,
-          "price": ""
+          "enabled": true,
+          "price": "9"
         },
         "internal_deworming": {
           "enabled": false,
@@ -229,7 +230,7 @@
       },
       "schedule": {
         "mon": {
-          "enabled": false,
+          "enabled": true,
           "from": "09:00",
           "to": "17:00"
         },
@@ -239,7 +240,7 @@
           "to": "17:00"
         },
         "wed": {
-          "enabled": false,
+          "enabled": true,
           "from": "09:00",
           "to": "17:00"
         },
@@ -249,7 +250,7 @@
           "to": "17:00"
         },
         "fri": {
-          "enabled": false,
+          "enabled": true,
           "from": "09:00",
           "to": "17:00"
         },
@@ -264,8 +265,8 @@
           "to": "17:00"
         }
       },
-      "reviewCount": 0,
-      "totalScore": 0
+      "reviewCount": 10,
+      "totalScore": 1
     }
   ],
   "pets": [
@@ -276,6 +277,7 @@
       "species": "Σκύλος",
       "breed": "Ημίαιμο",
       "gender": "male",
+      "lost": true,
       "microchip": "555111222",
       "birthdate": "2021-04-12",
       "photoUrl": "/images/rex.png",
@@ -290,12 +292,16 @@
       "species": "Γάτα",
       "breed": "Αδέσποτη",
       "gender": "female",
+      "lost": false,
       "microchip": "555333444",
       "birthdate": "2022-06-01",
       "photoUrl": "/images/mila.png",
-      "region": "Αττική",
+      "region": "Θεσπρωτίας",
       "status": "adoption",
-      "notes": "Υγιής – εμβολιασμένη"
+      "notes": "Υγιής – εμβολιασμένη",
+      "lastSeenDate": "2026-01-03",
+      "lastSeenAddress": "",
+      "condition": "Καφέ και μικρό"
     },
     {
       "id": "1",
@@ -389,11 +395,12 @@
       "species": "Σκύλος",
       "breed": "Golden Retriever",
       "gender": "Αρσενικό",
-      "lost": true,
-      "lastSeenDate": "2025-12-05",
+      "lost": false,
+      "lastSeenDate": "2026-01-08",
       "region": "Κοζάνης",
-      "lastSeenAddress": "Κοζάνη, Κέντρο",
-      "ownerId": "631b"
+      "lastSeenAddress": "",
+      "ownerId": "631b",
+      "lastSeenRegion": "Εύβοιας"
     },
     {
       "id": "8",
@@ -446,10 +453,12 @@
       "breed": "Beagle",
       "gender": "Αρσενικό",
       "lost": true,
-      "lastSeenDate": "2025-12-07",
-      "region": "Ηλείας",
-      "lastSeenAddress": "Αμαλιάδα, Κέντρο",
-      "ownerId": "631b"
+      "lastSeenDate": "2026-01-08",
+      "region": "Άρτας",
+      "lastSeenAddress": "Συνταγμα",
+      "ownerId": "631b",
+      "lastSeenRegion": "Αιτωλοακαρνανίας",
+      "condition": "Μικρο και φοβισμένο"
     },
     {
       "id": "12",
@@ -502,15 +511,10 @@
       "breed": "Dachshund",
       "gender": "Αρσενικό",
       "lost": false,
-      "lastSeenDate": "2025-10-05",
-      "region": "Κιλκίς",
-      "lastSeenAddress": "Κιλκίς, Κέντρο",
+      "lastSeenDate": "2026-01-08",
+      "region": "Ευρυτανίας",
+      "lastSeenAddress": "",
       "ownerId": "631b"
-    },
-    {
-      "id": "33eb",
-      "ownerId": "631b",
-      "name": "Test"
     }
   ],
   "lostReports": [
@@ -524,6 +528,50 @@
       "condition": "",
       "status": "submitted",
       "createdAt": "2026-01-04T16:31:09.658Z"
+    },
+    {
+      "id": "0452",
+      "petId": "7",
+      "date": "2026-01-08",
+      "region": "Εύβοιας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:35:06.710Z"
+    },
+    {
+      "id": "7c28",
+      "petId": "11",
+      "date": "2026-01-01",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:36:42.714Z"
+    },
+    {
+      "id": "9257",
+      "petId": "15",
+      "date": "2026-01-08",
+      "region": "Δωδεκανήσου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:38:37.977Z"
+    },
+    {
+      "id": "1bf2",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Άρτας",
+      "address": "Συνταγμα",
+      "condition": "Μικρο και φοβισμένο",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T12:09:53.996Z"
     }
   ],
   "foundReports": [
@@ -548,6 +596,83 @@
       "condition": "",
       "status": "submitted",
       "createdAt": "2026-01-05T12:35:55.588Z"
+    },
+    {
+      "id": "8983",
+      "petId": "vp002",
+      "date": "2025-07-09",
+      "region": "Ζακύνθου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:01:14.930Z"
+    },
+    {
+      "id": "2e3a",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Αττικής",
+      "address": "",
+      "condition": "",
+      "status": "draft",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:12:57.203Z"
+    },
+    {
+      "id": "0d4d",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Αττικής",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:13:35.395Z"
+    },
+    {
+      "id": "4e34",
+      "petId": "7",
+      "date": "2026-01-01",
+      "region": "Δράμας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:33:53.436Z"
+    },
+    {
+      "id": "841e",
+      "petId": "15",
+      "date": "2026-01-08",
+      "region": "Ευρυτανίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:44:40.336Z"
+    },
+    {
+      "id": "cbd0",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Έβρου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T11:45:02.053Z"
+    },
+    {
+      "id": "8c45",
+      "petId": "vp002",
+      "date": "2026-01-03",
+      "region": "Θεσπρωτίας",
+      "address": "",
+      "condition": "Καφέ και μικρό",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T12:08:58.079Z"
     }
   ],
   "adoptionReports": [

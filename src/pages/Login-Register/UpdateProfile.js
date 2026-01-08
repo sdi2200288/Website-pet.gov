@@ -65,8 +65,6 @@ export default function Profile() {
     email: "",
     address: "",
     phone: "",
-    password: "",
-    confirmPassword: "",
     specializations: [],
     region: "",
     studyLevel: "",
@@ -74,8 +72,6 @@ export default function Profile() {
     photoFile: null,
     services: buildInitialServicesState(),
     schedule: buildInitialScheduleState(),
-    reviewCount: 0,
-    totalScore: 0,
   };
 
   const ownerInitial = {
@@ -87,8 +83,6 @@ export default function Profile() {
     birthdate: "",
     phone: "",
     email: "",
-    password: "",
-    confirmPassword: "",
   };
 
   const [form, setForm] = useState(isVet ? vetInitial : ownerInitial);
@@ -130,10 +124,6 @@ export default function Profile() {
             photoFile: null,
             services: mergeServices(defaultServices, data.services),
             schedule: mergeSchedule(defaultSchedule, data.schedule),
-            reviewCount: data.reviewCount ?? 0,
-            totalScore: data.totalScore ?? 0,
-            password: "",
-            confirmPassword: "",
           }));
         } else {
           setForm((prev) => ({
@@ -147,8 +137,6 @@ export default function Profile() {
             birthdate: data.birthdate ?? "",
             phone: data.phone ?? "",
             email: data.email ?? "",
-            password: "",
-            confirmPassword: "",
           }));
         }
       } catch {
@@ -206,11 +194,12 @@ export default function Profile() {
 
   function changeServicePrice(serviceId, value) {
     if (value === "" || /^\d+(\.\d{0,2})?$/.test(value)) {
+      const normalized = value === "" ? "" : value.replace(/^0+(?=\d)/, "");
       setForm((prev) => ({
         ...prev,
         services: {
           ...prev.services,
-          [serviceId]: { ...prev.services[serviceId], price: value },
+          [serviceId]: { ...prev.services[serviceId], price: normalized },
         },
       }));
     }
@@ -307,12 +296,6 @@ export default function Profile() {
     try {
       const url = isVet ? `http://localhost:3001/vets/${user.id}` : `http://localhost:3001/owners/${user.id}`;
       let submitData = { ...form };
-      delete submitData.confirmPassword;
-      delete submitData.photoFile;
-      if (isVet) {
-        delete submitData.reviewCount;
-        delete submitData.totalScore;
-      }
       const res = await fetch(url, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

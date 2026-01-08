@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./found.css";
 import { REGIONS } from "../Utils/Util";
 
 export default function FoundLost({ isLoggedIn, userData }) {
@@ -311,7 +310,7 @@ export default function FoundLost({ isLoggedIn, userData }) {
                     <div className="line" />
                     <p><strong>Ημερομηνία:</strong> {foundInfo.date}</p>
                     <p><strong>Ώρα:</strong> {foundInfo.time || "-"}</p>
-                    <p><strong>Περιοχή:</strong> {foundInfo.region}</p>
+                    <p><strong>Περιοχή:</strong> {foundInfo.region || "-"}</p>
                     <p><strong>Διεύθυνση:</strong> {foundInfo.address || "-"}</p>
                     <p><strong>Κατάσταση:</strong> {foundInfo.condition || "-"}</p>
                     <div className="form-buttons">

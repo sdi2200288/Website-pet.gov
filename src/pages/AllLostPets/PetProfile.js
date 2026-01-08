@@ -103,24 +103,24 @@ export default function PetProfile() {
               <div className="petSectionGrid">
                 <div className="petField">
                   <span className="label">Διεύθυνση</span>
-                  <span className="value">{pet.lastSeenAddress}</span>
+                  <span className="value">{pet.lastSeenAddress || "-"}</span>
                 </div>
 
                 <div className="petField">
                   <span className="label">Ημερομηνία</span>
-                  <span className="value">{pet.lastSeenDate}</span>
+                  <span className="value">{pet.lastSeenDate || "-"}</span>
                 </div>
 
                 <div className="petField">
                   <span className="label">Κατάσταση</span>
-                  <span className="value">
-                    {"Εξαφανισμένο"}
+                  <span className="value"> 
+                    {pet.condition || "-"}
                   </span>
                 </div>
 
                 <div className="petField">
                   <span className="label">Περιοχή (Νομός)</span>
-                  <span className="value">{pet.region}</span>
+                  <span className="value">{pet.region || "-"}</span>
                 </div>
               </div>
             </section>

@@ -113,7 +113,7 @@ export default function ProfilePetOwner() {
                                 </div>
                                 <div className="petMissingRow">
                                     <span>Κατάσταση:</span>
-                                    <strong>Εξαφανισμένο</strong>
+                                    <strong>{pet.condition || "-"}</strong>
                                 </div>
                             </div>
                         )}
