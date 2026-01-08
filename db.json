@@ -57,18 +57,25 @@
       "education": "Μεταπτυχιακό",
       "availability": [
         {
-          "date": "2024-01-20",
-          "times": ["09:00", "09:30", "10:00", "10:30"]
+          "date": "2026-01-20",
+          "times": [
+            "09:30",
+            "10:00",
+            "12:00",
+            "13:00"
+          ]
         },
         {
-          "date": "2024-01-21", 
-          "times": ["08:00", "08:30", "10:00", "10:30"]
+          "date": "2026-01-21",
+          "times": [
+            "10:30"
+          ]
         }
       ],
       "image": "/images/vets/vet1.jpg"
     },
     {
-    "id": "v202",
+      "id": "v202",
       "firstname": "ΕΛΕΝΗ",
       "lastname": "ΝΙΚΟΛΑΟΥ",
       "afm": "2223334445",
@@ -86,8 +93,12 @@
       "education": "Διδακτορικό",
       "availability": [
         {
-          "date": "2024-01-21",
-          "times": ["09:00", "09:30", "10:00", "10:30"]
+          "date": "2026-01-21",
+          "times": [
+            "09:30",
+            "10:00",
+            "10:30"
+          ]
         }
       ],
       "image": "/images/vets/vet3.jpg"
@@ -442,6 +453,134 @@
       "medications": "",
       "status": "completed",
       "createdAt": "2025-12-01T11:45:00.000Z"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "app_4ptb5li64",
+      "vetId": "v001",
+      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "vetEmail": "vetgiorgos@example.com",
+      "vetPhone": "6900000100",
+      "petId": "13",
+      "petName": "Άρης",
+      "petMicrochip": "1112131415",
+      "petSpecies": "Σκύλος",
+      "date": "2026-01-20",
+      "time": "09:30",
+      "reason": "other",
+      "description": "",
+      "status": "cancelled",
+      "createdAt": "2026-01-07T19:05:48.459Z",
+      "ownerId": "o102",
+      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
+      "ownerEmail": "maria@example.com",
+      "ownerPhone": "6900000002",
+      "ownerAfm": "9876543210",
+      "cancelledBy": "vet",
+      "cancelledAt": "2026-01-07T19:06:34.369Z"
+    },
+    {
+      "id": "app_08eniqgxl",
+      "vetId": "v001",
+      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "vetEmail": "vetgiorgos@example.com",
+      "vetPhone": "6900000100",
+      "petId": "8",
+      "petName": "Σούζυ",
+      "petMicrochip": "6677889900",
+      "petSpecies": "Γάτα",
+      "date": "2026-01-21",
+      "time": "10:30",
+      "reason": "vaccination",
+      "description": "",
+      "status": "cancelled",
+      "createdAt": "2026-01-07T19:06:14.149Z",
+      "ownerId": "o102",
+      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
+      "ownerEmail": "maria@example.com",
+      "ownerPhone": "6900000002",
+      "ownerAfm": "9876543210",
+      "pet": {
+        "id": "8",
+        "name": "Σούζυ",
+        "photoUrl": "https://placekitten.com/403/303",
+        "microchip": "6677889900",
+        "species": "Γάτα",
+        "breed": "Ragdoll",
+        "gender": "Θηλυκό",
+        "lost": true,
+        "lastSeenDate": "2025-12-03",
+        "region": "Αρκαδίας",
+        "lastSeenAddress": "Τρίπολη, Κέντρο",
+        "ownerId": "o102"
+      },
+      "cancelledBy": "owner",
+      "cancelledAt": "2026-01-07T19:07:01.585Z"
+    },
+    {
+      "id": "app_do9yoywrj",
+      "vetId": "v001",
+      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "vetEmail": "vetgiorgos@example.com",
+      "vetPhone": "6900000100",
+      "petId": "8",
+      "petName": "Σούζυ",
+      "petMicrochip": "6677889900",
+      "petSpecies": "Γάτα",
+      "date": "2026-01-20",
+      "time": "10:00",
+      "reason": "surgery",
+      "description": "",
+      "status": "rejected",
+      "createdAt": "2026-01-07T19:07:59.229Z",
+      "ownerId": "o102",
+      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
+      "ownerEmail": "maria@example.com",
+      "ownerPhone": "6900000002",
+      "ownerAfm": "9876543210"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "4155",
+      "userId": "o102",
+      "userType": "owner",
+      "title": "Επιβεβαίωση Ραντεβού",
+      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ επιβεβαίωσε το ραντεβού για Σούζυ στις 2026-01-21 10:30",
+      "appointmentId": "app_08eniqgxl",
+      "read": false,
+      "createdAt": "2026-01-07T19:06:29.401Z"
+    },
+    {
+      "id": "2132",
+      "userId": "o102",
+      "userType": "owner",
+      "title": "Ακύρωση Ραντεβού",
+      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ ακύρωσε το ραντεβού για Άρης στις 2026-01-20 09:30",
+      "appointmentId": "app_4ptb5li64",
+      "read": false,
+      "createdAt": "2026-01-07T19:06:34.390Z"
+    },
+    {
+      "id": "f06d",
+      "userId": "v001",
+      "userType": "vet",
+      "title": "Ακύρωση Ραντεβού",
+      "message": "Ο ιδιοκτήτης ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ ακύρωσε το ραντεβού για Σούζυ στις 2026-01-21 10:30",
+      "appointmentId": "app_08eniqgxl",
+      "read": false,
+      "createdAt": "2026-01-07T19:07:01.616Z"
+    },
+    {
+      "id": "1325",
+      "userId": "o102",
+      "userType": "owner",
+      "title": "Απόρριψη Ραντεβού",
+      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ απέρριψε το ραντεβού για Σούζυ",
+      "appointmentId": "app_do9yoywrj",
+      "read": false,
+      "createdAt": "2026-01-07T19:08:23.595Z"
     }
   ]
 }
