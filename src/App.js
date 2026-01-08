@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
@@ -60,6 +60,7 @@ function RoleMismatchWrapper() {
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const showMenuFooter = !location.pathname.startsWith("/foundLostPet/");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeMenu, setActiveMenu] = useState(1);
@@ -88,7 +89,9 @@ function App() {
     setUserRole(null);
     setUserData(null);
     localStorage.removeItem("user");
+    navigate("/login")
   };
+
   return (
     <>
       <ScrollTop />
@@ -97,7 +100,7 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
-      
+
           {/* VET DASHBOARD */}
           <Route element={<ProtectedRoute allowedRole="vet" />}>
             <Route path="/vet-dashboard" element={<VetDashboard />}>
@@ -158,7 +161,7 @@ function App() {
           <Route path="/FAQOwner" element={<FAQOwner />} />
           <Route path="/FAQVet" element={<FAQVet />} />
 
-          <Route  path="/role-mismatch/:role" element={<RoleMismatchWrapper />}/>
+          <Route path="/role-mismatch/:role" element={<RoleMismatchWrapper />} />
         </Routes>
       </main>
 

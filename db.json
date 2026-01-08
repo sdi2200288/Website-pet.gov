@@ -5,7 +5,7 @@
       "firstname": "ΑΛΤΑΝΗ",
       "lastname": "ΤΟΝΤΟΥ",
       "afm": "2325788990",
-      "gender": "female",
+      "gender": "Γυναίκα",
       "address": "Αθανασίου Διάκου 7",
       "birthdate": "2004-06-25",
       "phone": "6942781851",
@@ -43,7 +43,7 @@
       "firstname": "ΓΙΩΡΓΟΣ",
       "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
       "afm": "1112223334",
-      "gender": "male",
+      "gender": "Άνδρας",
       "address": "Πατησίων 100, Αθήνα",
       "birthdate": "1988-01-18",
       "phone": "6900000100",
@@ -102,6 +102,170 @@
         }
       ],
       "image": "/images/vets/vet3.jpg"
+    },
+    {
+      "id": "844c",
+      "firstname": "ELENII",
+      "lastname": "ANTONIOUU",
+      "afm": "1234567891",
+      "gender": "Γυναίκα",
+      "birthdate": "2026-01-01",
+      "email": "e.antoniou2016@gmail.com",
+      "address": "Makrisia",
+      "phone": "69804267100",
+      "password": "",
+      "specializations": [
+        "Άλλο"
+      ],
+      "region": "Ηλείας",
+      "studyLevel": "Πτυχίο",
+      "experienceYears": "5",
+      "photoFile": null,
+      "services": {
+        "clinical_exam": {
+          "enabled": false,
+          "price": "10"
+        },
+        "vaccination": {
+          "enabled": false,
+          "price": "10"
+        },
+        "microchip_place": {
+          "enabled": false,
+          "price": ""
+        },
+        "health_book": {
+          "enabled": false,
+          "price": ""
+        },
+        "declaration": {
+          "enabled": false,
+          "price": ""
+        },
+        "blood_tests": {
+          "enabled": true,
+          "price": "10"
+        },
+        "biochemical_tests": {
+          "enabled": true,
+          "price": "10"
+        },
+        "urine_tests": {
+          "enabled": true,
+          "price": "10"
+        },
+        "feces_tests": {
+          "enabled": true,
+          "price": "10"
+        },
+        "xray": {
+          "enabled": true,
+          "price": "10"
+        },
+        "ultrasound": {
+          "enabled": true,
+          "price": "10"
+        },
+        "sterilization": {
+          "enabled": false,
+          "price": ""
+        },
+        "cleansing": {
+          "enabled": false,
+          "price": ""
+        },
+        "tumor_removal": {
+          "enabled": false,
+          "price": ""
+        },
+        "orthopedic": {
+          "enabled": false,
+          "price": ""
+        },
+        "surgery_general": {
+          "enabled": false,
+          "price": ""
+        },
+        "teeth_cleaning": {
+          "enabled": false,
+          "price": ""
+        },
+        "tooth_extraction": {
+          "enabled": false,
+          "price": ""
+        },
+        "gingivitis": {
+          "enabled": false,
+          "price": ""
+        },
+        "internal_deworming": {
+          "enabled": false,
+          "price": ""
+        },
+        "external_deworming": {
+          "enabled": false,
+          "price": ""
+        },
+        "heartworm_prevention": {
+          "enabled": false,
+          "price": ""
+        },
+        "antiparasitic_treatment": {
+          "enabled": false,
+          "price": ""
+        },
+        "skin_exam": {
+          "enabled": false,
+          "price": ""
+        },
+        "allergy_test": {
+          "enabled": false,
+          "price": ""
+        },
+        "skin_treatment": {
+          "enabled": false,
+          "price": ""
+        }
+      },
+      "schedule": {
+        "mon": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "tue": {
+          "enabled": true,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "wed": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "thu": {
+          "enabled": true,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "fri": {
+          "enabled": false,
+          "from": "09:00",
+          "to": "17:00"
+        },
+        "sat": {
+          "enabled": true,
+          "from": "05:00",
+          "to": "17:00"
+        },
+        "sun": {
+          "enabled": true,
+          "from": "09:00",
+          "to": "17:00"
+        }
+      },
+      "reviewCount": 0,
+      "totalScore": 0
     }
   ],
   "pets": [

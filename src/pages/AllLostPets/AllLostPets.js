@@ -50,7 +50,18 @@ export default function AllLostPets() {
     let result = [...allLostPets];
     if (region) result = result.filter(p => p.region === region);
     if (species) result = result.filter(p => p.species === species);
-    if (breed) result = result.filter(p => p.breed === breed);
+    if (breed) {
+      if (breed === "__OTHER__") {
+        const popular = new Set(breedOptions);
+        result = result.filter((p) => {
+          const petBreed = (p.breed ?? "").trim();
+          if (!petBreed) return false;
+          return !popular.has(petBreed);
+        });
+      } else {
+        result = result.filter((p) => (p.breed ?? "") === breed);
+      }
+    }
     if (gender) result = result.filter(p => p.gender === gender);
     result.sort((a, b) => sortOrder === "recent" ? new Date(b.lastSeenDate) - new Date(a.lastSeenDate) : new Date(a.lastSeenDate) - new Date(b.lastSeenDate));
     setLostPets(result);
@@ -125,7 +136,7 @@ export default function AllLostPets() {
                 {breedOptions.map((b) => (
                   <option key={b} value={b}>{b}</option>
                 ))}
-                {species && <option value="other">Άλλο</option>}
+                {species && <option value="__OTHER__">Άλλο</option>}
               </select>
             </div>
           </div>

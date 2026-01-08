@@ -335,6 +335,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         </div>
         {errors.password && <div className="fieldError">{errors.password}</div>}
       </label>
+
       <label className="loginLabel">
         Επιβεβαίωση κωδικού *
         <div style={{ position: "relative" }}>
@@ -352,8 +353,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         </div>
         {errors.confirmPassword && <div className="fieldError">{errors.confirmPassword}</div>}
       </label>
-      
-      {serverError && <div className="fieldError">{serverError}</div>}
+
       <div className="registerFieldFull">
         <input type="file" accept="image/*" ref={photoInputRef} onChange={handlePhotoChange} style={{ display: "none" }}
         />
@@ -456,6 +456,8 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
           </button>{" "}
           του Pet.
         </div>
+        {serverError && <div className="fieldError">{serverError}</div>}
+
         <div className="registerActions">
           <button type="button" className="registerSecondaryButton" onClick={handleClear}>
             Απαλοιφή όλων
