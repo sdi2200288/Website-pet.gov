@@ -24,6 +24,9 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
     else if (path.startsWith("/vet-dashboard")) {
       setActiveMenu(3);
     }
+    else if (path.startsWith("/owner-dashboard")) {
+      setActiveMenu(2);
+    }
     else if (path.startsWith("/all-lost-pets")) {
       setActiveMenu(4);
     }
@@ -60,9 +63,9 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
                 <li><Link to="/owner-dashboard/loss" className="dropdown-link">Δήλωση απώλειας κατοικιδίου</Link></li>
                 <li><Link to="/owner-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων </Link></li>
                 <li><Link to="/owner-dashboard/health-booklet" className="dropdown-link">Προβολή ηλεκτρονικού βιβλιαρίου</Link></li>
-                <li>Κλείσιμο ραντεβού</li>
-                <li>Ιστορικό ραντεβού</li>
-                <li>Μελλοντικά ραντεβού</li>
+                <li><Link to="/owner-dashboard/book-date" className="dropdown-link">Κλείσιμο ραντεβού</Link></li>
+                <li><Link to="/owner-dashboard/future-bookings" className="dropdown-link">Ιστορικό ραντεβού</Link></li>
+                <li><Link to="/owner-dashboard/future-bookings" className="dropdown-link">Μελλοντικά ραντεβού</Link></li>
               </ul>
             </div>
           </div>
@@ -73,18 +76,19 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
               <ul>
                 <li><Link to="/vet-dashboard/found2" className="dropdown-link">Δήλωση εύρεσης κατοικιδίου</Link></li>
                 <li><Link to="/vet-dashboard/loss2" className="dropdown-link">Δήλωση απώλειας κατοικιδίου</Link></li>
-                <li><Link to="/vet-dashboard/adoption" className="dropdown-link">Δήλωση υιοθεσίας κατοικιδίου</Link></li>
-                <li><Link to="/vet-dashboard/identity" className="dropdown-link">Δήλωση αναδοχής κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/adopt" className="dropdown-link">Δήλωση υιοθεσίας κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/anadoxi" className="dropdown-link">Δήλωση αναδοχής κατοικιδίου</Link></li>
                 <li><Link to="/vet-dashboard/transfer" className="dropdown-link">Δήλωση μεταβίβασης κατοικιδίου</Link></li>
                 <li><Link to="/vet-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων</Link></li>
-                <li>Καταχώριση ταυτότητας κατοικιδίου</li>
-                <li>Ενημέρωση ιατρικών πράξεων</li>
-                <li>Προβολή ηλεκτρονικού βιβλιαρίου</li>
-                <li>Ενημέρωση διαθεσιμότητας</li>
-                <li>Διαχείριση ραντεβού</li>
+                <li><Link to="/vet-dashboard/identity" className="dropdown-link">Καταχώριση ταυτότητας κατοικιδίου</Link></li>
+                <li><Link to="/vet-dashboard/medical" className="dropdown-link">Ενημέρωση ιατρικών πράξεων</Link></li>
+                <li><Link to="/vet-dashboard/booklet" className="dropdown-link">Προβολή ηλεκτρονικού βιβλιαρίου</Link></li>
+                <li><Link to="/vet-dashboard/future-bookings-vet" className="dropdown-link">Ενημέρωση διαθεσιμότητας</Link></li>
+                <li><Link to="/vet-dashboard/future-bookings-vet" className="dropdown-link">Διαχείριση ραντεβού</Link></li>
               </ul>
             </div>
           </div>
+          <Link to="/owner-dashboard/book-date" className={`menu-item ${activeMenu === 6 ? "active" : ""}`}>Βρες Κτηνίατρο</Link>
 
           <Link to="/all-lost-pets" className={`menu-item ${activeMenu === 4 ? "active" : ""}`}>Χαμένα Κατοικίδια</Link>
           {!isLoggedIn && (

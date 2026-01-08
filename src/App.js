@@ -104,6 +104,7 @@ function App() {
           {/* VET DASHBOARD */}
           <Route element={<ProtectedRoute allowedRole="vet" />}>
             <Route path="/vet-dashboard" element={<VetDashboard />}>
+              <Route path="profile-vet" element={<ProfileOwner />} />
               <Route path="found2" element={<Found2 />} />
               <Route path="loss2" element={<Loss2 />} />
               <Route path="anadoxi" element={<Anadoxi />} />
@@ -120,6 +121,7 @@ function App() {
           {/* OWNER DASHBOARD */}
           <Route element={<ProtectedRoute allowedRole="owner" />}>
             <Route path="/owner-dashboard" element={<OwnerDashboard />}>
+              <Route path="profile" element={<ProfileOwner />} />
               <Route path="health-booklet" element={<HealthBookletOwner />} />
               <Route path="found" element={<Found />} />
               <Route path="loss" element={<Loss />} />

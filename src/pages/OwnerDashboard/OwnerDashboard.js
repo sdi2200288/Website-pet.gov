@@ -39,6 +39,17 @@ export default function OwnerDashboard() {
           <ul className="sidebar-menu">
             <li>
               <NavLink
+                to={`profile?ownerId=${user?.id || ""}`}
+                className={({ isActive }) =>
+                  `sidebar-link ${isActive ? "active" : ""}`
+                }
+              >
+                <FaUser className="menu-icon" />
+                <span>Το Προφίλ μου</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to={`found?ownerId=${user?.id || ""}`}
               className={({ isActive }) =>
                 `sidebar-link ${isActive ? "active" : ""}`

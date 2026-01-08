@@ -269,7 +269,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
-  align-items: stretch; /* Να τεντώνονται ίσα όλες οι κάρτες */
+  align-items: stretch;
 }
 
 .veterinarian-card {
@@ -277,10 +277,10 @@
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Μόνο transform και box-shadow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; 
   display: flex;
   flex-direction: column;
-  height: 100%; /* Να παίρνει όλο το ύψος του grid cell */
+  height: 100%; 
 }
 
 .veterinarian-card a {
@@ -297,16 +297,16 @@
 
 .vet-image {
    width: 100%;
-  height: 200px; /* Σταθερό ύψος */
+  height: 200px; 
   overflow: hidden;
   position: relative;
-  flex-shrink: 0; /* Να μην συμπιέζεται */
+  flex-shrink: 0; 
 }
 
 .vet-image img {
  width: 100%;
   height: 100%;
-  object-fit: cover; /* ΚΡΙΤΙΚΟ: Να γεμίζει το container χωρίς να παραμορφώνεται */
+  object-fit: cover;
   display: block;
   transition: transform 0.5s ease;
 }
@@ -315,7 +315,7 @@
   transform: scale(1.05);
 }
 
-/* Fallback για εικόνες που δεν φορτώνουν */
+
 .vet-image::before {
   content: '';
   position: absolute;
@@ -334,7 +334,7 @@
 
 .vet-info {
   padding: 20px;
-  flex-grow: 1; /* Να παίρνει τον υπόλοιπο χώρο */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
@@ -394,7 +394,6 @@
   margin-top: 30px;
 }
 
-/* Ολόκληρο το container για κλείσιμο ραντεβού */
 .appointment-container {
   display: flex;
   justify-content: center;
@@ -494,7 +493,6 @@
   display: block;
 }
 
-/* Οι υπάρχουσες κλάσεις appointment-actions */
 .appointment-actions {
   grid-column: 1 / -1;
   display: flex;
@@ -505,7 +503,6 @@
   border-top: 2px solid #f1f5f9;
 }
 
-/* Ειδικά χρώματα για τα κουμπιά στο appointment */
 .appointment-container .secondary-btn {
   background: #6b7280;
   color: #ffffff;
@@ -528,7 +525,6 @@
   border-color: #2563eb;
 }
 
-/* Στυλ για το vet-info μέσα στο appointment */
 .vet-info-appointment {
   background: #f8fafc;
   border-radius: 12px;
@@ -559,15 +555,14 @@
   font-size: 0.9rem;
 }
 
-/* Κουμπιά στο Preview */
 .preview-actions {
   display: flex;
-  justify-content: space-between; /* Αριστερά - Δεξιά */
+  justify-content: space-between; 
   align-items: center;
   margin-top: 32px;
   padding-top: 24px;
   border-top: 2px solid #f1f5f9;
-  flex-wrap: wrap; /* Για να μην σπάει σε mobile */
+  flex-wrap: wrap; 
 }
 
 .preview-action-buttons {
@@ -582,7 +577,6 @@
   align-items: center;
 }
 
-/* Χρώματα κουμπιών */
 .cancel-btn {
   background: #6b7280;
   color: #ffffff;
@@ -680,10 +674,9 @@
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 12px;
-}
+} 
 
 
-/* Responsive */
 @media (max-width: 1024px) {
   .hero-filters-card {
     max-width: 900px;
