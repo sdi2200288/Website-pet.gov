@@ -1,8 +1,7 @@
-import React, {  useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { lossDeclarations, REGIONS} from "../Utils/Util";
-import PetDetails from "../../components/Pet/Pet";
+import { REGIONS } from "../Utils/Util";
 import "./Loss2.css";
 
 export default function Loss2() {
@@ -12,88 +11,94 @@ export default function Loss2() {
   const [pet, setPet] = useState(null);
   const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [lossInfo, setLossInfo] = useState({
     date: "",
     region: "",
     address: "",
     condition: "",
   });
-  
 
-  // const selectedPet = pets.find((p) => p.id === selectedPetId);
-
-  // const selectedPet = pets.find((p) => p.id === selectedPetId);
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
 
   const goToStep = (targetStep) => {
-    // const user = JSON.parse(localStorage.getItem("user"));
     if (!vet) {
-      // navigate("/login"); // redirect αν δεν υπάρχει user
       window.location.href = "/login";
       return;
     }
-
     if (vet.role !== "vet") {
       window.location.href = "/login";
-    return;
-  }
+      return;
+    }
     setStep(targetStep);
   };
-  
-   // Συνάρτηση για να φορτώνει τον ιδιοκτήτη
+
+
   const loadOwnerData = async (ownerId) => {
     try {
-      const res = await fetch(`http://localhost:3001/owners/${ownerId}`);
+      let res = await fetch(`http://localhost:3001/owners/${ownerId}`);
       if (res.ok) {
         const ownerData = await res.json();
         setOwner(ownerData);
+        return true;
       }
+      res = await fetch(`http://localhost:3001/vets/${ownerId}`);
+      if (res.ok) {
+        const vetOwnerData = await res.json();
+        setOwner(vetOwnerData);
+        return true;
+      }
+      setOwner(null);
+      return false;
     } catch (error) {
       console.error("Σφάλμα φόρτωσης ιδιοκτήτη:", error);
+      setOwner(null);
+      return false;
     }
   };
 
+
   const handleSearchByMicrochip = async () => {
-  if (!microchip) {
-    alert("Εισάγετε αριθμό microchip");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    const res = await fetch(
-      `http://localhost:3001/pets?microchip=${microchip}`
-    );
-    const data = await res.json();
-
-    if (!data.length) {
-      alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
+    setLoading(true);
+    setErrors({});
+    try {
+      const res = await fetch(`http://localhost:3001/pets?microchip=${microchip}`);
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        setErrors({ microchip: "Δεν βρέθηκε κατοικίδιο με αυτό το microchip" });
+        return;
+      }
+      const foundPet = data[0];
+      if (foundPet.lost === true) {
+        setErrors({ microchip: "Το κατοικίδιο έχει ήδη ενεργή δήλωση εξαφάνισης" });
+        return;
+      }
+      setPet(foundPet);
+      const ownerLoaded = await loadOwnerData(foundPet.ownerId);
+      if (!ownerLoaded) {
+        setErrors({ microchip: "Δεν βρέθηκαν στοιχεία ιδιοκτήτη (ούτε σε owners ούτε σε vets)" });
+        return;
+      }
+      setStep(2);
+    } catch (err) {
+      setErrors({ microchip: "Σφάλμα αναζήτησης. Προσπαθήστε ξανά." });
+    } finally {
       setLoading(false);
-      return;
     }
-    const foundPet = data[0];
-    setPet(data[0]);
-     // Φόρτωση των στοιχείων του ιδιοκτήτη
-      await loadOwnerData(foundPet.ownerId);
-    setStep(2);
-  } catch (err) {
-    alert("Σφάλμα αναζήτησης");
-  } finally {
-    setLoading(false);
-  }
-};
-const handleSubmit = async (status) => {
+  };
+
+
+  const handleSubmit = async (status) => {
     if (!pet) return;
 
     const report = {
       petId: pet.id,
-      vetId: vet.id,
       date: lossInfo.date,
       region: lossInfo.region,
       address: lossInfo.address,
       condition: lossInfo.condition,
-      status,
+      status, // 'draft' ή 'submitted'
+      ownerId: owner.id,
       createdAt: new Date().toISOString(),
     };
 
@@ -103,24 +108,75 @@ const handleSubmit = async (status) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(report),
       });
-
-      if (res.ok) {
-        alert(
-          `Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`
+      if (!res.ok) throw new Error("POST lostReports failed");
+      if (status === "submitted") {
+        const petUpdate = await fetch(
+          `http://localhost:3001/pets/${pet.id}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              lost: true,
+              lastSeenDate: lossInfo.date,
+              region: lossInfo.region,
+              lastSeenAddress: lossInfo.address,
+              condition: lossInfo.condition,
+            }),
+          }
         );
-        // Reset
-        setStep(0);
-        setPet(null);
-        setOwner(null);
-        setMicrochip("");
-        setLossInfo({ date: "", region: "", address: "", condition: "" });
-
-        // Μετάβαση στην αρχικη
-        navigate("/vet-dashboard");
+        if (!petUpdate.ok) throw new Error("PATCH pet failed");
       }
+      alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
+      // Reset
+      setStep(0);
+      setPet(null);
+      setOwner(null);
+      setMicrochip("");
+      setLossInfo({ date: "", region: "", address: "", condition: "" });
+
+      // Μετάβαση στην αρχικη
+      navigate("/vet-dashboard");
     } catch {
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
     }
+  };
+
+  const validate1 = () => {
+    const newErrors = {};
+    if (!microchip.trim()) newErrors.microchip = "Πρέπει να εισάγετε αριθμό microchip";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    handleSearchByMicrochip();
+  };
+
+  const validate3 = () => {
+    const newErrors = {};
+    if (!lossInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
+    if (!lossInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
+    if (lossInfo.date && pet?.lastSeenDate) {
+      const lossDate = new Date(lossInfo.date);
+      const lastSeenDate = new Date(pet.lastSeenDate);
+      if (lossDate < lastSeenDate) {
+        newErrors.date = "Η ημερομηνία πρέπει να είναι μετά την τελευταία εμφάνιση του κατοικιδίου";
+      }
+    }
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    goToStep(4);
+  };
+
+
+  const handleCancel = () => {
+    const confirmLeave = window.confirm(
+      "Αν ακυρώσετε, τα στοιχεία της δήλωσης δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
+    );
+    if (!confirmLeave) return;
+    setStep(0);
+    setPet(null);
+    setOwner(null);
+    setMicrochip("");
+    setLossInfo({ date: "", region: "", address: "", condition: "" });
+    setErrors({});
   };
 
 
@@ -155,7 +211,7 @@ const handleSubmit = async (status) => {
               </span>
             </div>
 
-             <div className="line" />
+            <div className="line" />
 
             <div className="step step-zero">
               <div className="circle">4</div>
@@ -173,7 +229,7 @@ const handleSubmit = async (status) => {
 
       {/* ================= STEP 1 ================= */}
       {step === 1 && (
-        <>
+        <div className="step1-container">
           <div className="stepper">
             <div className="step active">
               <div className="circle">1</div>
@@ -202,45 +258,29 @@ const handleSubmit = async (status) => {
             </div>
           </div>
 
-          <h3>Εισάγετε τον αριθμό microchip τπυ κατοικιδίου</h3>
+          <div className="step1-content">
+            <h3>Εισάγετε τον αριθμό microchip του κατοικιδίου</h3>
 
-          {/* <div className="chip-search">
             <input
-              type="text"
-              placeholder="Εισάγετε αριθμό microchip..."
               className="chip-input"
+              value={microchip}
+              onChange={(e) => setMicrochip(e.target.value)}
+              placeholder="Εισάγετε αριθμό microchip..."
             />
-            <button className="chip-button" aria-label="Αναζήτηση">
-              <FiSearch size={22} />
+
+            {errors.microchip && (
+              <p className="error-text step1-error">{errors.microchip}</p>
+            )}
+
+            <button
+              className="next-btn"
+              onClick={validate1}
+              disabled={loading}
+            >
+              {loading ? "Αναζήτηση..." : "Συνέχεια"}
             </button>
           </div>
-          <button
-            className="next-btn"
-            onClick={() => setStep(2)}
-          >
-            Συνέχεια
-          </button> */}
-          <div className="chip-search">
-          <input
-            className="chip-input"
-            value={microchip}
-            onChange={(e) => setMicrochip(e.target.value)}
-            placeholder="Εισάγετε αριθμό microchip..."
-          /> 
         </div>
-        {loading && <p>Αναζήτηση...</p>}
-          
-        <div style={{ marginTop: '20px' }}>
-          <button
-            className="next-btn"
-            onClick={handleSearchByMicrochip}
-            disabled={loading || !microchip.trim()}
-          >
-            {loading ? 'Αναζήτηση...' : 'Συνέχεια'}
-            {/* Συνέχεια */}
-          </button>
-        </div>
-        </>
       )}
 
       {/* ================= STEP 2 ================= */}
@@ -276,49 +316,65 @@ const handleSubmit = async (status) => {
               <div className="step-title">Προεπισκόπηση & Υποβολή</div>
             </div>
           </div>
-        <div className="found-form">
-          <h3>Βασικά Στοιχεία</h3>
-         
-      {/* Εάν ΥΠΑΡΧΕΙ pet, δείξε τα στοιχεία του */}
-      {pet ? (
-        <div className="profile-grid">
-          <div>
-            <p className="label">Όνομα</p>
-            <p className="value"> {pet.name}</p>
+          <div className="found-form step-2-wide">
+            <h3>Βασικά Στοιχεία</h3>
 
-            <p className="label">Φύλο</p>
-            <p className="value">{pet.gender}</p>
+            {/* Εάν ΥΠΑΡΧΕΙ pet, δείξε τα στοιχεία του */}
+            {pet ? (
+              <div className="booklet-layout">
+                <div className="booklet-header">
+                  <div className="pet-photo">
+                    <img
+                      src={pet.photoUrl}
+                      alt={pet.name}
+                    />
+                  </div>
+                  <div className="booklet-top">
+                    <div className="info-box2">
+                      <h4>Στοιχεία Κατοικιδίου</h4>
+                      <p><span>Όνομα:</span> {pet.name}</p>
+                      <p><span>Είδος:</span> {pet.species}</p>
+                      <p><span>Ράτσα:</span> {pet.breed}</p>
+                      <p><span>Φύλο:</span> {pet.gender}</p>
+                      <p><span>Microchip:</span> {pet.microchip}</p>
+                      <p><span>Ημερομηνία Γέννησης:</span> {pet.birthdate || "-"}</p>
+                      <p><span>Ηλικία:</span> {pet.age || "-"}</p>
 
-            <p className="label">Είδος</p>
-            <p className="value">{pet.species}</p>
+                    </div>
+
+                    <div className="info-box2">
+                      <h4>Στοιχεία Ιδιοκτήτη</h4>
+                      {owner ? (
+                        <>
+                          <p><span>Όνομα:</span> {owner.firstname} {owner.lastname}</p>
+                          <p><span>ΑΦΜ:</span> {owner.afm}</p>
+                          <p><span>Διεύθυνση:</span> {owner.address}</p>
+                          <p><span>Τηλέφωνο:</span> {owner.phone}</p>
+                          <p><span>Email:</span> {owner.email}</p>
+                        </>
+                      ) : (
+                        <p>Φόρτωση στοιχείων ιδιοκτήτη...</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              /* Εάν ΔΕΝ υπάρχει pet, δείξε μήνυμα και πεδίο αναζήτησης */
+              <div>
+                <p> Δεν έχει βρεθεί κατοικίδιο ακόμα...</p>
+              </div>
+            )}
+
+
+            <div className="form-buttons">
+              <button onClick={handleCancel}>
+                Ακύρωση
+              </button>
+              <button type="button" onClick={() => setStep(3)} disabled={!pet} >Συνέχεια</button>
+            </div>
           </div>
-          <div>
-            <p className="label">Ράτσα</p>
-            <p className="value">{pet.breed}</p>
-
-            <p className="label">Ημερ. Γέννησης</p>
-            <p className="value">{pet.birthdate}</p>
-          </div>
-
-          <div>
-            <p className="label">Microchip</p>
-            <p className="value">{pet.microchip}</p>
-          </div>
-        </div>
-      ) : (
-        /* Εάν ΔΕΝ υπάρχει pet, δείξε μήνυμα και πεδίο αναζήτησης */
-        <div>
-          <p> Δεν έχει βρεθεί κατοικίδιο ακόμα...</p>
-        </div>
-      )}
-
-
-          <div className="form-buttons">
-            <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-            <button type="button" onClick={() => setStep(3)}  disabled={!pet} >Συνέχεια</button>
-          </div>
-        </div>
-            </>
+        </>
       )}
 
       {/* ================= STEP 3 ================= */}
@@ -350,74 +406,84 @@ const handleSubmit = async (status) => {
               <div className="step-title">Εισαγωγή στοιχείων απώλειας</div>
             </div>
 
-             <div className="line" />
+            <div className="line" />
 
             <div className="step">
               <div className="circle">4</div>
               <div className="step-title">Προεπισκόπηση & Υποβολή</div>
             </div>
           </div>
-          
-         <div className="found-form">
-          <h3>Στοιχεία Εύρεσης</h3>
 
-          <label>
-            Ημερομηνία
-             <input
-              type="date"
-              value={lossInfo.date}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, date: e.target.value })
-              }
-            />
-          </label>
+          <div className="found-form">
+            <h3>Στοιχεία Απώλειας</h3>
 
-          <label>
-                      Περιοχή (Νομός)
-                      <select
-                        value={lossInfo.region}
-                        onChange={(e) =>
-                          setLossInfo({ ...lossInfo, region: e.target.value })
-                        }
-                      >
-                        <option value="">Επιλέξτε...</option>
-                        {REGIONS.map((r) => (
-                            <option key={r} value={r}>{r}</option>
-                          ))}
-                      </select>
-                    </label>
+            <label>
+              Ημερομηνία *
+              <input
+                type="date"
+                value={lossInfo.date}
+                max={new Date().toISOString().split("T")[0]}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, date: e.target.value })
+                }
+              />
+              {errors.date && <p className="error-text">{errors.date}</p>}
+            </label>
 
-          <label>
-            <input
-              type="text"
-              placeholder="Π.χ. Σύνταγμα"
-              value={lossInfo.address}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, address: e.target.value })
-              }/>
-          </label>
 
-          <label>
-           <textarea
-              placeholder="Π.χ. Υγιές, φοβισμένο..."
-              rows={4}
-              value={lossInfo.condition}
-              onChange={(e) =>
-                setLossInfo({ ...lossInfo, condition: e.target.value })
-              }
-            ></textarea>
-          </label>
+            <label>
+              Περιοχή (Νομός) *
+              <select
+                value={lossInfo.region}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, region: e.target.value })
+                }
+              >
+                <option value="">Επιλέξτε...</option>
+                {REGIONS.map((region) => (
+                  <option key={region} value={region}>
+                    {region}
+                  </option>
+                ))}
+              </select>
+              {errors.region && <p className="error-text">{errors.region}</p>}
+            </label>
 
-          <div>
-            <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+            <label>
+              Διεύθυνση
+              <input
+                type="text"
+                placeholder="Π.χ. Σύνταγμα"
+                value={lossInfo.address}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, address: e.target.value })
+                } />
+            </label>
+
+            <label>
+              Κατάσταση Ζώου
+              <textarea
+                placeholder="Π.χ. Υγιές, φοβισμένο..."
+                rows={4}
+                value={lossInfo.condition}
+                onChange={(e) =>
+                  setLossInfo({ ...lossInfo, condition: e.target.value })
+                }
+              ></textarea>
+            </label>
+
+            <div>
+              <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+            </div>
+
+            <div className="form-buttons">
+              <button onClick={handleCancel}>
+                Ακύρωση
+              </button>
+              <button type="button" onClick={validate3}>Συνέχεια</button>
+            </div>
           </div>
-
-          <div className="form-buttons">
-            <button type="button" onClick={() => goToStep(2)}>Ακύρωση</button>
-            <button type="button" onClick={() => goToStep(4)}>Συνέχεια</button>
-          </div>
-        </div>
-      </>
+        </>
       )}
       {step === 4 && (
         <>
@@ -461,7 +527,7 @@ const handleSubmit = async (status) => {
             <div className="booklet-layout">
               <div className="booklet-header">
                 <div className="pet-photo">
-                   <img
+                  <img
                     src={pet.photoUrl}
                     alt={pet.name}
                   />
@@ -469,36 +535,37 @@ const handleSubmit = async (status) => {
 
                 <div className="booklet-top">
                   <div className="info-box">
-                    <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
-                     <p><span>Όνομα:</span> {pet.name}</p>
+                    <h4>Στοιχεία Κατοικιδίου</h4>
+                    <p><span>Όνομα:</span> {pet.name}</p>
                     <p><span>Είδος:</span> {pet.species}</p>
                     <p><span>Ράτσα:</span> {pet.breed}</p>
                     <p><span>Φύλο:</span> {pet.gender}</p>
                     <p><span>Microchip:</span> {pet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {pet.birthdate}</p>
-                    <p><span>Περιοχή:</span> {pet.region}</p>
+                    <p><span>Ημερομηνία Γέννησης:</span> {pet.birthdate || "-"}</p>
+                    <p><span>Ηλικία:</span> {pet.age || "-"}</p>
                   </div>
 
                   <div className="info-box">
                     <h4>Στοιχεία Ιδιοκτήτη</h4>
-                      {owner ? (
-                        <>
-                          <p><span>Όνομα:</span> {owner.firstname} {owner.lastname}</p>
-                          <p><span>ΑΦΜ:</span> {owner.afm}</p>
-                          <p><span>Διεύθυνση:</span> {owner.address}</p>
-                          <p><span>Τηλέφωνο:</span> {owner.phone}</p>
-                          <p><span>Email:</span> {owner.email}</p>
-                        </>
-                      ) : (
-                        <p>Φόρτωση στοιχείων ιδιοκτήτη...</p>
-                      )}
+                    {owner ? (
+                      <>
+                        <p><span>Όνομα:</span> {owner.firstname} {owner.lastname}</p>
+                        <p><span>ΑΦΜ:</span> {owner.afm}</p>
+                        <p><span>Διεύθυνση:</span> {owner.address}</p>
+                        <p><span>Τηλέφωνο:</span> {owner.phone}</p>
+                        <p><span>Email:</span> {owner.email}</p>
+                      </>
+                    ) : (
+                      <p>Φόρτωση στοιχείων ιδιοκτήτη...</p>
+                    )}
                   </div>
 
                   <div className="info-box">
                     <h4>Στοιχεία Απώλειας</h4>
                     <p><span>Ημερομηνία:</span> {lossInfo.date}</p>
                     <p><span>Περιοχή:</span> {lossInfo.region}</p>
-                    <p><span>Διεύθυνση:</span> {lossInfo.address}</p>
+                    <p><span>Διεύθυνση:</span> {lossInfo.address || "-"}</p>
+                    <p><span>Κατάσταση Ζώου:</span> {lossInfo.condition || "-"}</p>
                   </div>
                 </div>
               </div>
@@ -506,7 +573,9 @@ const handleSubmit = async (status) => {
             </div>
 
             <div className="form-buttons">
-              <button type="button" onClick={() => setStep(3)}>Ακύρωση</button>
+              <button onClick={handleCancel}>
+                Ακύρωση
+              </button>
               <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
               <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>

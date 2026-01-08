@@ -277,7 +277,6 @@ export default function Loss() {
                 ))}
               </select>
               {errors.region && <p className="error-text">{errors.region}</p>}
-
             </label>
 
             <label>
@@ -354,8 +353,8 @@ export default function Loss() {
                     <p><span>Ράτσα:</span> {selectedPet.breed}</p>
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία:</span> {selectedPet.data}</p>
-                  </div>
+                    <p><span>Ημερομηνία Γέννησης:</span> {selectedPet.birthdate || "-"}</p>
+                    <p><span>Ηλικία:</span> {selectedPet.age || "-"}</p>                  </div>
 
                   <div className="info-box">
                     <h4>Στοιχεία Ιδιοκτήτη</h4>
@@ -363,6 +362,7 @@ export default function Loss() {
                     <p><span>ΑΦΜ:</span> {user.afm}</p>
                     <p><span>Διεύθυνση:</span> {user.address}</p>
                     <p><span>Τηλέφωνο:</span> {user.phone}</p>
+                    <p><span>Email:</span> {user.email}</p>
                   </div>
 
                   <div className="info-box">
@@ -373,6 +373,7 @@ export default function Loss() {
                     <p><span>Κατάσταση Ζώου:</span> {lossInfo.condition}</p>
                   </div>
                 </div>
+
               </div>
             </div>
 
@@ -384,6 +385,7 @@ export default function Loss() {
               <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
+
         </>
       )}
     </div>

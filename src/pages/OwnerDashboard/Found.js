@@ -359,6 +359,7 @@ export default function Found() {
                       <p><span>ΑΦΜ:</span>{user.afm} </p>
                       <p><span>Διεύθυνση:</span> {user.address}</p>
                       <p><span>Τηλέφωνο:</span> {user.phone}</p>
+                      <p><span>Email:</span> {user.email}</p>
                     </div>
 
                     <div className="info-box">

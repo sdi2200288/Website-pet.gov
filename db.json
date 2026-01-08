@@ -287,21 +287,21 @@
     },
     {
       "id": "vp002",
-      "ownerId": "631b",
+      "ownerId": "o102",
       "name": "Μίλα",
       "species": "Γάτα",
       "breed": "Αδέσποτη",
       "gender": "female",
-      "lost": false,
+      "lost": true,
       "microchip": "555333444",
       "birthdate": "2022-06-01",
       "photoUrl": "/images/mila.png",
-      "region": "Θεσπρωτίας",
+      "region": "Άρτας",
       "status": "adoption",
       "notes": "Υγιής – εμβολιασμένη",
-      "lastSeenDate": "2026-01-03",
-      "lastSeenAddress": "",
-      "condition": "Καφέ και μικρό"
+      "lastSeenDate": "2026-01-07",
+      "lastSeenAddress": "εεεεεεε",
+      "condition": "εεεε"
     },
     {
       "id": "1",
@@ -353,11 +353,12 @@
       "species": "Γάτα",
       "breed": "Persian",
       "gender": "Θηλυκό",
-      "lost": true,
-      "lastSeenDate": "2025-12-02",
-      "region": "Αχαΐας",
-      "lastSeenAddress": "Πάτρα, Κέντρο",
-      "ownerId": "o102"
+      "lost": false,
+      "lastSeenDate": "2026-01-02",
+      "region": "Ζακύνθου",
+      "lastSeenAddress": "1111111111",
+      "ownerId": "o102",
+      "condition": "11111111111"
     },
     {
       "id": "5",
@@ -410,11 +411,12 @@
       "species": "Γάτα",
       "breed": "Ragdoll",
       "gender": "Θηλυκό",
-      "lost": true,
-      "lastSeenDate": "2025-12-03",
-      "region": "Αρκαδίας",
-      "lastSeenAddress": "Τρίπολη, Κέντρο",
-      "ownerId": "o102"
+      "lost": false,
+      "lastSeenDate": "2026-01-08",
+      "region": "Εύβοιας",
+      "lastSeenAddress": "eyboia",
+      "ownerId": "o102",
+      "condition": "fovismeno"
     },
     {
       "id": "9",
@@ -439,10 +441,11 @@
       "breed": "British Shorthair",
       "gender": "Θηλυκό",
       "lost": false,
-      "lastSeenDate": "2025-10-20",
-      "region": "Ξάνθης",
-      "lastSeenAddress": "Ξάνθη, Κέντρο",
-      "ownerId": "o101"
+      "lastSeenDate": "2026-01-08",
+      "region": "Αιτωλοακαρνανίας",
+      "lastSeenAddress": "ααααααααααααααααααααααααααααααααα",
+      "ownerId": "o101",
+      "condition": "μμμμμμμμμμμμμμμμμμμμμμμμμμμμ"
     },
     {
       "id": "11",
@@ -454,11 +457,11 @@
       "gender": "Αρσενικό",
       "lost": true,
       "lastSeenDate": "2026-01-08",
-      "region": "Άρτας",
-      "lastSeenAddress": "Συνταγμα",
+      "region": "Αργολίδας",
+      "lastSeenAddress": ";;;;;;;",
       "ownerId": "631b",
       "lastSeenRegion": "Αιτωλοακαρνανίας",
-      "condition": "Μικρο και φοβισμένο"
+      "condition": ";;;;;;;;;"
     },
     {
       "id": "12",
@@ -572,6 +575,39 @@
       "status": "submitted",
       "ownerId": "631b",
       "createdAt": "2026-01-08T12:09:53.996Z"
+    },
+    {
+      "id": "0bfe",
+      "petId": "vp002",
+      "date": "2026-01-07",
+      "region": "Άρτας",
+      "address": "εεεεεεε",
+      "condition": "εεεε",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T15:11:11.840Z"
+    },
+    {
+      "id": "692b",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Αργολίδας",
+      "address": ";;;;;;;",
+      "condition": ";;;;;;;;;",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T15:40:11.622Z"
+    },
+    {
+      "id": "9680",
+      "petId": "10",
+      "date": "2026-01-01",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "o101",
+      "createdAt": "2026-01-08T15:41:24.644Z"
     }
   ],
   "foundReports": [
@@ -673,6 +709,50 @@
       "status": "submitted",
       "ownerId": "631b",
       "createdAt": "2026-01-08T12:08:58.079Z"
+    },
+    {
+      "id": "03c9",
+      "petId": "4",
+      "date": "2026-01-02",
+      "region": "Ζακύνθου",
+      "address": "1111111111",
+      "condition": "11111111111",
+      "status": "submitted",
+      "ownerId": "o102",
+      "createdAt": "2026-01-08T15:30:18.365Z"
+    },
+    {
+      "id": "17c9",
+      "petId": "11",
+      "date": "2026-01-08",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "aaaaaa",
+      "condition": "aaaaaaaaa",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-08T15:37:31.587Z"
+    },
+    {
+      "id": "6d1f",
+      "petId": "10",
+      "date": "2026-01-08",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "ααααααααααααααααααααααααααααααααα",
+      "condition": "μμμμμμμμμμμμμμμμμμμμμμμμμμμμ",
+      "status": "submitted",
+      "ownerId": "o101",
+      "createdAt": "2026-01-08T15:42:57.427Z"
+    },
+    {
+      "id": "ff8c",
+      "petId": "8",
+      "date": "2026-01-08",
+      "region": "Εύβοιας",
+      "address": "eyboia",
+      "condition": "fovismeno",
+      "status": "submitted",
+      "ownerId": "o102",
+      "createdAt": "2026-01-08T15:44:25.801Z"
     }
   ],
   "adoptionReports": [
@@ -718,6 +798,40 @@
       "transferDate": "2026-01-04",
       "status": "submitted",
       "createdAt": "2026-01-04T16:31:35.817Z"
+    },
+    {
+      "id": "59ea",
+      "petId": "vp002",
+      "microchip": "555333444",
+      "vetId": "844c",
+      "currentOwnerId": "631b",
+      "currentOwnerAfm": "2325788990",
+      "currentOwnerEmail": "sdi2200288@uoa.gr",
+      "currentOwnerPhone": "6942781851",
+      "newOwnerId": "o101",
+      "newOwnerAfm": "1234567890",
+      "newOwnerEmail": "nikos@example.com",
+      "newOwnerPhone": "6900000001",
+      "transferDate": "2026-01-08",
+      "status": "submitted",
+      "createdAt": "2026-01-08T16:48:27.383Z"
+    },
+    {
+      "id": "85a0",
+      "petId": "vp002",
+      "microchip": "555333444",
+      "vetId": "844c",
+      "currentOwnerId": "o101",
+      "currentOwnerAfm": "1234567890",
+      "currentOwnerEmail": "nikos@example.com",
+      "currentOwnerPhone": "6900000001",
+      "newOwnerId": "o102",
+      "newOwnerAfm": "9876543210",
+      "newOwnerEmail": "maria@example.com",
+      "newOwnerPhone": "6900000002",
+      "transferDate": "2026-01-08",
+      "status": "submitted",
+      "createdAt": "2026-01-08T16:49:46.437Z"
     }
   ],
   "medicalReports": [

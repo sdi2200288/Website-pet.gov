@@ -30,6 +30,9 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
     else if (path.startsWith("/all-lost-pets")) {
       setActiveMenu(4);
     }
+    else if (path.startsWith("/owner-dashboard/book-date")) {
+      setActiveMenu(6);
+    }
     else {
       setActiveMenu(5);
     }
@@ -44,7 +47,7 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
     setShowProfileDropdown(false);
     if (onLogout) onLogout();
   };
-  const profilePath =  "/ProfileOwner";
+  const profilePath = "/ProfileOwner";
 
   return (
     <header className="top-header">
