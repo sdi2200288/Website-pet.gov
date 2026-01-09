@@ -1,183 +1,248 @@
 import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-import { FiSearch } from "react-icons/fi";
-import PetDetails from "../../components/Pet/Pet";
-// import dog from "../../images/lostPet1.png";
-import { SPECIES,dogPopular,catPopular } from "../Utils/Util";
-
+import { SPECIES, dogPopular, catPopular } from "../Utils/Util";
 import "./Identity.css";
+import "./Loss2.css";
 
 export default function Identity() {
-  // const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = φόρμα, 2 = προεπισκόπηση
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const vet = JSON.parse(localStorage.getItem("user"));
   const [petInfo, setPetInfo] = useState({
     microchip: "",
     name: "",
     species: "",
     breed: "",
-    birthdate: "", // Αλλαγή από 'age' σε 'birthdate'
+    birthdate: "",
+    age: "",
     gender: "",
     forAdoption: "Όχι",
   });
-
-  const [ownerInfo, setOwnerInfo] = useState({
-    afm: "",
-    email: "",
+  const [ownerAFM, setOwnerAFM] = useState("");
+  const [ownerFound, setOwnerFound] = useState(null);
+  const [showOwnerRegister, setShowOwnerRegister] = useState(false);
+  const [ownerForm, setOwnerForm] = useState({
+    firstname: "",
+    lastname: "",
+    genderu: "",
+    address: "",
+    birthdate: "",
     phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
-  
+
   const getBreedsBySpecies = () => {
     if (petInfo.species === "Σκύλος") return dogPopular;
     if (petInfo.species === "Γάτα") return catPopular;
     return [];
   };
 
-  const goToStep = (targetStep) => {
-    const vet = JSON.parse(localStorage.getItem("user"));
+  const handleCancel = () => {
+    const confirmLeave = window.confirm(
+      "Αν ακυρώσετε, τα στοιχεία της δήλωσης δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
+    );
+    if (!confirmLeave) return;
+    setStep(0);
+    setPetInfo({
+      microchip: "",
+      name: "",
+      species: "",
+      breed: "",
+      birthdate: "",
+      age: "",
+      gender: "",
+      forAdoption: "Όχι",
+    });
+    setOwnerAFM("");
+    setOwnerFound(null);
+    setShowOwnerRegister(false);
+    setOwnerForm({
+      firstname: "",
+      lastname: "",
+      genderu: "",
+      address: "",
+      birthdate: "",
+      phone: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+    setErrors({});
+    setIsSubmitting(false);
+  };
 
+  const goToStep = (targetStep) => {
     if (!vet || vet.role !== "vet") {
       window.location.href = "/login";
       return;
     }
-
     setStep(targetStep);
   };
 
-  // Επιβεβαίωση υποχρεωτικών πεδίων
-  const validateForm = () => {
-    if (!/^\d{9}$/.test(petInfo.microchip)) {
-      alert("Το πεδίο Microchip είναι υποχρεωτικό");
-      return false;
+  const findOwnerByAFM = async (afm) => {
+    try {
+      const res = await fetch(`http://localhost:3001/owners?afm=${afm}`);
+      if (!res.ok) return null;
+      const arr = await res.json();
+      return arr?.length ? arr[0] : null;
+    } catch {
+      return null;
     }
-    if (!petInfo.name.trim()) {
-      alert("Το πεδίο Όνομα είναι υποχρεωτικό");
-      return false;
-    }
-    if (!petInfo.species.trim()) {
-      alert("Το πεδίο Είδος είναι υποχρεωτικό");
-      return false;
-    }
-    if (!petInfo.gender) {
-      alert("Το πεδίο Φύλο είναι υποχρεωτικό");
-      return false;
-    }
-    if (petInfo.forAdoption === "Όχι") {
-      if (!/^\d{9}$/.test(ownerInfo.afm)) {
-        alert("Το ΑΦΜ του ιδιοκτήτη είναι υποχρεωτικό");
-        return false;
-      }
-      if (!ownerInfo.email.trim()) {
-        alert("Το Email του ιδιοκτήτη είναι υποχρεωτικό");
-        return false;
-      }
-      if (!ownerInfo.phone.trim()) {
-        alert("Το Τηλέφωνο του ιδιοκτήτη είναι υποχρεωτικό");
-        return false;
-      }
-    }
-    return true;
   };
 
-  // Συνάρτηση για υποβολή στη βάση δεδομένων
-  const submitPet = async () => {
-    if (!validateForm()) {
+  const validateUser = async () => {
+    const newErrors = {};
+    if (!ownerForm.firstname.trim()) newErrors.firstname = "Πρέπει να συμπληρωθεί το όνομα";
+    else if (!/^[Α-ΩA-Z]+$/.test(ownerForm.firstname.trim())) newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
+    if (!ownerForm.lastname.trim()) newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
+    else if (!/^[Α-ΩA-Z]+$/.test(ownerForm.lastname.trim())) newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
+    if (!ownerForm.phone) newErrors.phone = "Πρέπει να συμπληρωθεί το τηλέφωνο";
+    else if (!/^\d{10,15}$/.test(ownerForm.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι 10–15 ψηφία";
+    if (!ownerForm.genderu) newErrors.genderu = "Πρέπει να επιλέξετε φύλο";
+    if (!ownerForm.address.trim()) newErrors.address = "Πρέπει να συμπληρωθεί η διεύθυνση";
+    if (!ownerForm.birthdate) newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
+    if (!ownerForm.email.includes("@")) newErrors.email = "Μη έγκυρο email";
+    if (ownerForm.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
+    if (ownerForm.password !== ownerForm.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateForm = async () => {
+    const newErrors = {};
+    if (!/^\d{9}$/.test(petInfo.microchip)) newErrors.microchip = "Το microchip πρέπει να έχει 9 ψηφία";
+    else {
+      const res = await fetch(`http://localhost:3001/pets?microchip=${petInfo.microchip}`);
+      if (!res.ok) return false;
+      const data = await res.json();
+      if (data.length > 0) newErrors.microchip = "Το microchip υπάρχει ήδη στη βάση";
+    }
+    if (!petInfo.name.trim()) newErrors.name = "Πρέπει να συμπληρωθεί το όνομα";
+    if (!petInfo.species) newErrors.species = "Πρέπει να επιλεγεί είδος";
+    if (!petInfo.breed.trim()) newErrors.breed = "Πρέπει να συμπληρωθεί ράτσα";
+    if (!petInfo.gender) newErrors.gender = "Πρέπει να επιλεγεί φύλο";
+    if (!petInfo.age || isNaN(petInfo.age) || Number(petInfo.age) < 0) newErrors.age = "Η ηλικία είναι υποχρεωτική";
+    if (petInfo.forAdoption === "Όχι") {
+      if (!/^\d{10}$/.test(ownerAFM)) newErrors.ownerAFM = "Πρέπει να συμπληρωθεί έγκυρο ΑΦΜ";
+    }
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleOwnerRegisterChange = (e) => {
+    const { name, value } = e.target;
+    let v = value;
+    if (name === "phone") v = value.replace(/\D/g, "").slice(0, 15);
+    setOwnerForm((prev) => ({ ...prev, [name]: v }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const handleNextStep = async () => {
+    const isPetValid = await validateForm();
+    if (!isPetValid) return;
+    if (petInfo.forAdoption === "Ναι") {
+      setOwnerFound(null);
+      setShowOwnerRegister(false);
+      setStep(2);
       return;
     }
-
-    setIsSubmitting(true);
-    const vet = JSON.parse(localStorage.getItem("user"));
-
-    if (!vet) {
-      alert("Πρέπει να είστε συνδεδεμένος ως κτηνίατρος");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // Δημιουργία νέου ID για το κατοικίδιο
-    const petId = "vp" + Math.random().toString(36).substr(2, 9);
-
-    // Δημιουργία owner αν δεν υπάρχει
-    let ownerId = null;
-    if (petInfo.forAdoption === "Όχι" && ownerInfo.afm) {
-      try {
-        // Έλεγχος αν υπάρχει ήδη ο owner με αυτό το ΑΦΜ
-        const response = await fetch(`http://localhost:3001/owners?afm=${ownerInfo.afm}`);
-        const existingOwners = await response.json();
-        
-        if (existingOwners.length > 0) {
-          ownerId = existingOwners[0].id;
-        } else {
-          // Δημιουργία νέου owner
-          const newOwnerId = "own" + Math.random().toString(36).substr(2, 6);
-          const newOwner = {
-            id: newOwnerId,
-            firstname: "",
-            lastname: "",
-            afm: ownerInfo.afm,
-            gender: "",
-            address: "",
-            birthdate: "",
-            phone: ownerInfo.phone,
-            email: ownerInfo.email,
-            password: ""
-          };
-          
-          await fetch("http://localhost:3001/owners", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newOwner)
-          });
-          
-          ownerId = newOwnerId;
-        }
-      } catch (err) {
-        console.error("Error checking/creating owner:", err);
-        alert("Σφάλμα κατά τη δημιουργία/εύρεση ιδιοκτήτη");
-        setIsSubmitting(false);
+    if (!showOwnerRegister) {
+      const user = await findOwnerByAFM(ownerAFM);
+      if (user) {
+        setOwnerFound(user);
+        setShowOwnerRegister(false);
+        setErrors((prev) => ({ ...prev, ownerAFM: "" }));
+        setStep(2);
         return;
       }
+      setOwnerFound(null);
+      setShowOwnerRegister(true);
+      setErrors((prev) => ({ ...prev, ownerAFM: "" }));
+      return;
     }
+    const okOwner = await validateUser();
+    if (!okOwner) return;
+    setStep(2);
+  };
 
-    // Δημιουργία του νέου pet
-    const newPet = {
-      id: petId,
-      ownerId: ownerId,
-      name: petInfo.name,
-      species: petInfo.species,
-      breed: petInfo.breed,
-      gender: petInfo.gender === "Αρσενικό" ? "male" : "female",
-      microchip: petInfo.microchip,
-      birthdate: petInfo.birthdate || null,
-      photoUrl: "",
-      region: "",
-      status: petInfo.forAdoption === "Ναι" ? "adoption" : "owned",
-      notes: "",
-    };
-
+  const submit = async () => {
+    const okPet = await validateForm();
+    if (!okPet) return;
+    if (!vet || vet.role !== "vet") {
+      alert("Πρέπει να είστε συνδεδεμένος ως κτηνίατρος");
+      return;
+    }
+    setIsSubmitting(true);
     try {
-      console.log("Sending pet data:", newPet);
-      
-      const response = await fetch("http://localhost:3001/pets", {
+      let finalOwnerId = null;
+      if (petInfo.forAdoption === "Ναι") {
+        finalOwnerId = vet.id;
+      } else {
+        if (ownerFound?.id) {
+          finalOwnerId = ownerFound.id;
+        } else {
+          const okOwner = await validateUser();
+          if (!okOwner) return;
+          const resOwner = await fetch(`http://localhost:3001/owners`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstname: ownerForm.firstname,
+              lastname: ownerForm.lastname,
+              afm: ownerAFM,
+              gender: ownerForm.genderu,
+              address: ownerForm.address,
+              birthdate: ownerForm.birthdate,
+              phone: ownerForm.phone,
+              email: ownerForm.email,
+              password: ownerForm.password,
+            }),
+          });
+
+          if (!resOwner.ok) throw new Error("Σφάλμα δημιουργίας ιδιοκτήτη");
+          const newOwner = await resOwner.json();
+          setOwnerFound(newOwner);
+          finalOwnerId = newOwner.id;
+        }
+      }
+      const petId = "vp" + Math.random().toString(36).substr(2, 9);
+      const newPet = {
+        id: petId,
+        ownerId: finalOwnerId,
+        name: petInfo.name,
+        species: petInfo.species,
+        breed: petInfo.breed,
+        gender: petInfo.gender,
+        microchip: petInfo.microchip,
+        birthdate: petInfo.birthdate || null,
+        age: petInfo.age,
+        region: vet.region || "",
+        lastSeenAddress: vet.address || "",
+        lastSeenDate: new Date().toISOString().split("T")[0],
+        status: petInfo.forAdoption === "Ναι" ? "adoption" : "owned",
+      };
+      const resPet = await fetch(`http://localhost:3001/pets`, {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPet),
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error:", errorText);
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log("Success:", result);
-
-      alert("Το κατοικίδιο καταχωρήθηκε επιτυχώς!");
-
-      // Επαναφορά φόρμας
+      if (!resPet.ok) throw new Error("Σφάλμα κατά την υποβολή κατοικιδίου");
+      const createdPet = await resPet.json();
+      const identityEntry = {
+        id: "idn" + Math.random().toString(36).substr(2, 9),
+        petId: createdPet.id,
+        vetId: vet.id,
+        date: new Date().toISOString().split("T")[0],
+      };
+      const resIdentity = await fetch(`http://localhost:3001/identity`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(identityEntry),
+      });
+      if (!resIdentity.ok) throw new Error("Σφάλμα καταχώρησης identity");
+      alert("Η καταχώρηση ολοκληρώθηκε επιτυχώς!");
       setStep(0);
       setPetInfo({
         microchip: "",
@@ -185,44 +250,55 @@ export default function Identity() {
         species: "",
         breed: "",
         birthdate: "",
+        age: "",
         gender: "",
         forAdoption: "Όχι",
       });
-      setOwnerInfo({ afm: "", email: "", phone: "" });
-
-    } catch (err) {
-      console.error("SUBMIT ERROR:", err.message);
-      alert(`Σφάλμα κατά την αποστολή: ${err.message}`);
-    } finally {
+      setOwnerAFM("");
+      setOwnerFound(null);
+      setShowOwnerRegister(false);
+      setOwnerForm({
+        firstname: "",
+        lastname: "",
+        genderu: "",
+        address: "",
+        birthdate: "",
+        phone: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      setErrors({});
       setIsSubmitting(false);
-    }
-  };
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    };
+  }
 
   return (
     <div className="identity">
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
-            <div className="stepper">
-                <div className="step step-zero">
-                <div className="circle">1</div>
-                <span>
-                    Στο πρώτο βήμα θα συμπληρώσετε τα στοιχεία του κατοικιδίου (microchip, όνομα, είδος, ράτσα, ημερομηνία γέννησης, φύλο, φωτογραφία). Αν δεν είναι προς υιοθεσία, θα συμπληρώσετε ΑΦΜ, email και τηλέφωνο ιδιοκτήτη.
-                </span>
-                </div>
-                <div className="line" />
-                
-                <div className="step step-zero">
-                <div className="circle">2</div>
-                <span>
-                    Στο δεύτερο βήμα θα δείτε την προεπισκόπηση της καταγραφής και θα μπορείτε να την υποβάλετε. Μετά την υποβολή θα δείτε το βιβλιάριο με την επιλογή εκτύπωσης.
-                </span>
-                </div>
+          <div className="stepper">
+            <div className="step step-zero">
+              <div className="circle">1</div>
+              <span>
+                Στο πρώτο βήμα συμπληρώνετε στοιχεία κατοικιδίου. Αν δεν είναι προς υιοθεσία, δίνετε το ΑΦΜ του ιδιοκτήτη.
+                Αν δεν υπάρχει λογαριασμός, θα εμφανιστεί φόρμα δημιουργίας.
+              </span>
             </div>
+            <div className="line" />
+            <div className="step step-zero">
+              <div className="circle">2</div>
+              <span>Στο δεύτερο βήμα βλέπετε προεπισκόπηση και κάνετε υποβολή.</span>
+            </div>
+          </div>
 
-            <button className="next-btn" onClick={() => goToStep(1)}>
-                Συνέχεια
-            </button>
+          <button className="next-btn" onClick={() => goToStep(1)}>
+            Συνέχεια
+          </button>
         </>
       )}
 
@@ -240,9 +316,9 @@ export default function Identity() {
               <div className="step-title">Προεπισκόπηση και καταχώρηση</div>
             </div>
           </div>
-        {/* <div className="booklet-container"> */}
-            <div className="found-form">
-            <h3>Εισαγωγή Στοιχείων</h3>
+
+          <div className="found-form">
+            <h3>Εισαγωγή Στοιχείων Κατοικιδίου</h3>
 
             <label>
               Microchip *
@@ -254,10 +330,10 @@ export default function Identity() {
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, "");
                   setPetInfo({ ...petInfo, microchip: value });
+                  setErrors((prev) => ({ ...prev, microchip: "" }));
                 }}
-                required
               />
-
+              {errors.microchip && <div className="fieldError">{errors.microchip}</div>}
             </label>
 
             <label>
@@ -265,20 +341,22 @@ export default function Identity() {
               <input
                 type="text"
                 value={petInfo.name}
-                onChange={(e) =>
-                  setPetInfo({ ...petInfo, name: e.target.value })
-                }
-                required
+                onChange={(e) => {
+                  setPetInfo({ ...petInfo, name: e.target.value });
+                  setErrors((prev) => ({ ...prev, name: "" }));
+                }}
               />
+              {errors.name && <div className="fieldError">{errors.name}</div>}
             </label>
 
             <label>
               Είδος *
               <select
                 value={petInfo.species}
-                onChange={(e) =>
-                  setPetInfo({ ...petInfo, species: e.target.value, breed: "" })
-                }
+                onChange={(e) => {
+                  setPetInfo({ ...petInfo, species: e.target.value, breed: "" });
+                  setErrors((prev) => ({ ...prev, species: "", breed: "" }));
+                }}
                 required
               >
                 <option value="">Επιλογή</option>
@@ -288,26 +366,30 @@ export default function Identity() {
                   </option>
                 ))}
               </select>
-
+              {errors.species && <div className="fieldError">{errors.species}</div>}
             </label>
 
             <label>
-              Ράτσα
-              {petInfo.species === "Άλλο" || petInfo.species === "" ? (
+              Ράτσα *
+              {petInfo.species === "" || petInfo.species === "Άλλο" ? (
                 <input
                   type="text"
                   placeholder="Εισάγετε ράτσα"
                   value={petInfo.breed}
-                  onChange={(e) =>
-                    setPetInfo({ ...petInfo, breed: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setPetInfo({ ...petInfo, breed: e.target.value });
+                    setErrors((prev) => ({ ...prev, breed: "" }));
+                  }}
+                  disabled={petInfo.species === ""}
                 />
               ) : (
                 <select
                   value={petInfo.breed}
-                  onChange={(e) =>
-                    setPetInfo({ ...petInfo, breed: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setPetInfo({ ...petInfo, breed: e.target.value });
+                    setErrors((prev) => ({ ...prev, breed: "" }));
+                  }}
+                  disabled={petInfo.species === ""}
                 >
                   <option value="">Επιλογή ράτσας</option>
                   {getBreedsBySpecies().map((breed) => (
@@ -317,23 +399,23 @@ export default function Identity() {
                   ))}
                 </select>
               )}
-              </label>
-
-
+              {errors.breed && <div className="fieldError">{errors.breed}</div>}
+            </label>
 
             <label>
               Φύλο *
               <select
                 value={petInfo.gender}
-                onChange={(e) =>
-                  setPetInfo({ ...petInfo, gender: e.target.value })
-                }
-                required
+                onChange={(e) => {
+                  setPetInfo({ ...petInfo, gender: e.target.value });
+                  setErrors((prev) => ({ ...prev, gender: "" }));
+                }}
               >
                 <option value="">Επιλογή</option>
                 <option value="Αρσενικό">Αρσενικό</option>
                 <option value="Θηλυκό">Θηλυκό</option>
               </select>
+              {errors.gender && <div className="fieldError">{errors.gender}</div>}
             </label>
 
             <label>
@@ -341,167 +423,267 @@ export default function Identity() {
               <input
                 type="date"
                 value={petInfo.birthdate}
-                onChange={(e) =>
-                  setPetInfo({ ...petInfo, birthdate: e.target.value })
-                }
+                max={new Date().toISOString().split("T")[0]}
+                onChange={(e) => setPetInfo({ ...petInfo, birthdate: e.target.value })}
               />
+            </label>
+
+            <label>
+              Ηλικία *
+              <input
+                type="number"
+                value={petInfo.age}
+                onChange={(e) => {
+                  setPetInfo({ ...petInfo, age: e.target.value });
+                  setErrors((prev) => ({ ...prev, age: "" }));
+                }}
+              />
+              {errors.age && <div className="fieldError">{errors.age}</div>}
             </label>
 
             <label>
               Προς Υιοθεσία
               <select
                 value={petInfo.forAdoption}
-                onChange={(e) =>
-                  setPetInfo({ ...petInfo, forAdoption: e.target.value })
-                }
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setPetInfo({ ...petInfo, forAdoption: val });
+                  setErrors((prev) => ({ ...prev, ownerAFM: "" }));
+                  if (val === "Ναι") {
+                    setOwnerAFM("");
+                    setOwnerFound(null);
+                    setShowOwnerRegister(false);
+                    setOwnerForm({
+                      firstname: "",
+                      lastname: "",
+                      genderu: "",
+                      address: "",
+                      birthdate: "",
+                      phone: "",
+                      email: "",
+                      password: "",
+                      confirmPassword: "",
+                    });
+                  }
+                }}
               >
                 <option value="Ναι">Ναι</option>
                 <option value="Όχι">Όχι</option>
               </select>
             </label>
-
             {petInfo.forAdoption === "Όχι" && (
               <>
                 <h3>Στοιχεία Ιδιοκτήτη</h3>
-
                 <label>
                   ΑΦΜ *
                   <input
                     type="text"
                     inputMode="numeric"
-                    maxLength={9}
-                    value={ownerInfo.afm}
+                    maxLength={10}
+                    value={ownerAFM}
                     onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      setOwnerInfo({ ...ownerInfo, afm: value });
+                      const v = e.target.value.replace(/\D/g, "").slice(0, 10);
+                      setOwnerAFM(v);
+                      setErrors((prev) => ({ ...prev, ownerAFM: "" }));
                     }}
-                    required
                   />
+                  {errors.ownerAFM && <div className="fieldError">{errors.ownerAFM}</div>}
                 </label>
 
-                <label>
-                  Email *
-                  <input
-                    type="email"
-                    value={ownerInfo.email}
-                    onChange={(e) =>
-                      setOwnerInfo({ ...ownerInfo, email: e.target.value })
-                    }
-                    required
-                  />
-                </label>
+                {showOwnerRegister && (
+                  <div className="ownerRegister">
+                    <h4>Δημιουργία Λογαριασμού Ιδιοκτήτη (Δεν υπάρχει λογαριασμός με αυτό το ΑΦΜ)</h4>
 
-                <label>
-                  Τηλέφωνο *
-                  <input
-                    type="tel"
-                    value={ownerInfo.phone}
-                    onChange={(e) =>
-                      setOwnerInfo({ ...ownerInfo, phone: e.target.value })
-                    }
-                    required
-                  />
-                </label>
-                
+                    <label>
+                      Όνομα *
+                      <input
+                        type="text"
+                        name="firstname"
+                        value={ownerForm.firstname}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.firstname && <div className="fieldError">{errors.firstname}</div>}
+                    </label>
+
+                    <label>
+                      Επώνυμο *
+                      <input
+                        type="text"
+                        name="lastname"
+                        value={ownerForm.lastname}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.lastname && <div className="fieldError">{errors.lastname}</div>}
+                    </label>
+
+                    <label>
+                      Διεύθυνση *
+                      <input
+                        type="text"
+                        name="address"
+                        value={ownerForm.address}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.address && <div className="fieldError">{errors.address}</div>}
+                    </label>
+
+                    <label>
+                      Ημερομηνία Γέννησης *
+                      <input
+                        type="date"
+                        name="birthdate"
+                        value={ownerForm.birthdate}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
+                    </label>
+
+                    <label>
+                      Email *
+                      <input
+                        type="email"
+                        name="email"
+                        value={ownerForm.email}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.email && <div className="fieldError">{errors.email}</div>}
+                    </label>
+
+                    <label>
+                      Τηλέφωνο *
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={ownerForm.phone}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.phone && <div className="fieldError">{errors.phone}</div>}
+                    </label>
+
+                    <label>
+                      Φύλο *
+                      <select
+                        name="genderu"
+                        value={ownerForm.genderu}
+                        onChange={handleOwnerRegisterChange}
+                      >
+                        <option value="">Επιλογή</option>
+                        <option value="Αρσενικό">Αρσενικό</option>
+                        <option value="Θηλυκό">Θηλυκό</option>
+                        <option value="Άλλο">Άλλο</option>
+                      </select>
+                      {errors.genderu && <div className="fieldError">{errors.genderu}</div>}
+                    </label>
+
+                    <label>
+                      Κωδικός *
+                      <input
+                        type="password"
+                        name="password"
+                        value={ownerForm.password}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.password && <div className="fieldError">{errors.password}</div>}
+                    </label>
+
+                    <label>
+                      Επιβεβαίωση Κωδικού *
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={ownerForm.confirmPassword}
+                        onChange={handleOwnerRegisterChange}
+                      />
+                      {errors.confirmPassword && <div className="fieldError">{errors.confirmPassword}</div>}
+                    </label>
+                  </div>
+                )}
               </>
             )}
+
             <div className="form-buttons">
-                <button type="button" onClick={() => { if (validateForm()) setStep(2);}}>Συνέχεια</button>
+              <button type="button" onClick={handleNextStep}>
+                Συνέχεια
+              </button>
             </div>
           </div>
-        {/* </div> */}
-          
         </>
       )}
 
       {/* ================= STEP 2 ================= */}
-      {/* ================= STEP 2 ================= */}
-{step === 2 && (
-  <>
-    <div className="stepper">
-      <div className="step clickable" onClick={() => setStep(1)}>
-        <div className="circle">1</div>
-        <div className="step-title">Δημιουργία προφίλ κατοικιδίου</div>
-      </div>
-      <div className="line" />
-      <div className="step active">
-        <div className="circle">2</div>
-        <div className="step-title">Προεπισκόπηση και καταχώρηση</div>
-      </div>
+      {step === 2 && (
+        <>
+          <div className="stepper">
+            <div className="step clickable" onClick={() => setStep(1)}>
+              <div className="circle">1</div>
+              <div className="step-title">Δημιουργία προφίλ κατοικιδίου</div>
+            </div>
+            <div className="line" />
+            <div className="step active">
+              <div className="circle">2</div>
+              <div className="step-title">Προεπισκόπηση και καταχώρηση</div>
+            </div>
+          </div>
+
+          <h3>Προεπισκόπηση Στοιχείων</h3>
+
+          <div className="preview-content">
+            <div className="info-box2">
+              <h4>Στοιχεία Κατοικιδίου</h4>
+              <p><span>Microchip:</span> {petInfo.microchip}</p>
+              <p><span>Όνομα:</span> {petInfo.name}</p>
+              <p><span>Είδος:</span> {petInfo.species}</p>
+              <p><span>Ράτσα:</span> {petInfo.breed}</p>
+              <p><span>Φύλο:</span> {petInfo.gender}</p>
+              <p><span>Ηλικία:</span> {petInfo.age}</p>
+              <p><span>Ημερομηνία Γέννησης:</span> {petInfo.birthdate || "-"}</p>
+              <p><span>Προς Υιοθεσία:</span> {petInfo.forAdoption}</p>
+            </div>
+
+            {petInfo.forAdoption === "Ναι" && vet && (
+              <div className="info-box2">
+                <h4>Στοιχεία Κτηνιάτρου</h4>
+                <p><span>Όνομα:</span> {vet.firstname} {vet.lastname}</p>
+                <p><span>Email:</span> {vet.email}</p>
+                <p><span>Τηλέφωνο:</span> {vet.phone}</p>
+                <p><span>Διεύθυνση:</span> {vet.address}</p>
+                <p><span>Περιοχή:</span> {vet.region}</p>
+              </div>
+            )}
+
+            {petInfo.forAdoption === "Όχι" && ownerFound && (
+              <div className="info-box2">
+                <h4>Στοιχεία Ιδιοκτήτη</h4>
+                <p><span>Όνομα:</span> {ownerFound.firstname} {ownerFound.lastname}</p>
+                <p><span>ΑΦΜ:</span> {ownerFound.afm}</p>
+                <p><span>Email:</span> {ownerFound.email}</p>
+                <p><span>Τηλέφωνο:</span> {ownerFound.phone}</p>
+              </div>
+            )}
+
+            {petInfo.forAdoption === "Όχι" && !ownerFound && showOwnerRegister && (
+              <div className="info-box2">
+                <h4>Νέος Ιδιοκτήτης</h4>
+                <p><span>ΑΦΜ:</span> {ownerAFM}</p>
+                <p><span>Όνομα:</span> {ownerForm.firstname} {ownerForm.lastname}</p>
+                <p><span>Ημερομηνία Γέννησης :</span> {ownerForm.birthdate}</p>
+                <p><span>Φύλο:</span> {ownerForm.genderu}</p>
+                <p><span>Διεύθυνση:</span> {ownerForm.address}</p>
+                <p><span>Email:</span> {ownerForm.email}</p>
+                <p><span>Τηλέφωνο:</span> {ownerForm.phone}</p>
+              </div>
+            )}
+          </div>
+          <div className="form-buttons">
+            <button type="button" onClick={handleCancel}>
+              Ακύρωση
+            </button>
+            <button type="button" onClick={submit} disabled={isSubmitting}>
+              {isSubmitting ? "Υποβολή..." : "Οριστική Υποβολή"}
+            </button>
+          </div>
+        </>
+      )}
     </div>
-    
-    {/* <div className="booklet-container"> */}
-      <h3>Προεπισκόπηση Στοιχείων</h3>
-      
-      {/* Απλοποιημένη δομή για προεπισκόπηση */}
-      <div className="preview-content">
-        <div className="preview-section">
-          <h4>Στοιχεία Κατοικιδίου</h4>
-          <div className="info-grid">
-            <div className="info-pair ">
-              <span className="label">Microchip:</span>
-              <span className="value">{petInfo.microchip}</span>
-            </div>
-            <div className="info-pair ">
-              <span className="label">Όνομα:</span>
-              <span className="value">{petInfo.name}</span>
-            </div>
-            <div className="info-pair ">
-              <span className="label">Είδος:</span>
-              <span className="value">{petInfo.species}</span>
-            </div>
-            <div className="info-pair">
-              <span className="label">Ράτσα:</span>
-              <span className="value">{petInfo.breed}</span>
-            </div>
-            <div className="info-pair">
-              <span className="label">Φύλο:</span>
-              <span className="value">{petInfo.gender}</span>
-            </div>
-            <div className="info-pair">
-              <span className="label">Ημερομηνία Γέννησης:</span>
-              <span className="value">{petInfo.birthdate}</span>
-            </div>
-            <div className="info-pair">
-              <span className="label">Προς Υιοθεσία:</span>
-              <span className="value">{petInfo.forAdoption}</span>
-            </div>
-          </div>
-        </div>
-
-        {petInfo.forAdoption === "Όχι" && (
-          <div className="preview-section">
-            <h4>Στοιχεία Ιδιοκτήτη</h4>
-            <div className="info-grid">
-              <div className="info-pair">
-                <span className="label">ΑΦΜ:</span>
-                <span className="value">{ownerInfo.afm}</span>
-              </div>
-              <div className="info-pair">
-                <span className="label">Email:</span>
-                <span className="value">{ownerInfo.email}</span>
-              </div>
-              <div className="info-pair">
-                <span className="label">Τηλέφωνο:</span>
-                <span className="value">{ownerInfo.phone}</span>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="form-buttons">
-        <button type="button" onClick={() => setStep(1)}>Ακύρωση</button>
-        <button 
-          type="button"  
-          onClick={submitPet}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Υποβολή..." : "Οριστική Υποβολή"}
-        </button>
-      </div>
-    {/* </div> */}
-  </>
-)}    </div>
   );
 }

@@ -35,6 +35,30 @@
       "phone": "6900000002",
       "email": "maria@example.com",
       "password": "Maria1!!"
+    },
+    {
+      "id": "8d4e",
+      "firstname": "E",
+      "lastname": "A",
+      "afm": "1111111111",
+      "gender": "Αρσενικό",
+      "address": "Μακρίσια",
+      "birthdate": "2026-01-15",
+      "phone": "6980426710",
+      "email": "e.antoniou2016@gmail.com",
+      "password": "11111111"
+    },
+    {
+      "id": "0405",
+      "firstname": "Ε",
+      "lastname": "Σ",
+      "afm": "1344444444",
+      "gender": "Αρσενικό",
+      "address": "Μακρίσια",
+      "birthdate": "2026-01-23",
+      "phone": "6980426711",
+      "email": "e.antoniou26@gmail.com",
+      "password": "123456789"
     }
   ],
   "vets": [
@@ -349,7 +373,7 @@
       "id": "4",
       "name": "Λούνα",
       "photoUrl": "https://placekitten.com/401/301",
-      "microchip": "2233445566",
+      "microchip": "223344556",
       "species": "Γάτα",
       "breed": "Persian",
       "gender": "Θηλυκό",
@@ -495,7 +519,7 @@
       "id": "14",
       "name": "Φλώρα",
       "photoUrl": "https://placekitten.com/406/306",
-      "microchip": "1213141516",
+      "microchip": "121314151",
       "species": "Γάτα",
       "breed": "Russian Blue",
       "gender": "Θηλυκό",
@@ -518,6 +542,36 @@
       "region": "Ευρυτανίας",
       "lastSeenAddress": "",
       "ownerId": "631b"
+    },
+    {
+      "id": "vpgb9f9zvow",
+      "ownerId": "8d4e",
+      "name": "q",
+      "species": "Σκύλος",
+      "breed": "Rottweiler",
+      "gender": "Αρσενικό",
+      "microchip": "111111111",
+      "birthdate": null,
+      "age": "2",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Makrisia",
+      "lastSeenDate": "2026-01-09",
+      "status": "owned"
+    },
+    {
+      "id": "vpwiudf8uve",
+      "ownerId": "0405",
+      "name": "2",
+      "species": "Σκύλος",
+      "breed": "Yorkshire Terrier",
+      "gender": "Αρσενικό",
+      "microchip": "111111112",
+      "birthdate": null,
+      "age": "2",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Makrisia",
+      "lastSeenDate": "2026-01-09",
+      "status": "owned"
     }
   ],
   "lostReports": [
@@ -985,5 +1039,6 @@
       "read": false,
       "createdAt": "2026-01-07T19:08:23.595Z"
     }
-  ]
+  ],
+   "identity": []
 }
