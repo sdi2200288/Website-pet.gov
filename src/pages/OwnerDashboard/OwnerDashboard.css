@@ -48,42 +48,59 @@
   overflow-x: hidden;
   padding: 24px 32px 40px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .dashboard-layout {
   display: flex;
   width: 100%;
   min-height: 100vh;
+  padding-top: 16px; /* πρόσθεσε χώρο πάνω */
+  gap: 0; 
 }
 
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
+  width: 270px;
   /* πιο μικρή */
   background-color: #ffffff;
   color: black;
-  padding: 24px 20px;
+  padding: 40px 20px 24px;
   border-right: 1px solid #eee;
-  /* border-radius: 0;          ΟΧΙ καρτέλα */
-  min-height: 100vh;
-  /* position: sticky;
-  top: 0; */
+  min-height: calc(100vh - 16px); /* αφαιρούμε το padding πάνω */
+  position: relative; /* όχι sticky */
+  top: 0;
 }
 
 .sidebar h3 {
-  /* margin-bottom: 16px;
-  font-size: 1rem; */
-  font-size: 1.1rem;
+  /* font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 6px;
-  color: #111;
+  color: #111; */
+  font-size: 1.3rem; /* Αύξησε το μέγεθος */
+  font-weight: 700;
+  margin-bottom: 20px; /* Περισσότερο χώρο κάτω */
+  color: #111; /* Πιο έντονο μπλε/σκούρο */
+  padding: 0 8px; /* Πρόσθεσε padding στα πλάγια */
 }
 
 .sidebar-subtitle {
   font-size: 0.85rem;
   color: #777;
   margin-bottom: 20px;
+  padding: 0 8px;
+}
+
+.sidebar-header {
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-header h3 {
+  margin-bottom: 8px;
 }
 
 .sidebar-menu {

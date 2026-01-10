@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PetDetails from "../../components/Pet/Pet";
-// import dog from "../../images/lostPet1.png";
 import "./HealthBookletOwner.css";
-// import { pets } from "../Utils/Util"
 
 
 export default function HealthBookletOwner() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = βιβλιάριο
   const [pets, setPets] = useState([]);
   const [selectedPetId, setSelectedPetId] = useState(null);
   
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
+
+    useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+   window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
 
   const goToStep = (targetStep) => {
     if (!user) {
@@ -21,12 +26,6 @@ export default function HealthBookletOwner() {
     setStep(targetStep);
   };
 
-  // useEffect(() => {
-  //   if(!user || user.role !== "owner"){
-  //     window.location.href = "/login";
-  //   }
-  // }, [user]);
-  
   // Fetch pets του ιδιοκτήτη
   useEffect(() => {
   if (!user) return;
@@ -35,17 +34,44 @@ export default function HealthBookletOwner() {
     .then((res) => res.json())
     .then((data) => {
       setPets(data);
-
-      if (data.length > 0) {
-        setSelectedPetId(data[0].id); 
-      }
     })
     .catch(() => setPets([]));
-}, [user]);
-
+  }, [user]);
 
   return (
     <div className="health-booklet">
+       {/* Breadcrumb */}
+      <nav className="breadcrumb">
+        {[
+          { label: "Αρχική", path: "/", step: null },
+          { label: "Προβολή Βιβλιαρίου", step: 0 }, // εδώ θέλουμε να πάει στο step 0 του component
+          ...(step >= 1 ? [{ label: "Επιλογή Κατοικιδίου", step: 1 }] : []),
+          ...(step >= 2 ? [{ label: "Προβολή Βιβλιαρίου", step: 2 }] : []),
+        ].map((item, index, arr) => {
+          const isLast = index === arr.length - 1;
+          return (
+            <span key={index}>
+              <span
+                style={{
+                  color: isLast ? "black" : "blue",
+                  cursor: isLast ? "default" : "pointer",
+                  textDecoration: isLast ? "none" : "underline",
+                }}
+                onClick={() => {
+                  if (!isLast) {
+                    if (item.step !== null) goToStep(item.step);
+                    else if (item.path) navigate(item.path);
+                  }
+                }}
+              >
+                {item.label}
+              </span>
+              {!isLast && " / "}
+            </span>
+          );
+        })}
+      </nav>
+
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
@@ -151,9 +177,6 @@ export default function HealthBookletOwner() {
                     <p><span>Ράτσα:</span> {selectedPet.breed}</p>
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    {/* <p><span>Ημερομηνία:</span> {selectedPet.lastSeenDate}</p>
-                    <p><span>Περιοχή:</span> {selectedPet.region}</p>
-                    <p><span>Διεύθυνση:</span> {selectedPet.lastSeenAddress}</p> */}
                   </div>
 
                   <div className="info-box">

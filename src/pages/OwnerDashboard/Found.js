@@ -28,6 +28,10 @@ export default function Found() {
     setStep(targetStep);
   };
 
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+   window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
 
   useEffect(() => {
     if (!user) return;
@@ -132,6 +136,42 @@ export default function Found() {
 
   return (
     <div className="report-container ">
+      {/* Breadcrumb */}
+      <nav className="breadcrumb">
+        {[
+          { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
+          { label: "Δήλωση Εύρεσης", step: 0 }, // step 0 του wizard
+          ...(step >= 1 ? [{ label: "Επιλογή Κατοικιδίου", step: 1 }] : []),
+          ...(step >= 2 ? [{ label: "Στοιχεία Εύρεσης", step: 2 }] : []),
+          ...(step === 3 ? [{ label: "Προεπισκόπηση", step: 3 }] : []),
+        ].map((item, index, arr) => {
+          const isLast = index === arr.length - 1; // τρέχον step
+          return (
+            <span key={index}>
+              <span
+                style={{
+                  color: isLast ? "black" : "blue",
+                  cursor: isLast ? "default" : "pointer",
+                  textDecoration: isLast ? "none" : "underline",
+                }}
+                onClick={() => {
+                  if (!isLast) {
+                    if (item.step !== undefined) {
+                      goToStep(item.step); // μεταβαίνει στο step του wizard
+                    } else if (item.path) {
+                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
+                    }
+                  }
+                }}
+              >
+                {item.label}
+              </span>
+              {!isLast && " / "}
+            </span>
+          );
+        })}
+      </nav>
+
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>

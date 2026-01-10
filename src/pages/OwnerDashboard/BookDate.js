@@ -405,7 +405,7 @@ const handleConfirmAppointment = () => {
                 ))}
               </select>
           </div>
-
+          
           {/* ΠΕΡΙΓΡΑΦΗ */}
           <div className="form-group full-width">
             <label htmlFor="description">Σύντομη Περιγραφή (προαιρετικά)</label>

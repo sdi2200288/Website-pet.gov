@@ -13,24 +13,15 @@ import {
 
 
 export default function OwnerDashboard() {
-  // const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-
-  // useEffect(() => {
-  //   if(!user || user.role != "owner"){
-  //     navigate("/login");
-  //   }
-  // }, [user, navigate]);
-
-  // if (!user) return null;
 
   return (
     <div className="OwnerDashboard">
 
-      <nav className="breadcrumb">
+      {/* <nav className="breadcrumb">
         <Link to="/">Αρχική /</Link>
         <span>Dashboard Ιδιοκτήτη</span>
-      </nav>
+      </nav> */}
 
       <div className="dashboard-layout">
         <aside className="sidebar">
@@ -70,13 +61,12 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-               to={`history-statement?ownerId=${user?.id || ""}`}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? "active" : ""}`
-              }
-              >
-                <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
-              </NavLink>
+                  to={`history-bookings-owner?ownerId=${user?.id || ""}`}
+                  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+                >
+                  <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
+                </NavLink>
+
             </li>
             <li>
               <NavLink

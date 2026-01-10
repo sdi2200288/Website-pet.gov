@@ -8,7 +8,7 @@
       "gender": "Γυναίκα",
       "address": "Αθανασίου Διάκου 7",
       "birthdate": "2004-06-25",
-      "phone": "6942781851",
+      "phone": "6942781852",
       "email": "sdi2200288@uoa.gr",
       "password": "Altani1!!"
     },
@@ -81,9 +81,16 @@
       "education": "Μεταπτυχιακό",
       "availability": [
         {
+          "date": "2026-01-10",
+          "times": [
+            "10:00",
+            "12:00",
+            "13:00"
+          ]
+        },
+        {
           "date": "2026-01-20",
           "times": [
-            "09:30",
             "10:00",
             "12:00",
             "13:00"
@@ -335,11 +342,12 @@
       "species": "Σκύλος",
       "breed": "Labrador Retriever",
       "gender": "Θηλυκό",
-      "lost": true,
-      "lastSeenDate": "2025-12-20",
+      "lost": false,
+      "lastSeenDate": "2026-01-09",
       "region": "Αττικής",
-      "lastSeenAddress": "Αθήνα, Κέντρο",
-      "ownerId": "631b"
+      "lastSeenAddress": "",
+      "ownerId": "631b",
+      "condition": "Ηταν φοβισμενο"
     },
     {
       "id": "2",
@@ -553,10 +561,12 @@
       "microchip": "111111111",
       "birthdate": null,
       "age": "2",
-      "region": "Ηλείας",
-      "lastSeenAddress": "Makrisia",
-      "lastSeenDate": "2026-01-09",
-      "status": "owned"
+      "region": "Αττικής",
+      "lastSeenAddress": "",
+      "lastSeenDate": "2026-01-10",
+      "status": "owned",
+      "lost": false,
+      "condition": ""
     },
     {
       "id": "vpwiudf8uve",
@@ -572,6 +582,21 @@
       "lastSeenAddress": "Makrisia",
       "lastSeenDate": "2026-01-09",
       "status": "owned"
+    },
+    {
+      "id": "vp2zapvcwhj",
+      "ownerId": "v001",
+      "name": "Μπαλος",
+      "species": "Γάτα",
+      "breed": "Sphynx",
+      "gender": "Αρσενικό",
+      "microchip": "456789012",
+      "birthdate": "2023-03-12",
+      "age": "3",
+      "region": "Αττικής",
+      "lastSeenAddress": "Πατησίων 100, Αθήνα",
+      "lastSeenDate": "2026-01-10",
+      "status": "adoption"
     }
   ],
   "lostReports": [
@@ -662,6 +687,17 @@
       "status": "submitted",
       "ownerId": "o101",
       "createdAt": "2026-01-08T15:41:24.644Z"
+    },
+    {
+      "id": "63ec",
+      "petId": "1",
+      "date": "2026-01-10",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-10T07:50:12.573Z"
     }
   ],
   "foundReports": [
@@ -697,17 +733,6 @@
       "status": "submitted",
       "ownerId": "631b",
       "createdAt": "2026-01-08T11:01:14.930Z"
-    },
-    {
-      "id": "2e3a",
-      "petId": "11",
-      "date": "2026-01-08",
-      "region": "Αττικής",
-      "address": "",
-      "condition": "",
-      "status": "draft",
-      "ownerId": "631b",
-      "createdAt": "2026-01-08T11:12:57.203Z"
     },
     {
       "id": "0d4d",
@@ -807,6 +832,28 @@
       "status": "submitted",
       "ownerId": "o102",
       "createdAt": "2026-01-08T15:44:25.801Z"
+    },
+    {
+      "id": "e843",
+      "petId": "1",
+      "date": "2026-01-09",
+      "region": "Αττικής",
+      "address": "",
+      "condition": "Ηταν φοβισμενο",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-10T07:47:56.490Z"
+    },
+    {
+      "id": "0f6b",
+      "petId": "vpgb9f9zvow",
+      "date": "2026-01-10",
+      "region": "Αττικής",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "8d4e",
+      "createdAt": "2026-01-10T08:12:13.072Z"
     }
   ],
   "adoptionReports": [
@@ -996,6 +1043,89 @@
       "ownerEmail": "maria@example.com",
       "ownerPhone": "6900000002",
       "ownerAfm": "9876543210"
+    },
+    {
+      "id": "app_r6cuyt337",
+      "vetId": "v001",
+      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "vetEmail": "vetgiorgos@example.com",
+      "vetPhone": "6900000100",
+      "petId": "vp001",
+      "petName": "Ρεξ",
+      "petMicrochip": "555111222",
+      "petSpecies": "Σκύλος",
+      "date": "2026-01-20",
+      "time": "09:30",
+      "reason": "vaccination",
+      "description": "",
+      "status": "confirmed",
+      "createdAt": "2026-01-10T07:52:24.713Z",
+      "ownerId": "631b",
+      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
+      "ownerEmail": "sdi2200288@uoa.gr",
+      "ownerPhone": "6942781851",
+      "ownerAfm": "2325788990"
+    },
+    {
+      "id": "app_1o5yua48j",
+      "vetId": "v202",
+      "vetName": "ΕΛΕΝΗ ΝΙΚΟΛΑΟΥ",
+      "vetEmail": "veteleni@example.com",
+      "vetPhone": "6900000200",
+      "petId": "1",
+      "petName": "Μπέλα",
+      "petMicrochip": "1234567890",
+      "petSpecies": "Σκύλος",
+      "date": "2026-01-21",
+      "time": "10:00",
+      "reason": "clinical_exam",
+      "description": "",
+      "status": "cancelled",
+      "createdAt": "2026-01-10T08:00:57.083Z",
+      "ownerId": "631b",
+      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
+      "ownerEmail": "sdi2200288@uoa.gr",
+      "ownerPhone": "6942781851",
+      "ownerAfm": "2325788990",
+      "pet": {
+        "id": "1",
+        "name": "Μπέλα",
+        "photoUrl": "https://placedog.net/400/300?id=1",
+        "microchip": "1234567890",
+        "species": "Σκύλος",
+        "breed": "Labrador Retriever",
+        "gender": "Θηλυκό",
+        "lost": false,
+        "lastSeenDate": "2026-01-09",
+        "region": "Αττικής",
+        "lastSeenAddress": "",
+        "ownerId": "631b",
+        "condition": "Ηταν φοβισμενο"
+      },
+      "cancelledBy": "owner",
+      "cancelledAt": "2026-01-10T08:01:10.631Z"
+    },
+    {
+      "id": "app_u3x9scjzu",
+      "vetId": "v001",
+      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
+      "vetEmail": "vetgiorgos@example.com",
+      "vetPhone": "6900000100",
+      "petId": "11",
+      "petName": "Ράσμους",
+      "petMicrochip": "9900112233",
+      "petSpecies": "Σκύλος",
+      "date": "2026-01-10",
+      "time": "12:00",
+      "reason": "surgery",
+      "description": "",
+      "status": "pending",
+      "createdAt": "2026-01-10T08:06:03.576Z",
+      "ownerId": "631b",
+      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
+      "ownerEmail": "sdi2200288@uoa.gr",
+      "ownerPhone": "6942781851",
+      "ownerAfm": "2325788990"
     }
   ],
   "notifications": [
@@ -1038,7 +1168,34 @@
       "appointmentId": "app_do9yoywrj",
       "read": false,
       "createdAt": "2026-01-07T19:08:23.595Z"
+    },
+    {
+      "id": "de0c",
+      "userId": "631b",
+      "userType": "owner",
+      "title": "Επιβεβαίωση Ραντεβού",
+      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ επιβεβαίωσε το ραντεβού για Ρεξ στις 2026-01-20 09:30",
+      "appointmentId": "app_r6cuyt337",
+      "read": false,
+      "createdAt": "2026-01-10T07:54:54.676Z"
+    },
+    {
+      "id": "d687",
+      "userId": "v202",
+      "userType": "vet",
+      "title": "Ακύρωση Ραντεβού",
+      "message": "Ο ιδιοκτήτης ΑΛΤΑΝΗ ΤΟΝΤΟΥ ακύρωσε το ραντεβού για Μπέλα στις 2026-01-21 10:00",
+      "appointmentId": "app_1o5yua48j",
+      "read": false,
+      "createdAt": "2026-01-10T08:01:10.648Z"
     }
   ],
-   "identity": []
+  "identity": [
+    {
+      "id": "idnqad0xm55x",
+      "petId": "vp2zapvcwhj",
+      "vetId": "v001",
+      "date": "2026-01-10"
+    }
+  ]
 }

@@ -12,6 +12,11 @@ export default function HistoryDeclaration() {
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedChip, setSelectedChip] = useState("");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [sortOrder, setSortOrder] = useState("recent"); // recent | old
+
+
 
   // Data
   const [allPets, setAllPets] = useState([]);
@@ -65,8 +70,8 @@ export default function HistoryDeclaration() {
   };
 
 
-  // Δημιουργία ιστορικού δηλώσεων με σωστά δεδομένα
-  const historyDeclarations = useMemo(() => {
+    // Δημιουργία ιστορικού δηλώσεων με σωστά δεδομένα
+    const historyDeclarations = useMemo(() => {
     const combined = [];
 
     lossDeclarations.forEach(r => {
@@ -104,15 +109,46 @@ export default function HistoryDeclaration() {
 
   const breeds = selectedSpecies === "Σκύλος"? dogPopular: selectedSpecies === "Γάτα"? catPopular: [...dogPopular, ...catPopular];
 
-  // Φιλτράρισμα ανά microchip
-  const filteredDeclarations = historyDeclarations.filter((d) => {
-    if (selectedChip && d.microchip !== selectedChip) return false;
-    if (selectedSpecies && d.species !== selectedSpecies) return false;
-    if (selectedBreed && d.breed !== selectedBreed) return false;
-    if (selectedGender && d.gender !== selectedGender) return false;
-    if (selectedRegion && d.region !== selectedRegion) return false;
-    return true;
+  const filteredDeclarations = useMemo(() => {
+    return historyDeclarations
+
+      .filter((d) => {
+        if (selectedChip && d.microchip !== selectedChip) return false;
+        if (selectedSpecies && d.species !== selectedSpecies) return false;
+        if (selectedBreed && d.breed !== selectedBreed) return false;
+        if (selectedGender && normalizeGender(d.gender) !== selectedGender) return false;
+        if (selectedRegion && !d.region?.includes(selectedRegion) && !selectedRegion.includes(d.region)) return false;
+        if (dateFrom && new Date(d.date) < new Date(dateFrom)) return false;
+        if (dateTo && new Date(d.date) > new Date(dateTo)) return false;
+
+        return true;
+      })
+    .sort((a, b) => {
+    const da = new Date(a.createdAt || a.date);
+    const db = new Date(b.createdAt || b.date);
+
+    return sortOrder === "recent" ? db - da : da - db;
   });
+
+  },[
+    historyDeclarations,
+    selectedChip,
+    selectedSpecies,
+    selectedBreed,
+    selectedGender,
+    selectedRegion,
+    dateFrom,
+    dateTo,
+    sortOrder
+  ]);
+
+const normalizeGender = (g) => {
+  if (!g) return "";
+  if (g === "male") return "Αρσενικό";
+  if (g === "female") return "Θηλυκό";
+  return g;
+};
+
 
   // Μοναδικά microchips για το dropdown
   const uniqueMicrochips = [...new Set(historyDeclarations.map(d => d.microchip))];
@@ -193,12 +229,14 @@ export default function HistoryDeclaration() {
 
         <div className="filter-item">
           <span className="filter-label">Ημερομηνία από:</span>
-          <input type="date" />
+          {/* <input type="date" /> */}
+          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
         </div>
 
         <div className="filter-item">
           <span className="filter-label">Ημερομηνία έως:</span>
-          <input type="date" />
+          {/* <input type="date" /> */}
+          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
         </div>
 
         <div className="filter-item history-chip-filter">
@@ -217,7 +255,13 @@ export default function HistoryDeclaration() {
         </div>
       </div>
       <div className="history-list-panel">
-        <PetDeclarationsList declarations={filteredDeclarations}  onDeleteDeclaration={handleDeleteDeclaration}  isVet={isVet}/>
+        <PetDeclarationsList
+          declarations={filteredDeclarations}
+          sortOrder={sortOrder}
+          onSortChange={setSortOrder}
+          onDeleteDeclaration={handleDeleteDeclaration}
+          isVet={isVet}
+        />
       </div>
     </div>
   );

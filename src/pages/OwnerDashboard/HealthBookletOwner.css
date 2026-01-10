@@ -264,3 +264,16 @@
   padding: 30px 30px 40px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
+
+.breadcrumb {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  color: #555;
+}
+.breadcrumb .clickable {
+  cursor: pointer;
+  color: #4d9df3;
+}
+.breadcrumb .clickable:hover {
+  text-decoration: underline;
+}
