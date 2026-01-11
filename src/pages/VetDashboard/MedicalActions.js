@@ -36,6 +36,11 @@ export default function MedicalActions() {
     setStep(targetStep);
    };
 
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+     window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
+
    const [medicalAction, setMedicalAction] = useState({
         date: "",                // Ημερομηνία
         duration: "",            // Διάρκεια εξέτασης
@@ -194,6 +199,7 @@ return (
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
+         <div className="step0-wrapper">
           <div className="stepper">
             <div className="step step-zero">
               <div className="circle">1</div>
@@ -230,6 +236,7 @@ return (
           <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
+          </div>
         </>
       )}
 

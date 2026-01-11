@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./HealthBookletVet.css";
 
 export default function HealthBookletVet() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = βιβλιάριο
   const [pets, setPets] = useState([]);
   const [selectedPetId, setSelectedPetId] = useState(null);
@@ -48,6 +50,11 @@ export default function HealthBookletVet() {
     setError("");
   };
 
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+    window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
+
   // Fetch pets και medicalReports
   useEffect(() => {
     if (!vet || vet.role !== "vet") return;
@@ -75,6 +82,7 @@ export default function HealthBookletVet() {
       {/* STEP 0 */}
       {step === 0 && (
         <>
+        <div className="step0-wrapper">
           <div className="stepper">
             <div className="step">
               <div className="circle">1</div>
@@ -93,6 +101,7 @@ export default function HealthBookletVet() {
           <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
+          </div>
         </>
       )}
 

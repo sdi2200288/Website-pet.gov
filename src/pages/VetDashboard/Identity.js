@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { SPECIES, dogPopular, catPopular } from "../Utils/Util";
 import "./Identity.css";
 import "./Loss2.css";
 
 export default function Identity() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = φόρμα, 2 = προεπισκόπηση
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -80,6 +82,11 @@ export default function Identity() {
     }
     setStep(targetStep);
   };
+
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+    window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
 
   const findOwnerByAFM = async (afm) => {
     try {
@@ -281,7 +288,8 @@ export default function Identity() {
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
-          <div className="stepper">
+        <div className="step0-wrapper">
+          <div className="stepper ">
             <div className="step step-zero">
               <div className="circle">1</div>
               <span>
@@ -295,10 +303,11 @@ export default function Identity() {
               <span>Στο δεύτερο βήμα βλέπετε προεπισκόπηση και κάνετε υποβολή.</span>
             </div>
           </div>
-
+         
           <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>
+         </div>
         </>
       )}
 

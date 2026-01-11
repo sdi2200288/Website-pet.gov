@@ -35,7 +35,10 @@ export default function Found2() {
     setStep(targetStep);
   };
 
-
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+   window.scrollTo({ top: 0, behavior: "smooth"});
+  }, [step]);
 
   const loadOwnerData = async (ownerId) => {
     try {
@@ -183,10 +186,12 @@ export default function Found2() {
   };
 
   return (
-    <div className="found">
+    <div className="found2">
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
+        <div className="stepper-wrapper">
+          <div className="stepper stepper-intro">
           <div className="stepper">
             <div className="step step-zero">
               <div className="circle">1</div>
@@ -219,7 +224,8 @@ export default function Found2() {
               </span>
             </div>
           </div>
-
+          </div>
+          </div>
           <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια
           </button>

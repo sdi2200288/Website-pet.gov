@@ -5,6 +5,7 @@
   padding: 40px;
   text-align: center;
   background: #fafafa;
+  margin-top: 30px;
 }
 
 /* ===============================
@@ -15,9 +16,20 @@
   align-items: flex-start;
   justify-content: center;
   gap: 40px;
-  margin-bottom: 40px;
+  max-width: 800px;
+  margin: 0 auto 40px; 
 }
 
+ .step0-wrapper {
+  min-height: calc(100vh - 80px); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;    
+  justify-content: center; 
+  gap: 30px;
+
+  transform: translateY(-60px);
+}
 .step {
   display: flex;
   flex-direction: column;
