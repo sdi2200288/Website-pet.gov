@@ -135,6 +135,37 @@
   font-size: 0.95rem;
 }
 
+.history-buttons {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.history-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.history-btn.repeat {
+  background: #3498db;
+  color: #fff;
+}
+
+.history-btn.review {
+  background: #f1c40f;
+  color: #fff;
+}
+
+.history-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+
 /* ===== MOBILE ===== */
 
 @media (max-width: 600px) {

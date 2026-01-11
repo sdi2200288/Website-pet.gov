@@ -9,6 +9,7 @@ import { FiSearch } from "react-icons/fi";
 import "./HomePage.css";
 import { Link } from "react-router-dom";
 import { formatNumber } from "../Utils/Util";
+import "../OwnerDashboard/BookDate"
 
 
 export default function Homepage() {
@@ -19,7 +20,9 @@ export default function Homepage() {
   const [topVets, setTopVets] = useState([]);
   const [searchChip, setSearchChip] = useState("");
   const navigate = useNavigate();
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  const ownerId = user?.id;
+  
   const handleSearch = () => {
     const chip = searchChip.trim();
     if (!chip) {
@@ -175,19 +178,55 @@ export default function Homepage() {
 
               <div className="lost-pets-grid">
                 {topVets.map((vet) => (
-                  <div className="lost-pet-card" key={vet.id}>
-                    <VetDetails vet={vet} />
+                  <div className="veterinarian-card" key={vet.id}>
+                    <div className="vet-card-content">
+                      <div className="vet-image">
+                        <img
+                          src={vet.image || "/default-vet.jpg"}
+                          alt={vet.name}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "/default-vet.jpg";
+                          }}
+                        />
+                      </div>
+                      <div className="vet-info">
+                        <h3>{vet.name}</h3>
+                        <p><strong>Περιοχή:</strong> {vet.region}</p>
+                        <p><strong>Ειδίκευση:</strong> {vet.specialization}</p>
+                        <p><strong>Εμπειρία:</strong> {vet.experience} χρόνια</p>
+                        <p><strong>Βαθμολογία:</strong> ⭐ {vet.totalScore / vet.reviewCount || 0} ({vet.reviewCount || 0} αξιολογήσεις)</p>
+                        {/* <button className="book-btn" onClick={() => navigate("/BookDate")}>
+                          Κλείστε Ραντεβού
+                        </button> */}
+                        <button
+                          className="book-btn"
+                          onClick={() => navigate(`/owner-dashboard/book-date?ownerId=${ownerId}`)}
+                        >
+                          Κλείστε Ραντεβού
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                ))
-                }
+                ))}
               </div>
-
-              <div className="lost-pets-cta">
+              {/* <div className="lost-pets-cta">
                 <Link to="/all-vets" className="see-all-lost-pets-btn">
                   Δες όλoυς τους κτηνιάτρους μας
                 </Link>
+              </div> */}
+              <div className="lost-pets-cta">
+                <Link
+                  to={`/owner-dashboard/book-date?ownerId=${ownerId}`}
+                  className="see-all-lost-pets-btn"
+                >
+                  Δες όλoυς τους κτηνιάτρους μας
+                </Link>
               </div>
-            </div>
+
+            </div> 
+
+
           </section>
         )
       }

@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "./BookDate.css";
+import "../../components/Vet/Vet"
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { 
   FiSearch, 
   // FiCheck, 
@@ -14,6 +17,8 @@ import BookDateImage from "../../images/BookDate.png";
 import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS } from "../Utils/Util";
 
 export default function BookDate() {
+   const location = useLocation();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [selectedVet, setSelectedVet] = useState(null);
   const [myPets, setMyPets] = useState([]);
@@ -55,6 +60,19 @@ export default function BookDate() {
     setStep(2);
   };
 
+    useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const vetId = params.get("vetId");
+
+    if (vetId && allVeterinarians.length > 0) {
+      const vet = allVeterinarians.find(v => v.id.toString() === vetId);
+      if (vet) {
+        setSelectedVet(vet);
+        setStep(2); // πάμε κατευθείαν στο BookAppointmentStep
+      }
+    }
+  }, [location.search, allVeterinarians]);
+  
   const applyFiltersAndSort = useCallback(() => {
     let result = [...allVeterinarians];
     
@@ -704,8 +722,9 @@ const handleConfirmAppointment = () => {
             <p className="empty-message">Δεν βρέθηκαν κτηνίατροι με τα τρέχοντα κριτήρια.</p>
           ) : (
             veterinarians.map((vet) => (
-              <div className="veterinarian-card" key={vet.id}>
-                <div className="vet-card-content">
+              <div className="veterinarian-card" key={vet.id} /*onClick={() => navigate(`/VetProfile/${vet.id}`)}*/>
+            
+                 <div className="vet-card-content">
                   <div className="vet-image">
                     <img src={vet.image} alt={vet.name} onError={(e) => {
                       e.target.onerror = null;
@@ -723,7 +742,7 @@ const handleConfirmAppointment = () => {
                         handleBookClick(vet);
                     }}>Κλείστε Ραντεβού</button>
                   </div>
-                </div>
+                </div> 
               </div>
             )))}
         </div>

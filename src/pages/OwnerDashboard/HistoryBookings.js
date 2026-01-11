@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { MEDICAL_ACTS } from "../Utils/Util";
+import { useNavigate,useLocation } from "react-router-dom";
 import "./HistoryBookings.css";
 
 export default function AppointmentHistory() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [history, setHistory] = useState([]);
   const [openId, setOpenId] = useState(null);
+
+  const handleRepeatAppointment = (appointment) => {
+    // Προς το παρόν απλά alert, μετά μπορείς να κάνεις redirect στο νέο ραντεβού
+    alert(`Θες σίγουρα Ραντεβού ξανά με τον κτηνίατρο: ${appointment.vetName}`);
+    navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
+  };
+
+  const handleReviewAppointment = (appointment) => {
+    // Προς το παρόν απλά alert, μετά μπορείς να ανοίξεις φόρμα αξιολόγησης
+    alert(`Θες σίγουρα να αξιολογήσεις τον: ${appointment.vetName}`);
+     navigate(`/review/${appointment.vetId}`, { 
+      state: { 
+        appointmentId: appointment.id,
+        vetName: appointment.vetName 
+      }  
+    });
+  };
 
   const getMedicalActLabel = (id) => {
     const act = MEDICAL_ACTS.find(a => a.id === id);
     return act ? act.label : "Άγνωστη Πράξη";
   };
+  
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -92,6 +113,10 @@ export default function AppointmentHistory() {
                 {a.cancelledBy && (
                   <div><strong>Ακυρώθηκε από:</strong> {a.cancelledBy === "owner" ? "Ιδιοκτήτη" : "Κτηνίατρο"}</div>
                 )}
+              </div>
+              <div className="history-buttons">
+                <button className="history-btn repeat" onClick={() => handleRepeatAppointment(a)}>Ραντεβού Ξανά</button>
+                <button className="history-btn review" onClick={() => handleReviewAppointment(a)}>Αξιολόγησε</button>
               </div>
             </div>
           )}

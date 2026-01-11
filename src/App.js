@@ -19,6 +19,7 @@ import Loss from "./pages/OwnerDashboard/Loss";
 import BookDate from "./pages/OwnerDashboard/BookDate";
 import FutureBookings from "./pages/OwnerDashboard/FutureBookings";
 import HistoryBookings from "./pages/OwnerDashboard/HistoryBookings";
+import Evaluation from "./pages/OwnerDashboard/Evaluation";
 
 import Found2 from "./pages/VetDashboard/Found2";
 import Loss2 from "./pages/VetDashboard/Loss2";
@@ -131,7 +132,8 @@ function App() {
               <Route path="history-statement" element={<HistoryDeclaration />} />
               <Route path="book-date" element={<BookDate />} />
               <Route path="future-bookings" element={<FutureBookings />} />
-              <Route path="history-bookings-owner" element={<HistoryBookings />} />
+              <Route path="history-bookings-owner" element={<HistoryBookings />} /> 
+              {/* <Route path="evaluate" element={<Evaluation />} />    */}
             </Route>
           </Route>
 
@@ -141,6 +143,7 @@ function App() {
           <Route path="/all-lost-pets" element={<AllLostPets />} />
           <Route path="/all-lost-pets/PetProfile/:id" element={<PetProfile />} />
           <Route path="/foundLostPet/:id" element={<FoundLost isLoggedIn={isLoggedIn} userData={userData} />} />
+          <Route path="/review/:vetId" element={<Evaluation />} />
 
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/register/owner" element={
