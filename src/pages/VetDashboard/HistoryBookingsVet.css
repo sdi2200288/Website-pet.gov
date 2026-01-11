@@ -1,0 +1,172 @@
+.history-appointment-history-vet {
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 96px 16px 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.history-appointment-history-vet h2 {
+  text-align: center;
+  /* margin-bottom: 24px; */
+  color: #2c3e50;
+  margin-top: 40px;
+}
+
+/* ===== CARD ===== */
+
+.history-booking-card-vet {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.history-booking-card-vet:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* ===== HEADER ===== */
+
+.history-booking-header-vet {
+  padding: 20px 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fafafa, #f2f2f2);
+}
+
+/* Left side */
+.history-main-vet {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-pet-name-vet {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.history-datetime-vet {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Right side */
+.history-actions-vet {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ===== STATUS BADGE ===== */
+
+.history-status-vet {
+  min-width: 120px;
+  text-align: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+/* Status colors */
+.history-booking-card.cancelled-vet .history-status {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.history-booking-card.rejected-vet .history-status {
+  background: linear-gradient(135deg, #f39c12, #d35400);
+}
+
+.history-booking-card.confirmed-vet .history-status {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+}
+
+/* Arrow */
+.history-arrow-vet {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+/* ===== BODY ===== */
+
+.history-booking-body-vet {
+  padding: 22px 26px;
+  background-color: #fff;
+  border-top: 1px solid #eee;
+}
+
+/* Info grid */
+.history-info-grid-vet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
+}
+
+.history-info-grid-vet div {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.history-info-grid-vet strong {
+  color: #2c3e50;
+}
+
+/* ===== EMPTY STATE ===== */
+
+.history-appointment-history-vet p {
+  text-align: center;
+  color: #777;
+  font-size: 0.95rem;
+}
+
+/* Status colors */
+.history-status-vet.cancelled {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.history-status-vet.rejected {
+  background: linear-gradient(135deg, #f39c12, #d35400);
+}
+
+.history-status-vet.confirmed {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 600px) {
+  .history-booking-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .history-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .history-status {
+    min-width: auto;
+    padding: 6px 12px;
+  }
+
+  .history-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

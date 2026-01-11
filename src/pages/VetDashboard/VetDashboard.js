@@ -12,11 +12,11 @@ export default function VetDashboard() {
 
   return (
     <div className="VetDashboard">
-      <nav className="breadcrumb">
+      {/* <nav className="breadcrumb">
         <Link to="/">Αρχική</Link>
         <span className="separator"> &gt; </span>
         <span>Dashboard Κτηνίατρου</span>
-      </nav>
+      </nav> */}
 
       <div className="dashboard-layout">
         <aside className="sidebar">

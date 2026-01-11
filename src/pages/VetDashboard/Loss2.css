@@ -72,7 +72,61 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 180px;
+  width: 220px;
+  text-align: center;
+}
+
+/* =============================== 
+   STEP 0 - ΠΡΩΤΗ ΟΘΟΝΗ INTRO
+================================ */
+.stepper-intro .step {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%; /* Σίγουρα 100% πλάτος */
+  max-width: none; /* Καταργούμε το max-width 220px */
+  margin-bottom: 20px;
+}
+
+.stepper-intro .step .circle {
+  margin-bottom: 15px;
+}
+
+.stepper-intro .step span {
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 800px; /* Πιο φαρδιά περιοχή για κείμενο */
+  width: 100%;
+  text-align: center;
+  word-break: normal;
+  white-space: normal; /* Επιτρέπουμε αλλαγή γραμμής */
+}
+
+/* Κάνουμε τον stepper πιο φαρδύ */
+.stepper-intro {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Για να μην έχουν line μεταξύ τους στο step 0 */
+.stepper-intro .line {
+  display: none;
+}
+
+/* Κάνουμε τα βήματα οριζόντια */
+.stepper-intro {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* Κάθε βήμα να παίρνει περισσότερο χώρο */
+.stepper-intro .step {
+  flex: 1;
+  min-width: 250px;
+  max-width: 300px;
 }
 
 .circle {
@@ -96,7 +150,9 @@
 .step span,
 .step-title {
   font-size: 14px;
-  text-align: center;
+  line-height: 1.5;
+  word-break: break-word;
+  max-width: 100%;
 }
 
 .line {
@@ -509,4 +565,17 @@
 .step1-content .next-btn {
   margin-top: 30px;
   align-self: center;
+}
+
+.breadcrumb {
+  font-size: 0.9rem;
+  margin-bottom: 40px;
+  color: #555;
+}
+.breadcrumb .clickable {
+  cursor: pointer;
+  color: #4d9df3;
+}
+.breadcrumb .clickable:hover {
+  text-decoration: underline;
 }

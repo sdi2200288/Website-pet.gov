@@ -187,6 +187,42 @@ export default function Found2() {
 
   return (
     <div className="found2">
+         {/* Breadcrumb */}
+      <nav className="breadcrumb">
+        {[
+          { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
+          { label: "Δήλωση Εύρεσης", step: 0 }, // step 0 του wizard
+          ...(step >= 1 ? [{ label: "Εισαγωγή Microchip", step: 1 }] : []),
+          ...(step >= 2 ? [{ label: "Προβολή Προφίλ", step: 2 }] : []),
+          ...(step >= 3 ? [{ label: "Εισαγωγή στοιχείων εύρεσης", step: 3 }] : []),
+          ...(step === 4 ? [{ label: "Προεπισκόπηση & Υποβολή", step: 4 }] : []),
+        ].map((item, index, arr) => {
+          const isLast = index === arr.length - 1; // τρέχον step
+          return (
+            <span key={index}>
+              <span
+                style={{
+                  color: isLast ? "black" : "blue",
+                  cursor: isLast ? "default" : "pointer",
+                  textDecoration: isLast ? "none" : "underline",
+                }}
+                onClick={() => {
+                  if (!isLast) {
+                    if (item.step !== undefined) {
+                      goToStep(item.step); // μεταβαίνει στο step του wizard
+                    } else if (item.path) {
+                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
+                    }
+                  }
+                }}
+              >
+                {item.label}
+              </span>
+              {!isLast && " / "}
+            </span>
+          );
+        })}
+      </nav>
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>

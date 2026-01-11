@@ -5,7 +5,6 @@
   padding: 40px;
   text-align: center;
   background: #fafafa;
-  margin-top: 30px;
 }
 
 /* ===============================
@@ -16,20 +15,9 @@
   align-items: flex-start;
   justify-content: center;
   gap: 40px;
-  max-width: 800px;
-  margin: 0 auto 40px; 
+  margin-bottom: 40px;
 }
 
- .step0-wrapper {
-  min-height: calc(100vh - 80px); 
-  display: flex;
-  flex-direction: column;
-  align-items: center;    
-  justify-content: center; 
-  gap: 30px;
-
-  transform: translateY(-60px);
-}
 .step {
   display: flex;
   flex-direction: column;
@@ -37,11 +25,13 @@
   width: 180px;
 }
 
+
 .step.step-zero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 3000px; /* λίγο πιο φαρδύ για να μην είναι πολύ στενά */
+  width: auto;
+  max-width: 100%;
 }
 
 .step.step-zero span {
@@ -49,7 +39,9 @@
   text-align: left; /* αριστερή στοίχιση για καλύτερη ροή */
   line-height: 1.3; /* πιο άνετο διάστιχο */
   word-wrap: break-word;
+  width: 100pσ;
 }
+
 
 
 .circle {
