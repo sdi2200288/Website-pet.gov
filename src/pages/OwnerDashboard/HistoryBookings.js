@@ -49,7 +49,7 @@ export default function AppointmentHistory() {
 
       {history.map(a => (
         <div key={a.id} className={`history-booking-card history ${a.status}`}>
-          <div className="history-booking-header" onClick={() => toggle(a.id)}>
+          {/* <div className="history-booking-header" onClick={() => toggle(a.id)}>
             <div className="history-left">
               <div className="history-pet-name">{a.pet?.name}</div>
             </div>
@@ -62,7 +62,25 @@ export default function AppointmentHistory() {
               </span>
               <span className="arrow">{openId === a.id ? "▲" : "▼"}</span>
             </div>
+          </div> */}
+          <div className="history-booking-header" onClick={() => toggle(a.id)}>
+            <div className="history-main">
+              <div className="history-pet-name">{a.pet?.name}</div>
+              <div className="history-datetime">
+                {new Date(`${a.date}T${a.time}`).toLocaleDateString("el-GR")} • {a.time}
+              </div>
+            </div>
+
+            <div className="history-actions">
+              <span className={`history-status ${a.status}`}>
+                {a.status === "cancelled" && "Ακυρώθηκε"}
+                {a.status === "rejected" && "Απορρίφθηκε"}
+                {a.status === "confirmed" && "Ολοκληρώθηκε"}
+              </span>
+              <span className="history-arrow">{openId === a.id ? "▲" : "▼"}</span>
+            </div>
           </div>
+
 
           {openId === a.id && (
             <div className="history-booking-body">

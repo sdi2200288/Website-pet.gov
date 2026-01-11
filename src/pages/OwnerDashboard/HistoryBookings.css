@@ -1,100 +1,121 @@
 /* HistoryBookings.css */
 
 .history-appointment-history {
-  max-width: 900px;
-  margin: 30px auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 96px 16px 0;
   font-family: 'Arial', sans-serif;
-  padding: 0 15px;
 }
 
 .history-appointment-history h2 {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  /* margin-bottom: 24px; */
+  color: #2c3e50;
+  margin-top: 40px;
 }
 
+/* ===== CARD ===== */
+
 .history-booking-card {
-  border-radius: 10px;
-  margin-bottom: 15px;
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: #fff;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .history-booking-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
 }
 
+/* ===== HEADER ===== */
+
 .history-booking-header {
+  padding: 20px 26px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
+  padding: 16px 20px;
   cursor: pointer;
-  background-color: #f7f7f7;
+  background: linear-gradient(135deg, #fafafa, #f2f2f2);
 }
 
-.history-booking-header .history-left .history-pet-name {
-  font-weight: bold;
-  font-size: 1.1rem;
+/* Left side */
+.history-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-pet-name {
+  font-size: 1.15rem;
+  font-weight: 700;
   color: #2c3e50;
 }
 
-.history-booking-header .history-right {
+.history-datetime {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+/* Right side */
+.history-actions {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
 }
 
-.history-booking-header .history-right span {
-  font-size: 0.9rem;
-}
+/* ===== STATUS BADGE ===== */
 
-.history-booking-header .history-status {
-  /* font-weight: bold;
-  padding: 3px 8px;
-  border-radius: 5px;
-  color: white;
+.history-status {
+  min-width: 120px;
+  text-align: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
   text-transform: uppercase;
-  font-size: 0.8rem; */
-  font-weight: 700;          /* πιο bold */
-  font-size: 0.95rem;        /* λίγο μεγαλύτερο */
-  padding: 5px 12px;         /* πιο μεγάλο padding */
-  border-radius: 6px;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;     /* λίγο διάστιχο */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* μικρή σκιά για ένταση */
+  letter-spacing: 0.6px;
 }
 
-/* .history-booking-card.history-cancelled .history-status {
-   background-color: #c0392b
+/* Status colors */
+.history-booking-card.cancelled .history-status {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
 }
 
-.history-booking-card.history-rejected .history-status {
-  background-color: #d35400;
+.history-booking-card.rejected .history-status {
+  background: linear-gradient(135deg, #f39c12, #d35400);
 }
 
-.history-booking-card.history-confirmed .history-status {
-  background-color: #27ae60; /* ήδη έντονο πράσινο 
-  box-shadow: 0 0 10px rgba(39,174,96,0.5); /* glow για επιβεβαιωμένο 
-} */
+.history-booking-card.confirmed .history-status {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+}
 
-.history-booking-card.cancelled .history-status { background-color: #c0392b; }
-.history-booking-card.rejected .history-status { background-color: #d35400; }
-.history-booking-card.confirmed .history-status { background-color: #27ae60; box-shadow: 0 0 10px rgba(39,174,96,0.5); }
+/* Arrow */
+.history-arrow {
+  font-size: 0.7rem;
+  color: #999;
+}
+
+/* ===== BODY ===== */
 
 .history-booking-body {
-  padding: 12px 15px;
+  padding: 22px 26px;
   background-color: #fff;
   border-top: 1px solid #eee;
 }
 
+/* Info grid */
 .history-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
 }
 
 .history-info-grid div {
@@ -103,23 +124,34 @@
 }
 
 .history-info-grid strong {
-  color: #333;
+  color: #2c3e50;
 }
 
-.history-arrow {
-  font-size: 0.9rem;
-  color: #888;
+/* ===== EMPTY STATE ===== */
+
+.history-appointment-history p {
+  text-align: center;
+  color: #777;
+  font-size: 0.95rem;
 }
+
+/* ===== MOBILE ===== */
 
 @media (max-width: 600px) {
   .history-booking-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
+    gap: 12px;
   }
 
-  .history-booking-header .history-right {
-    flex-wrap: wrap;
+  .history-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .history-status {
+    min-width: auto;
+    padding: 6px 12px;
   }
 
   .history-info-grid {

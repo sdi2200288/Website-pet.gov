@@ -61,15 +61,6 @@ export default function OwnerDashboard() {
             </li>
             <li>
               <NavLink
-                  to={`history-bookings-owner?ownerId=${user?.id || ""}`}
-                  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-                >
-                  <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
-                </NavLink>
-
-            </li>
-            <li>
-              <NavLink
                 to={`health-booklet?ownerId=${user?.id || ""}`}
               className={({ isActive }) =>
                 `sidebar-link ${isActive ? "active" : ""}`
@@ -88,15 +79,14 @@ export default function OwnerDashboard() {
                 <FaCalendarAlt className="menu-icon" /> <span>Κλείσιμο Ραντεβού</span>
               </NavLink>
             </li>
-            <li>
+           <li>
               <NavLink
-                to={`history-bookings?ownerId=${user?.id || ""}`}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? "active" : ""}`
-              }
-            >
-                <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
-              </NavLink>
+                  to={`history-bookings-owner?ownerId=${user?.id || ""}`}
+                  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+                >
+                  <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
+                </NavLink>
+
             </li>
             <li>
               <NavLink

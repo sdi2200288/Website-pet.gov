@@ -1,26 +1,42 @@
-.future-bookings { 
-  max-width: 900px;
+.future-bookings {  
+  width: 100%;
+  max-width: 1200px; /* μεγαλύτερο container */
   margin: 40px auto;
-  padding: 20px;
+  padding: 100px 20px 20px; /* top padding για τίτλο */
+  font-family: 'Arial', sans-serif;
 }
 
+.future-bookings h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+/* Λίστα */
 .bookings-list {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr; /* full width cards */
+  gap: 24px;
 }
 
 /* Κάρτα */
 .booking-card {
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  width: 100%;
+  border-radius: 14px;
   overflow: hidden;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
 }
 
 /* Χρώματα κατάστασης */
 .booking-card.confirmed {
-  background: #dff3e7; /* ανοιχτό πράσινο */
+  background: #dff3e7;
   border: 2px solid #3fa67a;
 }
 
@@ -29,24 +45,26 @@
   border: 2px solid #d1a66d;
 }
 
+.booking-card.cancelled {
+  background: #f5c6c5;
+  border: 2px solid #a12b2a;
+}
+
 /* Header */
 .booking-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 20px 24px; /* πιο μεγάλος χώρος */
+  background: linear-gradient(135deg, #fafafa, #f2f2f2);
+  font-size: 0.95rem;
 }
 
 /* Αριστερά */
-.pet-name {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.breed {
-  font-size: 13px;
-  color: #555;
-  margin-left: 6px;
+.left .pet-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2c3e50;
 }
 
 /* Δεξιά */
@@ -54,24 +72,22 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  font-size: 14px;
+  flex-wrap: wrap;
 }
 
 .time {
-  white-space: nowrap;
   font-weight: 500;
-}
-
-.header-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  color: #555;
+  white-space: nowrap;
 }
 
 .status {
-  padding: 4px 10px;
-  border-radius: 16px;
-  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .status.ok {
@@ -84,44 +100,80 @@
   color: #8a5a1e;
 }
 
+.status.cancelled {
+  background: #f5c6c5;
+  color: #a12b2a;
+}
+
 /* Ιατρική πράξη */
 .action {
   background: rgba(255,255,255,0.6);
-  padding: 4px 10px;
+  padding: 6px 14px;
   border-radius: 12px;
-  font-size: 13px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 /* Βελάκι */
 .arrow {
-  font-size: 12px;
-  cursor: pointer;
+  font-size: 0.9rem;
+  color: #777;
 }
+
 /* Body */
 .booking-body {
   background: #ffffff;
-  padding: 20px;
+  padding: 22px 24px;
 }
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px 20px;
-  font-size: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px 24px;
+  font-size: 0.95rem;
+  color: #555;
 }
 
-/* Κουμπί */
+.info-grid strong {
+  color: #2c3e50;
+}
+
+/* Κουμπί ακύρωσης */
 .cancel-btn {
   margin-top: 20px;
-  padding: 8px 18px;
+  padding: 10px 20px;
   border: 1px solid red;
   background: white;
   color: red;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .cancel-btn:hover {
   background: red;
   color: white;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .booking-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .action, .status, .time {
+    font-size: 0.8rem;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
 }

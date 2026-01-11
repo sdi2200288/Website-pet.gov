@@ -185,9 +185,9 @@ export default function BookDate() {
     fetchData();
   }, []);
 
-  // useEffect(() => {
-  //   applyFiltersAndSort();
-  // }, [applyFiltersAndSort]);
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [sortOrder]);
 
   const clearFilters = () => {
   setRegion("");
@@ -672,6 +672,7 @@ const handleConfirmAppointment = () => {
           <div className="results-left">
             <label>Ταξινόμηση</label>
             <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+            {/* <select value={sortOrder}onChange={(e) => {  setSortOrder(e.target.value);  applyFiltersAndSort();}}> */}
               <option value="ratingDesc">Αξιολόγηση (Υψηλότερη)</option>
               <option value="ratingAsc">Αξιολόγηση (Χαμηλότερη)</option>
               <option value="nameAsc">Ονοματεπώνυμο (Α-Ω)</option>
