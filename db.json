@@ -91,6 +91,7 @@
         {
           "date": "2026-01-20",
           "times": [
+            "09:30",
             "10:00",
             "12:00",
             "13:00"
@@ -1058,13 +1059,30 @@
       "time": "09:30",
       "reason": "vaccination",
       "description": "",
-      "status": "confirmed",
+      "status": "cancelled",
       "createdAt": "2026-01-10T07:52:24.713Z",
       "ownerId": "631b",
       "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
       "ownerEmail": "sdi2200288@uoa.gr",
       "ownerPhone": "6942781851",
-      "ownerAfm": "2325788990"
+      "ownerAfm": "2325788990",
+      "pet": {
+        "id": "vp001",
+        "ownerId": "631b",
+        "name": "Ρεξ",
+        "species": "Σκύλος",
+        "breed": "Ημίαιμο",
+        "gender": "male",
+        "lost": true,
+        "microchip": "555111222",
+        "birthdate": "2021-04-12",
+        "photoUrl": "/images/rex.png",
+        "region": "Αττική",
+        "status": "foster",
+        "notes": "Βρέθηκε τραυματισμένος – έτοιμος για αναδοχή"
+      },
+      "cancelledBy": "owner",
+      "cancelledAt": "2026-01-12T13:25:29.959Z"
     },
     {
       "id": "app_1o5yua48j",
@@ -1188,6 +1206,16 @@
       "appointmentId": "app_1o5yua48j",
       "read": false,
       "createdAt": "2026-01-10T08:01:10.648Z"
+    },
+    {
+      "id": "2cf9",
+      "userId": "v001",
+      "userType": "vet",
+      "title": "Ακύρωση Ραντεβού",
+      "message": "Ο ιδιοκτήτης ΑΛΤΑΝΗ ΤΟΝΤΟΥ ακύρωσε το ραντεβού για Ρεξ στις 2026-01-20 09:30",
+      "appointmentId": "app_r6cuyt337",
+      "read": false,
+      "createdAt": "2026-01-12T13:25:30.043Z"
     }
   ],
   "identity": [
