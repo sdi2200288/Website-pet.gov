@@ -19,7 +19,7 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
       setActiveMenu(1);
     }
     else if (path.startsWith("/owner-dashboard")) {
-      if (path.startsWith("/owner-dashboard/book-date")) {
+      if (path.startsWith("/owner-dashboard/book-date") || path.startsWith("/owner-dashboard/bookprofile")) { 
         setActiveMenu(6);
       }
       else {
@@ -28,9 +28,6 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
     }
     else if (path.startsWith("/vet-dashboard")) {
       setActiveMenu(3);
-    }
-    else if (path.startsWith("/owner-dashboard")) {
-      setActiveMenu(2);
     }
     else if (path.startsWith("/all-lost-pets")) {
       setActiveMenu(4);
