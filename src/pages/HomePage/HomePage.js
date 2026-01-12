@@ -9,8 +9,7 @@ import { FiSearch } from "react-icons/fi";
 import "./HomePage.css";
 import { Link } from "react-router-dom";
 import { formatNumber } from "../Utils/Util";
-import "../OwnerDashboard/BookDate"
-
+import "../OwnerDashboard/BookDate";
 
 export default function Homepage() {
   const [ownersData, setOwnersData] = useState([]);
@@ -19,17 +18,18 @@ export default function Homepage() {
   const [lostPets, setLostPets] = useState([]);
   const [topVets, setTopVets] = useState([]);
   const [searchChip, setSearchChip] = useState("");
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const ownerId = user?.id;
-  
+
   const handleSearch = () => {
     const chip = searchChip.trim();
     if (!chip) {
       alert("Παρακαλώ εισάγετε τον αριθμό μικροτσίπ για αναζήτηση");
       return;
     }
-    const pet = petData.find(p => p.microchip === chip);
+    const pet = petData.find((p) => p.microchip === chip);
     if (!pet) {
       alert("Δεν βρέθηκε κατοικίδιο με αυτόν τον αριθμό μικροτσίπ");
       return;
@@ -48,14 +48,27 @@ export default function Homepage() {
       try {
         const ownersRes = await fetch("http://localhost:3001/owners");
         const owners = await ownersRes.json();
+
         const vetRes = await fetch("http://localhost:3001/vets");
         const vets = await vetRes.json();
+
         const petRes = await fetch("http://localhost:3001/pets");
         const pets = await petRes.json();
-        const recentLostPets = pets.filter(pet => pet.lost === true)
-          .sort((a, b) => new Date(b.lostDate) - new Date(a.lostDate)).slice(0, 3);
-        const topVetsList = vets.filter(v => v.reviewCount > 0)
-          .sort((a, b) => (b.totalScore / b.reviewCount) - (a.totalScore / a.reviewCount)).slice(0, 3);
+
+        const recentLostPets = pets
+          .filter((pet) => pet.lost === true)
+          .sort((a, b) => new Date(b.lostDate) - new Date(a.lostDate))
+          .slice(0, 3);
+
+        const topVetsList = vets
+          .filter((v) => Number(v.reviewCount || 0) >= 1).sort((a, b) => {
+            const aCount = Number(a.reviewCount || 0);
+            const bCount = Number(b.reviewCount || 0);
+            const aAvg = aCount ? Number(a.totalScore || 0) / aCount : 0;
+            const bAvg = bCount ? Number(b.totalScore || 0) / bCount : 0;
+            if (bAvg !== aAvg) return bAvg - aAvg;
+            return bCount - aCount;
+          }).slice(0, 3);
         setTopVets(topVetsList);
         setLostPets(recentLostPets);
         setOwnersData(owners);
@@ -127,7 +140,7 @@ export default function Homepage() {
 
           <div className="info-text">
             <Link to="/owner-dashboard" className="vet-owner-button">
-              Είσαι ιδιοκτήτης;  <span className="arrow">→</span>
+              Είσαι ιδιοκτήτης; <span className="arrow">→</span>
             </Link>
             <p>Ως συνδεδεμένος ιδιοκτήτης στην πλατφόρμα μπορείς να:</p>
             <ul>
@@ -138,98 +151,87 @@ export default function Homepage() {
               <li>Να αξιολογείς κτηνιάτρους</li>
             </ul>
           </div>
-
         </div>
       </section>
-      {
-        lostPets.length === 0 ? (
-          null
-        ) : (
-          <section className="lost-pets-section">
-            <div className="lost-pets-wrap">
-              <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
 
-              <div className="lost-pets-grid">
-                {lostPets.map((p) => (
-                  <div className="lost-pet-card" key={p.id}>
-                    <Link to={`/all-lost-pets/PetProfile/${p.id}`}>
-                      <PetDetails pet={p} mode={0} />
-                    </Link>
-                  </div>
-                ))}
-              </div>
+      {lostPets.length === 0 ? null : (
+        <section className="lost-pets-section">
+          <div className="lost-pets-wrap">
+            <p className="lost-pets-title">Πρόσφατα Χαμένα Κατοικίδια</p>
 
-              <div className="lost-pets-cta">
-                <Link to="/all-lost-pets" className="see-all-lost-pets-btn">
-                  Δες όλα τα χαμένα κατοικίδια
-                </Link>
-              </div>
+            <div className="lost-pets-grid">
+              {lostPets.map((p) => (
+                <div className="lost-pet-card" key={p.id}>
+                  <Link to={`/all-lost-pets/PetProfile/${p.id}`}> <PetDetails pet={p} mode={0} /></Link>
+                </div>
+              ))}
             </div>
-          </section>
-        )
-      }
-      {
-        topVets.length === 0 ? (
-          null
-        ) : (
-          <section className="lost-pets-section">
-            <div className="lost-pets-wrap">
-              <p className="lost-pets-title">Οι καλύτεροι κτηνιατροί μας</p>
 
-              <div className="lost-pets-grid">
-                {topVets.map((vet) => (
-                  <div className="veterinarian-card" key={vet.id}>
-                    <div className="vet-card-content">
+            <div className="lost-pets-cta">
+              <Link to="/all-lost-pets" className="see-all-lost-pets-btn"> Δες όλα τα χαμένα κατοικίδια </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {topVets.length === 0 ? null : (
+        <section className="lost-pets-section">
+          <div className="lost-pets-wrap">
+            <p className="lost-pets-title">Οι καλύτεροι κτηνιατροί μας</p>
+
+            <div className="lost-pets-grid">
+              {topVets.map((v) => {
+                const fullName = `${v.firstname} ${v.lastname}`;
+                const rating = v.reviewCount ? (Number(v.totalScore) / Number(v.reviewCount)).toFixed(1) : "0.0";
+
+                return (
+                  <div className="veterinarian-card" key={v.id}>
+                    <div
+                      className="vet-card-content"
+                      onClick={() => navigate(`/owner-dashboard/bookprofile/${v.id}`)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          navigate(`/owner-dashboard/bookprofile/${v.id}`);
+                        }
+                      }}
+                    >
                       <div className="vet-image">
-                        <img
-                          src={vet.image || "/default-vet.jpg"}
-                          alt={vet.name}
-                          onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/default-vet.jpg";
-                          }}
-                        />
+                        <img src={v.image || "/default-vet.jpg"} alt={fullName} />
                       </div>
+
                       <div className="vet-info">
-                        <h3>{vet.name}</h3>
-                        <p><strong>Περιοχή:</strong> {vet.region}</p>
-                        <p><strong>Ειδίκευση:</strong> {vet.specialization}</p>
-                        <p><strong>Εμπειρία:</strong> {vet.experience} χρόνια</p>
-                        <p><strong>Βαθμολογία:</strong> ⭐ {vet.totalScore / vet.reviewCount || 0} ({vet.reviewCount || 0} αξιολογήσεις)</p>
-                        {/* <button className="book-btn" onClick={() => navigate("/BookDate")}>
-                          Κλείστε Ραντεβού
-                        </button> */}
-                        <button
-                          className="book-btn"
-                          onClick={() => navigate(`/owner-dashboard/book-date?ownerId=${ownerId}`)}
-                        >
-                          Κλείστε Ραντεβού
-                        </button>
+                        <h3>{fullName}</h3>
+                        <p><strong>Περιοχή:</strong> {v.region}</p>
+                        <p><strong>Ειδίκευση:</strong> {v.specializations || "—"}</p>
+                        <p><strong>Εμπειρία:</strong> {v.experience || 0} χρόνια</p>
+                        <p><strong>Βαθμολογία:</strong> ⭐ {rating} ({v.reviewCount || 0})</p>
                       </div>
+
+                      <button
+                        className="book-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/owner-dashboard/book-date?vetId=${v.id}`);
+                        }}
+                      >
+                        Κλείστε Ραντεβού
+                      </button>
                     </div>
                   </div>
-                ))}
-              </div>
-              {/* <div className="lost-pets-cta">
-                <Link to="/all-vets" className="see-all-lost-pets-btn">
-                  Δες όλoυς τους κτηνιάτρους μας
-                </Link>
-              </div> */}
-              <div className="lost-pets-cta">
-                <Link
-                  to={`/owner-dashboard/book-date?ownerId=${ownerId}`}
-                  className="see-all-lost-pets-btn"
-                >
-                  Δες όλoυς τους κτηνιάτρους μας
-                </Link>
-              </div>
+                );
+              })}
+            </div>
 
-            </div> 
-
-
-          </section>
-        )
-      }
+            <div className="lost-pets-cta">
+              <Link to={`/owner-dashboard/book-date?ownerId=${ownerId}`} className="see-all-lost-pets-btn">
+                Δες όλoυς τους κτηνιάτρους μας
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="stats-section">
         <div className="stats-wrap">
@@ -262,6 +264,6 @@ export default function Homepage() {
           </div>
         </div>
       </section>
-    </div >
+    </div>
   );
 }

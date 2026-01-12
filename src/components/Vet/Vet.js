@@ -29,7 +29,7 @@ export default function VetDetails({ vet, selected = false }) {
                 </div>
                 <div className="vet-row">
                     <span>Εμπειρία</span>
-                    <b>{vet.experienceYears}</b>
+                    <b>{vet.experience}</b>
                 </div>
             </div>
             <div className="vet-divider" />

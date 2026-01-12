@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./VetDashboard.css";
-import { NavLink, Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { FaUser, FaFileAlt, FaBook, FaCalendarAlt, FaHistory } from "react-icons/fa";
 
 export default function VetDashboard() {
@@ -12,12 +12,6 @@ export default function VetDashboard() {
 
   return (
     <div className="VetDashboard">
-      {/* <nav className="breadcrumb">
-        <Link to="/">Αρχική</Link>
-        <span className="separator"> &gt; </span>
-        <span>Dashboard Κτηνίατρου</span>
-      </nav> */}
-
       <div className="dashboard-layout">
         <aside className="sidebar">
           <h3>Επιλογές Κτηνίατρου</h3>

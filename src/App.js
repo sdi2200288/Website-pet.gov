@@ -17,6 +17,7 @@ import OwnerDashboard from "./pages/OwnerDashboard/OwnerDashboard";
 import Found from "./pages/OwnerDashboard/Found";
 import Loss from "./pages/OwnerDashboard/Loss";
 import BookDate from "./pages/OwnerDashboard/BookDate";
+import BookProfile from "./pages/OwnerDashboard/BookProfile";
 import FutureBookings from "./pages/OwnerDashboard/FutureBookings";
 import HistoryBookings from "./pages/OwnerDashboard/HistoryBookings";
 import Evaluation from "./pages/OwnerDashboard/Evaluation";
@@ -131,8 +132,9 @@ function App() {
               <Route path="loss" element={<Loss />} />
               <Route path="history-statement" element={<HistoryDeclaration />} />
               <Route path="book-date" element={<BookDate />} />
+              <Route path="bookprofile/:id" element={<BookProfile />} />
               <Route path="future-bookings" element={<FutureBookings />} />
-              <Route path="history-bookings-owner" element={<HistoryBookings />} /> 
+              <Route path="history-bookings-owner" element={<HistoryBookings />} />
               {/* <Route path="evaluate" element={<Evaluation />} />    */}
             </Route>
           </Route>

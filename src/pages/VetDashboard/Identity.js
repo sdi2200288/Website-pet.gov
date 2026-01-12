@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SPECIES, dogPopular, catPopular } from "../Utils/Util";
 import "./Identity.css";
@@ -6,8 +6,10 @@ import "./Loss2.css";
 
 export default function Identity() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
   const [step, setStep] = useState(0); // 0 = intro, 1 = φόρμα, 2 = προεπισκόπηση
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const vet = JSON.parse(localStorage.getItem("user"));
   const [petInfo, setPetInfo] = useState({
@@ -85,7 +87,7 @@ export default function Identity() {
 
   useEffect(() => {
     // Όταν αλλάζει το step, scroll στην κορυφή του container
-    window.scrollTo({ top: 0, behavior: "smooth"});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
   const findOwnerByAFM = async (afm) => {
@@ -285,7 +287,7 @@ export default function Identity() {
 
   return (
     <div className="identity">
-       {/* Breadcrumb */}
+      {/* Breadcrumb */}
       <nav className="breadcrumb">
         {[
           { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
@@ -322,26 +324,26 @@ export default function Identity() {
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
-        <div className="step0-wrapper">
-          <div className="stepper ">
-            <div className="step step-zero">
-              <div className="circle">1</div>
-              <span>
-                Στο πρώτο βήμα συμπληρώνετε στοιχεία κατοικιδίου. Αν δεν είναι προς υιοθεσία, δίνετε το ΑΦΜ του ιδιοκτήτη.
-                Αν δεν υπάρχει λογαριασμός, θα εμφανιστεί φόρμα δημιουργίας.
-              </span>
+          <div className="step0-wrapper">
+            <div className="stepper ">
+              <div className="step step-zero">
+                <div className="circle">1</div>
+                <span>
+                  Στο πρώτο βήμα συμπληρώνετε στοιχεία κατοικιδίου. Αν δεν είναι προς υιοθεσία, δίνετε το ΑΦΜ του ιδιοκτήτη.
+                  Αν δεν υπάρχει λογαριασμός, θα εμφανιστεί φόρμα δημιουργίας.
+                </span>
+              </div>
+              <div className="line" />
+              <div className="step step-zero">
+                <div className="circle">2</div>
+                <span>Στο δεύτερο βήμα βλέπετε προεπισκόπηση και κάνετε υποβολή.</span>
+              </div>
             </div>
-            <div className="line" />
-            <div className="step step-zero">
-              <div className="circle">2</div>
-              <span>Στο δεύτερο βήμα βλέπετε προεπισκόπηση και κάνετε υποβολή.</span>
-            </div>
+
+            <button className="next-btn" onClick={() => goToStep(1)}>
+              Συνέχεια
+            </button>
           </div>
-         
-          <button className="next-btn" onClick={() => goToStep(1)}>
-            Συνέχεια
-          </button>
-         </div>
         </>
       )}
 
@@ -619,24 +621,42 @@ export default function Identity() {
                     </label>
 
                     <label>
-                      Κωδικός *
-                      <input
-                        type="password"
-                        name="password"
-                        value={ownerForm.password}
-                        onChange={handleOwnerRegisterChange}
-                      />
+                      Κωδικός (τουλάχιστον 8 ψηφία) *
+                      <div style={{ position: "relative" }}>
+                        <input type={showPassword ? "text" : "password"}
+                          className={`loginInput ${errors.password ? "inputError" : ""}`}
+                          name="password"
+                          value={ownerForm.password}
+                          onChange={handleOwnerRegisterChange}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="button-password"
+                        >
+                          {showPassword ? "Hide" : "Show"}
+                        </button>
+                      </div>
                       {errors.password && <div className="fieldError">{errors.password}</div>}
                     </label>
 
                     <label>
                       Επιβεβαίωση Κωδικού *
-                      <input
-                        type="password"
-                        name="confirmPassword"
-                        value={ownerForm.confirmPassword}
-                        onChange={handleOwnerRegisterChange}
-                      />
+                      <div style={{ position: "relative" }}>
+
+                        <input type={showConfirmPassword ? "text" : "password"} className={`loginInput ${errors.confirmPassword ? "inputError" : ""}`}
+                          name="confirmPassword"
+                          value={ownerForm.confirmPassword}
+                          onChange={handleOwnerRegisterChange}
+                        />
+                        <button
+                          className="button-password"
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          {showConfirmPassword ? "Hide" : "Show"}
+                        </button>
+                      </div>
                       {errors.confirmPassword && <div className="fieldError">{errors.confirmPassword}</div>}
                     </label>
                   </div>
@@ -651,82 +671,85 @@ export default function Identity() {
             </div>
           </div>
         </>
-      )}
+      )
+      }
 
       {/* ================= STEP 2 ================= */}
-      {step === 2 && (
-        <>
-          <div className="stepper">
-            <div className="step clickable" onClick={() => setStep(1)}>
-              <div className="circle">1</div>
-              <div className="step-title">Δημιουργία προφίλ κατοικιδίου</div>
-            </div>
-            <div className="line" />
-            <div className="step active">
-              <div className="circle">2</div>
-              <div className="step-title">Προεπισκόπηση και καταχώρηση</div>
-            </div>
-          </div>
-
-          <h3>Προεπισκόπηση Στοιχείων</h3>
-
-          <div className="preview-content">
-            <div className="info-box2">
-              <h4>Στοιχεία Κατοικιδίου</h4>
-              <p><span>Microchip:</span> {petInfo.microchip}</p>
-              <p><span>Όνομα:</span> {petInfo.name}</p>
-              <p><span>Είδος:</span> {petInfo.species}</p>
-              <p><span>Ράτσα:</span> {petInfo.breed}</p>
-              <p><span>Φύλο:</span> {petInfo.gender}</p>
-              <p><span>Ηλικία:</span> {petInfo.age}</p>
-              <p><span>Ημερομηνία Γέννησης:</span> {petInfo.birthdate || "-"}</p>
-              <p><span>Προς Υιοθεσία:</span> {petInfo.forAdoption}</p>
+      {
+        step === 2 && (
+          <>
+            <div className="stepper">
+              <div className="step clickable" onClick={() => setStep(1)}>
+                <div className="circle">1</div>
+                <div className="step-title">Δημιουργία προφίλ κατοικιδίου</div>
+              </div>
+              <div className="line" />
+              <div className="step active">
+                <div className="circle">2</div>
+                <div className="step-title">Προεπισκόπηση και καταχώρηση</div>
+              </div>
             </div>
 
-            {petInfo.forAdoption === "Ναι" && vet && (
-              <div className="info-box2">
-                <h4>Στοιχεία Κτηνιάτρου</h4>
-                <p><span>Όνομα:</span> {vet.firstname} {vet.lastname}</p>
-                <p><span>Email:</span> {vet.email}</p>
-                <p><span>Τηλέφωνο:</span> {vet.phone}</p>
-                <p><span>Διεύθυνση:</span> {vet.address}</p>
-                <p><span>Περιοχή:</span> {vet.region}</p>
-              </div>
-            )}
+            <h3>Προεπισκόπηση Στοιχείων</h3>
 
-            {petInfo.forAdoption === "Όχι" && ownerFound && (
+            <div className="preview-content">
               <div className="info-box2">
-                <h4>Στοιχεία Ιδιοκτήτη</h4>
-                <p><span>Όνομα:</span> {ownerFound.firstname} {ownerFound.lastname}</p>
-                <p><span>ΑΦΜ:</span> {ownerFound.afm}</p>
-                <p><span>Email:</span> {ownerFound.email}</p>
-                <p><span>Τηλέφωνο:</span> {ownerFound.phone}</p>
+                <h4>Στοιχεία Κατοικιδίου</h4>
+                <p><span>Microchip:</span> {petInfo.microchip}</p>
+                <p><span>Όνομα:</span> {petInfo.name}</p>
+                <p><span>Είδος:</span> {petInfo.species}</p>
+                <p><span>Ράτσα:</span> {petInfo.breed}</p>
+                <p><span>Φύλο:</span> {petInfo.gender}</p>
+                <p><span>Ηλικία:</span> {petInfo.age}</p>
+                <p><span>Ημερομηνία Γέννησης:</span> {petInfo.birthdate || "-"}</p>
+                <p><span>Προς Υιοθεσία:</span> {petInfo.forAdoption}</p>
               </div>
-            )}
 
-            {petInfo.forAdoption === "Όχι" && !ownerFound && showOwnerRegister && (
-              <div className="info-box2">
-                <h4>Νέος Ιδιοκτήτης</h4>
-                <p><span>ΑΦΜ:</span> {ownerAFM}</p>
-                <p><span>Όνομα:</span> {ownerForm.firstname} {ownerForm.lastname}</p>
-                <p><span>Ημερομηνία Γέννησης :</span> {ownerForm.birthdate}</p>
-                <p><span>Φύλο:</span> {ownerForm.genderu}</p>
-                <p><span>Διεύθυνση:</span> {ownerForm.address}</p>
-                <p><span>Email:</span> {ownerForm.email}</p>
-                <p><span>Τηλέφωνο:</span> {ownerForm.phone}</p>
-              </div>
-            )}
-          </div>
-          <div className="form-buttons">
-            <button type="button" onClick={handleCancel}>
-              Ακύρωση
-            </button>
-            <button type="button" onClick={submit} disabled={isSubmitting}>
-              {isSubmitting ? "Υποβολή..." : "Οριστική Υποβολή"}
-            </button>
-          </div>
-        </>
-      )}
-    </div>
+              {petInfo.forAdoption === "Ναι" && vet && (
+                <div className="info-box2">
+                  <h4>Στοιχεία Κτηνιάτρου</h4>
+                  <p><span>Όνομα:</span> {vet.firstname} {vet.lastname}</p>
+                  <p><span>Email:</span> {vet.email}</p>
+                  <p><span>Τηλέφωνο:</span> {vet.phone}</p>
+                  <p><span>Διεύθυνση:</span> {vet.address}</p>
+                  <p><span>Περιοχή:</span> {vet.region}</p>
+                </div>
+              )}
+
+              {petInfo.forAdoption === "Όχι" && ownerFound && (
+                <div className="info-box2">
+                  <h4>Στοιχεία Ιδιοκτήτη</h4>
+                  <p><span>Όνομα:</span> {ownerFound.firstname} {ownerFound.lastname}</p>
+                  <p><span>ΑΦΜ:</span> {ownerFound.afm}</p>
+                  <p><span>Email:</span> {ownerFound.email}</p>
+                  <p><span>Τηλέφωνο:</span> {ownerFound.phone}</p>
+                </div>
+              )}
+
+              {petInfo.forAdoption === "Όχι" && !ownerFound && showOwnerRegister && (
+                <div className="info-box2">
+                  <h4>Νέος Ιδιοκτήτης</h4>
+                  <p><span>ΑΦΜ:</span> {ownerAFM}</p>
+                  <p><span>Όνομα:</span> {ownerForm.firstname} {ownerForm.lastname}</p>
+                  <p><span>Ημερομηνία Γέννησης :</span> {ownerForm.birthdate}</p>
+                  <p><span>Φύλο:</span> {ownerForm.genderu}</p>
+                  <p><span>Διεύθυνση:</span> {ownerForm.address}</p>
+                  <p><span>Email:</span> {ownerForm.email}</p>
+                  <p><span>Τηλέφωνο:</span> {ownerForm.phone}</p>
+                </div>
+              )}
+            </div>
+            <div className="form-buttons">
+              <button type="button" onClick={handleCancel}>
+                Ακύρωση
+              </button>
+              <button type="button" onClick={submit} disabled={isSubmitting}>
+                {isSubmitting ? "Υποβολή..." : "Οριστική Υποβολή"}
+              </button>
+            </div>
+          </>
+        )
+      }
+    </div >
   );
 }

@@ -44,7 +44,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
     specializations: [],
     region: "",
     studyLevel: "",
-    experienceYears: "",
+    experience: "",
     photoFile: null,
     services: buildInitialServicesState(),
     schedule: buildInitialScheduleState(),
@@ -83,7 +83,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       specializations: [],
       region: "",
       studyLevel: "",
-      experienceYears: "",
+      experience: "",
       photoFile: null,
       services: buildInitialServicesState(),
       schedule: buildInitialScheduleState(),
@@ -153,7 +153,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
     }
     if (!form.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
     if (!form.studyLevel) newErrors.studyLevel = "Πρέπει να επιλέξετε επίπεδο σπουδών";
-    if (form.experienceYears === "" || form.experienceYears < 0) newErrors.experienceYears = "Πρέπει να εισάγετε έγκυρα έτη εμπειρίας";
+    if (form.experience === "" || form.experience < 0) newErrors.experience = "Πρέπει να εισάγετε έγκυρα έτη εμπειρίας";
     for (const [serviceId, service] of Object.entries(form.services)) {
       if (service.enabled && (service.price === "" || Number(service.price) <= 0)) {
         newErrors.services = "Όλες οι επιλεγμένες υπηρεσίες πρέπει να έχουν έγκυρη τιμή";
@@ -300,8 +300,8 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
       <label className="loginLabel">
         Εμπειρία (Έτη) *
-        <input className="loginInput" type="number" min="0" name="experienceYears" value={form.experienceYears} onChange={handleChange} />
-        {errors.experienceYears && <div className="fieldError">{errors.experienceYears}</div>}
+        <input className="loginInput" type="number" min="0" name="experience" value={form.experience} onChange={handleChange} />
+        {errors.experience && <div className="fieldError">{errors.experience}</div>}
       </label>
 
       <label className="loginLabel">

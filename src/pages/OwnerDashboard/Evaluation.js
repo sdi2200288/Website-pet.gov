@@ -153,7 +153,7 @@ export default function Evaluation() {
             <div className="contact-item">
               <span className="contact-value">{vet.firstname} {vet.lastname}</span>
             </div>
-            <p className="vet-specialty">{vet.specialization || "-"}</p>
+            <p className="vet-specialty">{vet.specializations || "-"}</p>
           </div>
 
           <div className="vet-contact-info">

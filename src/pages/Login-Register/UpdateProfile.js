@@ -68,7 +68,7 @@ export default function Profile() {
     specializations: [],
     region: "",
     studyLevel: "",
-    experienceYears: "",
+    experience: "",
     photoFile: null,
     services: buildInitialServicesState(),
     schedule: buildInitialScheduleState(),
@@ -120,7 +120,7 @@ export default function Profile() {
             specializations: data.specializations ?? [],
             region: data.region ?? "",
             studyLevel: data.studyLevel ?? "",
-            experienceYears: data.experienceYears ?? "",
+            experience: data.experience ?? "",
             photoFile: null,
             services: mergeServices(defaultServices, data.services),
             schedule: mergeSchedule(defaultSchedule, data.schedule),
@@ -243,7 +243,7 @@ export default function Profile() {
     if (!form.specializations || form.specializations.length === 0) newErrors.specializations = "Πρέπει να επιλέξετε τουλάχιστον μία ειδικότητα";
     if (!form.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
     if (!form.studyLevel) newErrors.studyLevel = "Πρέπει να επιλέξετε επίπεδο σπουδών";
-    if (form.experienceYears === "" || Number(form.experienceYears) < 0) newErrors.experienceYears = "Πρέπει να εισάγετε έγκυρα έτη εμπειρίας";
+    if (form.experience === "" || Number(form.experience) < 0) newErrors.experience = "Πρέπει να εισάγετε έγκυρα έτη εμπειρίας";
 
     for (const [, s] of Object.entries(form.services || {})) {
       if (s.enabled && (s.price === "" || Number(s.price) <= 0)) {
@@ -457,8 +457,8 @@ export default function Profile() {
 
           <label className="loginLabel">
             Εμπειρία (Έτη) *
-            <input className="loginInput" type="number" min="0" name="experienceYears" value={form.experienceYears} onChange={handleChange} />
-            {errors.experienceYears && <div className="fieldError">{errors.experienceYears}</div>}
+            <input className="loginInput" type="number" min="0" name="experience" value={form.experience} onChange={handleChange} />
+            {errors.experience && <div className="fieldError">{errors.experience}</div>}
           </label>
 
           <label className="loginLabel">

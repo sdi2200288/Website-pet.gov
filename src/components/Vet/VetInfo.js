@@ -29,9 +29,9 @@ export default function VetInfo({ user }) {
             <div className="vet-info-block vet-info-wide">
                 <h3>Εκπαίδευση και επαγγελματικά προσόντα</h3>
                 <ul>
-                    <li className="profile-row"><span>Επίπεδο σπουδών</span><p>{user.studyLevel || "-"}</p></li>
+                    <li className="profile-row"><span>Επίπεδο σπουδών</span><p>{user.education || "-"}</p></li>
                     <li className="profile-row">
-                        <span>Εμπειρία</span> <p>{user.experienceYears !== "" && user.experienceYears != null ? `${user.experienceYears} έτη` : "-"}</p>
+                        <span>Εμπειρία</span> <p>{user.experience !== "" && user.experience != null ? `${user.experience} έτη` : "-"}</p>
                     </li>
                     <li className="profile-row">
                         <span>Ειδίκευση</span><p>{(user.specializations && user.specializations.join(", ")) || "-"}</p>

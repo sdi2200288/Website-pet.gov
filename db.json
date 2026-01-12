@@ -109,7 +109,6 @@
         "Κτηνιατρική Μικρών Ζώων"
       ],
       "studyLevel": "Διδακτορικό",
-      "experienceYears": "5",
       "photoFile": null,
       "services": {
         "clinical_exam": {
@@ -300,7 +299,7 @@
       ],
       "region": "Ηλείας",
       "studyLevel": "Πτυχίο",
-      "experienceYears": "50",
+      "experience": "50",
       "photoFile": null,
       "services": {
         "clinical_exam": {
