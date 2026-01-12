@@ -25,9 +25,14 @@ export default function Profile() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
+  
+  const reviewCountNum = Number(user.reviewCount || "0");
+  const totalScoreNum = Number(user.totalScore || "0");
 
   const isVet = user?.role === "vet";
   const enabledServicesByCategory = buildEnabledServicesByCategory(user || {});
+
+  const avgRating = reviewCountNum > 0 ? (totalScoreNum / reviewCountNum).toFixed(1) : "0";
 
 
   useEffect(() => {
@@ -189,7 +194,14 @@ export default function Profile() {
             <div className="profile-card vet-tab-card">
               {activeTab === "info" && <VetInfo user={user} />}
               {activeTab === "prices" && (<VetPrices schedule={schedule} days={DAYS} formatHours={formatHours} enabledServicesByCategory={enabledServicesByCategory} />)}
-              {activeTab === "reviews" && (<VetReview reviews={reviews} avgRating={Number(calculateMO(user.totalScore, user.reviewCount || 0))} reviewCount={user.reviewCount || 0} Stars={Stars} />
+              {/* {activeTab === "reviews" && (<VetReview reviews={reviews} avgRating={Number(calculateMO(user.totalScore, user.reviewCount || 0))} reviewCount={user.reviewCount || 0} Stars={Stars} />)} */}
+              {activeTab === "reviews" && (
+                <VetReview
+                  reviews={reviews}
+                  avgRating={reviewCountNum > 0 ? (totalScoreNum / reviewCountNum).toFixed(1) : "0"}
+                  reviewCount={user.reviewCount || "0"} // εμφανίζεται σαν string
+                  Stars={Stars}
+                />
               )}
 
             </div>

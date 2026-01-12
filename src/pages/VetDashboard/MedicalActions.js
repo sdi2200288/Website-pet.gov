@@ -70,6 +70,7 @@ export default function MedicalActions() {
       setCurrentOwner(null);
     }
   };
+  
   const handleSearchByMicrochip = async () => {
     if (!microchip) {
       alert("Εισάγετε αριθμό microchip");

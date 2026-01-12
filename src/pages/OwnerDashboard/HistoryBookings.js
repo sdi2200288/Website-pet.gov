@@ -38,9 +38,16 @@ export default function AppointmentHistory() {
 
     Promise.all([
       fetch(`http://localhost:3001/appointments?ownerId=${user.id}`).then(r => r.json()),
-      fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json())
+      fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json()),
+      fetch(`http://localhost:3001/reviews`).then(r => r.json())
+        // .then(reviews => {
+        //   setHistory(pastAppointments.map(a => ({
+        //     ...a,
+        //     reviewed: reviews.some(r => r.appointmentId === a.id)
+        //   })));
+        // })        
     ])
-    .then(([appointments, pets]) => {
+    .then(([appointments, pets,reviews]) => {
       const today = new Date();
 
       const pastAppointments = appointments
@@ -50,7 +57,8 @@ export default function AppointmentHistory() {
         )
         .map(a => ({
           ...a,
-          pet: pets.find(p => p.id === a.petId)
+          pet: pets.find(p => p.id === a.petId),
+          reviewed: reviews.some(r=> r.appointmentId === a.id)
         }))
         // .sort((a, b) => new Date(b.date) - new Date(a.date));
         .sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
@@ -116,7 +124,16 @@ export default function AppointmentHistory() {
               </div>
               <div className="history-buttons">
                 <button className="history-btn repeat" onClick={() => handleRepeatAppointment(a)}>Ραντεβού Ξανά</button>
-                <button className="history-btn review" onClick={() => handleReviewAppointment(a)}>Αξιολόγησε</button>
+                {/* <button className="history-btn review" onClick={() => handleReviewAppointment(a)}>Αξιολόγησε</button> */}
+                {!a.reviewed && (
+                  <button
+                    className="history-btn review"
+                    onClick={() => handleReviewAppointment(a)}
+                  >
+                    Αξιολόγησε
+                  </button>
+                )}
+
               </div>
             </div>
           )}
