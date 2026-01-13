@@ -248,7 +248,7 @@
           "to": "17:00"
         },
         "sun": {
-          "enabled": false,
+          "enabled": true,
           "from": "09:00",
           "to": "17:00"
         }
@@ -1382,6 +1382,15 @@
       "stars": 3,
       "text": "Ολα καλα!",
       "createdAt": "2026-01-12T15:19:48.076Z"
+    },
+    {
+      "id": "95a4",
+      "vetId": "v001",
+      "ownerId": "631b",
+      "appointmentId": "app_r6cuyt337",
+      "stars": 3,
+      "text": "",
+      "createdAt": "2026-01-12T17:12:43.608Z"
     }
   ]
 }

@@ -14,7 +14,7 @@ import {
   // FiEdit2 
 } from "react-icons/fi";
 import BookDateImage from "../../images/BookDate.png";
-import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS } from "../Utils/Util";
+import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS, VET_SPECIALIZATIONS, EDUCATION_OPTIONS } from "../Utils/Util";
 
 export default function BookDate() {
   const location = useLocation();
@@ -22,6 +22,8 @@ export default function BookDate() {
   const [step, setStep] = useState(1);
   const [selectedVet, setSelectedVet] = useState(null);
   const [myPets, setMyPets] = useState([]);
+  const [selectedPetId, setSelectedPetId] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const [veterinarians, setVeterinarians] = useState([]);
   const [allVeterinarians, setAllVeterinarians] = useState([]);
@@ -143,9 +145,11 @@ export default function BookDate() {
       try {
         console.log("Φόρτωση κτηνιάτρων...");
         const res = await fetch("http://localhost:3001/vets");
+
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
+
         const vets = await res.json();
         console.log("Λήψη κτηνιάτρων:", vets.length);;
 
@@ -164,11 +168,16 @@ export default function BookDate() {
             });
           }
         });
+
+
         // Ταξινόμηση ημερομηνιών
         dates.sort((a, b) => new Date(a) - new Date(b));
+
         setSpecializationOptions(specializations);
         setEducationOptions(educations);
         setAvailableDates(dates);
+
+        // Μετατροπή δεδομένων για εμφάνιση
         const formattedVets = vets.map(vet => ({
           id: vet.id,
           name: `${vet.firstname} ${vet.lastname}`,
@@ -214,6 +223,29 @@ export default function BookDate() {
     setVeterinarians(allVeterinarians);
   };
 
+  const handleCancel = () => {
+    const confirmLeave = window.confirm(
+      "Αν ακυρώσετε, τα στοιχεία του ραντεβού δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
+    );
+    if (!confirmLeave) return;
+
+    // Καθαρισμός state
+    setStep(1);
+    setSelectedVet(null);
+    setSelectedPet("");
+    setSelectedDate("");
+    setSelectedTime("");
+    setVisitReason("");
+    setDescription("");
+
+    // Προσπάθεια να πλοηγηθούμε
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.id) {
+      navigate(`/owner-dashboard/book-date?ownerId=${user.id}`, { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  };
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -436,7 +468,7 @@ export default function BookDate() {
 
           {/* ΚΟΥΜΠΙΑ */}
           <div className="appointment-actions">
-            <button className="secondary-btn" onClick={onBack}>
+            <button className="secondary-btn" onClick={handleCancel}>
               Ακύρωση
             </button>
             <button className="primary-btn" onClick={handleGoToPreview}>
@@ -556,7 +588,7 @@ export default function BookDate() {
 
         {/* ΚΟΥΜΠΙΑ */}
         <div className="appointment-actions preview-actions">
-          <button className="cancel-btn" onClick={onBack}>Ακύρωση</button>
+          <button className="cancel-btn" onClick={handleCancel}>Ακύρωση</button>
           <div className="preview-action-buttons">
             <button className="edit-btn" onClick={onEdit}>Επεξεργασία</button>
             <button className="confirm-btn" onClick={onConfirm}>Επιβεβαίωση Ραντεβού</button>
@@ -612,7 +644,8 @@ export default function BookDate() {
                     <label>Ειδίκευση</label>
                     <select value={specialization} className={specialization ? "filtered" : ""} onChange={(e) => setSpecialization(e.target.value)}>
                       <option value="">Οποιαδήποτε</option>
-                      {specializationOptions.map((spec) => (
+                      {VET_SPECIALIZATIONS.map((spec) => (
+
                         <option key={spec} value={spec}>{spec}</option>
                       ))}
                     </select>
@@ -644,7 +677,8 @@ export default function BookDate() {
                     <label>Επίπεδο σπουδών</label>
                     <select value={education} className={education ? "filtered" : ""} onChange={(e) => setEducation(e.target.value)}>
                       <option value="">Οποιοδήποτε</option>
-                      {educationOptions.map((edu) => (
+                      {EDUCATION_OPTIONS.map((edu) => (
+
                         <option key={edu} value={edu}>{edu}</option>
                       ))}
                     </select>
@@ -738,6 +772,7 @@ export default function BookDate() {
                         <h3>{vet.name}</h3>
                         <p><strong>Περιοχή:</strong> {vet.region}</p>
                         <p><strong>Ειδίκευση:</strong> {vet.specializations}</p>
+
                         <p><strong>Εμπειρία:</strong> {vet.experience} χρόνια</p>
                         <p><strong>Βαθμολογία:</strong> ⭐ {vet.rating} ({vet.reviewCount || 0} αξιολογήσεις)</p>
                         <button className="book-btn" onClick={() => {

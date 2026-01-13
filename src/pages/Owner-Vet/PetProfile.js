@@ -10,6 +10,7 @@ export default function ProfilePetOwner() {
     const [foundDeclarations, setFoundDeclarations] = useState([]);
     const [foundByOthers, setFoundByOthers] = useState([]);
     const [activeTab, setActiveTab] = useState("booklet");
+    const [medicalActions, setMedicalActions] = useState([]);
 
     useEffect(() => {
         fetch(`http://localhost:3001/pets/${id}`)
@@ -26,6 +27,9 @@ export default function ProfilePetOwner() {
         fetch(`http://localhost:3001/foundReports?petId=${id}`)
             .then((res) => res.json())
             .then(setFoundByOthers);
+        fetch(`http://localhost:3001/medicalReports?petId=${id}`)
+            .then((res) => res.json())
+            .then((data) => setMedicalActions(data));
     }, [id]);
     if (!pet) return <p>Φόρτωση κατοικιδίου...</p>;
 
@@ -155,7 +159,7 @@ export default function ProfilePetOwner() {
                 </div>
 
 
-                {activeTab === "booklet" && (
+                {/* {activeTab === "booklet" && (
                     <div className="petTabPanel">
                         <div className="booklet-layout">
                             <div className="booklet-bottom">
@@ -172,6 +176,39 @@ export default function ProfilePetOwner() {
                                 <button className="next-btn">Εκτύπωση</button>
                             </div>
 
+                        </div>
+                    </div>
+                )} */}
+                {activeTab === "booklet" && (
+                    <div className="petTabPanel">
+                        <div className="booklet-layout">
+                            <div className="booklet-bottom">
+                                <div className="info-box large">
+                                    <h4>Ιατρικές Πράξεις</h4>
+                                    {medicalActions.length === 0 ? (
+                                        <p className="empty">— Δεν υπάρχουν καταχωρήσεις —</p>
+                                    ) : (
+                                        <div className="medical-actions-list">
+                                            {medicalActions.map((action) => (
+                                                <div key={action.id} className="medical-action-item">
+                                                    <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                                                    <p><strong>Τύπος:</strong> {action.type}</p>
+                                                    <p><strong>Περιγραφή:</strong> {action.description}</p>
+                                                    <p><strong>Φάρμακα/Οδηγίες:</strong> {action.medications}</p>
+                                                    <hr />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="info-box large">
+                                    <h4>Τυχόν Συμβάντα</h4>
+                                    <p className="empty">— Δεν υπάρχουν καταχωρήσεις —</p>
+                                </div>
+                            </div>
+                            <div className="bookletPrintCenter">
+                                <button className="next-btn">Εκτύπωση</button>
+                            </div>
                         </div>
                     </div>
                 )}
