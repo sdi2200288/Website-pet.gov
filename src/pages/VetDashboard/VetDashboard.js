@@ -17,17 +17,19 @@ export default function VetDashboard() {
           <h3>Επιλογές Κτηνίατρου</h3>
 
           <ul className="sidebar-menu">
-            <li>
-              <NavLink
+            {vet && vet.role === "vet" && (
+              <li>
+                <NavLink
                   to="profile-vet"
                   className={({ isActive }) =>
-                  `sidebar-link ${isActive ? "active" : ""}`
-                }
+                    `sidebar-link ${isActive ? "active" : ""}`
+                  }
                 >
-                <FaUser className="menu-icon" />
-                <span>Το Προφίλ μου</span>
-              </NavLink>
-            </li>
+                  <FaUser className="menu-icon" />
+                  <span>Το Προφίλ μου</span>
+                </NavLink>
+              </li>
+            )}
             {/* Δηλώσεις */}
             <li>
               <button
