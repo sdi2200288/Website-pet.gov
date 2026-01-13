@@ -63,11 +63,11 @@ export default function Menu({ isLoggedIn, onLogout, activeMenu, setActiveMenu, 
               <ul>
                 <li><Link to="/owner-dashboard/found" className="dropdown-link">Δήλωση εύρεσης κατοικιδίου </Link></li>
                 <li><Link to="/owner-dashboard/loss" className="dropdown-link">Δήλωση απώλειας κατοικιδίου</Link></li>
-                <li><Link to="/owner-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων </Link></li>
                 <li><Link to="/owner-dashboard/health-booklet" className="dropdown-link">Προβολή ηλεκτρονικού βιβλιαρίου</Link></li>
                 <li><Link to="/owner-dashboard/book-date" className="dropdown-link">Κλείσιμο ραντεβού</Link></li>
-                <li><Link to="/owner-dashboard/future-bookings" className="dropdown-link">Ιστορικό ραντεβού</Link></li>
                 <li><Link to="/owner-dashboard/future-bookings" className="dropdown-link">Μελλοντικά ραντεβού</Link></li>
+                <li><Link to="/owner-dashboard/future-bookings" className="dropdown-link">Ιστορικό ραντεβού</Link></li>
+                <li><Link to="/owner-dashboard/history-statement" className="dropdown-link">Ιστορικό δηλώσεων </Link></li>
               </ul>
             </div>
           </div>
