@@ -57,7 +57,17 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
     else if (!/^\d{10,15}$/.test(form.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι 10–15 ψηφία";
     if (!form.gender) newErrors.gender = "Πρέπει να επιλέξετε φύλο";
     if (!form.address.trim()) newErrors.address = "Πρέπει να συμπληρωθεί η διεύθυνση";
-    if (!form.birthdate) newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
+    if (!form.birthdate) { newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης"; }
+    else {
+      const today = new Date();
+      const birth = new Date(form.birthdate);
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+      if (age < 18) newErrors.birthdate = "Πρέπει να είστε άνω των 18 για να κάνετε εγγραφή";
+    }
     if (!form.email.includes("@")) newErrors.email = "Μη έγκυρο email";
     if (form.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
     if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";

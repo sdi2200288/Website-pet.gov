@@ -86,7 +86,6 @@ export default function Identity() {
   };
 
   useEffect(() => {
-    // Όταν αλλάζει το step, scroll στην κορυφή του container
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
@@ -111,7 +110,16 @@ export default function Identity() {
     else if (!/^\d{10,15}$/.test(ownerForm.phone)) newErrors.phone = "Το τηλέφωνο πρέπει να είναι 10–15 ψηφία";
     if (!ownerForm.genderu) newErrors.genderu = "Πρέπει να επιλέξετε φύλο";
     if (!ownerForm.address.trim()) newErrors.address = "Πρέπει να συμπληρωθεί η διεύθυνση";
-    if (!ownerForm.birthdate) newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
+    if (!ownerForm.birthdate) {
+      newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης";
+    } else {
+      const today = new Date();
+      const birth = new Date(ownerForm.birthdate);
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+      if (age < 18) newErrors.birthdate = "Ο ιδιοκτήτης πρέπει να είναι άνω των 18";
+    }
     if (!ownerForm.email.includes("@")) newErrors.email = "Μη έγκυρο email";
     if (ownerForm.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
     if (ownerForm.password !== ownerForm.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
@@ -133,6 +141,18 @@ export default function Identity() {
     if (!petInfo.breed.trim()) newErrors.breed = "Πρέπει να συμπληρωθεί ράτσα";
     if (!petInfo.gender) newErrors.gender = "Πρέπει να επιλεγεί φύλο";
     if (!petInfo.age || isNaN(petInfo.age) || Number(petInfo.age) < 0) newErrors.age = "Η ηλικία είναι υποχρεωτική";
+    else if (petInfo.birthdate) {
+      const today = new Date();
+      const birth = new Date(petInfo.birthdate);
+      let age = today.getFullYear() - birth.getFullYear();
+      const m = today.getMonth() - birth.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+      }
+      if (Number(petInfo.age) !== age) {
+        newErrors.age = "Η ηλικία δεν αντιστοιχεί στην ημερομηνία γέννησης";
+      }
+    }
     if (petInfo.forAdoption === "Όχι") {
       if (!/^\d{10}$/.test(ownerAFM)) newErrors.ownerAFM = "Πρέπει να συμπληρωθεί έγκυρο ΑΦΜ";
     }
@@ -243,6 +263,7 @@ export default function Identity() {
         id: "idn" + Math.random().toString(36).substr(2, 9),
         petId: createdPet.id,
         vetId: vet.id,
+        ownerId: finalOwnerId,
         date: new Date().toISOString().split("T")[0],
       };
       const resIdentity = await fetch(`http://localhost:3001/identity`, {
@@ -282,8 +303,10 @@ export default function Identity() {
     } catch (err) {
       console.error(err);
       alert(err.message);
-    };
-  }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="identity">
@@ -579,6 +602,7 @@ export default function Identity() {
                         name="birthdate"
                         value={ownerForm.birthdate}
                         onChange={handleOwnerRegisterChange}
+                        max={new Date().toISOString().split("T")[0]}
                       />
                       {errors.birthdate && <div className="fieldError">{errors.birthdate}</div>}
                     </label>
