@@ -65,11 +65,7 @@ export default function ForgotPassword() {
                         <div className="registerFieldFull loginFooter">
                             <div className="loginFooterLine">
                                 Είστε ήδη μέλος;{" "}
-                                <button
-                                    type="button"
-                                    className="linkButton"
-                                    onClick={() => navigate("/login")}
-                                >
+                                <button type="button" className="linkButton" onClick={() => navigate("/login")}>
                                     Σύνδεση ως Ιδιοκτήτης / Κτηνίατρος
                                 </button>
                             </div>
