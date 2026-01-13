@@ -2,7 +2,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./HistoryDeclaration.css";
 import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
-import { REGIONS, SPECIES,GENDERS,dogPopular,catPopular} from "../Utils/Util";
+import { REGIONS, SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util";
+import DeclarationModal from "../../pages/Owner-Vet/WatchDeclaration";
+
 
 export default function HistoryDeclaration() {
   const navigate = useNavigate();
@@ -15,17 +17,18 @@ export default function HistoryDeclaration() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [sortOrder, setSortOrder] = useState("recent"); // recent | old
-
+  const [selectedDeclaration, setSelectedDeclaration] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
 
   // Data
   const [allPets, setAllPets] = useState([]);
   const [foundDeclarations, setFoundDeclarations] = useState([]);
   const [lossDeclarations, setLossDeclarations] = useState([]);
-  
+
   const [loading, setLoading] = useState(true);
 
-  const [user] = useState(() =>JSON.parse(localStorage.getItem("user")));
+  const [user] = useState(() => JSON.parse(localStorage.getItem("user")));
   const isOwner = user?.role === "owner";
   const isVet = user?.role === "vet";
 
@@ -61,17 +64,26 @@ export default function HistoryDeclaration() {
       }
     };
 
-      fetchAll();
-    }, [user, isOwner, isVet]);
+    fetchAll();
+  }, [user, isOwner, isVet]);
 
+  const handleViewDeclaration = (declaration) => {
+    setSelectedDeclaration(declaration);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedDeclaration(null);
+    setIsModalOpen(false);
+  };
   // Συνάρτηση για εύρεση κατοικίδιου με βάση το petId
   const findPetById = (petId) => {
     return allPets.find(p => p.id === petId) || null;
   };
 
 
-    // Δημιουργία ιστορικού δηλώσεων με σωστά δεδομένα
-    const historyDeclarations = useMemo(() => {
+  // Δημιουργία ιστορικού δηλώσεων με σωστά δεδομένα
+  const historyDeclarations = useMemo(() => {
     const combined = [];
 
     lossDeclarations.forEach(r => {
@@ -107,7 +119,7 @@ export default function HistoryDeclaration() {
     return combined;
   }, [lossDeclarations, foundDeclarations, allPets]);
 
-  const breeds = selectedSpecies === "Σκύλος"? dogPopular: selectedSpecies === "Γάτα"? catPopular: [...dogPopular, ...catPopular];
+  const breeds = selectedSpecies === "Σκύλος" ? dogPopular : selectedSpecies === "Γάτα" ? catPopular : [...dogPopular, ...catPopular];
 
   const filteredDeclarations = useMemo(() => {
     return historyDeclarations
@@ -123,14 +135,14 @@ export default function HistoryDeclaration() {
 
         return true;
       })
-    .sort((a, b) => {
-    const da = new Date(a.createdAt || a.date);
-    const db = new Date(b.createdAt || b.date);
+      .sort((a, b) => {
+        const da = new Date(a.createdAt || a.date);
+        const db = new Date(b.createdAt || b.date);
 
-    return sortOrder === "recent" ? db - da : da - db;
-  });
+        return sortOrder === "recent" ? db - da : da - db;
+      });
 
-  },[
+  }, [
     historyDeclarations,
     selectedChip,
     selectedSpecies,
@@ -142,12 +154,12 @@ export default function HistoryDeclaration() {
     sortOrder
   ]);
 
-const normalizeGender = (g) => {
-  if (!g) return "";
-  if (g === "male") return "Αρσενικό";
-  if (g === "female") return "Θηλυκό";
-  return g;
-};
+  const normalizeGender = (g) => {
+    if (!g) return "";
+    if (g === "male") return "Αρσενικό";
+    if (g === "female") return "Θηλυκό";
+    return g;
+  };
 
 
   // Μοναδικά microchips για το dropdown
@@ -203,7 +215,7 @@ const normalizeGender = (g) => {
           </select>
         </div>
 
-       <div className="filter-item">
+        <div className="filter-item">
           <span className="filter-label">Φύλο:</span>
           <select value={selectedGender} onChange={(e) => setSelectedGender(e.target.value)}>
             <option value="">Όλα</option>
@@ -217,7 +229,7 @@ const normalizeGender = (g) => {
 
         <div className="filter-item">
           <span className="filter-label">Περιοχή:</span>
-           <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
+          <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
             <option value="">Όλες</option>
             {REGIONS.map((r) => (
               <option key={r} value={r}>
@@ -257,10 +269,15 @@ const normalizeGender = (g) => {
       <div className="history-list-panel">
         <PetDeclarationsList
           declarations={filteredDeclarations}
+          onDeleteDeclaration={handleDeleteDeclaration}
+          onViewDeclaration={handleViewDeclaration} 
           sortOrder={sortOrder}
           onSortChange={setSortOrder}
-          onDeleteDeclaration={handleDeleteDeclaration}
-          isVet={isVet}
+                />
+        <DeclarationModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          declaration={selectedDeclaration}
         />
       </div>
     </div>

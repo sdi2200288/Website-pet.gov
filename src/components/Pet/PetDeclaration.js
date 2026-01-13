@@ -1,7 +1,12 @@
 import React from "react";
 import "./PetDeclaration.css";
 
-export default function PetDeclaration({ item, type, onDeleteDeclaration }) {
+export default function PetDeclaration({
+  item,
+  type,
+  onDeleteDeclaration,
+  onViewDeclaration
+}) {
   const isLoss = type === "lost";
   const isFinal = item.status === "submitted";
   const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά Αποθηκευμένη";
@@ -21,12 +26,16 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration }) {
 
         <div className="petDeclarationInfo">
           <div className="petDeclarationField">
-            <span className="label">{isLoss ? "Ημερομηνία απώλειας" : "Ημερομηνία εύρεσης"}</span>
+            <span className="label">
+              {isLoss ? "Ημερομηνία απώλειας" : "Ημερομηνία εύρεσης"}
+            </span>
             <span className="value">{item.date}</span>
           </div>
 
           <div className="petDeclarationField">
-            <span className="label">{isLoss ? "Διεύθυνση απώλειας" : "Διεύθυνση εύρεσης"}</span>
+            <span className="label">
+              {isLoss ? "Διεύθυνση απώλειας" : "Διεύθυνση εύρεσης"}
+            </span>
             <span className="value">{item.address}</span>
           </div>
 
@@ -39,8 +48,12 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration }) {
         <div className="petDeclarationSide">
           <div className="petStatusRow">
             <span className="label">Κατάσταση</span>
-              <span className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"}`}>
-                {statusLabel}
+            <span
+              className={`petStatusBadge ${
+                isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"
+              }`}
+            >
+              {statusLabel}
             </span>
           </div>
 
@@ -48,11 +61,18 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration }) {
             {isFinal ? (
               <>
                 <button className="petButtonPrimary">Εκτύπωση</button>
-                <button className="petButtonSecondary">Προβολή</button>
+                <button
+                  className="petButtonSecondary"
+                  onClick={() => onViewDeclaration(item)}
+                >
+                  Προβολή
+                </button>
               </>
             ) : (
               <>
-                <button className="petButtonDanger"  onClick={handleDelete}>Διαγραφή</button>
+                <button className="petButtonDanger" onClick={handleDelete}>
+                  Διαγραφή
+                </button>
                 <button className="petButtonPrimary">Επεξεργασία</button>
               </>
             )}

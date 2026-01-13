@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./PetProfile.css";
 import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
+import DeclarationModal from "../../pages/Owner-Vet/WatchDeclaration";
+
 
 export default function ProfilePetOwner() {
     const { id } = useParams();
@@ -11,6 +13,9 @@ export default function ProfilePetOwner() {
     const [foundByOthers, setFoundByOthers] = useState([]);
     const [activeTab, setActiveTab] = useState("booklet");
     const [medicalActions, setMedicalActions] = useState([]);
+
+    const [selectedDeclaration, setSelectedDeclaration] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         fetch(`http://localhost:3001/pets/${id}`)
@@ -32,6 +37,16 @@ export default function ProfilePetOwner() {
             .then((data) => setMedicalActions(data));
     }, [id]);
     if (!pet) return <p>Φόρτωση κατοικιδίου...</p>;
+
+    function handleViewDeclaration(declaration) {
+        setSelectedDeclaration(declaration);
+        setIsModalOpen(true);
+    }
+
+    function closeModal() {
+        setIsModalOpen(false);
+        setSelectedDeclaration(null);
+    }
 
     return (
         <div className="petProfilePage">
@@ -158,27 +173,6 @@ export default function ProfilePetOwner() {
                     </button>
                 </div>
 
-
-                {/* {activeTab === "booklet" && (
-                    <div className="petTabPanel">
-                        <div className="booklet-layout">
-                            <div className="booklet-bottom">
-                                <div className="info-box large">
-                                    <h4>Ιατρικές Πράξεις</h4>
-                                    <p className="empty">— Δεν υπάρχουν καταχωρήσεις —</p>
-                                </div>
-                                <div className="info-box large">
-                                    <h4>Τυχόν Συμβάντα</h4>
-                                    <p className="empty">— Δεν υπάρχουν καταχωρήσεις —</p>
-                                </div>
-                            </div>
-                            <div className="bookletPrintCenter">
-                                <button className="next-btn">Εκτύπωση</button>
-                            </div>
-
-                        </div>
-                    </div>
-                )} */}
                 {activeTab === "booklet" && (
                     <div className="petTabPanel">
                         <div className="booklet-layout">
@@ -217,6 +211,7 @@ export default function ProfilePetOwner() {
                     <PetDeclarationsList
                         type="loss"
                         declarations={lossDeclarations}
+                        onViewDeclaration={handleViewDeclaration}
                     />
                 )}
 
@@ -224,6 +219,7 @@ export default function ProfilePetOwner() {
                     <PetDeclarationsList
                         type="found"
                         declarations={foundDeclarations}
+                        onViewDeclaration={handleViewDeclaration}
                     />
                 )}
 
@@ -231,9 +227,20 @@ export default function ProfilePetOwner() {
                     <PetDeclarationsList
                         type="found"
                         declarations={foundByOthers}
+                        onViewDeclaration={handleViewDeclaration}
                     />
                 )}
+
+
             </div>
+            {selectedDeclaration && (
+                <DeclarationModal
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    declaration={selectedDeclaration}
+                />
+            )}
+
         </div>
     );
 }

@@ -2,10 +2,11 @@ import "./PetDeclaration.css";
 import React from "react";
 import PetDeclaration from "./PetDeclaration";
 
-export default function PetDeclarationsList({  declarations = [],
+export default function PetDeclarationsList({declarations = [],
   onDeleteDeclaration,
+  onViewDeclaration,  
   sortOrder,
-  onSortChange }) {
+  onSortChange}) {
   return (
     <div className="petTabPanel">
       <div className="results-center">
@@ -23,7 +24,7 @@ export default function PetDeclarationsList({  declarations = [],
 
       <div className="petDeclarationsList">
         {declarations.map(item => (
-          <PetDeclaration key={item.id} item={item} type={item.type} onDeleteDeclaration={onDeleteDeclaration} />
+          <PetDeclaration key={item.id} item={item} type={item.type} onDeleteDeclaration={onDeleteDeclaration} onViewDeclaration={onViewDeclaration}/>
         ))}
       </div>
     </div>
