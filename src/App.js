@@ -57,9 +57,9 @@ import Communication from "./pages/FooterPages/Communication/Communication";
 import FAQOwner from "./pages/FooterPages/FAQ/FAQOwner";
 import FAQVet from "./pages/FooterPages/FAQ/FAQVet";
 
-function RoleMismatchWrapper() {
+function RoleMismatchWrapper({onLogout}) {
   const { role } = useParams();
-  return <RoleMismatch expectedRole={role} />;
+  return <RoleMismatch expectedRole={role} onLogout={onLogout} />;
 }
 
 function App() {
@@ -172,7 +172,7 @@ function App() {
           <Route path="/FAQOwner" element={<FAQOwner />} />
           <Route path="/FAQVet" element={<FAQVet />} />
 
-          <Route path="/role-mismatch/:role" element={<RoleMismatchWrapper />} />
+          <Route path="/role-mismatch/:role" element={<RoleMismatchWrapper onLogout={handleLogout}/>} />
         </Routes>
       </main>
 

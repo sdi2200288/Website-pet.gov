@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import "./RoleMismatch.css";
 
-export default function RoleMismatch({ expectedRole }) {
+export default function RoleMismatch({ expectedRole,onLogout }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,6 +15,7 @@ export default function RoleMismatch({ expectedRole }) {
 
   const handleYes = () => {
     // Πάει στο login για σωστό role
+    if(onLogout) onLogout();
     navigate("/login", { state: { from: location.pathname } });
   };
 
