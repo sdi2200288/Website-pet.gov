@@ -47,6 +47,7 @@ import HistoryDeclaration from "./pages/Owner-Vet/HistoryDeclaration";
 import Login from "./pages/Login-Register/Login";
 import Register from "./pages/Login-Register/Register";
 import ChangeCode from "./pages/Login-Register/ChangeCode";
+import ForgotPassword from "./pages/Login-Register/ForgotPassword";
 import UpdateProfile from "./pages/Login-Register/UpdateProfile";
 
 import Cookies from "./pages/FooterPages/Others/Cookies";
@@ -162,6 +163,7 @@ function App() {
           } />
 
           <Route path="/changecode" element={<ChangeCode />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/updateprofile" element={<UpdateProfile />} />
 
           <Route path="/Communication" element={<Communication />} />
