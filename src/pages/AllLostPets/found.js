@@ -324,7 +324,7 @@ export default function FoundLost({ isLoggedIn, userData }) {
                                             <p><span>Ράτσα:</span> {pet.breed || "-"}</p>
                                             <p><span>Φύλο:</span> {pet.gender || "-"}</p>
                                             <p><span>Microchip:</span> {pet.microchip || "-"}</p>
-                                            <p><span>Ημερομηνία Γέννησης:</span> {pet.date || "-"}</p>
+                                            <p><span>Ημερομηνία Γέννησης:</span> {pet.birthdate || "-"}</p>
                                             <p><span>Ηλικία:</span> {pet.age || "-"}</p>
                                         </div>
 

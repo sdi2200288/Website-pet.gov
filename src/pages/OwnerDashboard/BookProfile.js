@@ -95,7 +95,7 @@ export default function BookProfile() {
 
     const experienceText = Number(vet.experience ?? 0);
     const experienceYears = Number.isFinite(experienceText) ? experienceText : 0;
-    const profileImage = (typeof vet.photoFile === "string" && vet.photoFile.trim() !== "") ? vet.photoFile : (typeof vet.image === "string" && vet.image.trim() !== "") ? vet.image : "/default.jpg";
+    const profileImage = (typeof vet.photoUrl === "string" && vet.photoUrl.trim() !== "") ? vet.photoUrl : (typeof vet.photoUrl=== "string" && vet.photoUrl.trim() !== "") ? vet.photoUrl : "/default.jpg";
 
     const schedule = vet.schedule || {};
     const formatHours = (d) => {

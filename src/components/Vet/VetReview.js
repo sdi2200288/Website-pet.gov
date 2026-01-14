@@ -2,7 +2,7 @@
 import React from "react";
 import "./VetReview.css";
 
-export default function VetReviews({ reviews, Stars }) {
+export default function VetReviews({ reviews = [], Stars }) {
   // Υπολόγισε τα στατιστικά από τα reviews
   const reviewCount = reviews.length;
   const totalScore = reviews.reduce((sum, r) => sum + Number(r.stars), 0);
