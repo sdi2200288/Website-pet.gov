@@ -61,14 +61,16 @@ export default function Homepage() {
           .slice(0, 3);
 
         const topVetsList = vets
-          .filter((v) => Number(v.reviewCount || 0) >= 1).sort((a, b) => {
+          .sort((a, b) => {
             const aCount = Number(a.reviewCount || 0);
             const bCount = Number(b.reviewCount || 0);
             const aAvg = aCount ? Number(a.totalScore || 0) / aCount : 0;
             const bAvg = bCount ? Number(b.totalScore || 0) / bCount : 0;
             if (bAvg !== aAvg) return bAvg - aAvg;
             return bCount - aCount;
-          }).slice(0, 3);
+          })
+          .slice(0, 3);
+
         setTopVets(topVetsList);
         setLostPets(recentLostPets);
         setOwnersData(owners);
@@ -204,7 +206,12 @@ export default function Homepage() {
                       <div className="vet-info">
                         <h3>{fullName}</h3>
                         <p><strong>Περιοχή:</strong> {v.region}</p>
-                        <p><strong>Ειδίκευση:</strong> {v.specializations || "—"}</p>
+                        <p>
+                          <strong>Ειδίκευση:</strong>{" "}
+                          {Array.isArray(v.specializations) && v.specializations.length
+                            ? v.specializations.join(", ")
+                            : "—"}
+                        </p>
                         <p><strong>Εμπειρία:</strong> {v.experience || 0} χρόνια</p>
                         <p><strong>Βαθμολογία:</strong> ⭐ {rating} ({v.reviewCount || 0})</p>
                       </div>

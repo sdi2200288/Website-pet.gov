@@ -250,7 +250,9 @@ export default function Identity() {
         region: vet.region || "",
         lastSeenAddress: vet.address || "",
         lastSeenDate: new Date().toISOString().split("T")[0],
+        condition: "",
         status: petInfo.forAdoption === "Ναι" ? "adoption" : "owned",
+        photoUrl: "https://placedog.net/400/300?id=6",
       };
       const resPet = await fetch(`http://localhost:3001/pets`, {
         method: "POST",
