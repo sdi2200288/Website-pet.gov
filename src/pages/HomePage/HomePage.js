@@ -61,6 +61,7 @@ export default function Homepage() {
           .slice(0, 3);
 
         const topVetsList = vets
+          .filter(v => Number(v.reviewCount || 0) > 0)
           .sort((a, b) => {
             const aCount = Number(a.reviewCount || 0);
             const bCount = Number(b.reviewCount || 0);

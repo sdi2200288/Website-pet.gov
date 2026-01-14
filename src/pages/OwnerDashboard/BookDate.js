@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { FiSearch, FiUser, FiMapPin, FiCalendar, FiClock, } from "react-icons/fi";
 import BookDateImage from "../../images/BookDate.png";
 import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS, VET_SPECIALIZATIONS, EDUCATION_OPTIONS, } from "../Utils/Util";
+import vetdefault from "../../images/vetdeafult.webp";
 
 export default function BookDate() {
   const location = useLocation();
@@ -28,7 +29,7 @@ export default function BookDate() {
 
   const [availableDates, setAvailableDates] = useState([]);
 
-  // Φίλτρα
+  // Φίλτρα (DRAFT - αλλάζουν στο UI, δεν εφαρμόζονται άμεσα)
   const [region, setRegion] = useState("");
   const [experience, setExperience] = useState("");
   const [date, setDate] = useState("");
@@ -38,6 +39,18 @@ export default function BookDate() {
   const [timeTo, setTimeTo] = useState("");
   const [gender, setGender] = useState("");
   const [sortOrder, setSortOrder] = useState("ratingDesc");
+
+  // Φίλτρα (APPLIED - εφαρμόζονται μόνο όταν πατηθεί "Εφαρμογή φίλτρων")
+  const [appliedFilters, setAppliedFilters] = useState({
+    region: "",
+    experience: "",
+    date: "",
+    specialization: "",
+    studyLevel: "",
+    timeFrom: "",
+    timeTo: "",
+    gender: "",
+  });
 
   // Μοναδικές τιμές για τα φίλτρα
   const [specializationOptions, setSpecializationOptions] = useState([]);
@@ -55,7 +68,6 @@ export default function BookDate() {
       window.location.href = "/login";
       return;
     }
-
     setSelectedVet(vet);
     setStep(2);
   };
@@ -76,41 +88,52 @@ export default function BookDate() {
   const applyFiltersAndSort = useCallback(() => {
     let result = [...allVeterinarians];
 
-    if (region) result = result.filter((v) => v.region === region);
+    const {
+      region: aRegion,
+      experience: aExperience,
+      date: aDate,
+      specialization: aSpecialization,
+      studyLevel: aStudyLevel,
+      timeFrom: aTimeFrom,
+      timeTo: aTimeTo,
+      gender: aGender,
+    } = appliedFilters;
 
-    if (experience) {
-      if (experience === "10+") {
+    if (aRegion) result = result.filter((v) => v.region === aRegion);
+
+    if (aExperience) {
+      if (aExperience === "10+") {
         result = result.filter((v) => Number(v.experience) >= 10);
       } else {
-        const expNum = parseInt(experience, 10);
+        const expNum = parseInt(aExperience, 10);
         result = result.filter((v) => Number(v.experience) === expNum);
       }
     }
 
-    if (date) {
+    if (aDate) {
       result = result.filter(
-        (v) => v.availability && v.availability.some((avail) => avail.date === date)
+        (v) => v.availability && v.availability.some((avail) => avail.date === aDate)
       );
     }
 
-    if (specialization) {
+    if (aSpecialization) {
       result = result.filter(
-        (v) => Array.isArray(v.specializations) && v.specializations.includes(specialization)
+        (v) => Array.isArray(v.specializations) && v.specializations.includes(aSpecialization)
       );
     }
 
-    if (studyLevel) result = result.filter((v) => v.studyLevel === studyLevel);
+    if (aStudyLevel) result = result.filter((v) => v.studyLevel === aStudyLevel);
 
-    if (gender) result = result.filter((v) => v.gender === gender);
+    if (aGender) result = result.filter((v) => v.gender === aGender);
 
-    if (date && (timeFrom || timeTo)) {
+    if (aDate && (aTimeFrom || aTimeTo)) {
       result = result.filter((v) => {
-        const availability = v.availability?.find((avail) => avail.date === date);
+        const availability = v.availability?.find((avail) => avail.date === aDate);
         if (!availability || !Array.isArray(availability.times)) return false;
 
         return availability.times.some((t) => {
-          if (timeFrom && t < timeFrom) return false;
-          if (timeTo && t > timeTo) return false;
+          if (aTimeFrom && t < aTimeFrom) return false;
+          if (aTimeTo && t > aTimeTo) return false;
           return true;
         });
       });
@@ -118,9 +141,15 @@ export default function BookDate() {
 
     // Ταξινόμηση
     if (sortOrder === "ratingDesc") {
-      result.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+      result.sort((a, b) => {
+        if (b.rating !== a.rating) return b.rating - a.rating;
+        return (b.reviewCount || 0) - (a.reviewCount || 0);
+      });
     } else if (sortOrder === "ratingAsc") {
-      result.sort((a, b) => parseFloat(a.rating) - parseFloat(b.rating));
+      result.sort((a, b) => {
+        if (a.rating !== b.rating) return a.rating - b.rating;
+        return (b.reviewCount || 0) - (a.reviewCount || 0);
+      });
     } else if (sortOrder === "nameAsc") {
       result.sort((a, b) => a.name.localeCompare(b.name, "el"));
     } else if (sortOrder === "nameDesc") {
@@ -130,18 +159,7 @@ export default function BookDate() {
     }
 
     setVeterinarians(result);
-  }, [
-    allVeterinarians,
-    region,
-    experience,
-    date,
-    specialization,
-    studyLevel,
-    gender,
-    timeFrom,
-    timeTo,
-    sortOrder,
-  ]);
+  }, [allVeterinarians, appliedFilters, sortOrder]);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -192,25 +210,29 @@ export default function BookDate() {
         setEducationOptions(studyLevels);
         setAvailableDates(dates);
 
-        const formattedVets = vets.map((vet) => ({
-          id: vet.id,
-          name: `${vet.firstname} ${vet.lastname}`,
-          region: vet.region || "Άγνωστη",
-          rating:
-            vet.totalScore && vet.reviewCount
-              ? (Number(vet.totalScore) / Number(vet.reviewCount)).toFixed(1)
-              : "0.0",
-          specializations: normalizeSpecializations(vet.specializations), // ✅
-          experience: Number(vet.experience || 0),
-          studyLevel: vet.studyLevel || "Πτυχίο",
-          gender: vet.gender || "other",
-          phone: vet.phone,
-          email: vet.email,
-          address: vet.address,
-          availability: vet.availability || [],
-          photoUrl: vet.photoUrl || "/default-vet.jpg",
-          reviewCount: Number(vet.reviewCount || 0),
-        }));
+        const formattedVets = vets.map((vet) => {
+          const count = Number(vet.reviewCount || 0);
+          const total = Number(vet.totalScore || 0);
+          const ratingNum = count > 0 ? total / count : 0;
+
+          return {
+            id: vet.id,
+            name: `${vet.firstname} ${vet.lastname}`,
+            region: vet.region || "Άγνωστη",
+            rating: ratingNum,               // number για σωστό sort
+            ratingText: ratingNum.toFixed(1),// string για εμφάνιση
+            specializations: normalizeSpecializations(vet.specializations),
+            experience: Number(vet.experience || 0),
+            studyLevel: vet.studyLevel || "Πτυχίο",
+            gender: vet.gender || "other",
+            phone: vet.phone,
+            email: vet.email,
+            address: vet.address,
+            availability: vet.availability || [],
+            photoUrl: vet.photoUrl || "/default-vet.jpg",
+            reviewCount: count,
+          };
+        });
 
         setAllVeterinarians(formattedVets);
         setVeterinarians(formattedVets);
@@ -224,7 +246,7 @@ export default function BookDate() {
 
   useEffect(() => {
     applyFiltersAndSort();
-  }, [sortOrder]);
+  }, [applyFiltersAndSort]);
 
   const clearFilters = () => {
     setRegion("");
@@ -236,7 +258,17 @@ export default function BookDate() {
     setTimeTo("");
     setGender("");
     setSortOrder("ratingDesc");
-    setVeterinarians(allVeterinarians);
+
+    setAppliedFilters({
+      region: "",
+      experience: "",
+      date: "",
+      specialization: "",
+      studyLevel: "",
+      timeFrom: "",
+      timeTo: "",
+      gender: "",
+    });
   };
 
   const handleCancel = () => {
@@ -357,7 +389,13 @@ export default function BookDate() {
         <h2>Κλείσιμο Ραντεβού</h2>
 
         <div className="vet-info-appointment">
-          <img src={vet.photoUrl || "/default-vet.jpg"} alt={vet.name} />
+          <img
+            src={vet.photoUrl || vetdefault}
+            alt={vet.name}
+            onError={(e) => {
+              e.target.src = vetdefault;
+            }}
+          />
           <div className="vet-details">
             <h4>{vet.name}</h4>
             <p><strong>Περιοχή:</strong> {vet.region}</p>
@@ -441,6 +479,7 @@ export default function BookDate() {
               maxLength={200}
             />
             <small className="hint">Μέγιστο 200 χαρακτήρες ({description.length}/200)</small>
+
           </div>
 
           <div className="appointment-actions">
@@ -485,10 +524,13 @@ export default function BookDate() {
               </div>
               <div className="summary-card-content">
                 <img
-                  src={vet.photoUrl || "/default-vet.jpg"}
+                  src={vet.photoUrl || vetdefault}
                   alt={vet.name}
-                  className="vet-preview-img"
+                  onError={(e) => {
+                    e.target.src = vetdefault;
+                  }}
                 />
+
                 <div className="vet-preview-info">
                   <p><FiMapPin /> {vet.region}</p>
                   <p>
@@ -688,7 +730,22 @@ export default function BookDate() {
                     <button type="button" className="secondary-btn" onClick={clearFilters}>
                       Καθαρισμός φίλτρων
                     </button>
-                    <button type="button" className="primary-btn" onClick={applyFiltersAndSort}>
+                    <button
+                      type="button"
+                      className="primary-btn"
+                      onClick={() => {
+                        setAppliedFilters({
+                          region,
+                          experience,
+                          date,
+                          specialization,
+                          studyLevel,
+                          timeFrom,
+                          timeTo,
+                          gender,
+                        });
+                      }}
+                    >
                       Εφαρμογή φίλτρων
                     </button>
                   </div>
@@ -750,16 +807,16 @@ export default function BookDate() {
                         }
                       }}
                     >
-                      <div className="vet-image">
+                      <div className="pet-image">
                         <img
-                          src={vet.photoUrl}
-                          alt={vet.name}
+                          src={vet.photoUrl || vetdefault}
+                          alt={vet.lastname}
                           onError={(e) => {
-                            e.target.onerror = null;
-                            e.target.src = "/default-vet.jpg";
+                            e.target.src = vetdefault;
                           }}
                         />
                       </div>
+
 
                       <div className="vet-info">
                         <h3>{vet.name}</h3>
@@ -771,7 +828,7 @@ export default function BookDate() {
                             : "—"}
                         </p>
                         <p><strong>Εμπειρία:</strong> {vet.experience} χρόνια</p>
-                        <p><strong>Βαθμολογία:</strong> ⭐ {vet.rating} ({vet.reviewCount || 0} αξιολογήσεις)</p>
+                        <p><strong>Βαθμολογία:</strong> ⭐ {vet.ratingText} ({vet.reviewCount || 0} αξιολογήσεις)</p>
                         <button
                           className="book-btn"
                           onClick={(e) => {
@@ -793,12 +850,6 @@ export default function BookDate() {
 
       {step === 2 && (
         <>
-          <nav className="breadcrumb">
-            <Link to="/">Αρχική</Link> /
-            <Link to="#" onClick={() => setStep(1)}> Κτηνίατροι</Link> /
-            <span> Κλείσιμο Ραντεβού</span>
-          </nav>
-
           <div className="appointment-container">
             <BookAppointmentStep
               vet={selectedVet}
@@ -811,13 +862,6 @@ export default function BookDate() {
 
       {step === 3 && (
         <>
-          <nav className="breadcrumb">
-            <Link to="/">Αρχική</Link> /
-            <Link to="#" onClick={() => setStep(1)}> Κτηνίατροι</Link> /
-            <Link to="#" onClick={() => setStep(2)}> Κλείσιμο Ραντεβού</Link> /
-            <span> Προεπισκόπηση</span>
-          </nav>
-
           <div className="appointment-container">
             <PreviewAppointmentStep
               vet={selectedVet}
