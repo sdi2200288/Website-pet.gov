@@ -21,13 +21,13 @@ export default function VetReviews({ reviews = [], Stars }) {
           </div>
         </div>
       </div>
-      
+
       {reviews.length === 0 ? (
         <p>Δεν υπάρχουν αξιολογήσεις ακόμα.</p>
       ) : (
         <div className="review-list">
           {reviews.map((r) => (
-            <div key={r.id ?? `${r.author}-${r.date}-${r.stars}`} className="review-card">
+            <div key={r.id ?? `${r.ownerId}-${r.createdAt}`} className="review-card">
               <div className="review-card-top">
                 <div className="review-author">{r.author}</div>
                 <div className="review-date">

@@ -158,9 +158,9 @@ reviews = {
 }
 
 PetListDeclarations = ? gia type 1o orisma
-found.js from lostpets  και προβολη foundReportsWithoutAccount
+Προβολη foundReportsWithoutAccount
 history daclarations 
 εκτύπωση
-ενημερωση διαθεσιμότητας
 default dashboard
+Προφίλ κατοικιδίου απο προφίλ Ιδιοκτήτη (δηλώσεις)
 

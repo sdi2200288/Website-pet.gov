@@ -25,21 +25,13 @@ export default function Profile() {
 
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-  
-  const reviewCountNum = Number(user.reviewCount || "0");
-  const totalScoreNum = Number(user.totalScore || "0");
+  const reviewCountNum = Number(user?.reviewCount || 0);
+  const totalScoreNum = Number(user?.totalScore || 0);
+
 
   const isVet = user?.role === "vet";
   const enabledServicesByCategory = buildEnabledServicesByCategory(user || {});
 
-  const avgRating = reviewCountNum > 0 ? (totalScoreNum / reviewCountNum).toFixed(1) : "0";
-
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
 
   useEffect(() => {
     if (!isVet || !user?.id) return;
@@ -68,7 +60,6 @@ export default function Profile() {
           stars: Number(r.stars) || 0,
           text: r.text || "",
           author: ownersById[r.ownerId] || "Ανώνυμος",
-          date: r.createdAt ? new Date(r.createdAt).toLocaleDateString("el-GR") : "",
         }));
         setReviews(mapped);
       } catch (err) {
@@ -85,11 +76,8 @@ export default function Profile() {
       .then(res => res.json())
       .then(data => setPets(Array.isArray(data) ? data : []))
       .catch(console.error);
-  }, [user]);
+  }, [user?.id, user?.role]);
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
 
   const handleSpeciesChange = (e) => {
     setSpecies(e.target.value);
@@ -120,12 +108,15 @@ export default function Profile() {
     return true;
   });
 
-  const schedule = user.schedule || {};
+  const schedule = user?.schedule || {};
+
   const formatHours = (d) => {
     if (!d || !d.enabled) return "   Κλειστό";
     if (!d.from || !d.to) return " — ";
     return `   ${d.from} - ${d.to}`;
   };
+
+  if (!user) return <Navigate to="/login" replace />;
 
   return (
     <div className="owner-profile">
@@ -198,8 +189,6 @@ export default function Profile() {
               {activeTab === "reviews" && (
                 <VetReview
                   reviews={reviews}
-                  avgRating={reviewCountNum > 0 ? (totalScoreNum / reviewCountNum).toFixed(1) : "0"}
-                  reviewCount={user.reviewCount || "0"} // εμφανίζεται σαν string
                   Stars={Stars}
                 />
               )}
