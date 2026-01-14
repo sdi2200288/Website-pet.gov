@@ -69,7 +69,7 @@ export default function Profile() {
     region: "",
     studyLevel: "",
     experience: "",
-    photoFile: null,
+    photoUrl: "",
     services: buildInitialServicesState(),
     schedule: buildInitialScheduleState(),
   };
@@ -121,7 +121,7 @@ export default function Profile() {
             region: data.region ?? "",
             studyLevel: data.studyLevel ?? "",
             experience: data.experience ?? "",
-            photoFile: null,
+            photoUrl: "",
             services: mergeServices(defaultServices, data.services),
             schedule: mergeSchedule(defaultSchedule, data.schedule),
           }));
@@ -158,7 +158,7 @@ export default function Profile() {
 
   function handlePhotoChange(e) {
     const file = e.target.files?.[0] ?? null;
-    setForm((prev) => ({ ...prev, photoFile: file }));
+    setForm((prev) => ({ ...prev, photoUrl: file }));
   }
 
   function handleClear() {
@@ -481,7 +481,7 @@ export default function Profile() {
             <button type="button" className="registerSecondaryButton" onClick={() => photoInputRef.current?.click()}>
               Προσθήκη Φωτογραφίας
             </button>
-            {form.photoFile && <div className="registerPhotoName">Επιλέχθηκε: {form.photoFile.name}</div>}
+            {form.photoUrl && <div className="registerPhotoName">Επιλέχθηκε: {form.photoUrl.name}</div>}
           </div>
 
           {/* services */}

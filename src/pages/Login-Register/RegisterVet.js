@@ -45,7 +45,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
     region: "",
     studyLevel: "",
     experience: "",
-    photoFile: null,
+    photoUrl: "",
     services: buildInitialServicesState(),
     schedule: buildInitialScheduleState(),
   });
@@ -84,7 +84,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       region: "",
       studyLevel: "",
       experience: "",
-      photoUrl: null,
+      photoUrl: "",
       services: buildInitialServicesState(),
       schedule: buildInitialScheduleState(),
     });
@@ -373,8 +373,8 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         >
           Προσθήκη Φωτογραφίας
         </button>
-        {form.photoFile && (
-          <div className="registerPhotoName">Επιλέχθηκε: {form.photoFile.name}</div>
+        {form.photoUrl && (
+          <div className="registerPhotoName">Επιλέχθηκε: {form.photoUrl.name}</div>
         )}
       </div>
       <div className="registerFieldFull">

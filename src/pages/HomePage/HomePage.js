@@ -10,7 +10,7 @@ import "./HomePage.css";
 import { Link } from "react-router-dom";
 import { formatNumber } from "../Utils/Util";
 import "../OwnerDashboard/BookDate";
-import vetdefault from "../../images/vet.png";
+import vetdefault from "../../images/vetdeafult.webp";
 
 export default function Homepage() {
   const [ownersData, setOwnersData] = useState([]);
@@ -201,7 +201,7 @@ export default function Homepage() {
                         }
                       }}
                     >
-                      <div className="vet-image">
+                      <div className="pet-image">
                         <img src={v.photoUrl || vetdefault}
                           onError={(e) => {
                             e.target.src = vetdefault;
