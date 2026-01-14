@@ -77,7 +77,6 @@
       "reviewCount": "101",
       "region": "Αττικής",
       "experience": 8,
-      "education": "Μεταπτυχιακό",
       "availability": [
         {
           "date": "2026-01-10",
@@ -103,12 +102,11 @@
           ]
         }
       ],
-      "image": "/images/vets/vet1.jpg",
+      "photoUrl": "/images/vets/vet1.jpg",
       "specializations": [
         "Κτηνιατρική Μικρών Ζώων"
       ],
       "studyLevel": "Διδακτορικό",
-      "photoUrl": null,
       "services": {
         "clinical_exam": {
           "enabled": false,
@@ -252,36 +250,6 @@
           "to": "17:00"
         }
       }
-    },
-    {
-      "id": "v202",
-      "firstname": "ΕΛΕΝΗ",
-      "lastname": "ΝΙΚΟΛΑΟΥ",
-      "afm": "2223334445",
-      "gender": "female",
-      "address": "Εγνατία 55, Θεσσαλονίκη",
-      "birthdate": "1990-07-07",
-      "phone": "6900000200",
-      "email": "veteleni@example.com",
-      "password": "Vet2!!",
-      "totalScore": "803",
-      "region": "Θεσσαλονίκης",
-      "experience": 10,
-      "specializations": [
-        "Πτηνά"
-      ],
-      "education": "Διδακτορικό",
-      "availability": [
-        {
-          "date": "2026-01-21",
-          "times": [
-            "09:30",
-            "10:00",
-            "10:30"
-          ]
-        }
-      ],
-      "photoUrl": "/images/vets/vet3.jpg"
     },
     {
       "id": "844c",
@@ -445,6 +413,7 @@
           "to": "17:00"
         }
       },
+      "availability": [],
       "reviewCount": "10",
       "totalScore": "1"
     }
@@ -815,7 +784,7 @@
     {
       "id": "920d",
       "petId": "vp001",
-      "vetId": "v001",
+      "ownerId": "v001",
       "date": "2025-05-07",
       "region": "Δράμας",
       "address": "",
@@ -916,7 +885,7 @@
     {
       "id": "6e32",
       "petId": "vp002",
-      "vetId": "v001",
+      "ownerId": "v001",
       "date": "2024-02-05",
       "region": "Ηλείας",
       "address": "",
@@ -927,7 +896,7 @@
     {
       "id": "c682",
       "petId": "vp002",
-      "vetId": "v001",
+      "ownerId": "v001",
       "date": "2002-05-08",
       "region": "Ζακύνθου",
       "address": "",
@@ -1074,9 +1043,6 @@
       "petId": "vp001",
       "microchip": "555111222",
       "vetId": "v001",
-      "ownerAfm": "456789123",
-      "ownerEmail": "altanitontou1@gmail.com",
-      "ownerPhone": "6948512669",
       "status": "draft",
       "createdAt": "2026-01-05T12:31:55.445Z"
     }
@@ -1099,33 +1065,18 @@
     {
       "id": "2a93",
       "petId": "vp001",
-      "microchip": "555111222",
       "vetId": "v001",
       "currentOwnerId": "631b",
-      "currentOwnerAfm": "2325788990",
-      "currentOwnerEmail": "sdi2200288@uoa.gr",
-      "currentOwnerPhone": "6942781851",
-      "newOwnerAfm": "123457678",
-      "newOwnerEmail": "altanitontou1@gmail.com",
-      "newOwnerPhone": "6948512669",
-      "transferDate": "2026-01-04",
+      "newOwnerId": "123457678",
       "status": "submitted",
       "createdAt": "2026-01-04T16:31:35.817Z"
     },
     {
       "id": "59ea",
       "petId": "vp002",
-      "microchip": "555333444",
       "vetId": "844c",
       "currentOwnerId": "631b",
-      "currentOwnerAfm": "2325788990",
-      "currentOwnerEmail": "sdi2200288@uoa.gr",
-      "currentOwnerPhone": "6942781851",
       "newOwnerId": "o101",
-      "newOwnerAfm": "1234567890",
-      "newOwnerEmail": "nikos@example.com",
-      "newOwnerPhone": "6900000001",
-      "transferDate": "2026-01-08",
       "status": "submitted",
       "createdAt": "2026-01-08T16:48:27.383Z"
     },
@@ -1135,14 +1086,7 @@
       "microchip": "555333444",
       "vetId": "844c",
       "currentOwnerId": "o101",
-      "currentOwnerAfm": "1234567890",
-      "currentOwnerEmail": "nikos@example.com",
-      "currentOwnerPhone": "6900000001",
       "newOwnerId": "o102",
-      "newOwnerAfm": "9876543210",
-      "newOwnerEmail": "maria@example.com",
-      "newOwnerPhone": "6900000002",
-      "transferDate": "2026-01-08",
       "status": "submitted",
       "createdAt": "2026-01-08T16:49:46.437Z"
     }
@@ -1175,13 +1119,7 @@
     {
       "id": "app_4ptb5li64",
       "vetId": "v001",
-      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "vetEmail": "vetgiorgos@example.com",
-      "vetPhone": "6900000100",
       "petId": "13",
-      "petName": "Άρης",
-      "petMicrochip": "1112131415",
-      "petSpecies": "Σκύλος",
       "date": "2026-01-20",
       "time": "09:30",
       "reason": "other",
@@ -1189,23 +1127,13 @@
       "status": "cancelled",
       "createdAt": "2026-01-07T19:05:48.459Z",
       "ownerId": "o102",
-      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
-      "ownerEmail": "maria@example.com",
-      "ownerPhone": "6900000002",
-      "ownerAfm": "9876543210",
       "cancelledBy": "vet",
       "cancelledAt": "2026-01-07T19:06:34.369Z"
     },
     {
       "id": "app_08eniqgxl",
       "vetId": "v001",
-      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "vetEmail": "vetgiorgos@example.com",
-      "vetPhone": "6900000100",
       "petId": "8",
-      "petName": "Σούζυ",
-      "petMicrochip": "6677889900",
-      "petSpecies": "Γάτα",
       "date": "2026-01-21",
       "time": "10:30",
       "reason": "vaccination",
@@ -1213,37 +1141,13 @@
       "status": "cancelled",
       "createdAt": "2026-01-07T19:06:14.149Z",
       "ownerId": "o102",
-      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
-      "ownerEmail": "maria@example.com",
-      "ownerPhone": "6900000002",
-      "ownerAfm": "9876543210",
-      "pet": {
-        "id": "8",
-        "name": "Σούζυ",
-        "photoUrl": "https://placekitten.com/403/303",
-        "microchip": "6677889900",
-        "species": "Γάτα",
-        "breed": "Ragdoll",
-        "gender": "Θηλυκό",
-        "lost": true,
-        "lastSeenDate": "2025-12-03",
-        "region": "Αρκαδίας",
-        "lastSeenAddress": "Τρίπολη, Κέντρο",
-        "ownerId": "o102"
-      },
       "cancelledBy": "owner",
       "cancelledAt": "2026-01-07T19:07:01.585Z"
     },
     {
       "id": "app_do9yoywrj",
       "vetId": "v001",
-      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "vetEmail": "vetgiorgos@example.com",
-      "vetPhone": "6900000100",
       "petId": "8",
-      "petName": "Σούζυ",
-      "petMicrochip": "6677889900",
-      "petSpecies": "Γάτα",
       "date": "2026-01-20",
       "time": "10:00",
       "reason": "surgery",
@@ -1251,21 +1155,13 @@
       "status": "rejected",
       "createdAt": "2026-01-07T19:07:59.229Z",
       "ownerId": "o102",
-      "ownerName": "ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ",
-      "ownerEmail": "maria@example.com",
-      "ownerPhone": "6900000002",
-      "ownerAfm": "9876543210"
+      "cancelledBy": null,
+      "cancelledAt": null
     },
     {
       "id": "app_r6cuyt337",
       "vetId": "v001",
-      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "vetEmail": "vetgiorgos@example.com",
-      "vetPhone": "6900000100",
       "petId": "vp001",
-      "petName": "Ρεξ",
-      "petMicrochip": "555111222",
-      "petSpecies": "Σκύλος",
       "date": "2026-01-20",
       "time": "09:30",
       "reason": "vaccination",
@@ -1273,151 +1169,11 @@
       "status": "cancelled",
       "createdAt": "2026-01-10T07:52:24.713Z",
       "ownerId": "631b",
-      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
-      "ownerEmail": "sdi2200288@uoa.gr",
-      "ownerPhone": "6942781851",
-      "ownerAfm": "2325788990",
-      "pet": {
-        "id": "vp001",
-        "ownerId": "631b",
-        "name": "Ρεξ",
-        "species": "Σκύλος",
-        "breed": "Ημίαιμο",
-        "gender": "male",
-        "lost": true,
-        "microchip": "555111222",
-        "birthdate": "2021-04-12",
-        "photoUrl": "/images/rex.png",
-        "region": "Αττική",
-        "status": "foster",
-        "notes": "Βρέθηκε τραυματισμένος – έτοιμος για αναδοχή"
-      },
       "cancelledBy": "owner",
       "cancelledAt": "2026-01-12T13:25:29.959Z"
-    },
-    {
-      "id": "app_1o5yua48j",
-      "vetId": "v202",
-      "vetName": "ΕΛΕΝΗ ΝΙΚΟΛΑΟΥ",
-      "vetEmail": "veteleni@example.com",
-      "vetPhone": "6900000200",
-      "petId": "1",
-      "petName": "Μπέλα",
-      "petMicrochip": "1234567890",
-      "petSpecies": "Σκύλος",
-      "date": "2026-01-21",
-      "time": "10:00",
-      "reason": "clinical_exam",
-      "description": "",
-      "status": "cancelled",
-      "createdAt": "2026-01-10T08:00:57.083Z",
-      "ownerId": "631b",
-      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
-      "ownerEmail": "sdi2200288@uoa.gr",
-      "ownerPhone": "6942781851",
-      "ownerAfm": "2325788990",
-      "pet": {
-        "id": "1",
-        "name": "Μπέλα",
-        "photoUrl": "https://placedog.net/400/300?id=1",
-        "microchip": "1234567890",
-        "species": "Σκύλος",
-        "breed": "Labrador Retriever",
-        "gender": "Θηλυκό",
-        "lost": false,
-        "lastSeenDate": "2026-01-09",
-        "region": "Αττικής",
-        "lastSeenAddress": "",
-        "ownerId": "631b",
-        "condition": "Ηταν φοβισμενο"
-      },
-      "cancelledBy": "owner",
-      "cancelledAt": "2026-01-10T08:01:10.631Z"
-    },
-    {
-      "id": "app_u3x9scjzu",
-      "vetId": "v001",
-      "vetName": "ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ",
-      "vetEmail": "vetgiorgos@example.com",
-      "vetPhone": "6900000100",
-      "petId": "11",
-      "petName": "Ράσμους",
-      "petMicrochip": "9900112233",
-      "petSpecies": "Σκύλος",
-      "date": "2026-01-10",
-      "time": "12:00",
-      "reason": "surgery",
-      "description": "",
-      "status": "pending",
-      "createdAt": "2026-01-10T08:06:03.576Z",
-      "ownerId": "631b",
-      "ownerName": "ΑΛΤΑΝΗ ΤΟΝΤΟΥ",
-      "ownerEmail": "sdi2200288@uoa.gr",
-      "ownerPhone": "6942781851",
-      "ownerAfm": "2325788990"
     }
   ],
   "notifications": [
-    {
-      "id": "4155",
-      "userId": "o102",
-      "userType": "owner",
-      "title": "Επιβεβαίωση Ραντεβού",
-      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ επιβεβαίωσε το ραντεβού για Σούζυ στις 2026-01-21 10:30",
-      "appointmentId": "app_08eniqgxl",
-      "read": false,
-      "createdAt": "2026-01-07T19:06:29.401Z"
-    },
-    {
-      "id": "2132",
-      "userId": "o102",
-      "userType": "owner",
-      "title": "Ακύρωση Ραντεβού",
-      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ ακύρωσε το ραντεβού για Άρης στις 2026-01-20 09:30",
-      "appointmentId": "app_4ptb5li64",
-      "read": false,
-      "createdAt": "2026-01-07T19:06:34.390Z"
-    },
-    {
-      "id": "f06d",
-      "userId": "v001",
-      "userType": "vet",
-      "title": "Ακύρωση Ραντεβού",
-      "message": "Ο ιδιοκτήτης ΜΑΡΙΑ ΓΕΩΡΓΙΟΥ ακύρωσε το ραντεβού για Σούζυ στις 2026-01-21 10:30",
-      "appointmentId": "app_08eniqgxl",
-      "read": false,
-      "createdAt": "2026-01-07T19:07:01.616Z"
-    },
-    {
-      "id": "1325",
-      "userId": "o102",
-      "userType": "owner",
-      "title": "Απόρριψη Ραντεβού",
-      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ απέρριψε το ραντεβού για Σούζυ",
-      "appointmentId": "app_do9yoywrj",
-      "read": false,
-      "createdAt": "2026-01-07T19:08:23.595Z"
-    },
-    {
-      "id": "de0c",
-      "userId": "631b",
-      "userType": "owner",
-      "title": "Επιβεβαίωση Ραντεβού",
-      "message": "Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ επιβεβαίωσε το ραντεβού για Ρεξ στις 2026-01-20 09:30",
-      "appointmentId": "app_r6cuyt337",
-      "read": false,
-      "createdAt": "2026-01-10T07:54:54.676Z"
-    },
-    {
-      "id": "d687",
-      "userId": "v202",
-      "userType": "vet",
-      "title": "Ακύρωση Ραντεβού",
-      "message": "Ο ιδιοκτήτης ΑΛΤΑΝΗ ΤΟΝΤΟΥ ακύρωσε το ραντεβού για Μπέλα στις 2026-01-21 10:00",
-      "appointmentId": "app_1o5yua48j",
-      "read": false,
-      "createdAt": "2026-01-10T08:01:10.648Z"
-    },
     {
       "id": "2cf9",
       "userId": "v001",

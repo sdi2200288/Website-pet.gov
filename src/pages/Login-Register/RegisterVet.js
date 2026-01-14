@@ -84,7 +84,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
       region: "",
       studyLevel: "",
       experience: "",
-      photoFile: null,
+      photoUrl: null,
       services: buildInitialServicesState(),
       schedule: buildInitialScheduleState(),
     });
@@ -202,7 +202,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
         setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ.");
         return;
       }
-      const submitData = { ...form, reviewCount: 0, totalScore: 0 };
+      const submitData = { ...form, reviewCount: 0, totalScore: 0, availability:[]};
       delete submitData.confirmPassword;
 
       const res = await fetch(API_URL, {

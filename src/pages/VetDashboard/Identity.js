@@ -253,6 +253,7 @@ export default function Identity() {
         condition: "",
         status: petInfo.forAdoption === "Ναι" ? "adoption" : "owned",
         photoUrl: "https://placedog.net/400/300?id=6",
+        lost: false,
       };
       const resPet = await fetch(`http://localhost:3001/pets`, {
         method: "POST",
