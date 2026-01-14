@@ -39,13 +39,7 @@ export default function AppointmentHistory() {
     Promise.all([
       fetch(`http://localhost:3001/appointments?ownerId=${user.id}`).then(r => r.json()),
       fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json()),
-      fetch(`http://localhost:3001/reviews`).then(r => r.json())
-        // .then(reviews => {
-        //   setHistory(pastAppointments.map(a => ({
-        //     ...a,
-        //     reviewed: reviews.some(r => r.appointmentId === a.id)
-        //   })));
-        // })        
+      fetch(`http://localhost:3001/reviews`).then(r => r.json()) 
     ])
     .then(([appointments, pets,reviews]) => {
       const today = new Date();
@@ -60,7 +54,6 @@ export default function AppointmentHistory() {
           pet: pets.find(p => p.id === a.petId),
           reviewed: reviews.some(r=> r.appointmentId === a.id)
         }))
-        // .sort((a, b) => new Date(b.date) - new Date(a.date));
         .sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
 
 
@@ -78,20 +71,6 @@ export default function AppointmentHistory() {
 
       {history.map(a => (
         <div key={a.id} className={`history-booking-card history ${a.status}`}>
-          {/* <div className="history-booking-header" onClick={() => toggle(a.id)}>
-            <div className="history-left">
-              <div className="history-pet-name">{a.pet?.name}</div>
-            </div>
-            <div className="history-right">
-              <span>🕒 {new Date(`${a.date}T${a.time}`).toLocaleDateString("el-GR")} • {a.time}</span>
-              <span className={`history-status ${a.status}`}>
-                {a.status === "cancelled" && "Ακυρώθηκε"}
-                {a.status === "rejected" && "Απορρίφθηκε"}
-                {a.status === "confirmed" && "Ολοκληρώθηκε"}
-              </span>
-              <span className="arrow">{openId === a.id ? "▲" : "▼"}</span>
-            </div>
-          </div> */}
           <div className="history-booking-header" onClick={() => toggle(a.id)}>
             <div className="history-main">
               <div className="history-pet-name">{a.pet?.name}</div>
