@@ -102,7 +102,7 @@
           ]
         }
       ],
-      "photoUrl": "https://tse3.mm.bing.net/th/id/OIP.PPPpZTMMeoaSphabYUqpGQHaE8?w=799&h=533&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "photoUrl": "/images/vet.png",
       "specializations": [
         "Κτηνιατρική Μικρών Ζώων"
       ],
@@ -269,7 +269,7 @@
       "region": "Ηλείας",
       "studyLevel": "Πτυχίο",
       "experience": 50,
-      "photoUrl": "https://picsum.photos/800/500",
+      "photoUrl": "",
       "services": {
         "clinical_exam": {
           "enabled": false,
