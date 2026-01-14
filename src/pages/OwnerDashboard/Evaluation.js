@@ -137,19 +137,11 @@ export default function Evaluation() {
 
   return (
     <div className="review-page">
-      {/* Breadcrumbs */}
-      {/* <nav className="breadcrumbs">
-        <Link to="/">Αρχική</Link> / 
-        <Link to="/owner-dashboard">Ιδιοκτήτης</Link> / 
-        <Link to="/owner-dashboard/history-bookings-owner">Ιστορικό Ραντεβού</Link> / 
-        <span>Αξιολόγηση {appointmentData?.vetName ? `- ${appointmentData.vetName}` : ''}</span>
-      </nav> */}
-
       <div className="review-container">
         {/* Καρτέλα Κτηνίατρου */}
         <div className="vet-card-review">
           <div className="vet-header">
-            <h1>{vet.Name || "Όνομα Κτηνίατρου"}</h1>
+            <h1>{vet.firstname || "Όνομα Κτηνίατρου"}</h1>
             <div className="contact-item">
               <span className="contact-value">{vet.firstname} {vet.lastname}</span>
             </div>
@@ -179,7 +171,7 @@ export default function Evaluation() {
           <h2>Γράψτε την κριτική σας</h2>
           <p className="review-subtitle">
             Η γνώμη σας έχει σημασία! Μοιραστείτε μας την εμπειρία σας από
-            την επίσκεψή σας στην κτηνίατρο {vet.name}.
+            την επίσκεψή σας στην κτηνίατρο {vet.firstname} {vet.lastname}.
           </p>
 
           <form onSubmit={handleSubmit}>

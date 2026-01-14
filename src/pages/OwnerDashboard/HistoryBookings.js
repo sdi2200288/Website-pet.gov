@@ -9,20 +9,42 @@ export default function AppointmentHistory() {
   const [history, setHistory] = useState([]);
   const [openId, setOpenId] = useState(null);
 
-  const handleRepeatAppointment = (appointment) => {
-    alert(`Θες σίγουρα Ραντεβού ξανά με τον κτηνίατρο: ${appointment.vetName}`);
-    navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
-  };
+  // const handleRepeatAppointment = (appointment) => {
+  //   alert(`Θες σίγουρα Ραντεβού ξανά με τον κτηνίατρο: ${appointment.vetName}`);
+  //   navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
+  // };
 
-  const handleReviewAppointment = (appointment) => {
-    alert(`Θες σίγουρα να αξιολογήσεις τον: ${appointment.vetName}`);
-     navigate(`/review/${appointment.vetId}`, { 
-      state: { 
-        appointmentId: appointment.id,
-        vetName: appointment.vetName 
-      }  
-    });
-  };
+  // const handleReviewAppointment = (appointments) => {
+  //   alert(`Θες σίγουρα να αξιολογήσεις τον: ${appointments.vetId}`);
+  //    navigate(`/review/${appointments.vetId}`, { 
+  //     state: { 
+  //       appointmentId: appointments.id,
+  //       vetId: appointments.vetId 
+  //     }  
+  //   });
+  // };
+  const handleRepeatAppointment = (appointment) => {
+  const vetName = appointment.vet 
+    ? `${appointment.vet.firstname} ${appointment.vet.lastname}`
+    : appointment.vetId;
+  
+  alert(`Θέλετε να κλείσετε ραντεβού ξανά με τον κτηνίατρο: ${vetName}`);
+  navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
+};
+
+const handleReviewAppointment = (appointment) => {
+  const vetName = appointment.vet 
+    ? `${appointment.vet.firstname} ${appointment.vet.lastname}`
+    : appointment.vetId;
+  
+  alert(`Θέλετε να αξιολογήσετε τον: ${vetName}`);
+  navigate(`/review/${appointment.vetId}`, { 
+    state: { 
+      appointmentId: appointment.id,
+      vetId: appointment.vetId 
+    }  
+  });
+};
 
   const getMedicalActLabel = (id) => {
     const act = MEDICAL_ACTS.find(a => a.id === id);
@@ -37,9 +59,10 @@ export default function AppointmentHistory() {
     Promise.all([
       fetch(`http://localhost:3001/appointments?ownerId=${user.id}`).then(r => r.json()),
       fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json()),
-      fetch(`http://localhost:3001/reviews`).then(r => r.json()) 
+      fetch(`http://localhost:3001/reviews`).then(r => r.json()),
+      fetch(`http://localhost:3001/vets`).then(r => r.json()) // 
     ])
-    .then(([appointments, pets,reviews]) => {
+    .then(([appointments, pets,reviews,vets]) => {
       const today = new Date();
 
       const pastAppointments = appointments
@@ -50,6 +73,7 @@ export default function AppointmentHistory() {
         .map(a => ({
           ...a,
           pet: pets.find(p => p.id === a.petId),
+          vet: vets.find(v => v.id === a.vetId), 
           reviewed: reviews.some(r=> r.appointmentId === a.id)
         }))
         .sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
@@ -91,7 +115,7 @@ export default function AppointmentHistory() {
           {openId === a.id && (
             <div className="history-booking-body">
               <div className="history-info-grid">
-                <div><strong>Κτηνίατρος:</strong> {a.vetName}</div>
+                <div><strong>Κτηνίατρος:</strong> {a.vet ? `${a.vet.firstname} ${a.vet.lastname}` : a.vetId}</div>
                 <div><strong>Ιατρική Πράξη:</strong> {getMedicalActLabel(a.reason)}</div>
                 <div><strong>Είδος:</strong> {a.pet?.species}</div>
                 <div><strong>Microchip:</strong> {a.pet?.microchip}</div>
