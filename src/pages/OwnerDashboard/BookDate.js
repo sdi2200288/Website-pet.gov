@@ -4,22 +4,9 @@ import "./BookDate.css";
 import "../../components/Vet/Vet";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import {
-  FiSearch,
-  FiUser,
-  FiMapPin,
-  FiCalendar,
-  FiClock,
-} from "react-icons/fi";
+import { FiSearch, FiUser, FiMapPin, FiCalendar, FiClock, } from "react-icons/fi";
 import BookDateImage from "../../images/BookDate.png";
-import {
-  REGIONS,
-  VET_GENDERS,
-  EXPERIENCE_OPTIONS,
-  MEDICAL_ACTS,
-  VET_SPECIALIZATIONS,
-  EDUCATION_OPTIONS,
-} from "../Utils/Util";
+import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS, VET_SPECIALIZATIONS, EDUCATION_OPTIONS, } from "../Utils/Util";
 
 export default function BookDate() {
   const location = useLocation();
@@ -28,8 +15,8 @@ export default function BookDate() {
   const [step, setStep] = useState(1);
   const [selectedVet, setSelectedVet] = useState(null);
   const [myPets, setMyPets] = useState([]);
-  const [selectedPetId, setSelectedPetId] = useState(null);
-  const [errors, setErrors] = useState({});
+  // const [selectedPetId, setSelectedPetId] = useState(null);
+  // const [errors, setErrors] = useState({});
 
   const [veterinarians, setVeterinarians] = useState([]);
   const [allVeterinarians, setAllVeterinarians] = useState([]);
@@ -46,9 +33,9 @@ export default function BookDate() {
   const [region, setRegion] = useState("");
   const [experience, setExperience] = useState("");
   const [date, setDate] = useState("");
-  const [specializations, setSpecializations] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [studyLevel, setStudyLevel] = useState("");
   const [timeFrom, setTimeFrom] = useState("");
-  const [education, setEducation] = useState("");
   const [timeTo, setTimeTo] = useState("");
   const [gender, setGender] = useState("");
   const [sortOrder, setSortOrder] = useState("ratingDesc");
@@ -107,7 +94,6 @@ export default function BookDate() {
       );
     }
 
-
     if (specialization) {
       result = result.filter(
         (v) => Array.isArray(v.specializations) && v.specializations.includes(specialization)
@@ -115,6 +101,7 @@ export default function BookDate() {
     }
 
     if (studyLevel) result = result.filter((v) => v.studyLevel === studyLevel);
+
     if (gender) result = result.filter((v) => v.gender === gender);
 
     if (date && (timeFrom || timeTo)) {
@@ -186,12 +173,8 @@ export default function BookDate() {
           ),
         ];
 
-                const studyLevel = [
-          ...new Set(
-            vets
-              .map((v) => v.studyLevel)
-              .filter(Boolean)
-          ),
+        const studyLevels = [
+          ...new Set(vets.map((v) => v.studyLevel).filter(Boolean)),
         ];
 
         const dates = [];
@@ -207,10 +190,9 @@ export default function BookDate() {
         dates.sort((a, b) => new Date(a) - new Date(b));
 
         setSpecializationOptions(specializations);
-        setEducationOptions(educations);
+        setEducationOptions(studyLevels);
         setAvailableDates(dates);
 
-        // ✅ FIX: αποθηκεύουμε specializations (πληθυντικός) σαν array
         const formattedVets = vets.map((vet) => ({
           id: vet.id,
           name: `${vet.firstname} ${vet.lastname}`,
@@ -243,15 +225,15 @@ export default function BookDate() {
 
   useEffect(() => {
     applyFiltersAndSort();
-  }, [sortOrder]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [sortOrder]);
 
   const clearFilters = () => {
     setRegion("");
     setExperience("");
     setDate("");
-    setSpecialization("");
     setTimeFrom("");
-    setEducation("");
+    setSpecialization("");
+    setStudyLevel("");
     setTimeTo("");
     setGender("");
     setSortOrder("ratingDesc");
@@ -323,6 +305,7 @@ export default function BookDate() {
     const appointmentData = {
       id: generateId(),
       vetId: selectedVet.id,
+      petId: selectedPetObj?.id,
       date: selectedDate,
       time: selectedTime,
       reason: visitReason,
@@ -646,12 +629,13 @@ export default function BookDate() {
 
                   <div className="filter-field">
                     <label>Ειδίκευση</label>
-                    <select value={specializations} className={specializations ? "filtered" : ""} onChange={(e) => setSpecialization(e.target.value)}>
+                    <select value={specialization} className={specialization ? "filtered" : ""} onChange={(e) => setSpecialization(e.target.value)}>
                       <option value="">Οποιαδήποτε</option>
                       {VET_SPECIALIZATIONS.map((spec) => (
                         <option key={spec} value={spec}>{spec}</option>
                       ))}
                     </select>
+
                   </div>
                 </div>
 
@@ -680,12 +664,13 @@ export default function BookDate() {
 
                   <div className="filter-field">
                     <label>Επίπεδο σπουδών</label>
-                    <select value={studyLevel} className={studyLevel ? "filtered" : ""} onChange={(e) => setEducation(e.target.value)}>
+                    <select value={studyLevel} className={studyLevel ? "filtered" : ""} onChange={(e) => setStudyLevel(e.target.value)}>
                       <option value="">Οποιοδήποτε</option>
                       {EDUCATION_OPTIONS.map((edu) => (
                         <option key={edu} value={edu}>{edu}</option>
                       ))}
                     </select>
+
                   </div>
 
                   <div className="filter-field">

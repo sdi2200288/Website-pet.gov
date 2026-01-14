@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
+import "../OwnerDashboard/PetReport.css";
+
 
 export default function FoundLost({ isLoggedIn, userData }) {
     const { id } = useParams();
@@ -102,27 +104,35 @@ export default function FoundLost({ isLoggedIn, userData }) {
         }
     };
 
-    const handleSubmit = async () => {
-        const report = {
+    const handleSubmit = async (status) => {
+        const common = {
             petId: pet.id,
-            reporter: formUser,
-            foundInfo,
+            date: foundInfo.date,
+            region: foundInfo.region,
+            address: foundInfo.address,
+            condition: foundInfo.condition,
+            status, // 'draft' ή 'submitted'
             createdAt: new Date().toISOString(),
+            photoUrl: pet.photoUrl || "",
         };
 
+        const url = isLoggedIn ? "http://localhost:3001/foundReports" : "http://localhost:3001/foundReportsWithoutAcc";
+        const rep = isLoggedIn ? { ...common, ownerId: userData.id, } : { ...common, firstname: formUser.firstname, lastname: formUser.lastname, email: formUser.email, phone: formUser.phone, };
+
         try {
-            await fetch("http://localhost:3001/foundReports", {
+            const res = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(report),
+                body: JSON.stringify(rep),
             });
-
-            alert("Η δήλωση υποβλήθηκε επιτυχώς!");
+            if (!res.ok) throw new Error();
+            alert(status === "draft" ? "Η δήλωση αποθηκεύτηκε προσωρινά." : "Η δήλωση υποβλήθηκε οριστικά!");
             navigate(`/all-lost-pets/PetProfile/${pet.id}`);
         } catch {
             alert("Σφάλμα κατά την υποβολή");
         }
     };
+
 
     if (!pet) return null;
 
@@ -192,6 +202,7 @@ export default function FoundLost({ isLoggedIn, userData }) {
                             className={errors.phone ? "inputError" : ""}
                             value={formUser.phone}
                             disabled={isLoggedIn}
+                            maxLength={15}
                             onChange={(e) => handleUserChange("phone", e.target.value)}
                         />
                         {errors.phone && (
@@ -288,28 +299,69 @@ export default function FoundLost({ isLoggedIn, userData }) {
 
             {/* ================= STEP 3 ================= */}
             {step === 3 && (
-                <div className="found-form">
-                    <h3>Προεπισκόπηση</h3>
-                    <p><strong>Κατοικίδιο:</strong> {pet.name}</p>
-                    <div className="line" />
-                    <p><strong>Oνοματεπώνυμο:</strong> {formUser.firstname} {formUser.lastname}</p>
-                    <p><strong>Τηλέφωνο:</strong> {formUser.phone || "-"}</p>
-                    <p><strong>Email:</strong> {formUser.email || "-"}</p>
-                    <div className="line" />
-                    <p><strong>Ημερομηνία:</strong> {foundInfo.date}</p>
-                    <p><strong>Περιοχή:</strong> {foundInfo.region || "-"}</p>
-                    <p><strong>Διεύθυνση:</strong> {foundInfo.address || "-"}</p>
-                    <p><strong>Κατάσταση:</strong> {foundInfo.condition || "-"}</p>
-                    <div className="form-buttons">
-                        <button onClick={handleCancel}>
-                            Ακύρωση
-                        </button>
-                        <button className="primary" onClick={handleSubmit}>
-                            Οριστική Υποβολή
-                        </button>
+                <>
+                    <div className="found-form">
+                        <h3>Προεπισκόπηση Δήλωσης</h3>
+
+                        <div className="booklet-container">
+                            <div className="booklet-layout">
+                                <div className="booklet-header">
+                                    <div className="pet-photo">
+                                        <img
+                                            src={pet.photoUrl || "/default-pet.jpg"}
+                                            alt={pet.name}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = "/default-pet.jpg";
+                                            }}
+                                        />
+                                    </div>
+                                    <div className="booklet-top">
+                                        <div className="info-box">
+                                            <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
+                                            <p><span>Όνομα:</span> {pet.name}</p>
+                                            <p><span>Είδος:</span> {pet.species || "-"}</p>
+                                            <p><span>Ράτσα:</span> {pet.breed || "-"}</p>
+                                            <p><span>Φύλο:</span> {pet.gender || "-"}</p>
+                                            <p><span>Microchip:</span> {pet.microchip || "-"}</p>
+                                            <p><span>Ημερομηνία Γέννησης:</span> {pet.date || "-"}</p>
+                                            <p><span>Ηλικία:</span> {pet.age || "-"}</p>
+                                        </div>
+
+                                        <div className="info-box">
+                                            <h4>Στοιχεία Ευρέτη</h4>
+                                            <p><span>Ονοματεπώνυμο:</span> {formUser.firstname} {formUser.lastname}</p>
+                                            <p><span>Τηλέφωνο:</span> {formUser.phone || "-"}</p>
+                                            <p><span>Email:</span> {formUser.email || "-"}</p>
+                                        </div>
+
+                                        <div className="info-box">
+                                            <h4>Στοιχεία Εύρεσης</h4>
+                                            <p><span>Ημερομηνία:</span> {foundInfo.date || "-"}</p>
+                                            <p><span>Περιοχή:</span> {foundInfo.region || "-"}</p>
+                                            <p><span>Διεύθυνση:</span> {foundInfo.address || "-"}</p>
+                                            <p><span>Κατάσταση Ζώου:</span> {foundInfo.condition || "-"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-buttons">
+                                <button onClick={handleCancel}>Ακύρωση</button>
+                                {isLoggedIn && (
+                                    <button type="button" onClick={() => handleSubmit("draft")}>
+                                        Προσωρινή Αποθήκευση
+                                    </button>
+                                )}
+                                <button className="primary" type="button" onClick={() => handleSubmit("submitted")}>
+                                    Οριστική Υποβολή
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
+
         </div>
     );
 }

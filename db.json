@@ -1029,6 +1029,35 @@
       "status": "submitted",
       "ownerId": "8d4e",
       "createdAt": "2026-01-10T08:12:13.072Z"
+    },
+    {
+      "id": "3fca",
+      "petId": "vp001",
+      "date": "2026-01-07",
+      "region": "Εύβοιας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "createdAt": "2026-01-14T13:51:54.156Z",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "ownerId": "631b"
+    }
+  ],
+  "foundReportsWithoutAcc": [
+    {
+      "id": "e37d",
+      "petId": "vp001",
+      "date": "2026-01-13",
+      "region": "Εύβοιας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "createdAt": "2026-01-14T13:54:21.639Z",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "firstname": "MARIA",
+      "lastname": "ANTVNIOU",
+      "email": "1@uoa.gr",
+      "phone": "111111111111111"
     }
   ],
   "adoptionReports": [

@@ -53,17 +53,34 @@ Pets={
     lost
 }
 
-lostReports= {
+lostReports, foundReports = {
+    id  
+    petId  
+    date
+    region
+    address
+    condition
+    status // 'draft' ή 'submitted'
+    ownerId  // το ποιος την υπέβαλε (οχι απαραίτητα ο ιδιοκτήτης)
+    createdAt
+    photoUrl
+},
+
+foundReportsWithoutAcc = {
     id
-    petId
+    petId 
     date
     region
     address
     condition
     status
-    ownerId
     createdAt
-},
+    photoUrl
+    firstname
+    lastname
+    email
+    phone
+}
 
 
  adoptionReports, fosterReports = {
@@ -130,12 +147,20 @@ identity= {
     date: 2026-01-10
 }
 
-reviews=    {
-    id: a018,
-    vetId: v202,
-    ownerId: 631b,
-    appointmentId: app_1o5yua48j,
-    stars: 3,
-    text: Ολα καλα!,
-    createdAt: 2026-01-12T15:19:48.076Z
+reviews = {
+    id
+    vetId
+    ownerId
+    appointmentId
+    stars
+    text
+    createdAt
 }
+
+PetListDeclarations = ? gia type 1o orisma
+found.js from lostpets  και προβολη foundReportsWithoutAccount
+history daclarations 
+εκτύπωση
+ενημερωση διαθεσιμότητας
+default dashboard
+

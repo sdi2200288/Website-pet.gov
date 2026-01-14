@@ -112,19 +112,19 @@ export default function AllLostPets() {
               </select>
             </div>
             <div className="filter-field">
-              <label>Είδος</label>
-              <select value={species} className={species ? "filtered" : ""} onChange={handleSpeciesChange}>
+              <label>Φύλο</label>
+              <select value={gender} className={gender ? "filtered" : ""} onChange={(e) => setGender(e.target.value)}>
                 <option value="">Όλα</option>
-                {SPECIES.map((r) => (
+                {GENDERS.map((r) => (
                   <option key={r} value={r}>{r}</option>
                 ))}
               </select>
             </div>
             <div className="filter-field">
-              <label>Φύλο</label>
-              <select value={gender} className={gender ? "filtered" : ""} onChange={(e) => setGender(e.target.value)}>
+              <label>Είδος</label>
+              <select value={species} className={species ? "filtered" : ""} onChange={handleSpeciesChange}>
                 <option value="">Όλα</option>
-                {GENDERS.map((r) => (
+                {SPECIES.map((r) => (
                   <option key={r} value={r}>{r}</option>
                 ))}
               </select>

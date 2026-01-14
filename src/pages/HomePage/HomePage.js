@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import arxikieikona from "../../images/Arxiki_eikona.png";
 import PetDetails from "../../components/Pet/Pet";
-// import VetDetails from "../../components/Vet/Vet";
 import owner from "../../images/owner.png";
 import vet from "../../images/vet.png";
 import { FiSearch } from "react-icons/fi";
