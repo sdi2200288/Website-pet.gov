@@ -34,6 +34,7 @@ import HealthBookletOwner from "./pages/OwnerDashboard/HealthBookletOwner";
 import HealthBookletVet from "./pages/VetDashboard/HealthBookletVet";
 import FutureBookingsVet from "./pages/VetDashboard/FutureBookingsVet";
 import HistoryBookingsVet from "./pages/VetDashboard/HistoryBookingsVet";
+import Availability from "./pages/VetDashboard/Availability"
 
 import AllLostPets from "./pages/AllLostPets/AllLostPets";
 import PetProfile from "./pages/AllLostPets/PetProfile";
@@ -121,6 +122,7 @@ function App() {
               <Route path="booklet" element={<HealthBookletVet />} />
               <Route path="future-bookings-vet" element={<FutureBookingsVet />} />
               <Route path="history-bookings" element={<HistoryBookingsVet />} />
+              <Route path="availability" element={<Availability />} />
             </Route>
           </Route>
 

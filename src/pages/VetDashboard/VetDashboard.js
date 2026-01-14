@@ -84,7 +84,7 @@ export default function VetDashboard() {
             {/* Ραντεβού */}
             <li>
               <NavLink
-                to="/vet-dashboard/bookings"
+                to="/vet-dashboard/availability"
                 className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
               >
                 <FaCalendarAlt className="menu-icon" />

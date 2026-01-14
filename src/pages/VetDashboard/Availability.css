@@ -1,0 +1,260 @@
+/* /* ===============================
+   ROOT CONTAINER
+================================ */
+.availability-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* ===============================
+   HEADER
+================================ */
+.availability-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.availability-header h1 {
+  margin-bottom: 5px;
+}
+
+.availability-header p {
+  color: #555;
+  margin: 0;
+}
+
+/* ===============================
+   CALENDAR
+================================ */
+.react-calendar {
+  width: 500px;
+  max-width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-top: 20px;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px;
+  color: #1f2937;
+}
+
+.react-calendar__navigation button:disabled {
+  color: #cbd5e1;
+}
+
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+.react-calendar__tile {
+  height: 60px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.react-calendar__tile:hover {
+  background: #bbdefb;
+}
+
+.react-calendar__tile--now {
+  background: #e3f2fd;
+  font-weight: 700;
+}
+
+.react-calendar__tile--active {
+  background: #1976d2 !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+.available-day {
+  background-color: #1976d2 !important;
+  color: white !important;
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #cbd5e1;
+}
+
+.react-calendar__tile:disabled {
+  background: transparent;
+  color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   SELECTED DATE HOURS
+================================ */
+.selected-date {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.time-chip {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 5px;
+  background-color: #1976d2;
+  color: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ===============================
+   ADD AVAILABILITY BUTTON
+================================ */
+.add-availability-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-availability-btn:hover {
+  background-color: #115293;
+}
+
+/* ===============================
+   FORM
+================================ */
+.availability-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #ddd;
+  padding: 25px 30px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 95%;
+  background-color: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.availability-form label {
+  align-self: flex-start;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.availability-form input,
+.availability-form select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.availability-form button {
+  padding: 10px 18px;
+  font-size: 15px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.availability-form button:hover {
+  background-color: #115293;
+}
+
+/* ===============================
+   TIME CHECKBOXES
+================================ */
+.time-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.time-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  background: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.time-checkbox input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.time-checkbox:hover {
+  background: #bbdefb;
+}
+
+/* ===============================
+   DELETE BUTTON
+================================ */
+.delete-btn {
+  background-color: #e53935;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.delete-btn:hover {
+  background-color: #ab000d;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 600px) {
+  .availability-form,
+  .react-calendar {
+    width: 95%;
+  }
+
+  .time-chip {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+}
