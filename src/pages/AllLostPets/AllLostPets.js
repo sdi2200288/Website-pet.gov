@@ -43,7 +43,7 @@ export default function AllLostPets() {
   };
 
   useEffect(() => {
-    setLostPets(prev => [...prev].sort((a, b) => sortOrder === "recent" ? new Date(b.lostDate) - new Date(a.lostDate) : new Date(a.lostDate) - new Date(b.lostDate)));
+    setLostPets(prev => [...prev].sort((a, b) => sortOrder === "recent" ? new Date(b.lastSeenDate) - new Date(a.lastSeenDate) : new Date(a.lastSeenDate) - new Date(b.lastSeenDate)));
   }, [sortOrder]);
 
   const applyFiltersAndSort = () => {
@@ -91,7 +91,7 @@ export default function AllLostPets() {
     setGender("");
     setChipSearch("");
     setBreedOptions([]);
-    const sorted = [...allLostPets].sort((a, b) => sortOrder === "recent" ? new Date(b.lostDate) - new Date(a.lostDate) : new Date(a.lostDate) - new Date(b.lostDate));
+    const sorted = [...allLostPets].sort((a, b) => sortOrder === "recent" ? new Date(b.lastSeenDate) - new Date(a.lastSeenDate) : new Date(a.lastSeenDate) - new Date(b.lastSeenDate));
     setLostPets(sorted);
   };
 

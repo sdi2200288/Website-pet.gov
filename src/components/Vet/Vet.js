@@ -1,7 +1,7 @@
 import React from "react";
 import "./Vet.css";
 import { calculateMO } from "../../pages/Utils/Util"
-import owner from "../../images/lostPet3.png";
+// import owner from "../../images/lostPet3.png";
 
 export default function VetDetails({ vet, selected = false }) {
     if (!vet) return null;
@@ -12,7 +12,11 @@ export default function VetDetails({ vet, selected = false }) {
             </div>
 
             <div className="vet-img-wrap">
-                <img className="vet-img" src={owner} alt={vet.firstname + " " + vet.lastname} />
+                <img className="vet-img" src={vet.photoUrl || "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
+                    alt={vet.firstname + " " + vet.lastname}
+                    onError={(e) => {
+                        e.target.src = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
+                    }} />
             </div>
             <div className="vet-fields">
                 <div className="vet-row">

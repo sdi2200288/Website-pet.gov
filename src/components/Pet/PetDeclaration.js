@@ -1,12 +1,7 @@
 import React from "react";
 import "./PetDeclaration.css";
 
-export default function PetDeclaration({
-  item,
-  type,
-  onDeleteDeclaration,
-  onViewDeclaration
-}) {
+export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration }) {
   const isLoss = type === "lost";
   const isFinal = item.status === "submitted";
   const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά Αποθηκευμένη";
@@ -21,7 +16,11 @@ export default function PetDeclaration({
     <article className={`petDeclarationCard ${isFinal ? "status-final" : "status-draft"}`}>
       <div className="petDeclarationMainRow">
         <div className="petDeclarationPhoto">
-          <img src={item.photo} alt={item.petName || "Κατοικίδιο"} />
+          <img src={item.photoUrl || "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
+            alt={"Κατοικίδιο"}
+            onError={(e) => {
+              e.target.src = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
+            }} />
         </div>
 
         <div className="petDeclarationInfo">
@@ -49,9 +48,8 @@ export default function PetDeclaration({
           <div className="petStatusRow">
             <span className="label">Κατάσταση</span>
             <span
-              className={`petStatusBadge ${
-                isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"
-              }`}
+              className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"
+                }`}
             >
               {statusLabel}
             </span>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import arxikieikona from "../../images/Arxiki_eikona.png";
 import PetDetails from "../../components/Pet/Pet";
-import VetDetails from "../../components/Vet/Vet";
+// import VetDetails from "../../components/Vet/Vet";
 import owner from "../../images/owner.png";
 import vet from "../../images/vet.png";
 import { FiSearch } from "react-icons/fi";
@@ -57,7 +57,7 @@ export default function Homepage() {
 
         const recentLostPets = pets
           .filter((pet) => pet.lost === true)
-          .sort((a, b) => new Date(b.lostDate) - new Date(a.lostDate))
+          .sort((a, b) => new Date(b.lastSeenDate) - new Date(a.lastSeenDate))
           .slice(0, 3);
 
         const topVetsList = vets
@@ -201,7 +201,11 @@ export default function Homepage() {
                       }}
                     >
                       <div className="vet-image">
-                        <img src={v.image || "/default-vet.jpg"} alt={fullName} />
+                        <img className="pet-img" src={v.photoUrl ||'https://tse3.mm.bing.net/th/id/OIP.PPPpZTMMeoaSphabYUqpGQHaE8?w=799&h=533&rs=1&pid=ImgDetMain&o=7&rm=3'}
+                          alt={v.lastname}
+                          onError={(e) => {
+                            e.target.src = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
+                          }} />
                       </div>
 
                       <div className="vet-info">

@@ -10,13 +10,11 @@ export default function AppointmentHistory() {
   const [openId, setOpenId] = useState(null);
 
   const handleRepeatAppointment = (appointment) => {
-    // Προς το παρόν απλά alert, μετά μπορείς να κάνεις redirect στο νέο ραντεβού
     alert(`Θες σίγουρα Ραντεβού ξανά με τον κτηνίατρο: ${appointment.vetName}`);
     navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
   };
 
   const handleReviewAppointment = (appointment) => {
-    // Προς το παρόν απλά alert, μετά μπορείς να ανοίξεις φόρμα αξιολόγησης
     alert(`Θες σίγουρα να αξιολογήσεις τον: ${appointment.vetName}`);
      navigate(`/review/${appointment.vetId}`, { 
       state: { 
@@ -103,7 +101,6 @@ export default function AppointmentHistory() {
               </div>
               <div className="history-buttons">
                 <button className="history-btn repeat" onClick={() => handleRepeatAppointment(a)}>Ραντεβού Ξανά</button>
-                {/* <button className="history-btn review" onClick={() => handleReviewAppointment(a)}>Αξιολόγησε</button> */}
                 {!a.reviewed && (
                   <button
                     className="history-btn review"

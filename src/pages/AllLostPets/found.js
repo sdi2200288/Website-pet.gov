@@ -51,7 +51,6 @@ export default function FoundLost({ isLoggedIn, userData }) {
 
     const [foundInfo, setFoundInfo] = useState({
         date: "",
-        time: "",
         region: "",
         address: "",
         condition: "",
@@ -249,17 +248,6 @@ export default function FoundLost({ isLoggedIn, userData }) {
                     </label>
 
                     <label>
-                        Ώρα
-                        <input
-                            type="time"
-                            className={errors.time ? "inputError" : ""}
-                            value={foundInfo.time}
-                            onChange={(e) => handleFoundChange("time", e.target.value)}
-                        />
-                        {errors.time && <div className="fieldError">{errors.time}</div>}
-                    </label>
-
-                    <label>
                         Περιοχή (Νομός) *
                         <select
                             className={errors.region ? "inputError" : ""}
@@ -309,7 +297,6 @@ export default function FoundLost({ isLoggedIn, userData }) {
                     <p><strong>Email:</strong> {formUser.email || "-"}</p>
                     <div className="line" />
                     <p><strong>Ημερομηνία:</strong> {foundInfo.date}</p>
-                    <p><strong>Ώρα:</strong> {foundInfo.time || "-"}</p>
                     <p><strong>Περιοχή:</strong> {foundInfo.region || "-"}</p>
                     <p><strong>Διεύθυνση:</strong> {foundInfo.address || "-"}</p>
                     <p><strong>Κατάσταση:</strong> {foundInfo.condition || "-"}</p>

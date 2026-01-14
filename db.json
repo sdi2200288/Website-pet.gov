@@ -102,7 +102,7 @@
           ]
         }
       ],
-      "photoUrl": "/images/vets/vet1.jpg",
+      "photoUrl": "https://tse3.mm.bing.net/th/id/OIP.PPPpZTMMeoaSphabYUqpGQHaE8?w=799&h=533&rs=1&pid=ImgDetMain&o=7&rm=3",
       "specializations": [
         "Κτηνιατρική Μικρών Ζώων"
       ],
@@ -269,7 +269,7 @@
       "region": "Ηλείας",
       "studyLevel": "Πτυχίο",
       "experience": 50,
-      "photoUrl": null,
+      "photoUrl": "https://picsum.photos/800/500",
       "services": {
         "clinical_exam": {
           "enabled": false,
@@ -546,24 +546,6 @@
       "lost": false
     },
     {
-      "id": "6",
-      "ownerId": "v202",
-      "name": "Νάγια",
-      "species": "Γάτα",
-      "breed": "Maine Coon",
-      "gender": "Θηλυκό",
-      "microchip": "445566778",
-      "birthdate": null,
-      "age": "0",
-      "region": "Ημαθίας",
-      "lastSeenAddress": "Βέροια, Κέντρο",
-      "lastSeenDate": "2025-11-25",
-      "condition": "",
-      "status": "owned",
-      "photoUrl": "https://placekitten.com/402/302",
-      "lost": true
-    },
-    {
       "id": "7",
       "ownerId": "631b",
       "name": "Άτλας",
@@ -655,7 +637,7 @@
     },
     {
       "id": "12",
-      "ownerId": "v202",
+      "ownerId": "631b",
       "name": "Μίνα",
       "species": "Γάτα",
       "breed": "Sphynx",
@@ -1196,7 +1178,7 @@
   "reviews": [
     {
       "id": "a018",
-      "vetId": "v202",
+      "vetId": "844c",
       "ownerId": "631b",
       "appointmentId": "app_1o5yua48j",
       "stars": 3,
