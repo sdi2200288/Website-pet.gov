@@ -224,6 +224,7 @@ export default function Anadoxi() {
             <input
               className="chip-input"
               value={microchip}
+              maxLength={9}
               onChange={(e) => setMicrochip(e.target.value)}
               placeholder="Εισάγετε αριθμό microchip..."
             />

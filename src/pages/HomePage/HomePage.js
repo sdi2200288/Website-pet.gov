@@ -104,6 +104,7 @@ export default function Homepage() {
                 type="text"
                 placeholder="Εισάγετε αριθμό μικροτσίπ..."
                 className="hero-input"
+                maxLength={9}
                 onChange={(e) => setSearchChip(e.target.value)}
               />
               <button className="hero-button" aria-label="Αναζήτηση" onClick={handleSearch}>

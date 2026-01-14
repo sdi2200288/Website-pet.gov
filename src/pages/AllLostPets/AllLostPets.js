@@ -177,6 +177,7 @@ export default function AllLostPets() {
                 type="text"
                 placeholder="Εισάγετε αριθμό μικροτσίπ..."
                 value={chipSearch}
+                maxLength={9}
                 className="hero-input"
                 onChange={(e) => setChipSearch(e.target.value)}
               />
