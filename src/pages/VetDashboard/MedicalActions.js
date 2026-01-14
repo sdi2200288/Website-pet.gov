@@ -211,42 +211,41 @@ export default function MedicalActions() {
 
   return (
     <div className="transfer">
-      {/* Breadcrumb */}
-      <nav className="breadcrumb">
-        {[
-          { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
-          { label: "Ενημέρωση Ιατρικών Πράξεων", step: 0 }, // step 0 του wizard
-          ...(step >= 1 ? [{ label: "Εισαγωγή Microchip", step: 1 }] : []),
-          ...(step >= 2 ? [{ label: "Προβολή Βιβλιαρίου", step: 2 }] : []),
-          ...(step >= 3 ? [{ label: "Συμπλήρωση νέας ιατρικής πράξης", step: 3 }] : []),
-          ...(step === 4 ? [{ label: "Προεπισκόπηση & Υποβολή", step: 4 }] : []),
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1; // τρέχον step
-          return (
-            <span key={index}>
-              <span
-                style={{
-                  color: isLast ? "black" : "blue",
-                  cursor: isLast ? "default" : "pointer",
-                  textDecoration: isLast ? "none" : "underline",
-                }}
-                onClick={() => {
-                  if (!isLast) {
-                    if (item.step !== undefined) {
-                      goToStep(item.step); // μεταβαίνει στο step του wizard
-                    } else if (item.path) {
-                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
+      {/* Breadcrumb μόνο για step 0 */}
+      {step === 0 && (
+        <nav className="breadcrumb">
+          {[
+            { label: "Αρχική", path: "/" },
+            { label: "Ενημέρωση Ιατρικών Πράξεων", step: 0 },
+          ].map((item, index, arr) => {
+            const isLast = index === arr.length - 1;
+            return (
+              <span key={index}>
+                <span
+                  style={{
+                    color: isLast ? "black" : "blue",
+                    cursor: isLast ? "default" : "pointer",
+                    textDecoration: isLast ? "none" : "underline",
+                  }}
+                  onClick={() => {
+                    if (!isLast) {
+                      if (item.step !== undefined) {
+                        goToStep(item.step);
+                      } else if (item.path) {
+                        navigate(item.path);
+                      }
                     }
-                  }
-                }}
-              >
-                {item.label}
+                  }}
+                >
+                  {item.label}
+                </span>
+                {!isLast && " / "}
               </span>
-              {!isLast && " / "}
-            </span>
-          );
-        })}
-      </nav>
+            );
+          })}
+        </nav>
+      )}
+
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
@@ -294,6 +293,7 @@ export default function MedicalActions() {
       {/* ================= STEP 1 ================= */}
       {step === 1 && (
         <>
+        <div className="step1-spacer"></div>
           <div className="stepper">
             <div className="step active">
               <div className="circle">1</div>

@@ -219,23 +219,6 @@ export default function Adopt() {
           </div>
 
           <h3>Εισάγετε τον αριθμό microchip τπυ κατοικιδίου</h3>
-
-          {/* <div className="chip-search">
-            <input
-              type="text"
-              placeholder="Εισάγετε αριθμό microchip..."
-              className="chip-input"
-            />
-            <button className="chip-button" aria-label="Αναζήτηση">
-              <FiSearch size={22} />
-            </button>
-          </div>
-          <button
-            className="next-btn"
-            onClick={() => setStep(2)}
-          >
-            Συνέχεια
-          </button> */}
           <div className="chip-search">
             <input
               className="chip-input"

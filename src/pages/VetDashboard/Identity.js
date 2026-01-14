@@ -313,40 +313,41 @@ export default function Identity() {
 
   return (
     <div className="identity">
-      {/* Breadcrumb */}
-      <nav className="breadcrumb">
-        {[
-          { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
-          { label: "Καταγραφή Ταυτότητας", step: 0 }, // step 0 του wizard
-          ...(step >= 1 ? [{ label: "Δημιουργία προφίλ κατοικιδίου", step: 1 }] : []),
-          ...(step === 2 ? [{ label: "Προεπισκόπηση & Καταχώρηση", step: 2 }] : []),
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1; // τρέχον step
-          return (
-            <span key={index}>
-              <span
-                style={{
-                  color: isLast ? "black" : "blue",
-                  cursor: isLast ? "default" : "pointer",
-                  textDecoration: isLast ? "none" : "underline",
-                }}
-                onClick={() => {
-                  if (!isLast) {
-                    if (item.step !== undefined) {
-                      goToStep(item.step); // μεταβαίνει στο step του wizard
-                    } else if (item.path) {
-                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
+      {/* Breadcrumb μόνο για step 0 */}
+      {step === 0 && (
+        <nav className="breadcrumb">
+          {[
+            { label: "Αρχική", path: "/" },
+            { label: "Καταγραφή Ταυτότητας", step: 0 },
+          ].map((item, index, arr) => {
+            const isLast = index === arr.length - 1;
+            return (
+              <span key={index}>
+                <span
+                  style={{
+                    color: isLast ? "black" : "blue",
+                    cursor: isLast ? "default" : "pointer",
+                    textDecoration: isLast ? "none" : "underline",
+                  }}
+                  onClick={() => {
+                    if (!isLast) {
+                      if (item.step !== undefined) {
+                        goToStep(item.step); // μεταβαίνει στο step του wizard
+                      } else if (item.path) {
+                        navigate(item.path); // πηγαίνει σε άλλη σελίδα
+                      }
                     }
-                  }
-                }}
-              >
-                {item.label}
+                  }}
+                >
+                  {item.label}
+                </span>
+                {!isLast && " / "}
               </span>
-              {!isLast && " / "}
-            </span>
-          );
-        })}
-      </nav>
+            );
+          })}
+        </nav>
+      )}
+
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>

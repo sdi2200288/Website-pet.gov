@@ -37,7 +37,7 @@ export default function Found2() {
 
   useEffect(() => {
     // Όταν αλλάζει το step, scroll στην κορυφή του container
-   window.scrollTo({ top: 0, behavior: "smooth"});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
   const loadOwnerData = async (ownerId) => {
@@ -187,80 +187,79 @@ export default function Found2() {
 
   return (
     <div className="found2">
-         {/* Breadcrumb */}
-      <nav className="breadcrumb">
-        {[
-          { label: "Αρχική", path: "/" }, // πηγαίνει σε άλλη σελίδα
-          { label: "Δήλωση Εύρεσης", step: 0 }, // step 0 του wizard
-          ...(step >= 1 ? [{ label: "Εισαγωγή Microchip", step: 1 }] : []),
-          ...(step >= 2 ? [{ label: "Προβολή Προφίλ", step: 2 }] : []),
-          ...(step >= 3 ? [{ label: "Εισαγωγή στοιχείων εύρεσης", step: 3 }] : []),
-          ...(step === 4 ? [{ label: "Προεπισκόπηση & Υποβολή", step: 4 }] : []),
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1; // τρέχον step
-          return (
-            <span key={index}>
-              <span
-                style={{
-                  color: isLast ? "black" : "blue",
-                  cursor: isLast ? "default" : "pointer",
-                  textDecoration: isLast ? "none" : "underline",
-                }}
-                onClick={() => {
-                  if (!isLast) {
-                    if (item.step !== undefined) {
-                      goToStep(item.step); // μεταβαίνει στο step του wizard
-                    } else if (item.path) {
-                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
+      {/* Breadcrumb μόνο για step 0 */}
+      {step === 0 && (
+        <nav className="breadcrumb">
+          {[
+            { label: "Αρχική", path: "/" },
+            { label: "Δήλωση Εύρεσης", step: 0 },
+          ].map((item, index, arr) => {
+            const isLast = index === arr.length - 1;
+            return (
+              <span key={index}>
+                <span
+                  style={{
+                    color: isLast ? "black" : "blue",
+                    cursor: isLast ? "default" : "pointer",
+                    textDecoration: isLast ? "none" : "underline",
+                  }}
+                  onClick={() => {
+                    if (!isLast) {
+                      if (item.step !== undefined) {
+                        goToStep(item.step); // μεταβαίνει στο step του wizard
+                      } else if (item.path) {
+                        navigate(item.path); // πηγαίνει σε άλλη σελίδα
+                      }
                     }
-                  }
-                }}
-              >
-                {item.label}
+                  }}
+                >
+                  {item.label}
+                </span>
+                {!isLast && " / "}
               </span>
-              {!isLast && " / "}
-            </span>
-          );
-        })}
-      </nav>
+            );
+          })}
+        </nav>
+      )}
+
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
         <>
-        <div className="stepper-wrapper">
-          <div className="stepper stepper-intro">
-          <div className="stepper">
-            <div className="step step-zero">
-              <div className="circle">1</div>
-              <span>
-                Στο πρώτο βημα, θα εισάγετε το microchip του κατοικίδιου που βρέθηκε.
-              </span>
-            </div>
-            <div className="line" />
+          <div className="stepper-wrapper">
+            <div className="stepper stepper-intro">
+              <div className="stepper">
+                <div className="step step-zero">
+                  <div className="circle">1</div>
+                  <span>
+                    Στο πρώτο βημα, θα εισάγετε το microchip του κατοικίδιου που βρέθηκε.
+                  </span>
+                </div>
+                <div className="line" />
 
-            <div className="step step-zero">
-              <div className="circle">2</div>
-              <span>
-                Στο δεύτερο βήμα θα επιβεβαιώσετε τα στοιχεία του κατοικίδιου, όπως είναι καταχωρημένα στη βάση δεδομένων.
-              </span>
-            </div>
-            <div className="line" />
+                <div className="step step-zero">
+                  <div className="circle">2</div>
+                  <span>
+                    Στο δεύτερο βήμα θα επιβεβαιώσετε τα στοιχεία του κατοικίδιου, όπως είναι καταχωρημένα στη βάση δεδομένων.
+                  </span>
+                </div>
+                <div className="line" />
 
-            <div className="step step-zero">
-              <div className="circle">3</div>
-              <span>
-                Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία της ευρεσης (ημερομηνία, τοποθεσία, φωτογραφία).
-              </span>
-            </div>
-            <div className="line" />
+                <div className="step step-zero">
+                  <div className="circle">3</div>
+                  <span>
+                    Στο τρίτο βήμα θα συμπληρώσετε τα στοιχεία της ευρεσης (ημερομηνία, τοποθεσία, φωτογραφία).
+                  </span>
+                </div>
+                <div className="line" />
 
-            <div className="step step-zero">
-              <div className="circle">4</div>
-              <span>
-                Στο τέταρτο και τελευταίο βήμα θα ελέγξετε την προεπισκόπηση της δήλωσης σας και θα επιλέξετε προσωρινή αποθήκευση, υποβολή ή διαγραφή. Με την υποβολή η δήλωση κλειδώνει ενώ οι προσωρινά αποθηκευμένες δηλώσεις εμφανίζονται στο ιστορικό δηλώσεων για μελλοντική επεξεργασία ή υποβολή.
-              </span>
+                <div className="step step-zero">
+                  <div className="circle">4</div>
+                  <span>
+                    Στο τέταρτο και τελευταίο βήμα θα ελέγξετε την προεπισκόπηση της δήλωσης σας και θα επιλέξετε προσωρινή αποθήκευση, υποβολή ή διαγραφή. Με την υποβολή η δήλωση κλειδώνει ενώ οι προσωρινά αποθηκευμένες δηλώσεις εμφανίζονται στο ιστορικό δηλώσεων για μελλοντική επεξεργασία ή υποβολή.
+                  </span>
+                </div>
+              </div>
             </div>
-          </div>
-          </div>
           </div>
           <button className="next-btn" onClick={() => goToStep(1)}>
             Συνέχεια

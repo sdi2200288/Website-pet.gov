@@ -15,10 +15,6 @@ export default function AppointmentHistoryVet() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
 
-    // Promise.all([
-    //   fetch(`http://localhost:3001/appointments?ownerId=${user.id}`).then(r => r.json()),
-    //   fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json())
-    // ])
       Promise.all([
         fetch(`http://localhost:3001/appointments?vetId=${user.id}`).then(r => r.json()),
         fetch(`http://localhost:3001/pets`).then(r => r.json()) // Πέρνουμε όλα τα pets
