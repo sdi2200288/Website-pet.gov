@@ -1,10 +1,20 @@
-import React from "react";
+﻿import React from "react";
 import "./PetDeclaration.css";
 
-export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration }) {
-  const isLoss = type === "lost";
+export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration, onPrintDeclaration }) {
+  const effectiveType = type === "mixed" ? item.type : type;
   const isFinal = item.status === "submitted";
-  const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά Αποθηκευμένη";
+  const statusLabel = isFinal ? "Οριστικοποιημένη" : "Πρόχειρη";
+
+  const declarationTypeLabel = (() => {
+    if (effectiveType === "loss" || effectiveType === "lost") return "Απώλεια";
+    if (effectiveType === "found") return "Εύρεση";
+    if (effectiveType === "foundNoAcc") return "Εύρεση (χωρίς λογαριασμό)";
+    if (effectiveType === "adoption") return "Υιοθεσία";
+    if (effectiveType === "foster") return "Φιλοξενία";
+    if (effectiveType === "transfer") return "Μεταβίβαση";
+    return "Δήλωση";
+  })();
 
   const handleDelete = () => {
     if (onDeleteDeclaration) {
@@ -12,45 +22,94 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
     }
   };
 
+  const handlePrint = () => {
+    if (onPrintDeclaration) {
+      onPrintDeclaration(item);
+    }
+  };
+
+  const handleView = () => {
+    if (onViewDeclaration) {
+      onViewDeclaration(item);
+    }
+  };
+
+  const infoRows = (() => {
+    if (
+      effectiveType === "loss" ||
+      effectiveType === "lost" ||
+      effectiveType === "found" ||
+      effectiveType === "foundNoAcc"
+    ) {
+      return [
+        { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+        { label: "Ημερομηνία", value: item.date },
+        { label: "Περιοχή", value: item.region },
+        { label: "Διεύθυνση", value: item.address },
+        { label: "Κατάσταση", value: item.condition },
+      ];
+    }
+
+    if (effectiveType === "adoption" || effectiveType === "foster") {
+      return [
+        { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+        { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
+      ];
+    }
+
+    if (effectiveType === "transfer") {
+      const currentOwner =
+        item.currentOwnerName ||
+        item.currentOwnerFullname ||
+        item.currentOwner ||
+        item.currentOwnerId;
+      const newOwner =
+        item.newOwnerName || item.newOwnerFullname || item.newOwner || item.newOwnerId;
+
+      return [
+        { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+        { label: "Τρέχων Ιδιοκτήτης", value: currentOwner },
+        { label: "Νέος Ιδιοκτήτης", value: newOwner },
+        { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
+      ];
+    }
+
+    return [
+      { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+      { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
+    ];
+  })();
+
   return (
     <article className={`petDeclarationCard ${isFinal ? "status-final" : "status-draft"}`}>
       <div className="petDeclarationMainRow">
         <div className="petDeclarationPhoto">
-          <img src={item.photoUrl || "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"}
-            alt={"Κατοικίδιο"}
+          <img
+            src={
+              item.photoUrl ||
+              "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"
+            }
+            alt="Κατοικίδιο"
             onError={(e) => {
-              e.target.src = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
-            }} />
+              e.target.src =
+                "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
+            }}
+          />
         </div>
 
         <div className="petDeclarationInfo">
-          <div className="petDeclarationField">
-            <span className="label">
-              {isLoss ? "Ημερομηνία απώλειας" : "Ημερομηνία εύρεσης"}
-            </span>
-            <span className="value">{item.date}</span>
-          </div>
-
-          <div className="petDeclarationField">
-            <span className="label">
-              {isLoss ? "Διεύθυνση απώλειας" : "Διεύθυνση εύρεσης"}
-            </span>
-            <span className="value">{item.address}</span>
-          </div>
-
-          <div className="petDeclarationField">
-            <span className="label">Περιοχή (Νομός)</span>
-            <span className="value">{item.region}</span>
-          </div>
+          {infoRows.map((row) => (
+            <div className="petDeclarationField" key={row.label}>
+              <span className="label">{row.label}</span>
+              <span className="value">{row.value ?? "-"}</span>
+            </div>
+          ))}
         </div>
 
         <div className="petDeclarationSide">
           <div className="petStatusRow">
             <span className="label">Κατάσταση</span>
-            <span
-              className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"
-                }`}
-            >
+            <span className={`petStatusBadge ${isFinal ? "petStatusBadge--final" : "petStatusBadge--draft"}`}>
               {statusLabel}
             </span>
           </div>
@@ -58,11 +117,10 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
           <div className="petDeclarationButtonsTop">
             {isFinal ? (
               <>
-                <button className="petButtonPrimary">Εκτύπωση</button>
-                <button
-                  className="petButtonSecondary"
-                  onClick={() => onViewDeclaration(item)}
-                >
+                <button className="petButtonPrimary" onClick={handlePrint}>
+                  Εκτύπωση
+                </button>
+                <button className="petButtonSecondary" onClick={handleView}>
                   Προβολή
                 </button>
               </>
