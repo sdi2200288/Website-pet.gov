@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SPECIES, dogPopular, catPopular } from "../Utils/Util";
 import "./Identity.css";
-import "./Loss2.css";
+// import "./Loss2.css";
 
 export default function Identity() {
   const navigate = useNavigate();

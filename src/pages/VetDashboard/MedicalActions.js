@@ -14,11 +14,11 @@ export default function MedicalActions() {
   const [error, setError] = useState("");
   const [medicalHistory, setMedicalHistory] = useState([]);
 
-  const [newOwnerInfo, setNewOwnerInfo] = useState({
-    afm: "",
-    email: "",
-    phone: "",
-  });
+  // const [newOwnerInfo, setNewOwnerInfo] = useState({
+  //   afm: "",
+  //   email: "",
+  //   phone: "",
+  // });
 
   const vet = JSON.parse(localStorage.getItem("user"));
   // const selectedPet = pets.find((p) => p.id === selectedPetId);
@@ -41,18 +41,25 @@ export default function MedicalActions() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  // const [medicalAction, setMedicalAction] = useState({
+  //   date: "",                // Ημερομηνία
+  //   duration: "",            // Διάρκεια εξέτασης
+  //   startTime: "",           // Ώρα έναρξης
+  //   endTime: "",             // Ώρα λήξης
+  //   type: "",                // Τύπος Ιατρικής Πράξης
+  //   actionCode: "",          // Κωδικός Ιατρικής Πράξης
+  //   weight: "",              // Βάρος Ζώου
+  //   anesthesia: "",          // Αναισθησία
+  //   description: "",         // Περιγραφή Ιατρικής Επίσκεψης
+  //   medications: "",         // Στοιχεία Εξόδου (Φάρμακα / Οδηγίες)
+  // });
+
   const [medicalAction, setMedicalAction] = useState({
-    date: "",                // Ημερομηνία
-    duration: "",            // Διάρκεια εξέτασης
-    startTime: "",           // Ώρα έναρξης
-    endTime: "",             // Ώρα λήξης
-    type: "",                // Τύπος Ιατρικής Πράξης
-    actionCode: "",          // Κωδικός Ιατρικής Πράξης
-    weight: "",              // Βάρος Ζώου
-    anesthesia: "",          // Αναισθησία
-    description: "",         // Περιγραφή Ιατρικής Επίσκεψης
-    medications: "",         // Στοιχεία Εξόδου (Φάρμακα / Οδηγίες)
-  });
+  date: "",
+  type: "",
+  description: "",
+  medications: "",
+});
 
   const handleCancel = () => {
     const confirmLeave = window.confirm(
@@ -140,16 +147,16 @@ export default function MedicalActions() {
   };
 
   // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
-  const validateAFM = (afm) => {
-    const afmRegex = /^\d{9}$/;
-    return afmRegex.test(afm);
-  };
+  // const validateAFM = (afm) => {
+  //   const afmRegex = /^\d{9}$/;
+  //   return afmRegex.test(afm);
+  // };
 
-  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
-  const validatePhone = (phone) => {
-    const phoneRegex = /^69\d{8}$/;
-    return phoneRegex.test(phone);
-  };
+  // // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
+  // const validatePhone = (phone) => {
+  //   const phoneRegex = /^69\d{8}$/;
+  //   return phoneRegex.test(phone);
+  // };
 
   const loadMedicalHistory = async (petId) => {
     try {
@@ -173,13 +180,13 @@ export default function MedicalActions() {
       petId: selectedPet.id,
       vetId: vet.id,
       date: medicalAction.date,
-      duration: medicalAction.duration,
-      startTime: medicalAction.startTime,
-      endTime: medicalAction.endTime,
+      // duration: medicalAction.duration,
+      // startTime: medicalAction.startTime,
+      // endTime: medicalAction.endTime,
       type: medicalAction.type,
-      actionCode: medicalAction.actionCode,
-      weight: medicalAction.weight,
-      anesthesia: medicalAction.anesthesia,
+      // actionCode: medicalAction.actionCode,
+      // weight: medicalAction.weight,
+      // anesthesia: medicalAction.anesthesia,
       description: medicalAction.description,
       medications: medicalAction.medications,
       status, // draft | submitted
