@@ -62,6 +62,16 @@ export default function OwnerDashboard() {
                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
               </NavLink>
             </li>
+
+            <li>
+              <NavLink
+                to={`history-statement?ownerId=${user?.id || ""}`}
+                className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+              >
+                <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
+              </NavLink>
+            </li>
+
             <li>
               <NavLink
                 to={`health-booklet?ownerId=${user?.id || ""}`}
@@ -96,23 +106,14 @@ export default function OwnerDashboard() {
 
             <li>
               <NavLink
-                  to={`history-bookings-owner?ownerId=${user?.id || ""}`}
-                  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-                >
-                  <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
-                </NavLink>
+                to={`history-bookings-owner?ownerId=${user?.id || ""}`}
+                className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+              >
+                <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
+              </NavLink>
 
             </li>
 
-            <li>
-              <NavLink
-                  to={`history-statement?ownerId=${user?.id || ""}`}
-                  className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
-                >
-                  <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
-                </NavLink>
-
-            </li>
           </ul>
         </aside>
         <main className="dashboard-content">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
@@ -20,6 +20,8 @@ export default function Found2() {
     address: "",
     condition: "",
   });
+  const photoInputRef = useRef(null);
+  const [form, setForm] = useState({ photoUrl: "" });
 
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
 
@@ -64,6 +66,15 @@ export default function Found2() {
   };
 
 
+  function handlePhotoChange(e) {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) {
+      setForm((prev) => ({ ...prev, photoUrl: "" }));
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    setForm((prev) => ({ ...prev, photoUrl: previewUrl }));
+  }
 
   const handleSearchByMicrochip = async () => {
     setLoading(true);
@@ -102,10 +113,12 @@ export default function Found2() {
       region: foundInfo.region,
       address: foundInfo.address,
       condition: foundInfo.condition,
-      status, // 'draft' ή 'submitted'
+      status,
       ownerId: owner.id,
       createdAt: new Date().toISOString(),
+      photoUrl: form.photoUrl || pet.photoUrl || "",
     };
+
 
     try {
       const res = await fetch("http://localhost:3001/foundReports", {
@@ -138,6 +151,7 @@ export default function Found2() {
       setOwner(null);
       setMicrochip("");
       setFoundInfo({ date: "", region: "", address: "", condition: "" });
+      setForm({ photoUrl: "" });
 
       // Μετάβαση στην αρχικη
       navigate("/vet-dashboard");
@@ -182,6 +196,7 @@ export default function Found2() {
     setOwner(null);
     setMicrochip("");
     setFoundInfo({ date: "", region: "", address: "", condition: "" });
+    setForm({ photoUrl: "" });
     setErrors({});
   };
 
@@ -502,7 +517,24 @@ export default function Found2() {
               </label>
 
               <div>
-                <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={photoInputRef}
+                  onChange={handlePhotoChange}
+                  style={{ display: "none" }}
+                />
+                <button
+                  type="button"
+                  className="registerSecondaryButton"
+                  onClick={() => photoInputRef.current?.click()}
+                >
+                  Προσθήκη Φωτογραφίας
+                </button>
+
+                {form.photoUrl && (
+                  <div className="registerPhotoName">Επιλέχθηκε φωτογραφία</div>
+                )}
               </div>
 
               <div className="form-buttons">
@@ -559,9 +591,14 @@ export default function Found2() {
                 <div className="booklet-header">
                   <div className="pet-photo">
                     <img
-                      src={pet.photoUrl}
+                      src={form.photoUrl || pet.photoUrl}
                       alt={pet.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = pet.photoUrl;
+                      }}
                     />
+
                   </div>
 
                   <div className="booklet-top">

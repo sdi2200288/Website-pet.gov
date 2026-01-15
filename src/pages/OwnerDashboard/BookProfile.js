@@ -46,11 +46,14 @@ export default function BookProfile() {
                     setReviews(
                         arr.map((r) => ({
                             ...r,
-                            authorName: ownersById[r.ownerId]
+                            stars: Number(r.stars) || 0,
+                            text: r.text || "",
+                            author: ownersById[r.ownerId]
                                 ? `${ownersById[r.ownerId].firstname || ""} ${ownersById[r.ownerId].lastname || ""}`.trim()
-                                : "Χρήστης",
+                                : "Ανώνυμος",
                         }))
                     );
+
                 } catch {
                     setReviews([]);
                 }

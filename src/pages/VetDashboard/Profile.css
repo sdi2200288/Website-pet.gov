@@ -57,6 +57,16 @@
   margin-top: 30px;
 }
 
+.profile-actions .primary-btn,
+.profile-actions .secondary-btn {
+  border-radius: 20px;
+  height: 42px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
 .primary-btn {
   background: #2c3e50;
   color: white;

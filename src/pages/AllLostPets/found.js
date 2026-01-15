@@ -10,7 +10,7 @@ export default function FoundLost({ isLoggedIn, userData }) {
     const [step, setStep] = useState(1);
     const [pet, setPet] = useState(null);
     const [errors, setErrors] = useState({});
-
+    const [isPetOwner, setIsPetOwner] = useState(false);
 
     const handleFoundChange = (field, value) => {
         setFoundInfo({ ...foundInfo, [field]: value });
@@ -34,11 +34,15 @@ export default function FoundLost({ isLoggedIn, userData }) {
 
     const validateStep2 = () => {
         const newErrors = {};
-        if (!foundInfo.date) {
-            newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
-        }
-        if (!foundInfo.region) {
-            newErrors.region = "Πρέπει να επιλέξετε περιοχή";
+        if (!foundInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
+        if (!foundInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
+
+        if (foundInfo.date && pet?.lastSeenDate) {
+            const foundDate = new Date(foundInfo.date);
+            const lastSeenDate = new Date(pet.lastSeenDate);
+            if (foundDate < lastSeenDate) {
+                newErrors.date = "Η ημερομηνία πρέπει να είναι μετά την τελευταία εξαφάνιση του κατοικιδίου";
+            }
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -66,13 +70,28 @@ export default function FoundLost({ isLoggedIn, userData }) {
                 const data = await res.json();
                 if (!data.lost) throw new Error();
                 setPet(data);
+                // if (isLoggedIn && userData?.id && data?.ownerId) {
+                //     setIsPetOwner(String(userData.id) === String(data.ownerId));
+                // } else {
+                //     setIsPetOwner(false);
+                // } (data);
+                setPet(data);
+
+                const ownerMatch =
+                    isLoggedIn && userData?.id != null && data?.ownerId != null
+                        ? String(userData.id) === String(data.ownerId)
+                        : false;
+
+                setIsPetOwner(ownerMatch);
+
+
             } catch {
                 alert("Το κατοικίδιο δεν βρέθηκε");
                 navigate("/all-lost-pets");
             }
         };
         fetchPet();
-    }, [id, navigate]);
+    }, [id, navigate, isLoggedIn, userData?.id]);
 
     useEffect(() => {
         if (isLoggedIn && userData) {
@@ -105,6 +124,12 @@ export default function FoundLost({ isLoggedIn, userData }) {
     };
 
     const handleSubmit = async (status) => {
+        if (isLoggedIn && String(userData?.id) === String(pet?.ownerId)) {
+            alert("Δεν μπορείτε να κάνετε δήλωση εύρεσης για το δικό σας κατοικίδιο.");
+            return;
+        }
+
+
         const common = {
             petId: pet.id,
             date: foundInfo.date,
@@ -346,17 +371,31 @@ export default function FoundLost({ isLoggedIn, userData }) {
                                 </div>
                             </div>
 
+                            {/* Μήνυμα μόνο αν είναι ιδιοκτήτης */}
+                            {isPetOwner && (
+                                <div className="fieldError" style={{ margin: "12px 0" }}>
+                                    Δεν μπορείτε να κάνετε δήλωση εύρεσης για το δικό σας κατοικίδιο.
+                                </div>
+                            )}
+
                             <div className="form-buttons">
                                 <button onClick={handleCancel}>Ακύρωση</button>
-                                {isLoggedIn && (
+
+                                {/* Αν είναι ιδιοκτήτης, μην δείχνεις καν draft */}
+                                {isLoggedIn && !isPetOwner && (
                                     <button type="button" onClick={() => handleSubmit("draft")}>
                                         Προσωρινή Αποθήκευση
                                     </button>
                                 )}
-                                <button className="primary" type="button" onClick={() => handleSubmit("submitted")}>
-                                    Οριστική Υποβολή
-                                </button>
+
+                                {/* Αν είναι ιδιοκτήτης, μην δείχνεις καν submit */}
+                                {!isPetOwner && (
+                                    <button className="primary" type="button" onClick={() => handleSubmit("submitted")}>
+                                        Οριστική Υποβολή
+                                    </button>
+                                )}
                             </div>
+
                         </div>
                     </div>
                 </>

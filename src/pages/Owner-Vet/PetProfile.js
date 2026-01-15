@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "./PetProfile.css";
 import PetDeclarationsList from "../../components/Pet/PetListDeclaration";
 import DeclarationModal from "../../pages/Owner-Vet/WatchDeclaration";
+import { MEDICAL_ACTS } from "../Utils/Util";
 
 const DEFAULT_PET_PHOTO =
   "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
@@ -196,148 +197,13 @@ export default function ProfilePetOwner() {
     setSelectedDeclaration(null);
   }
 
-  function formatDateTime(iso) {
-    if (!iso) return "-";
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return String(iso);
-    return d.toLocaleString("el-GR");
-  }
-
-  function labelForType(t) {
-    if (t === "loss" || t === "lost") return "Δήλωση Απώλειας";
-    if (t === "found") return "Δήλωση Εύρεσης";
-    if (t === "foundNoAcc") return "Δήλωση Εύρεσης (χωρίς λογαριασμό)";
-    if (t === "adoption") return "Δήλωση Υιοθεσίας";
-    if (t === "foster") return "Δήλωση Φιλοξενίας";
-    if (t === "transfer") return "Δήλωση Μεταβίβασης";
-    return "Δήλωση";
-  }
-
-  function buildPrintRows(declaration) {
-    const rows = [
-      ["ID", declaration.id],
-      ["Pet ID", declaration.petId],
-      ["Κατάσταση", declaration.status],
-      ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)],
-    ];
-
-    const t = declaration.type;
-
-    if (t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc") {
-      rows.push(
-        ["Ημερομηνία", declaration.date],
-        ["Περιοχή", declaration.region],
-        ["Διεύθυνση", declaration.address],
-        ["Κατάσταση", declaration.condition]
-      );
-      if ("ownerId" in declaration) {
-        rows.push(["Υποβλήθηκε από", declaration.ownerName || declaration.ownerId]);
-      }
-    }
-
-    if (t === "foundNoAcc") {
-      rows.push(
-        ["Όνομα", declaration.firstname],
-        ["Επώνυμο", declaration.lastname],
-        ["Email", declaration.email],
-        ["Τηλέφωνο", declaration.phone]
-      );
-    }
-
-    if (t === "adoption") {
-      rows.push(
-        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
-        ["Κατάσταση", declaration.status],
-        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
-      );
-    }
-
-    if (t === "foster") {
-      rows.push(
-        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
-        ["Κατάσταση", declaration.status],
-        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
-      );
-    }
-
-    if (t === "transfer") {
-      rows.push(
-        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
-        ["Τρέχων Ιδιοκτήτης", declaration.currentOwnerName || declaration.currentOwnerId],
-        ["Νέος Ιδιοκτήτης", declaration.newOwnerName || declaration.newOwnerId],
-        ["Κατάσταση", declaration.status],
-        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
-      );
-    }
-
-    return rows;
-  }
 
   function handlePrintDeclaration(declaration) {
-    const title = labelForType(declaration.type);
-    const rows = buildPrintRows(declaration)
-      .map(
-        ([label, value]) =>
-          `<tr><td class="label">${label}</td><td class="value">${value ?? "-"}</td></tr>`
-      )
-      .join("");
-
-    const photo = declaration.photoUrl
-      ? `<img class="photo" src="${declaration.photoUrl}" alt="Photo" />`
-      : "";
-
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "fixed";
-    iframe.style.right = "0";
-    iframe.style.bottom = "0";
-    iframe.style.width = "0";
-    iframe.style.height = "0";
-    iframe.style.border = "0";
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentWindow?.document;
-    if (!doc) {
-      document.body.removeChild(iframe);
-      return;
-    }
-
-    doc.open();
-    doc.write(`<!doctype html>
-<html lang="el">
-<head>
-  <meta charset="utf-8" />
-  <title>${title}</title>
-  <style>
-    * { box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; margin: 16mm; color: #111; }
-    h1 { font-size: 18px; margin: 0 0 12px; }
-    table { width: 100%; border-collapse: collapse; }
-    td { padding: 6px 0; vertical-align: top; border-bottom: 1px solid #e5e7eb; }
-    .label { width: 160px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px; color: #4b5563; }
-    .value { font-size: 13px; font-weight: 600; color: #111827; }
-    .photo { width: 100%; max-height: 240px; object-fit: cover; margin: 10px 0; border: 1px solid #e5e7eb; }
-    @page { margin: 12mm; }
-  </style>
-</head>
-<body>
-  <h1>${title}</h1>
-  ${photo}
-  <table>${rows}</table>
-</body>
-</html>`);
-    doc.close();
-
-    const win = iframe.contentWindow;
-    const cleanup = () => {
-      document.body.removeChild(iframe);
-    };
-
+    setSelectedDeclaration(declaration);
+    setIsModalOpen(true);
     setTimeout(() => {
-      if (!win) return cleanup();
-      win.focus();
-      win.print();
-      cleanup();
-    }, 250);
+      window.print();
+    }, 0);
   }
 
   const lossSorted = sortDecls(lossDeclarations, sortOrder);
@@ -364,6 +230,8 @@ export default function ProfilePetOwner() {
       console.error(err);
     }
   };
+
+  const selectedMedicalAct = MEDICAL_ACTS.find((act) => act.id === medicalActions.type);
 
   return (
     <div className="petProfilePage">
@@ -499,22 +367,23 @@ export default function ProfilePetOwner() {
                     <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
                   ) : (
                     <div className="medical-actions-list">
-                      {medicalActions.map((action) => (
-                        <div key={action.id} className="medical-action-item">
-                          <p><strong>Ημερομηνία:</strong> {action.date}</p>
-                          <p><strong>Είδος:</strong> {action.type}</p>
-                          <p><strong>Περιγραφή:</strong> {action.description}</p>
-                          <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
-                          <hr />
-                        </div>
-                      ))}
+                      {medicalActions.map((action) => {
+                        const actLabel =
+                          MEDICAL_ACTS.find((a) => a.id === action.type)?.label ?? action.type ?? "—";
+
+                        return (
+                          <div key={action.id} className="medical-action-item">
+                            <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                            <p><strong>Είδος:</strong> {actLabel}</p>
+                            <p><strong>Περιγραφή:</strong> {action.description}</p>
+                            <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
+                            <hr />
+                          </div>
+                        );
+                      })}
+
                     </div>
                   )}
-                </div>
-
-                <div className="info-box large">
-                  <h4>Λοιπές Πληροφορίες</h4>
-                  <p className="empty">Δεν υπάρχουν διαθέσιμες πληροφορίες.</p>
                 </div>
               </div>
 

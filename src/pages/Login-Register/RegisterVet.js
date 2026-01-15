@@ -53,7 +53,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
+    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   }
 
   function handleAfmChange(e) {
@@ -189,20 +189,53 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError("");
-    if (!validate()) return;
+    if (!validate()) {
+      alert("ΚΟΠΗΚΕ ΑΠΟ VALIDATE");
+      return;
+    }
 
     try {
-      const ownersRes = await fetch(`http://localhost:3001/owners?afm=${form.afm}`);
-      const ownersData = await ownersRes.json();
-      const vetRes = await fetch(`http://localhost:3001/vets?afm=${form.afm}`);
-      const vetData = await vetRes.json();
+      // --------- ΕΝΙΑΙΟΣ ΕΛΕΓΧΟΣ ΑΦΜ + EMAIL (owners + vets) ---------
+      const normalizedEmail = form.email.trim().toLowerCase();
+      const normalizedAfm = String(form.afm).trim();
 
-      if (vetData.length > 0 || ownersData.length > 0) {
-        setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ.");
+      const [ownersRes, vetsRes] = await Promise.all([
+        fetch("http://localhost:3001/owners"),
+        fetch("http://localhost:3001/vets"),
+      ]);
+
+      if (!ownersRes.ok || !vetsRes.ok) {
+        throw new Error("Δεν μπορώ να διαβάσω owners/vets από τον server");
+      }
+
+      const [owners, vets] = await Promise.all([ownersRes.json(), vetsRes.json()]);
+
+      console.log("owners count:", owners?.length, "vets count:", vets?.length);
+      console.log("testing email:", normalizedEmail, "testing afm:", normalizedAfm);
+
+      const afmExists =
+        (owners ?? []).some(o => String(o.afm).trim() === normalizedAfm) ||
+        (vets ?? []).some(v => String(v.afm).trim() === normalizedAfm);
+
+
+      const emailExists =
+        (owners ?? []).some(o => (o.email ?? "").trim().toLowerCase() === normalizedEmail) ||
+        (vets ?? []).some(v => (v.email ?? "").trim().toLowerCase() === normalizedEmail);
+
+
+      if (afmExists) {
+        alert("Βρέθηκε διπλό ΑΦΜ!");
+        setErrors(prev => ({ ...prev, afm: "Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ." }));
         return;
       }
-      const submitData = { ...form, reviewCount: 0, totalScore: 0, availability:[]};
+
+      if (emailExists) {
+        alert("Βρέθηκε διπλό email!");
+        setErrors(prev => ({ ...prev, email: "Υπάρχει ήδη εγγραφή με αυτό το email." }));
+        return;
+      }
+
+      const submitData = { ...form, reviewCount: 0, totalScore: 0, availability: [] };
       delete submitData.confirmPassword;
 
       const res = await fetch(API_URL, {

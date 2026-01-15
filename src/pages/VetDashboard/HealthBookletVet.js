@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PetDetails from "../../components/Pet/Pet";
-import "./MedicalActions.css";
+import "../OwnerDashboard/HealthBookletOwner.css";
 import { MEDICAL_ACTS } from "../Utils/Util";
+
+const DEFAULT_PET_PHOTO = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
 
 export default function MedicalActions() {
   const navigate = useNavigate();
@@ -11,14 +12,8 @@ export default function MedicalActions() {
   const [currentOwner, setCurrentOwner] = useState(null);
   const [selectedPet, setSelectedPet] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [medicalHistory, setMedicalHistory] = useState([]);
-
-  const [newOwnerInfo, setNewOwnerInfo] = useState({
-    afm: "",
-    email: "",
-    phone: "",
-  });
+  const [errors, setErrors] = useState({});
 
   const vet = JSON.parse(localStorage.getItem("user"));
   // const selectedPet = pets.find((p) => p.id === selectedPetId);
@@ -41,31 +36,8 @@ export default function MedicalActions() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
-  const [medicalAction, setMedicalAction] = useState({
-    date: "",                // Ημερομηνία
-    duration: "",            // Διάρκεια εξέτασης
-    startTime: "",           // Ώρα έναρξης
-    endTime: "",             // Ώρα λήξης
-    type: "",                // Τύπος Ιατρικής Πράξης
-    actionCode: "",          // Κωδικός Ιατρικής Πράξης
-    weight: "",              // Βάρος Ζώου
-    anesthesia: "",          // Αναισθησία
-    description: "",         // Περιγραφή Ιατρικής Επίσκεψης
-    medications: "",         // Στοιχεία Εξόδου (Φάρμακα / Οδηγίες)
-  });
-
-  const handleCancel = () => {
-    const confirmLeave = window.confirm(
-      "Αν πατήσετε ακυρωση,θα βγείτε από την προβολή βιβλιαρίου.\nΘέλετε σίγουρα να συνεχίσετε;"
-    );
-    if (!confirmLeave) return;
-
-    // Καθαρισμός state
-    setStep(1);
-    setSelectedPet("");
-
-    // Πλοήγηση χωρίς query
-    navigate("/vet-dashboard/booklet", { replace: true });
+  const handlePrint = () => {
+    window.print();
   };
   // Συνάρτηση για φόρτωση του τρέχοντος ιδιοκτήτη
   const loadCurrentOwner = async (ownerId) => {
@@ -84,69 +56,40 @@ export default function MedicalActions() {
   };
 
   const handleSearchByMicrochip = async () => {
-    if (!microchip) {
-      alert("Εισάγετε αριθμό microchip");
-      return;
-    }
-
     setLoading(true);
-    setError("");
-    setSelectedPet(null);
-    setCurrentOwner(null);
-
+    setErrors({});
     try {
-      const res = await fetch(
-        `http://localhost:3001/pets?microchip=${microchip}`
-      );
+      const res = await fetch(`http://localhost:3001/pets?microchip=${microchip}`);
       const data = await res.json();
-
-      if (!data.length) {
-        alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
-        setSelectedPet(null);
-        setLoading(false);
+      if (!Array.isArray(data) || data.length === 0) {
+        setErrors({ microchip: "Δεν βρέθηκε κατοικίδιο με αυτό το microchip" });
         return;
       }
-
       const foundPet = data[0];
+      if (foundPet.lost === false) {
+        setErrors({ microchip: "Το κατοικίδιο δεν έχει ενεργή δήλωση εξαφάνισης" });
+        return;
+      }
       setSelectedPet(foundPet);
-
-      // Φόρτωση του τρέχοντος ιδιοκτήτη
-      await loadCurrentOwner(foundPet.ownerId);
-      await loadMedicalHistory(foundPet.id);
+      const ownerLoaded = await loadCurrentOwner(foundPet.ownerId);
+      if (!ownerLoaded) {
+        setErrors({ microchip: "Δεν βρέθηκαν στοιχεία ιδιοκτήτη (ούτε σε owners ούτε σε vets)" });
+        return;
+      }
       setStep(2);
     } catch (err) {
-      alert("Σφάλμα αναζήτησης");
+      setErrors({ microchip: "Σφάλμα αναζήτησης. Προσπαθήστε ξανά." });
     } finally {
       setLoading(false);
     }
   };
 
-  // Συνάρτηση για υπολογισμό ηλικίας από ημερομηνία γέννησης
-  const calculateAge = (birthdate) => {
-    if (!birthdate) return "Άγνωστη";
-
-    const birth = new Date(birthdate);
-    const today = new Date();
-    let years = today.getFullYear() - birth.getFullYear();
-    const months = today.getMonth() - birth.getMonth();
-
-    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
-      years--;
-    }
-
-    return `${years} ετών`;
-  };
-
-  // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
-  const validateAFM = (afm) => {
-    const afmRegex = /^\d{9}$/;
-    return afmRegex.test(afm);
-  };
-
-  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
-  const validatePhone = (phone) => {
-    const phoneRegex = /^69\d{8}$/;
-    return phoneRegex.test(phone);
+  const validate1 = () => {
+    const newErrors = {};
+    if (!microchip.trim()) newErrors.microchip = "Πρέπει να εισάγετε αριθμό microchip";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    handleSearchByMicrochip();
   };
 
   const loadMedicalHistory = async (petId) => {
@@ -164,48 +107,7 @@ export default function MedicalActions() {
     }
   };
 
-  const handleSubmitMedical = async (status) => {
-    if (!selectedPet || !currentOwner) return;
-
-    const medicalReport = {
-      petId: selectedPet.id,
-      vetId: vet.id,
-      date: medicalAction.date,
-      duration: medicalAction.duration,
-      startTime: medicalAction.startTime,
-      endTime: medicalAction.endTime,
-      type: medicalAction.type,
-      actionCode: medicalAction.actionCode,
-      weight: medicalAction.weight,
-      anesthesia: medicalAction.anesthesia,
-      description: medicalAction.description,
-      medications: medicalAction.medications,
-      status, // draft | submitted
-      createdAt: new Date().toISOString(),
-    };
-
-    try {
-      const res = await fetch("http://localhost:3001/medicalReports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(medicalReport),
-      });
-
-      if (res.ok) {
-        alert(`Η ιατρική πράξη ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
-        // Reset
-        setStep(0);
-        setSelectedPet(null);
-        setCurrentOwner(null);
-        setMicrochip("");
-        setMedicalAction({ type: "", date: "", description: "", medications: "" });
-      } else {
-        throw new Error("Σφάλμα στην αποθήκευση");
-      }
-    } catch {
-      alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
-    }
-  };
+  const selectedMedicalAct = MEDICAL_ACTS.find((act) => act.id === medicalHistory.type);
 
   return (
     <div className="transfer">
@@ -275,7 +177,7 @@ export default function MedicalActions() {
       {/* ================= STEP 1 ================= */}
       {step === 1 && (
         <>
-         <div className="step1-spacer"></div>
+          <div className="step1-spacer"></div>
           <div className="stepper">
             <div className="step active">
               <div className="circle">1</div>
@@ -290,17 +192,18 @@ export default function MedicalActions() {
           </div>
 
           <h3>Εισάγετε τον αριθμό microchip του κατοικιδίου</h3>
-          <div className="chip-search">
-            <input
-              className="chip-input"
-              value={microchip}
-              maxLength={9}
-              onChange={(e) => setMicrochip(e.target.value)}
-              placeholder="Εισάγετε αριθμό microchip..."
-            />
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          {loading && <p>Αναζήτηση...</p>}
+
+          <input
+            className="chip-input"
+            value={microchip}
+            maxLength={9}
+            onChange={(e) => setMicrochip(e.target.value)}
+            placeholder="Εισάγετε αριθμό microchip..."
+          />
+
+          {errors.microchip && (
+            <p className="error-text step1-error">{errors.microchip}</p>
+          )}
 
           <div style={{ marginTop: '20px' }}>
             <button
@@ -316,7 +219,7 @@ export default function MedicalActions() {
       )}
 
       {/* ================= STEP 2 ================= */}
-      {step === 2 && (
+      {step === 2 && selectedPet && (
         <>
           <div className="stepper">
             <div
@@ -333,84 +236,78 @@ export default function MedicalActions() {
               <div className="step-title">Προβολή βιβλιάριου</div>
             </div>
           </div>
-          <div className="found-form">
-            <h3>Βιβλιάριο Υγείας</h3>
+          <div className="booklet-container">
+            <h3>Βιβλιάριο υγείας</h3>
 
-            <div className="profile-grid">
-              <div>
-                <p className="label">Όνομα</p>
-                <p className="value">{selectedPet.name}</p>
+            <div className="booklet-layout">
+              <div className="booklet-header">
+                <div className="pet-photo">
+                  <img
+                    src={selectedPet.photoUrl || DEFAULT_PET_PHOTO}
+                    alt={selectedPet.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = DEFAULT_PET_PHOTO;
+                    }}
+                  />
+                </div>
 
-                <p className="label">Φύλο</p>
-                <p className="value">{selectedPet.gender}</p>
-
-                <p className="label">Ηλικία</p>
-                <p className="value">{calculateAge(selectedPet.birthdate)}</p>
-              </div>
-
-              <div>
-                <p className="label">Είδος</p>
-                <p className="value">{selectedPet.species}</p>
-
-                <p className="label">Ράτσα</p>
-                <p className="value">{selectedPet.breed}</p>
-
-                <p className="label">Ημερ. Γέννησης</p>
-                <p className="value">{selectedPet.birthdate}</p>
-              </div>
-
-              <div>
-                <p className="label">Microchip</p>
-                <p className="value">{selectedPet.microchip}</p>
-
-                <p className="label">Περιοχή</p>
-                <p className="value">{selectedPet.region || "Άγνωστη"}</p>
-              </div>
-            </div>
-            <h3>Ιδιοκτήτης</h3>
-
-            <div className="profile-grid">
-              <div>
-                <p className="label">Όνομα</p>
-                <p className="value">{currentOwner.firstname} {currentOwner.lastname}</p>
-
-                <p className="label">ΑΦΜ</p>
-                <p className="value">{currentOwner.afm}</p>
-              </div>
-
-              <div>
-                <p className="label">Email</p>
-                <p className="value">{currentOwner.email}</p>
-
-                <p className="label">Τηλέφωνο</p>
-                <p className="value">{currentOwner.phone}</p>
-              </div>
-            </div>
-
-            <h3>Ιστορικό Ιατρικών Πράξεων</h3>
-            {medicalHistory.length === 0 ? (
-              <p>Δεν υπάρχουν προηγούμενες ιατρικές πράξεις.</p>
-            ) : (
-              <div className="medical-history">
-                {medicalHistory.map((report) => (
-                  <div key={report.id} className="history-item">
-                    <p><strong>Τύπος Πράξης:</strong> {report.type}</p>
-                    <p><strong>Ημερομηνία:</strong> {report.date}</p>
-                    <p><strong>Περιγραφή:</strong> {report.description}</p>
-                    <p><strong>Φάρμακα / Οδηγίες:</strong> {report.medications}</p>
-                    <hr />
+                <div className="booklet-top">
+                  <div className="info-box">
+                    <h4>Στοιχεία κατοικιδίου</h4>
+                    <p><span>Όνομα:</span> {selectedPet.name}</p>
+                    <p><span>Είδος:</span> {selectedPet.species}</p>
+                    <p><span>Ράτσα:</span> {selectedPet.breed}</p>
+                    <p><span>Φύλο:</span> {selectedPet.gender}</p>
+                    <p><span>Microchip:</span> {selectedPet.microchip}</p>
+                    <p><span>Ημερομηνία γέννησης:</span> {selectedPet.birthdate || "-"}</p>
+                    <p><span>Ηλικία:</span> {selectedPet.age || "-"} έτη</p>
                   </div>
-                ))}
+
+                  <div className="info-box">
+                    <h4>Στοιχεία ιδιοκτήτη</h4>
+                    <p><span>Ονοματεπώνυμο:</span> {currentOwner.firstname} {currentOwner.lastname}</p>
+                    <p><span>ΑΦΜ:</span> {currentOwner.afm}</p>
+                    <p><span>Διεύθυνση:</span> {currentOwner.address}</p>
+                    <p><span>Τηλέφωνο:</span> {currentOwner.phone}</p>
+                  </div>
+                </div>
               </div>
-            )}
-            {/* <div className="form-buttons"> */}
-            <button type="button" className="cancel-btn2" onClick={handleCancel}>
-              Ακύρωση
+
+              <div className="booklet-bottom">
+                <div className="info-box large">
+                  <h4>Ιστορικό πράξεων</h4>
+                  {loading ? (
+                    <p>Φόρτωση...</p>
+                  ) : medicalHistory.length === 0 ? (
+                    <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
+                  ) : (
+                    <div className="medical-actions-list">
+                      {medicalHistory.map((action) => {
+                        const actLabel =
+                          MEDICAL_ACTS.find((a) => a.id === action.type)?.label ?? action.type ?? "—";
+
+                        return (
+                          <div key={action.id} className="medical-action-item">
+                            <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                            <p><strong>Είδος:</strong> {actLabel}</p>
+                            <p><strong>Περιγραφή:</strong> {action.description}</p>
+                            <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
+                            <hr />
+                          </div>
+                        );
+                      })}
+
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <button className="next-btn" type="button" onClick={handlePrint}>
+              Εκτύπωση
             </button>
-            {/* </div> */}
-
           </div>
-
 
         </>
 
@@ -418,3 +315,5 @@ export default function MedicalActions() {
     </div>
   );
 }
+
+

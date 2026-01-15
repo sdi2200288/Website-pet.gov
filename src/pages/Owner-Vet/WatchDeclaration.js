@@ -16,7 +16,7 @@ function labelForType(t) {
   if (t === "found") return "Δήλωση Εύρεσης";
   if (t === "foundNoAcc") return "Δήλωση Εύρεσης (χωρίς λογαριασμό)";
   if (t === "adoption") return "Δήλωση Υιοθεσίας";
-  if (t === "foster") return "Δήλωση Φιλοξενίας";
+  if (t === "foster") return "Δήλωση Αναδοχής";
   if (t === "transfer") return "Δήλωση Μεταβίβασης";
   return "Δήλωση";
 }
@@ -93,7 +93,7 @@ export default function DeclarationModal({ isOpen, onClose, declaration }) {
 
           {t === "foster" && (
             <div className="modal-section">
-              <h4>Στοιχεία Φιλοξενίας</h4>
+              <h4>Στοιχεία Αναδοχής</h4>
               <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
               <Row label="Status" value={declaration.status} />
               <Row label="Created At" value={formatDateTime(declaration.createdAt)} />

@@ -62,15 +62,6 @@ export default function BookDate() {
     return [];
   };
 
-  const handleBookClick = (vet) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      window.location.href = "/login";
-      return;
-    }
-    setSelectedVet(vet);
-    setStep(2);
-  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -316,10 +307,8 @@ export default function BookDate() {
   };
 
   const handleGoToPreview = () => {
-    if (!selectedPet) return alert("Παρακαλώ επιλέξτε κατοικίδιο");
     if (!selectedDate) return alert("Παρακαλώ επιλέξτε ημερομηνία");
     if (!selectedTime) return alert("Παρακαλώ επιλέξτε ώρα");
-    if (!visitReason) return alert("Παρακαλώ επιλέξτε λόγο επίσκεψης");
     setStep(3);
   };
 
@@ -370,7 +359,8 @@ export default function BookDate() {
         setVisitReason("");
         setDescription("");
 
-        window.location.reload();
+        // window.location.reload();
+        navigate(`/owner-dashboard/book-date?ownerId=${user.id}`, { replace: true });
       })
       .catch((error) => {
         console.error("Πλήρες σφάλμα:", error);
@@ -593,7 +583,7 @@ export default function BookDate() {
               </div>
               <div className="summary-card-content">
                 <p className="reason-label">
-                  {medicalAct ? medicalAct.reason : "Δεν έχει επιλεγεί λόγος"}
+                  {medicalAct ? medicalAct.label : "Δεν έχει επιλεγεί λόγος"}
                 </p>
                 {description && (
                   <>

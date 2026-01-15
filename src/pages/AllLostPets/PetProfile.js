@@ -9,6 +9,9 @@ export default function PetProfile() {
   const [owner, setOwner] = useState(null);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+
 
   useEffect(() => {
     const fetchPet = async () => {
@@ -32,6 +35,8 @@ export default function PetProfile() {
     };
     fetchPet();
   }, [id]);
+  const isOwnerOfPet =
+    user?.id != null && pet?.ownerId != null && String(user.id) === String(pet.ownerId);
 
   if (error) return <p>{error}</p>;
   if (!pet || !owner) return <p>Φόρτωση...</p>;
@@ -148,9 +153,20 @@ export default function PetProfile() {
               </div>
             </section>
           </div>
-          <button className="petPrimaryButton" onClick={() => navigate(`/foundLostPet/${pet.id}`)}>
-            Δήλωση Εύρεσης
-          </button>
+          {!isOwnerOfPet ? (
+            <button
+              className="petPrimaryButton"
+              onClick={() => navigate(`/foundLostPet/${pet.id}`)}
+            >
+              Δήλωση Εύρεσης
+            </button>
+          ) : (
+            <p style={{ marginTop: 12, color: "crimson", fontWeight: 600 }}>
+              Δεν μπορείτε να κάνετε δήλωση εύρεσης για το δικό σας κατοικίδιο.
+            </p>
+          )}
+
+
         </div>
       </div>
     </div >

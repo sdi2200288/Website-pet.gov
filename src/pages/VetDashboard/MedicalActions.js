@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PetDetails from "../../components/Pet/Pet";
+import "../OwnerDashboard/HealthBookletOwner.css";
 import "./MedicalActions.css";
 import { MEDICAL_ACTS } from "../Utils/Util";
+
+const DEFAULT_PET_PHOTO = "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
 
 export default function MedicalActions() {
   const navigate = useNavigate();
@@ -13,15 +15,11 @@ export default function MedicalActions() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [medicalHistory, setMedicalHistory] = useState([]);
-
-  const [newOwnerInfo, setNewOwnerInfo] = useState({
-    afm: "",
-    email: "",
-    phone: "",
-  });
+  const [errors, setErrors] = useState({});
 
   const vet = JSON.parse(localStorage.getItem("user"));
   // const selectedPet = pets.find((p) => p.id === selectedPetId);
+
 
   const goToStep = (targetStep) => {
     if (!vet) {
@@ -53,6 +51,12 @@ export default function MedicalActions() {
     description: "",         // Περιγραφή Ιατρικής Επίσκεψης
     medications: "",         // Στοιχεία Εξόδου (Φάρμακα / Οδηγίες)
   });
+
+  const handleMedicalChange = (e) => {
+    const { name, value } = e.target;
+    setMedicalAction((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleCancel = () => {
     const confirmLeave = window.confirm(
@@ -86,69 +90,40 @@ export default function MedicalActions() {
   };
 
   const handleSearchByMicrochip = async () => {
-    if (!microchip) {
-      alert("Εισάγετε αριθμό microchip");
-      return;
-    }
-
     setLoading(true);
-    setError("");
-    setSelectedPet(null);
-    setCurrentOwner(null);
-
+    setErrors({});
     try {
-      const res = await fetch(
-        `http://localhost:3001/pets?microchip=${microchip}`
-      );
+      const res = await fetch(`http://localhost:3001/pets?microchip=${microchip}`);
       const data = await res.json();
-
-      if (!data.length) {
-        alert("Δεν βρέθηκε κατοικίδιο με αυτό το microchip");
-        setSelectedPet(null);
-        setLoading(false);
+      if (!Array.isArray(data) || data.length === 0) {
+        setErrors({ microchip: "Δεν βρέθηκε κατοικίδιο με αυτό το microchip" });
         return;
       }
-
       const foundPet = data[0];
+      if (foundPet.lost === false) {
+        setErrors({ microchip: "Το κατοικίδιο δεν έχει ενεργή δήλωση εξαφάνισης" });
+        return;
+      }
       setSelectedPet(foundPet);
-
-      // Φόρτωση του τρέχοντος ιδιοκτήτη
-      await loadCurrentOwner(foundPet.ownerId);
-      await loadMedicalHistory(foundPet.id);
+      const ownerLoaded = await loadCurrentOwner(foundPet.ownerId);
+      if (!ownerLoaded) {
+        setErrors({ microchip: "Δεν βρέθηκαν στοιχεία ιδιοκτήτη (ούτε σε owners ούτε σε vets)" });
+        return;
+      }
       setStep(2);
     } catch (err) {
-      alert("Σφάλμα αναζήτησης");
+      setErrors({ microchip: "Σφάλμα αναζήτησης. Προσπαθήστε ξανά." });
     } finally {
       setLoading(false);
     }
   };
 
-  // Συνάρτηση για υπολογισμό ηλικίας από ημερομηνία γέννησης
-  const calculateAge = (birthdate) => {
-    if (!birthdate) return "Άγνωστη";
-
-    const birth = new Date(birthdate);
-    const today = new Date();
-    let years = today.getFullYear() - birth.getFullYear();
-    const months = today.getMonth() - birth.getMonth();
-
-    if (months < 0 || (months === 0 && today.getDate() < birth.getDate())) {
-      years--;
-    }
-
-    return `${years} ετών`;
-  };
-
-  // Συνάρτηση για έλεγχο εγκυρότητας ΑΦΜ (9 ψηφία)
-  const validateAFM = (afm) => {
-    const afmRegex = /^\d{9}$/;
-    return afmRegex.test(afm);
-  };
-
-  // Συνάρτηση για έλεγχο εγκυρότητας τηλεφώνου
-  const validatePhone = (phone) => {
-    const phoneRegex = /^69\d{8}$/;
-    return phoneRegex.test(phone);
+  const validate1 = () => {
+    const newErrors = {};
+    if (!microchip.trim()) newErrors.microchip = "Πρέπει να εισάγετε αριθμό microchip";
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
+    handleSearchByMicrochip();
   };
 
   const loadMedicalHistory = async (petId) => {
@@ -208,6 +183,40 @@ export default function MedicalActions() {
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
     }
   };
+
+  const validateMedical = () => {
+    const newErrors = {};
+    if (!medicalAction.date) newErrors.date = "Πρέπει να συμπληρωθεί η ημερομηνία";
+    if (!medicalAction.startTime) newErrors.startTime = "Πρέπει να συμπληρωθεί η ώρα έναρξης";
+    if (!medicalAction.endTime) newErrors.endTime = "Πρέπει να συμπληρωθεί η ώρα λήξης";
+    if (!medicalAction.duration.trim()) newErrors.duration = "Πρέπει να συμπληρωθεί η διάρκεια εξέτασης";
+    if (!medicalAction.type) newErrors.type = "Πρέπει να επιλέξετε τύπο ιατρικής πράξης";
+    if (!medicalAction.actionCode.trim()) newErrors.actionCode = "Πρέπει να συμπληρωθεί ο κωδικός ιατρικής πράξης";
+    if (!medicalAction.weight) newErrors.weight = "Πρέπει να συμπληρωθεί το βάρος";
+    if (!medicalAction.anesthesia) newErrors.anesthesia = "Πρέπει να επιλέξετε αναισθησία";
+    if (medicalAction.weight && Number(medicalAction.weight) <= 0) {
+      newErrors.weight = "Το βάρος πρέπει να είναι μεγαλύτερο από 0";
+    }
+    if (medicalAction.startTime && medicalAction.endTime) {
+      const start = new Date(`1970-01-01T${medicalAction.startTime}:00`);
+      const end = new Date(`1970-01-01T${medicalAction.endTime}:00`);
+      if (Number.isNaN(start.getTime())) newErrors.startTime = "Μη έγκυρη ώρα έναρξης";
+      if (Number.isNaN(end.getTime())) newErrors.endTime = "Μη έγκυρη ώρα λήξης";
+      if (!Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime()) && end <= start) {
+        newErrors.endTime = "Η ώρα λήξης πρέπει να είναι μετά την ώρα έναρξης";
+      }
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleGoToPreview = () => {
+    if (!validateMedical()) return;
+    goToStep(4);
+  };
+
+  const selectedMedicalAct = MEDICAL_ACTS.find((act) => act.id === medicalAction.type);
+
 
   return (
     <div className="transfer">
@@ -293,7 +302,7 @@ export default function MedicalActions() {
       {/* ================= STEP 1 ================= */}
       {step === 1 && (
         <>
-        <div className="step1-spacer"></div>
+          <div className="step1-spacer"></div>
           <div className="stepper">
             <div className="step active">
               <div className="circle">1</div>
@@ -320,17 +329,19 @@ export default function MedicalActions() {
           </div>
 
           <h3>Εισάγετε τον αριθμό microchip του κατοικιδίου</h3>
-          <div className="chip-search">
-            <input
-              className="chip-input"
-              value={microchip}
-              maxLength={9}
-              onChange={(e) => setMicrochip(e.target.value)}
-              placeholder="Εισάγετε αριθμό microchip..."
-            />
-          </div>
-          {error && <p className="error-message">{error}</p>}
-          {loading && <p>Αναζήτηση...</p>}
+
+          <input
+            className="chip-input"
+            value={microchip}
+            maxLength={9}
+            onChange={(e) => setMicrochip(e.target.value)}
+            placeholder="Εισάγετε αριθμό microchip..."
+          />
+
+          {errors.microchip && (
+            <p className="error-text step1-error">{errors.microchip}</p>
+          )}
+
 
           <div style={{ marginTop: '20px' }}>
             <button
@@ -376,76 +387,72 @@ export default function MedicalActions() {
             </div>
           </div>
           <div className="found-form">
-            <h3>Βιβλιάριο Υγείας</h3>
+            <h3>Βιβλιάριο υγείας</h3>
 
-            <div className="profile-grid">
-              <div>
-                <p className="label">Όνομα</p>
-                <p className="value">{selectedPet.name}</p>
+            <div className="booklet-layout">
+              <div className="booklet-header">
+                <div className="pet-photo">
+                  <img
+                    src={selectedPet.photoUrl || DEFAULT_PET_PHOTO}
+                    alt={selectedPet.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = DEFAULT_PET_PHOTO;
+                    }}
+                  />
+                </div>
 
-                <p className="label">Φύλο</p>
-                <p className="value">{selectedPet.gender}</p>
-
-                <p className="label">Ηλικία</p>
-                <p className="value">{calculateAge(selectedPet.birthdate)}</p>
-              </div>
-
-              <div>
-                <p className="label">Είδος</p>
-                <p className="value">{selectedPet.species}</p>
-
-                <p className="label">Ράτσα</p>
-                <p className="value">{selectedPet.breed}</p>
-
-                <p className="label">Ημερ. Γέννησης</p>
-                <p className="value">{selectedPet.birthdate}</p>
-              </div>
-
-              <div>
-                <p className="label">Microchip</p>
-                <p className="value">{selectedPet.microchip}</p>
-
-                <p className="label">Περιοχή</p>
-                <p className="value">{selectedPet.region || "Άγνωστη"}</p>
-              </div>
-            </div>
-            <h3>Τρέχων Ιδιοκτήτης</h3>
-
-            <div className="profile-grid">
-              <div>
-                <p className="label">Όνομα</p>
-                <p className="value">{currentOwner.firstname} {currentOwner.lastname}</p>
-
-                <p className="label">ΑΦΜ</p>
-                <p className="value">{currentOwner.afm}</p>
-              </div>
-
-              <div>
-                <p className="label">Email</p>
-                <p className="value">{currentOwner.email}</p>
-
-                <p className="label">Τηλέφωνο</p>
-                <p className="value">{currentOwner.phone}</p>
-              </div>
-            </div>
-
-            <h3>Ιστορικό Ιατρικών Πράξεων</h3>
-            {medicalHistory.length === 0 ? (
-              <p>Δεν υπάρχουν προηγούμενες ιατρικές πράξεις.</p>
-            ) : (
-              <div className="medical-history">
-                {medicalHistory.map((report) => (
-                  <div key={report.id} className="history-item">
-                    <p><strong>Τύπος Πράξης:</strong> {report.type}</p>
-                    <p><strong>Ημερομηνία:</strong> {report.date}</p>
-                    <p><strong>Περιγραφή:</strong> {report.description}</p>
-                    <p><strong>Φάρμακα / Οδηγίες:</strong> {report.medications}</p>
-                    <hr />
+                <div className="booklet-top">
+                  <div className="info-box">
+                    <h4>Στοιχεία κατοικιδίου</h4>
+                    <p><span>Όνομα:</span> {selectedPet.name}</p>
+                    <p><span>Είδος:</span> {selectedPet.species}</p>
+                    <p><span>Ράτσα:</span> {selectedPet.breed}</p>
+                    <p><span>Φύλο:</span> {selectedPet.gender}</p>
+                    <p><span>Microchip:</span> {selectedPet.microchip}</p>
+                    <p><span>Ημερομηνία γέννησης:</span> {selectedPet.birthdate || "-"}</p>
+                    <p><span>Ηλικία:</span> {selectedPet.age || "-"} έτη</p>
                   </div>
-                ))}
-              </div>
-            )}
 
+                  <div className="info-box">
+                    <h4>Στοιχεία ιδιοκτήτη</h4>
+                    <p><span>Ονοματεπώνυμο:</span> {currentOwner.firstname} {currentOwner.lastname}</p>
+                    <p><span>ΑΦΜ:</span> {currentOwner.afm}</p>
+                    <p><span>Διεύθυνση:</span> {currentOwner.address}</p>
+                    <p><span>Τηλέφωνο:</span> {currentOwner.phone}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="booklet-bottom">
+                <div className="info-box large">
+                  <h4>Ιστορικό πράξεων</h4>
+                  {loading ? (
+                    <p>Φόρτωση...</p>
+                  ) : medicalHistory.length === 0 ? (
+                    <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
+                  ) : (
+                    <div className="medical-actions-list">
+                      {medicalHistory.map((action) => {
+                        const actLabel =
+                          MEDICAL_ACTS.find((a) => a.id === action.type)?.label ?? action.type ?? "—";
+
+                        return (
+                          <div key={action.id} className="medical-action-item">
+                            <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                            <p><strong>Είδος:</strong> {actLabel}</p>
+                            <p><strong>Περιγραφή:</strong> {action.description}</p>
+                            <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
+                            <hr />
+                          </div>
+                        );
+                      })}
+
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="form-buttons">
               <button type="button" onClick={handleCancel}>Ακύρωση</button>
               <button type="button" onClick={() => goToStep(3)}>Συνέχεια</button>
@@ -494,72 +501,116 @@ export default function MedicalActions() {
               {/* Στήλη 1 */}
               <div className="form-column">
                 <div className="form-group">
-                  <label>Ημερομηνία</label>
-                  <input
-                    type="date"
-                    value={medicalAction.date}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, date: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Ημερομηνία *
+                    <input
+                      type="date"
+                      name="date"
+                      className={`loginInput ${errors.date ? "inputError" : ""}`}
+                      value={medicalAction.date}
+                      onChange={handleMedicalChange}
+                    />
+                    {errors.date && <div className="fieldError">{errors.date}</div>}
+                  </label>
+
                 </div>
                 <div className="form-group">
-                  <label>Ώρα Έναρξης</label>
-                  <input
-                    type="time"
-                    value={medicalAction.startTime}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, startTime: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Ώρα Έναρξης *
+                    <input
+                      type="time"
+                      name="startTime"
+                      className={`loginInput ${errors.startTime ? "inputError" : ""}`}
+                      value={medicalAction.startTime}
+                      onChange={handleMedicalChange}
+                    />
+                    {errors.startTime && <div className="fieldError">{errors.startTime}</div>}
+                  </label>
                 </div>
                 <div className="form-group">
-                  <label>Τύπος Ιατρικής Πράξης</label>
-                  <select>
-                    <option value="">Επιλέξτε...</option>
-                    {MEDICAL_ACTS.map((act) => (
-                      <option key={act.id} value={act.id}>
-                        {act.label}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="loginLabel">
+                    Τύπος Ιατρικής Πράξης *
+                    <select
+                      name="type"
+                      className={`loginSelect ${errors.type ? "inputError" : ""}`}
+                      value={medicalAction.type}
+                      onChange={handleMedicalChange}
+                    >
+                      <option value="">Επιλέξτε...</option>
+                      {MEDICAL_ACTS.map((act) => (
+                        <option key={act.id} value={act.id}>
+                          {act.label}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.type && <div className="fieldError">{errors.type}</div>}
+                  </label>
+
                 </div>
                 <div className="form-group">
-                  <label>Βάρος Ζώου (kg)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    value={medicalAction.weight}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, weight: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Βάρος Ζώου (kg) *
+                    <input
+                      type="number"
+                      step="0.1"
+                      name="weight"
+                      className={`loginInput ${errors.weight ? "inputError" : ""}`}
+                      value={medicalAction.weight}
+                      onChange={handleMedicalChange}
+                    />
+                    {errors.weight && <div className="fieldError">{errors.weight}</div>}
+                  </label>
+
                 </div>
               </div>
 
               {/* Στήλη 2 */}
               <div className="form-column">
                 <div className="form-group">
-                  <label>Διάρκεια εξέτασης</label>
-                  <input
-                    type="text"
-                    placeholder="πχ 30 λεπτά"
-                    value={medicalAction.duration}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, duration: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Διάρκεια εξέτασης *
+                    <input
+                      type="number"
+                      step="1"
+                      name="duration"
+                      className={`loginInput ${errors.duration ? "inputError" : ""}`}
+                      value={medicalAction.duration}
+                      onChange={handleMedicalChange}
+                      placeholder="πχ 30 λεπτά"
+                    />
+                    {errors.duration && <div className="fieldError">{errors.duration}</div>}
+                  </label>
+
                 </div>
                 <div className="form-group">
-                  <label>Ώρα Λήξης</label>
-                  <input
-                    type="time"
-                    value={medicalAction.endTime}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, endTime: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Ώρα Λήξης *
+                    <input
+                      type="time"
+                      name="endTime"
+                      className={`loginInput ${errors.endTime ? "inputError" : ""}`}
+                      value={medicalAction.endTime}
+                      onChange={handleMedicalChange}
+                    />
+                    {errors.endTime && <div className="fieldError">{errors.endTime}</div>}
+                  </label>
+
                 </div>
                 <div className="form-group">
-                  <label>Κωδικός Ιατρικής Πράξης</label>
-                  <input
-                    type="text"
-                    value={medicalAction.actionCode}
-                    onChange={(e) => setMedicalAction({ ...medicalAction, actionCode: e.target.value })}
-                  />
+                  <label className="loginLabel">
+                    Κωδικός Ιατρικής Πράξης *
+                    <input
+                      type="text"
+                      name="actionCode"
+                      className={`loginInput ${errors.actionCode ? "inputError" : ""}`}
+                      value={medicalAction.actionCode}
+                      onChange={handleMedicalChange}
+                    />
+                    {errors.actionCode && <div className="fieldError">{errors.actionCode}</div>}
+                  </label>
                 </div>
                 <div className="form-group">
-                  <label>Αναισθησία</label>
+                  <label>Αναισθησία *</label>
                   <div className="radio-group">
                     <label>
                       <input
@@ -580,6 +631,7 @@ export default function MedicalActions() {
                         onChange={(e) => setMedicalAction({ ...medicalAction, anesthesia: e.target.value })}
                       />
                       Όχι
+                      {errors.anesthesia && <div className="fieldError">{errors.anesthesia}</div>}
                     </label>
                   </div>
                 </div>
@@ -622,7 +674,7 @@ export default function MedicalActions() {
 
             <div className="form-buttons">
               <button type="button" onClick={handleCancel}>Ακύρωση</button>
-              <button type="button" onClick={() => goToStep(4)}>Συνέχεια</button>
+              <button type="button" onClick={handleGoToPreview}>Συνέχεια</button>
             </div>
           </div>
         </>
@@ -669,16 +721,16 @@ export default function MedicalActions() {
           <div className="booklet-container">
             <h3>Προεπισκόπηση Ιατρικής Πράξης</h3>
             <div className="info-box large">
-              <p><strong>Ημερομηνία:</strong> {medicalAction.date || "— —"}</p>
-              <p><strong>Διάρκεια εξέτασης:</strong> {medicalAction.duration || "— —"}</p>
-              <p><strong>Ώρα Έναρξης:</strong> {medicalAction.startTime || "— —"}</p>
-              <p><strong>Ώρα Λήξης:</strong> {medicalAction.endTime || "— —"}</p>
-              <p><strong>Τύπος Ιατρικής Πράξης:</strong> {medicalAction.type || "— —"}</p>
-              <p><strong>Κωδικός Ιατρικής Πράξης:</strong> {medicalAction.actionCode || "— —"}</p>
-              <p><strong>Βάρος Ζώου:</strong> {medicalAction.weight || "— —"}</p>
-              <p><strong>Αναισθησία:</strong> {medicalAction.anesthesia || "— —"}</p>
-              <p><strong>Περιγραφή Ιατρικής Επίσκεψης:</strong> {medicalAction.description || "— —"}</p>
-              <p><strong>Στοιχεία Εξόδου:</strong> {medicalAction.medications || "— —"}</p>
+              <p><strong>Ημερομηνία:</strong> {medicalAction.date || "— "}</p>
+              <p><strong>Διάρκεια εξέτασης:</strong> {medicalAction.duration || "-"}</p>
+              <p><strong>Ώρα Έναρξης:</strong> {medicalAction.startTime || "-"}</p>
+              <p><strong>Ώρα Λήξης:</strong> {medicalAction.endTime || "-"}</p>
+              <p><strong>Τύπος Ιατρικής Πράξης:</strong>{" "}{selectedMedicalAct ? selectedMedicalAct.label : "Δεν έχει επιλεγεί λόγος"}</p>
+              <p><strong>Κωδικός Ιατρικής Πράξης:</strong> {medicalAction.actionCode || "-"}</p>
+              <p><strong>Βάρος Ζώου:</strong> {medicalAction.weight || "-"}</p>
+              <p><strong>Αναισθησία:</strong> {medicalAction.anesthesia || "-"}</p>
+              <p><strong>Περιγραφή Ιατρικής Επίσκεψης:</strong> {medicalAction.description || "-"}</p>
+              <p><strong>Στοιχεία Εξόδου:</strong> {medicalAction.medications || "-"}</p>
             </div>
 
             <div className="form-buttons">
@@ -691,3 +743,4 @@ export default function MedicalActions() {
     </div>
   );
 }
+

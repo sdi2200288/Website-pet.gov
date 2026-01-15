@@ -171,9 +171,9 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <div className="vet-top-actions">
+                <div className="profile-actions">
                   <button className="primary-btn"> <Link to="/updateprofile"> Ενημέρωση στοιχείων</Link></button>
-                  <button className="secondary-btn"> <Link to="/changecode">Αλλαγή κωδικού</Link> </button>
+                  <button className="secondary-btn"> <Link to="/changecode"> Αλλαγή κωδικού</Link></button>
                 </div>
               </div>
             </div>

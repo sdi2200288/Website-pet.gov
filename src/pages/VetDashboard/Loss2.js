@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 // import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
@@ -18,6 +18,8 @@ export default function Loss2() {
     address: "",
     condition: "",
   });
+  const photoInputRef = useRef(null);
+  const [form, setForm] = useState({ photoUrl: "" });
 
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
 
@@ -32,6 +34,17 @@ export default function Loss2() {
     }
     setStep(targetStep);
   };
+
+  function handlePhotoChange(e) {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) {
+      setForm((prev) => ({ ...prev, photoUrl: "" }));
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    setForm((prev) => ({ ...prev, photoUrl: previewUrl }));
+  }
+
 
   useEffect(() => {
     // Όταν αλλάζει το step, scroll στην κορυφή του container
@@ -104,6 +117,7 @@ export default function Loss2() {
       status, // 'draft' ή 'submitted'
       ownerId: owner.id,
       createdAt: new Date().toISOString(),
+      photoUrl: form.photoUrl || pet.photoUrl || "",
     };
 
     try {
@@ -137,6 +151,8 @@ export default function Loss2() {
       setOwner(null);
       setMicrochip("");
       setLossInfo({ date: "", region: "", address: "", condition: "" });
+      setForm({ photoUrl: "" });
+
 
       // Μετάβαση στην αρχικη
       navigate("/vet-dashboard");
@@ -181,6 +197,8 @@ export default function Loss2() {
     setMicrochip("");
     setLossInfo({ date: "", region: "", address: "", condition: "" });
     setErrors({});
+    setForm({ photoUrl: "" });
+
   };
 
 
@@ -518,7 +536,24 @@ export default function Loss2() {
             </label>
 
             <div>
-              <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={photoInputRef}
+                onChange={handlePhotoChange}
+                style={{ display: "none" }}
+              />
+              <button
+                type="button"
+                className="registerSecondaryButton"
+                onClick={() => photoInputRef.current?.click()}
+              >
+                Προσθήκη Φωτογραφίας
+              </button>
+
+              {form.photoUrl && (
+                <div className="registerPhotoName">Επιλέχθηκε φωτογραφία</div>
+              )}
             </div>
 
             <div className="form-buttons">
@@ -573,8 +608,12 @@ export default function Loss2() {
               <div className="booklet-header">
                 <div className="pet-photo">
                   <img
-                    src={pet.photoUrl}
+                    src={form.photoUrl || pet.photoUrl}
                     alt={pet.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = pet.photoUrl;
+                    }}
                   />
                 </div>
 

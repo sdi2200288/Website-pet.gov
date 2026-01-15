@@ -36,13 +36,15 @@
 
 .step.step-zero span {
   font-size: 14px;
-  text-align: left; /* αριστερή στοίχιση για καλύτερη ροή */
-  line-height: 1.3; /* πιο άνετο διάστιχο */
+  text-align: left;
+  /* αριστερή στοίχιση για καλύτερη ροή */
+  line-height: 1.3;
+  /* πιο άνετο διάστιχο */
   word-wrap: break-word;
   width: 100%;
 }
 
-.step1-spacer{
+.step1-spacer {
   height: 40px;
 }
 
@@ -64,7 +66,8 @@
   background: #d4c5b2;
 }
 
-.step span, .step-title {
+.step span,
+.step-title {
   font-size: 14px;
   text-align: center;
 }
@@ -121,7 +124,7 @@
   border: 1px solid #ccc;
   font-size: 16px;
   background: #fff;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .chip-button {
@@ -154,7 +157,7 @@
   border-radius: 12px;
   max-width: 700px;
   margin: 20px auto;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   text-align: left;
 }
 
@@ -175,11 +178,12 @@
   margin-bottom: 25px;
 }
 
-.profile-grid > div {
-  background: #fff; /* απλό λευκό */
+.profile-grid>div {
+  background: #fff;
+  /* απλό λευκό */
   border-radius: 14px;
   padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .label {
@@ -232,10 +236,13 @@
 .found-form .form-buttons button:last-child:hover {
   background: #244fc4;
 }
+
 /* Bold τίτλοι για τα δύο sections στο Step 2 και Step 3 */
 .found-form h3 {
-  font-weight: 700; /* πιο έντονο */
-  font-size: 18px;  /* λίγο μεγαλύτερο για έμφαση */
+  font-weight: 700;
+  /* πιο έντονο */
+  font-size: 18px;
+  /* λίγο μεγαλύτερο για έμφαση */
   color: #000;
   margin-bottom: 20px;
 }
@@ -248,7 +255,7 @@
   background: #ffffff;
   border-radius: 18px;
   padding: 30px 30px 40px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .booklet-layout {
@@ -271,7 +278,7 @@
   border-radius: 14px;
   padding: 8px;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
 .pet-photo img {
@@ -282,7 +289,8 @@
 .booklet-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0; /* χωρίς κενό ανάμεσα στα στοιχεία */
+  gap: 0;
+  /* χωρίς κενό ανάμεσα στα στοιχεία */
 }
 
 .info-box {
@@ -290,7 +298,7 @@
   border-radius: 14px;
   padding: 18px 20px;
   border: 1px solid #ddd;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .info-box h4 {
@@ -323,7 +331,7 @@
 .booklet-container .form-buttons button {
   padding: 10px 18px;
   border-radius: 6px;
-  border: none; 
+  border: none;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -356,6 +364,15 @@
   background: #15803d;
 }
 
+.booklet-container .form-buttons .next-btn {
+  background: #2f6fed;
+  color: #fff;
+}
+
+.booklet-container .form-buttons .next-btn:hover {
+  background: #244fc4;
+}
+
 .medical-history {
   max-width: 700px;
   margin: 20px auto;
@@ -367,7 +384,7 @@
   padding: 15px 20px;
   border-radius: 10px;
   margin-bottom: 12px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .history-item p {
@@ -418,7 +435,7 @@
   border-radius: 12px;
   max-width: 900px;
   margin: 20px auto;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
 .found-form h3 {
@@ -490,4 +507,15 @@
   padding: 10px 0;
   font-size: 14px;
   color: #666;
+}
+
+.inputError {
+  border-color: #ef4444;
+  background-color: #ffffff;
+}
+
+.fieldError {
+  color: #ef4444;
+  font-size: 11px;
+  margin-top: 4px;
 }

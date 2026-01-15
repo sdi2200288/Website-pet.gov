@@ -124,7 +124,7 @@ export default function Homepage() {
 
           <div className="info-text">
             <Link to="/vet-dashboard" className="vet-owner-button">
-              Είσαι κτηνίατρος; <span className="arrow">→</span>
+              Είσαι κτηνίατρος; <span className="arrow"></span>
             </Link>
             <p>Ως συνδεδεμένος κτηνίατρος στην πλατφόρμα μπορείς να:</p>
             <ul>
@@ -144,7 +144,7 @@ export default function Homepage() {
 
           <div className="info-text">
             <Link to="/owner-dashboard" className="vet-owner-button">
-              Είσαι ιδιοκτήτης; <span className="arrow">→</span>
+              Είσαι ιδιοκτήτης; <span className="arrow"></span>
             </Link>
             <p>Ως συνδεδεμένος ιδιοκτήτης στην πλατφόρμα μπορείς να:</p>
             <ul>

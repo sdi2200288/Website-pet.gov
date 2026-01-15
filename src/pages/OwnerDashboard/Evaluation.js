@@ -23,9 +23,6 @@ export default function Evaluation() {
   };
 
 
-  const searchParams = new URLSearchParams(location.search);
-  const vetIdFromParams = searchParams.get("vetId");
-
   useEffect(() => {
     if (location.state) {
       setAppointmentData(location.state);
@@ -47,15 +44,19 @@ export default function Evaluation() {
   }, [vetId, location.state]);
 
   const checkIfReviewed = async () => {
-    const res = await fetch(
-      `http://localhost:3001/reviews?appointmentId=${appointmentId}`
-    );
+    if (!appointmentId) return false;
+    const res = await fetch(`http://localhost:3001/reviews?appointmentId=${appointmentId}`);
     const data = await res.json();
     return Array.isArray(data) && data.length > 0;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!appointmentId) {
+      alert("Λείπει το appointmentId. Παρακαλώ μπείτε από το ιστορικό ραντεβού.");
+      navigate(-1);
+      return;
+    }
     if (!rating) {
       alert("Παρακαλώ επιλέξτε βαθμολογία");
       return;
@@ -95,25 +96,17 @@ export default function Evaluation() {
 
       if (!reviewResponse.ok) throw new Error("Αποτυχία υποβολής αξιολόγησης");
 
-      // 2. Ενημέρωση στατιστικών του κτηνίατρου
-      const updatedVet = {
-      ...vet,
-      reviewCount: String(Number(vet.reviewCount || "0") + 1),
-      totalScore: String(Number(vet.totalScore || "0") + ratingToStars[rating])
-    };
-
-
-
       await fetch(`http://localhost:3001/vets/${vetId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(updatedVet)
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          reviewCount: String(Number(vet.reviewCount || "0") + 1),
+          totalScore: String(Number(vet.totalScore || "0") + ratingToStars[rating]),
+        }),
       });
 
       alert("Η αξιολόγησή σας υποβλήθηκε επιτυχώς!");
-      navigate(`/vet-profile/${vetId}`);
+      navigate(`/owner-dashboard/history-bookings-owner?ownerId=${user.id}`);
 
     } catch (error) {
       console.error("Σφάλμα:", error);

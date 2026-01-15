@@ -106,10 +106,15 @@ medicalReports=    {
     petId
     vetId
     date
+    duration
+    startTime
+    endTime
     type
+    actionCode
+    weight: 
+    anesthesia
     description
     medications
-    status
     createdAt
 }
 
@@ -157,10 +162,4 @@ reviews = {
     createdAt
 }
 
-PetListDeclarations = ? gia type 1o orisma
-Προβολη foundReportsWithoutAccount
-history daclarations 
-εκτύπωση
-default dashboard
-Προφίλ κατοικιδίου απο προφίλ Ιδιοκτήτη (δηλώσεις)
 

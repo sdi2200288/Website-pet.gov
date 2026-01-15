@@ -300,3 +300,27 @@
 .step1-spacer {
   height: 40px;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .booklet-container,
+  .booklet-container * {
+    visibility: visible;
+  }
+
+  .booklet-container {
+    position: absolute;
+    inset: 0;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+  }
+
+  .next-btn,
+  .cancel-btn2 {
+    display: none;
+  }
+}

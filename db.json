@@ -2,15 +2,15 @@
   "owners": [
     {
       "id": "631b",
-      "firstname": "ΑΛΤΑΝΗ",
-      "lastname": "ΤΟΝΤΟΥ",
+      "firstname": "ΑΛΤΑΝΗH",
+      "lastname": "ΤΟΝΤΟΥY",
       "afm": "2325788990",
-      "gender": "Γυναίκα",
-      "address": "Αθανασίου Διάκου 7",
-      "birthdate": "2004-06-25",
-      "phone": "6942781852",
+      "gender": "Άνδρας",
+      "address": "Αθανασίου Διάκου 71",
+      "birthdate": "2004-06-26",
+      "phone": "69427818521",
       "email": "sdi2200288@uoa.gr",
-      "password": "Altani1!!"
+      "password": "Altani1!!!"
     },
     {
       "id": "o101",
@@ -45,7 +45,7 @@
       "address": "Μακρίσια",
       "birthdate": "2026-01-15",
       "phone": "6980426710",
-      "email": "e.antoniou2016@gmail.com",
+      "email": "e.antoniou209886@gmail.com",
       "password": "11111111"
     },
     {
@@ -81,8 +81,32 @@
       "address": "Ούλωφ Πάλμε 2-4 Α ΦΕΠΑ",
       "birthdate": "2003-01-29",
       "phone": "000000000000000",
-      "email": "e.antoniou2016@gmail.com",
+      "email": "e.antoniou206@gmail.com",
       "password": "12345678"
+    },
+    {
+      "id": "2707",
+      "firstname": "K",
+      "lastname": "D",
+      "afm": "2325788991",
+      "gender": "Αρσενικό",
+      "address": "DDDD",
+      "birthdate": "2003-06-03",
+      "phone": "6980426710",
+      "email": "e.antoniou2016@gmail.com",
+      "password": "123456789"
+    },
+    {
+      "id": "ad5c",
+      "firstname": "JK",
+      "lastname": "BTS",
+      "afm": "5555555555",
+      "gender": "Αρσενικό",
+      "address": "KOREA",
+      "birthdate": "2004-06-16",
+      "phone": "5612999999",
+      "email": "JK@uoa.gr",
+      "password": "6666666666"
     }
   ],
   "vets": [
@@ -97,8 +121,8 @@
       "phone": "6900000100",
       "email": "vetgiorgos@example.com",
       "password": "Vet1!!",
-      "totalScore": "1001",
-      "reviewCount": "101",
+      "totalScore": "10",
+      "reviewCount": "2",
       "region": "Αττικής",
       "experience": 8,
       "availability": [
@@ -449,7 +473,37 @@
           "to": "17:00"
         }
       },
-      "availability": [],
+      "availability": [
+        {
+          "date": "2026-01-21",
+          "times": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30",
+            "11:00",
+            "11:30",
+            "12:00",
+            "13:00",
+            "13:30",
+            "14:00",
+            "14:30",
+            "15:00",
+            "15:30",
+            "16:00",
+            "16:30"
+          ]
+        },
+        {
+          "date": "2026-01-16",
+          "times": [
+            "09:00",
+            "09:30",
+            "10:00",
+            "10:30"
+          ]
+        }
+      ],
       "reviewCount": "1",
       "totalScore": "3"
     }
@@ -457,7 +511,7 @@
   "pets": [
     {
       "id": "vp001",
-      "ownerId": "631b",
+      "ownerId": "2707",
       "name": "Ρεξ",
       "species": "Σκύλος",
       "breed": "Ημίαιμο",
@@ -465,10 +519,10 @@
       "microchip": "555111222",
       "birthdate": "2021-04-12",
       "age": "4",
-      "region": "Αττική",
-      "lastSeenAddress": "εεεεεεε",
-      "lastSeenDate": "2026-01-07",
-      "condition": "εεεε",
+      "region": "Έβρου",
+      "lastSeenAddress": "",
+      "lastSeenDate": "2026-01-11",
+      "condition": "",
       "status": "foster",
       "photoUrl": "https://placedog.net/400/300?id=6",
       "lost": true
@@ -556,9 +610,9 @@
       "birthdate": null,
       "age": "0",
       "region": "Ζακύνθου",
-      "lastSeenAddress": "1111111111",
+      "lastSeenAddress": "123543224",
       "lastSeenDate": "2026-01-02",
-      "condition": "11111111111",
+      "condition": "555666333",
       "status": "owned",
       "photoUrl": "https://placekitten.com/401/301",
       "lost": false
@@ -778,6 +832,60 @@
       "status": "adoption",
       "photoUrl": "https://placekitten.com/405/305",
       "lost": false
+    },
+    {
+      "id": "vpt3x54epvu",
+      "ownerId": "844c",
+      "name": "AAAAA",
+      "species": "Σκύλος",
+      "breed": "German Shepherd",
+      "gender": "Θηλυκό",
+      "microchip": "654321876",
+      "birthdate": "2026-01-01",
+      "age": "0",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Makrisia",
+      "lastSeenDate": "2026-01-15",
+      "condition": "",
+      "status": "adoption",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "lost": false
+    },
+    {
+      "id": "vpqgig9l7lp",
+      "ownerId": "8d4e",
+      "name": "U",
+      "species": "Σκύλος",
+      "breed": "Labrador Retriever",
+      "gender": "Αρσενικό",
+      "microchip": "888888888",
+      "birthdate": null,
+      "age": "7",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Makrisia",
+      "lastSeenDate": "2026-01-15",
+      "condition": "",
+      "status": "owned",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "lost": false
+    },
+    {
+      "id": "vp83qkqzwl2",
+      "ownerId": "ad5c",
+      "name": "J",
+      "species": "Γάτα",
+      "breed": "Sphynx",
+      "gender": "Θηλυκό",
+      "microchip": "874323456",
+      "birthdate": null,
+      "age": "6",
+      "region": "Ηλείας",
+      "lastSeenAddress": "Makrisia",
+      "lastSeenDate": "2026-01-15",
+      "condition": "",
+      "status": "owned",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "lost": false
     }
   ],
   "lostReports": [
@@ -879,6 +987,29 @@
       "status": "submitted",
       "ownerId": "631b",
       "createdAt": "2026-01-10T07:50:12.573Z"
+    },
+    {
+      "id": "7625",
+      "petId": "vp001",
+      "date": "2026-01-08",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "Syntagma",
+      "condition": "ok",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-15T15:12:36.825Z",
+      "photoUrl": "blob:http://localhost:3000/8d742a44-c7d5-4e00-bc85-e6a32ebe2e35"
+    },
+    {
+      "id": "3184",
+      "petId": "vp001",
+      "date": "2026-01-11",
+      "region": "Έβρου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-15T15:58:31.080Z"
     }
   ],
   "foundReports": [
@@ -1059,6 +1190,52 @@
       "ownerId": "631b",
       "createdAt": "2026-01-14T17:53:29.077Z",
       "photoUrl": "blob:http://localhost:3000/dc679906-b780-49ff-9c81-4f322b384ac0"
+    },
+    {
+      "id": "73f2",
+      "petId": "vp001",
+      "date": "2026-01-08",
+      "region": "Αιτωλοακαρνανίας",
+      "address": "Syntagma",
+      "condition": "ok",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-15T15:11:16.181Z",
+      "photoUrl": "blob:http://localhost:3000/277bafc3-6f71-4bc0-862a-a93c45280ede"
+    },
+    {
+      "id": "e45d",
+      "petId": "vp001",
+      "date": "2025-12-31",
+      "region": "Βοιωτίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "createdAt": "2026-01-15T15:54:54.804Z",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "ownerId": "631b"
+    },
+    {
+      "id": "edcb",
+      "petId": "vp001",
+      "date": "2026-01-15",
+      "region": "Ηρακλείου",
+      "address": "",
+      "condition": "",
+      "status": "draft",
+      "ownerId": "631b",
+      "createdAt": "2026-01-15T15:56:55.649Z"
+    },
+    {
+      "id": "1f53",
+      "petId": "vp001",
+      "date": "2026-01-10",
+      "region": "Ηλείας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "631b",
+      "createdAt": "2026-01-15T15:57:41.267Z"
     }
   ],
   "foundReportsWithoutAcc": [
@@ -1076,6 +1253,21 @@
       "lastname": "ANTVNIOU",
       "email": "1@uoa.gr",
       "phone": "111111111111111"
+    },
+    {
+      "id": "904b",
+      "petId": "vp001",
+      "date": "2026-01-09",
+      "region": "Ευρυτανίας",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "createdAt": "2026-01-15T15:53:31.618Z",
+      "photoUrl": "https://placedog.net/400/300?id=6",
+      "firstname": "E",
+      "lastname": "A",
+      "email": "e.antoniou2016@gmail.com",
+      "phone": "6980426710"
     }
   ],
   "adoptionReports": [
@@ -1141,6 +1333,28 @@
       "transferDate": "2026-01-14",
       "status": "draft",
       "createdAt": "2026-01-14T17:36:16.985Z"
+    },
+    {
+      "id": "1bd9",
+      "petId": "vp001",
+      "microchip": "555111222",
+      "vetId": "844c",
+      "currentOwnerId": "631b",
+      "newOwnerId": "8d4e",
+      "transferDate": "2026-01-15",
+      "status": "submitted",
+      "createdAt": "2026-01-15T15:59:14.021Z"
+    },
+    {
+      "id": "c703",
+      "petId": "vp001",
+      "microchip": "555111222",
+      "vetId": "844c",
+      "currentOwnerId": "8d4e",
+      "newOwnerId": "2707",
+      "transferDate": "2026-01-15",
+      "status": "submitted",
+      "createdAt": "2026-01-15T16:01:06.414Z"
     }
   ],
   "medicalReports": [
@@ -1165,6 +1379,23 @@
       "medications": "",
       "status": "completed",
       "createdAt": "2025-12-01T11:45:00.000Z"
+    },
+    {
+      "id": "a16d",
+      "petId": "vpgb9f9zvow",
+      "vetId": "844c",
+      "date": "2026-01-15",
+      "duration": "66",
+      "startTime": "18:14",
+      "endTime": "19:40",
+      "type": "clinical_exam",
+      "actionCode": "6",
+      "weight": "8",
+      "anesthesia": "Ναι",
+      "description": "",
+      "medications": "",
+      "status": "submitted",
+      "createdAt": "2026-01-15T16:14:58.911Z"
     }
   ],
   "appointments": [
@@ -1223,6 +1454,265 @@
       "ownerId": "631b",
       "cancelledBy": "owner",
       "cancelledAt": "2026-01-12T13:25:29.959Z"
+    },
+    {
+      "id": "app_y5v441pve",
+      "vetId": "v001",
+      "petId": "vp001",
+      "date": "2026-01-15",
+      "time": "09:00",
+      "reason": "clinical_exam",
+      "description": "",
+      "status": "pending",
+      "createdAt": "2026-01-15T15:20:31.427Z",
+      "ownerId": "631b"
+    },
+    {
+      "id": "app_e5keajsf4",
+      "vetId": "v001",
+      "date": "2026-01-15",
+      "time": "09:00",
+      "reason": "",
+      "description": "",
+      "status": "pending",
+      "createdAt": "2026-01-15T15:26:50.913Z",
+      "ownerId": "631b"
+    },
+    {
+      "id": "app_6torajkgg",
+      "vetId": "v001",
+      "date": "2026-01-21",
+      "time": "10:30",
+      "reason": "",
+      "description": "",
+      "status": "cancelled",
+      "createdAt": "2026-01-15T15:45:16.015Z",
+      "ownerId": "631b",
+      "vet": {
+        "id": "v001",
+        "firstname": "ΓΙΩΡΓΟΣ",
+        "lastname": "ΚΩΝΣΤΑΝΤΙΝΟΥ",
+        "afm": "1112223334",
+        "gender": "Άνδρας",
+        "address": "Πατησίων 100, Αθήνα",
+        "birthdate": "1988-01-18",
+        "phone": "6900000100",
+        "email": "vetgiorgos@example.com",
+        "password": "Vet1!!",
+        "totalScore": "10",
+        "reviewCount": "2",
+        "region": "Αττικής",
+        "experience": 8,
+        "availability": [
+          {
+            "date": "2026-01-14",
+            "times": [
+              "09:00",
+              "09:30",
+              "10:00",
+              "10:30",
+              "11:00",
+              "11:30",
+              "12:00",
+              "12:30",
+              "13:00",
+              "13:30",
+              "14:00",
+              "14:30",
+              "15:00",
+              "15:30",
+              "16:00",
+              "16:30"
+            ]
+          },
+          {
+            "date": "2026-01-15",
+            "times": [
+              "09:00",
+              "10:00",
+              "11:00"
+            ]
+          },
+          {
+            "date": "2026-01-21",
+            "times": [
+              "10:30"
+            ]
+          }
+        ],
+        "photoUrl": "/images/vet.png",
+        "specializations": [
+          "Κτηνιατρική Μικρών Ζώων"
+        ],
+        "studyLevel": "Διδακτορικό",
+        "services": {
+          "clinical_exam": {
+            "enabled": false,
+            "price": ""
+          },
+          "vaccination": {
+            "enabled": false,
+            "price": ""
+          },
+          "microchip_place": {
+            "enabled": false,
+            "price": ""
+          },
+          "health_book": {
+            "enabled": false,
+            "price": ""
+          },
+          "declaration": {
+            "enabled": false,
+            "price": ""
+          },
+          "blood_tests": {
+            "enabled": false,
+            "price": ""
+          },
+          "biochemical_tests": {
+            "enabled": false,
+            "price": ""
+          },
+          "urine_tests": {
+            "enabled": false,
+            "price": ""
+          },
+          "feces_tests": {
+            "enabled": false,
+            "price": ""
+          },
+          "xray": {
+            "enabled": false,
+            "price": ""
+          },
+          "ultrasound": {
+            "enabled": false,
+            "price": ""
+          },
+          "sterilization": {
+            "enabled": false,
+            "price": ""
+          },
+          "cleansing": {
+            "enabled": false,
+            "price": ""
+          },
+          "tumor_removal": {
+            "enabled": false,
+            "price": ""
+          },
+          "orthopedic": {
+            "enabled": false,
+            "price": ""
+          },
+          "surgery_general": {
+            "enabled": false,
+            "price": ""
+          },
+          "teeth_cleaning": {
+            "enabled": false,
+            "price": ""
+          },
+          "tooth_extraction": {
+            "enabled": false,
+            "price": ""
+          },
+          "gingivitis": {
+            "enabled": false,
+            "price": ""
+          },
+          "internal_deworming": {
+            "enabled": false,
+            "price": ""
+          },
+          "external_deworming": {
+            "enabled": false,
+            "price": ""
+          },
+          "heartworm_prevention": {
+            "enabled": false,
+            "price": ""
+          },
+          "antiparasitic_treatment": {
+            "enabled": false,
+            "price": ""
+          },
+          "skin_exam": {
+            "enabled": true,
+            "price": "10"
+          },
+          "allergy_test": {
+            "enabled": false,
+            "price": ""
+          },
+          "skin_treatment": {
+            "enabled": false,
+            "price": ""
+          }
+        },
+        "schedule": {
+          "mon": {
+            "enabled": true,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "tue": {
+            "enabled": false,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "wed": {
+            "enabled": true,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "thu": {
+            "enabled": false,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "fri": {
+            "enabled": true,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "sat": {
+            "enabled": false,
+            "from": "09:00",
+            "to": "17:00"
+          },
+          "sun": {
+            "enabled": false,
+            "from": "09:00",
+            "to": "17:00"
+          }
+        }
+      },
+      "cancelledBy": "owner",
+      "cancelledAt": "2026-01-15T15:45:28.172Z"
+    },
+    {
+      "id": "app_05jf14drf",
+      "vetId": "v001",
+      "date": "2026-01-21",
+      "time": "10:30",
+      "reason": "",
+      "description": "",
+      "status": "pending",
+      "createdAt": "2026-01-15T15:46:01.596Z",
+      "ownerId": "631b"
+    },
+    {
+      "id": "app_vmosrcyb8",
+      "vetId": "844c",
+      "date": "2026-01-21",
+      "time": "12:30",
+      "reason": "",
+      "description": "",
+      "status": "confirmed",
+      "createdAt": "2026-01-15T15:49:39.408Z",
+      "ownerId": "631b"
     }
   ],
   "notifications": [
@@ -1235,6 +1725,26 @@
       "appointmentId": "app_r6cuyt337",
       "read": false,
       "createdAt": "2026-01-12T13:25:30.043Z"
+    },
+    {
+      "id": "c674",
+      "userId": "v001",
+      "userType": "vet",
+      "title": "Ακύρωση Ραντεβού",
+      "message": "Ο ιδιοκτήτης ακύρωσε το ραντεβού για undefined στις 2026-01-21 10:30",
+      "appointmentId": "app_6torajkgg",
+      "read": false,
+      "createdAt": "2026-01-15T15:45:28.210Z"
+    },
+    {
+      "id": "b380",
+      "userId": "631b",
+      "userType": "owner",
+      "title": "Επιβεβαίωση Ραντεβού",
+      "message": "Ο κτηνίατρος undefined επιβεβαίωσε το ραντεβού για undefined στις 2026-01-21 12:30",
+      "appointmentId": "app_vmosrcyb8",
+      "read": false,
+      "createdAt": "2026-01-15T15:50:12.230Z"
     }
   ],
   "identity": [
@@ -1243,6 +1753,27 @@
       "petId": "vp2zapvcwhj",
       "vetId": "v001",
       "date": "2026-01-10"
+    },
+    {
+      "id": "idnovp1wum9a",
+      "petId": "vpt3x54epvu",
+      "vetId": "844c",
+      "ownerId": "844c",
+      "date": "2026-01-15"
+    },
+    {
+      "id": "idn26vd39u8p",
+      "petId": "vpqgig9l7lp",
+      "vetId": "844c",
+      "ownerId": "8d4e",
+      "date": "2026-01-15"
+    },
+    {
+      "id": "idnwr7f94aa9",
+      "petId": "vp83qkqzwl2",
+      "vetId": "844c",
+      "ownerId": "ad5c",
+      "date": "2026-01-15"
     }
   ],
   "reviews": [
@@ -1254,6 +1785,24 @@
       "stars": 3,
       "text": "Ολα καλα!",
       "createdAt": "2026-01-12T15:19:48.076Z"
+    },
+    {
+      "id": "b462",
+      "vetId": "v001",
+      "ownerId": "631b",
+      "appointmentId": "app_y5v441pve",
+      "stars": 5,
+      "text": "οκ",
+      "createdAt": "2026-01-15T15:33:20.068Z"
+    },
+    {
+      "id": "05df",
+      "vetId": "v001",
+      "ownerId": "631b",
+      "appointmentId": "app_e5keajsf4",
+      "stars": 5,
+      "text": "",
+      "createdAt": "2026-01-15T15:37:02.756Z"
     }
   ]
 }

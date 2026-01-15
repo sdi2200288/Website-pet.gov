@@ -5,24 +5,9 @@ import "./HistoryBookings.css";
 
 export default function AppointmentHistory() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [history, setHistory] = useState([]);
   const [openId, setOpenId] = useState(null);
 
-  // const handleRepeatAppointment = (appointment) => {
-  //   alert(`Θες σίγουρα Ραντεβού ξανά με τον κτηνίατρο: ${appointment.vetName}`);
-  //   navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
-  // };
-
-  // const handleReviewAppointment = (appointments) => {
-  //   alert(`Θες σίγουρα να αξιολογήσεις τον: ${appointments.vetId}`);
-  //    navigate(`/review/${appointments.vetId}`, { 
-  //     state: { 
-  //       appointmentId: appointments.id,
-  //       vetId: appointments.vetId 
-  //     }  
-  //   });
-  // };
   const handleRepeatAppointment = (appointment) => {
   const vetName = appointment.vet 
     ? `${appointment.vet.firstname} ${appointment.vet.lastname}`
