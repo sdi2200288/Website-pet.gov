@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import PetDetails from "../../components/Pet/Pet";
-import "./HealthBookletVet.css";
-// import { MEDICAL_ACTS } from "../Utils/Util";
+import PetDetails from "../../components/Pet/Pet";
+import "./MedicalActions.css";
+import { MEDICAL_ACTS } from "../Utils/Util";
 
-export default function HealthBookletVet() {
+export default function MedicalActions() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [microchip, setMicrochip] = useState("");
@@ -14,13 +14,14 @@ export default function HealthBookletVet() {
   const [error, setError] = useState("");
   const [medicalHistory, setMedicalHistory] = useState([]);
 
-  // const [newOwnerInfo, setNewOwnerInfo] = useState({
-  //   afm: "",
-  //   email: "",
-  //   phone: "",
-  // });
+  const [newOwnerInfo, setNewOwnerInfo] = useState({
+    afm: "",
+    email: "",
+    phone: "",
+  });
 
   const vet = JSON.parse(localStorage.getItem("user"));
+  // const selectedPet = pets.find((p) => p.id === selectedPetId);
 
   const goToStep = (targetStep) => {
     if (!vet) {
@@ -42,13 +43,13 @@ export default function HealthBookletVet() {
 
   const [medicalAction, setMedicalAction] = useState({
     date: "",                // Ημερομηνία
-    // duration: "",            // Διάρκεια εξέτασης
-    // startTime: "",           // Ώρα έναρξης
-    // endTime: "",             // Ώρα λήξης
+    duration: "",            // Διάρκεια εξέτασης
+    startTime: "",           // Ώρα έναρξης
+    endTime: "",             // Ώρα λήξης
     type: "",                // Τύπος Ιατρικής Πράξης
-    // actionCode: "",          // Κωδικός Ιατρικής Πράξης
-    // weight: "",              // Βάρος Ζώου
-    // anesthesia: "",          // Αναισθησία
+    actionCode: "",          // Κωδικός Ιατρικής Πράξης
+    weight: "",              // Βάρος Ζώου
+    anesthesia: "",          // Αναισθησία
     description: "",         // Περιγραφή Ιατρικής Επίσκεψης
     medications: "",         // Στοιχεία Εξόδου (Φάρμακα / Οδηγίες)
   });
@@ -207,7 +208,7 @@ export default function HealthBookletVet() {
   };
 
   return (
-    <div className="health-booklet">
+    <div className="transfer">
       {/* Breadcrumb μόνο για step 0 */}
       {step === 0 && (
         <nav className="breadcrumb">
@@ -274,7 +275,7 @@ export default function HealthBookletVet() {
       {/* ================= STEP 1 ================= */}
       {step === 1 && (
         <>
-          <div className="step1-spacer"></div>
+         <div className="step1-spacer"></div>
           <div className="stepper">
             <div className="step active">
               <div className="circle">1</div>
@@ -402,17 +403,11 @@ export default function HealthBookletVet() {
                 ))}
               </div>
             )}
-            <div className="form-buttons">
-              <button type="button" className="cancel-btn2" onClick={handleCancel}>
-                Ακύρωση
-              </button>
-              <button type="button" className="print-btn" onClick={() => window.print()}>
-                Εκτύπωση
-              </button>
-
-            
-            </div>
-
+            {/* <div className="form-buttons"> */}
+            <button type="button" className="cancel-btn2" onClick={handleCancel}>
+              Ακύρωση
+            </button>
+            {/* </div> */}
 
           </div>
 
