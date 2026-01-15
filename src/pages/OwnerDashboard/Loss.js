@@ -152,41 +152,7 @@ export default function Loss() {
 
   return (
     <div className="report-container ">
-      {/* Breadcrumb */}
-      <nav className="breadcrumb">
-        {[
-          { label: "Αρχική", path: "/" },
-          { label: "Δήλωση Απώλειας", step: 0 },
-          ...(step >= 1 ? [{ label: "Επιλογή Κατοικιδίου", step: 1 }] : []),
-          ...(step >= 2 ? [{ label: "Στοιχεία Απώλειας", step: 2 }] : []),
-          ...(step === 3 ? [{ label: "Προεπισκόπηση", step: 3 }] : []),
-        ].map((item, index, arr) => {
-          const isLast = index === arr.length - 1; // το τρέχον step
-          return (
-            <span key={index}>
-              <span
-                style={{
-                  color: isLast ? "black" : "blue",
-                  cursor: isLast ? "default" : "pointer",
-                  textDecoration: isLast ? "none" : "underline",
-                }}
-                onClick={() => {
-                  if (!isLast) {
-                    if (item.step !== undefined) {
-                      goToStep(item.step); // πηγαίνει στο σωστό step
-                    } else if (item.path) {
-                      navigate(item.path); // πηγαίνει σε άλλη σελίδα
-                    }
-                  }
-                }}
-              >
-                {item.label}
-              </span>
-              {!isLast && " / "}
-            </span>
-          );
-        })}
-      </nav>
+
 
       {/* ================= STEP 0 ================= */}
       {step === 0 && (
