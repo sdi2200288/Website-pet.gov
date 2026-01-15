@@ -71,6 +71,18 @@
       "phone": "6947070122",
       "email": "TONTOSPANAGIOTES1@GMAIL.COM",
       "password": "22222222"
+    },
+    {
+      "id": "9def",
+      "firstname": "Ε",
+      "lastname": "Α",
+      "afm": "1111111114",
+      "gender": "Θηλυκό",
+      "address": "Ούλωφ Πάλμε 2-4 Α ΦΕΠΑ",
+      "birthdate": "2003-01-29",
+      "phone": "000000000000000",
+      "email": "e.antoniou2016@gmail.com",
+      "password": "12345678"
     }
   ],
   "vets": [
@@ -438,8 +450,8 @@
         }
       },
       "availability": [],
-      "reviewCount": "10",
-      "totalScore": "1"
+      "reviewCount": "1",
+      "totalScore": "3"
     }
   ],
   "pets": [
@@ -657,24 +669,6 @@
       "condition": ";;;;;;;;;",
       "status": "owned",
       "photoUrl": "https://placedog.net/400/300?id=6",
-      "lost": true
-    },
-    {
-      "id": "12",
-      "ownerId": "631b",
-      "name": "Μίνα",
-      "species": "Γάτα",
-      "breed": "Sphynx",
-      "gender": "Θηλυκό",
-      "microchip": "101121314",
-      "birthdate": null,
-      "age": "0",
-      "region": "Ζακύνθου",
-      "lastSeenAddress": "Ζάκυνθος, Κέντρο",
-      "lastSeenDate": "2025-11-30",
-      "condition": "",
-      "status": "owned",
-      "photoUrl": "https://placekitten.com/405/305",
       "lost": true
     },
     {
@@ -1053,6 +1047,18 @@
       "createdAt": "2026-01-14T13:51:54.156Z",
       "photoUrl": "https://placedog.net/400/300?id=6",
       "ownerId": "631b"
+    },
+    {
+      "id": "4f3f",
+      "petId": "11",
+      "date": "2026-01-10",
+      "region": "Ζακύνθου",
+      "address": "",
+      "condition": "",
+      "status": "draft",
+      "ownerId": "631b",
+      "createdAt": "2026-01-14T17:53:29.077Z",
+      "photoUrl": "blob:http://localhost:3000/dc679906-b780-49ff-9c81-4f322b384ac0"
     }
   ],
   "foundReportsWithoutAcc": [
@@ -1124,6 +1130,17 @@
       "newOwnerId": "o102",
       "status": "submitted",
       "createdAt": "2026-01-08T16:49:46.437Z"
+    },
+    {
+      "id": "e8a2",
+      "petId": "vpgb9f9zvow",
+      "microchip": "111111111",
+      "vetId": "844c",
+      "currentOwnerId": "8d4e",
+      "newOwnerId": "9def",
+      "transferDate": "2026-01-14",
+      "status": "draft",
+      "createdAt": "2026-01-14T17:36:16.985Z"
     }
   ],
   "medicalReports": [

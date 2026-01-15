@@ -4,7 +4,7 @@ import "./PetDeclaration.css";
 export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration, onPrintDeclaration }) {
   const effectiveType = type === "mixed" ? item.type : type;
   const isFinal = item.status === "submitted";
-  const statusLabel = isFinal ? "Οριστικοποιημένη" : "Πρόχειρη";
+  const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά αποθηκευμένη";
 
   const declarationTypeLabel = (() => {
     if (effectiveType === "loss" || effectiveType === "lost") return "Απώλεια";
@@ -131,10 +131,11 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
                 </button>
                 <button className="petButtonPrimary">Επεξεργασία</button>
               </>
-            )}
-          </div>
-        </div>
-      </div>
-    </article>
+            )
+            }
+          </div >
+        </div >
+      </div >
+    </article >
   );
 }

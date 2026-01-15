@@ -95,7 +95,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
   function handlePhotoChange(e) {
     const file = e.target.files?.[0] ?? null;
-    setForm((prev) => ({ ...prev, photoFile: file }));
+    setForm((prev) => ({ ...prev, photoUrl: file }));
   }
 
   function toggleSpecialization(spec) {

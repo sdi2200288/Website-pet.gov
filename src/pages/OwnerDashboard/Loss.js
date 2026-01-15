@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
 import PetDetails from "../../components/Pet/Pet";
 import "./PetReport.css";
+import vetdefault from "../../images/vetdeafult.webp";
 
 export default function Loss() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId, setSelectedPetId] = useState(null); // προσωρινά, δείχνουμε Barbie πάντα
+  const [selectedPetId, setSelectedPetId] = useState(null);
   const [pets, setPets] = useState([]);
   const [errors, setErrors] = useState({});
+  const photoInputRef = useRef(null);
+  const [form, setForm] = useState({ photoUrl: "" });
+
   const [lossInfo, setLossInfo] = useState({
     date: "",
     region: "",
@@ -20,10 +24,20 @@ export default function Loss() {
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
 
-    useEffect(() => {
-      // Όταν αλλάζει το step, scroll στην κορυφή του container
-     window.scrollTo({ top: 0, behavior: "smooth"});
-    }, [step]);
+  useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
+  function handlePhotoChange(e) {
+    const file = e.target.files?.[0] ?? null;
+    if (!file) {
+      setForm((prev) => ({ ...prev, photoUrl: "" }));
+      return;
+    }
+    const previewUrl = URL.createObjectURL(file);
+    setForm((prev) => ({ ...prev, photoUrl: previewUrl }));
+  }
 
   const goToStep = (targetStep) => {
     if (!user) {
@@ -58,7 +72,8 @@ export default function Loss() {
       status, // 'draft' ή 'submitted'
       ownerId: user.id,
       createdAt: new Date().toISOString(),
-    }
+      photoUrl: form.photoUrl || selectedPet.photoUrl || vetdefault,
+    };
 
     try {
       const res = await fetch("http://localhost:3001/lostReports", {
@@ -69,20 +84,17 @@ export default function Loss() {
       if (!res.ok) throw new Error("POST lostReports failed");
 
       if (status === "submitted") {
-        const petUpdate = await fetch(
-          `http://localhost:3001/pets/${selectedPet.id}`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              lost: true,
-              lastSeenDate: lossInfo.date,
-              region: lossInfo.region,
-              lastSeenAddress: lossInfo.address,
-              condition: lossInfo.condition,
-            }),
-          }
-        );
+        const petUpdate = await fetch(`http://localhost:3001/pets/${selectedPet.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            lost: true,
+            lastSeenDate: lossInfo.date,
+            region: lossInfo.region,
+            lastSeenAddress: lossInfo.address,
+            condition: lossInfo.condition,
+          }),
+        });
         if (!petUpdate.ok) throw new Error("PATCH pet failed");
       }
       alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
@@ -90,7 +102,7 @@ export default function Loss() {
       setStep(0);
       setSelectedPetId(null);
       setLossInfo({ date: "", region: "", address: "", condition: "" });
-
+      setForm({ photoUrl: "" });
       // Μετάβαση στο ιστορικό δηλώσεων
       navigate("/owner-dashboard");
     } catch (err) {
@@ -98,14 +110,12 @@ export default function Loss() {
     }
   };
 
-
   const validate1 = () => {
     if (!selectedPetId) {
       return;
     }
     goToStep(2);
   };
-
 
   const validate2 = () => {
     const newErrors = {};
@@ -123,7 +133,6 @@ export default function Loss() {
     goToStep(3);
   };
 
-
   const handleCancel = () => {
     const confirmLeave = window.confirm(
       "Αν ακυρώσετε, τα στοιχεία της δήλωσης δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
@@ -137,12 +146,13 @@ export default function Loss() {
       address: "",
       condition: "",
     });
+    setForm({ photoUrl: "" });
     setErrors({});
   };
 
   return (
     <div className="report-container ">
-     {/* Breadcrumb */}
+      {/* Breadcrumb */}
       <nav className="breadcrumb">
         {[
           { label: "Αρχική", path: "/" },
@@ -243,7 +253,9 @@ export default function Loss() {
               <div
                 key={pet.id}
                 className={`pet-card-wrapper ${selectedPetId === pet.id ? "selected" : ""}`}
-                onClick={() => { setSelectedPetId(pet.id) }}
+                onClick={() => {
+                  setSelectedPetId(pet.id);
+                }}
               >
                 <PetDetails pet={pet} mode={0} selected={selectedPetId === pet.id} />
               </div>
@@ -255,10 +267,7 @@ export default function Loss() {
               Πρέπει να επιλέξετε κάποιο κατοικίδιο για να συνεχίσετε
             </p>
           )}
-          <button
-            className="next-btn"
-            onClick={validate1}
-          >
+          <button className="next-btn" onClick={validate1}>
             Συνέχεια
           </button>
         </>
@@ -295,9 +304,7 @@ export default function Loss() {
                 type="date"
                 value={lossInfo.date}
                 max={new Date().toISOString().split("T")[0]}
-                onChange={(e) =>
-                  setLossInfo({ ...lossInfo, date: e.target.value })
-                }
+                onChange={(e) => setLossInfo({ ...lossInfo, date: e.target.value })}
               />
               {errors.date && <p className="error-text">{errors.date}</p>}
             </label>
@@ -306,9 +313,7 @@ export default function Loss() {
               Περιοχή (Νομός) *
               <select
                 value={lossInfo.region}
-                onChange={(e) =>
-                  setLossInfo({ ...lossInfo, region: e.target.value })
-                }
+                onChange={(e) => setLossInfo({ ...lossInfo, region: e.target.value })}
               >
                 <option value="">Επιλέξτε...</option>
                 {REGIONS.map((region) => (
@@ -326,9 +331,8 @@ export default function Loss() {
                 type="text"
                 placeholder="Π.χ. Σύνταγμα"
                 value={lossInfo.address}
-                onChange={(e) =>
-                  setLossInfo({ ...lossInfo, address: e.target.value })
-                } />
+                onChange={(e) => setLossInfo({ ...lossInfo, address: e.target.value })}
+              />
             </label>
 
             <label>
@@ -337,25 +341,36 @@ export default function Loss() {
                 placeholder="Π.χ. Υγιές, φοβισμένο..."
                 rows={4}
                 value={lossInfo.condition}
-                onChange={(e) =>
-                  setLossInfo({ ...lossInfo, condition: e.target.value })
-                }
+                onChange={(e) => setLossInfo({ ...lossInfo, condition: e.target.value })}
               ></textarea>
             </label>
 
             <div>
-              <button type="button">Προσθήκη Πρόσφατης Φωτογραφίας</button>
+              <input
+                type="file"
+                accept="image/*"
+                ref={photoInputRef}
+                onChange={handlePhotoChange}
+                style={{ display: "none" }}
+              />
+              <button type="button" onClick={() => photoInputRef.current?.click()}>
+                Προσθήκη Πρόσφατης Φωτογραφίας
+              </button>
+
+              {form.photoUrl && <div className="registerPhotoName">Επιλέχθηκε φωτογραφία</div>}
             </div>
 
             <div className="form-buttons">
-              <button onClick={handleCancel}>
-                Ακύρωση
+              <button onClick={handleCancel}>Ακύρωση</button>
+              <button type="button" onClick={validate2}>
+                Συνέχεια
               </button>
-              <button type="button" onClick={validate2}>Συνέχεια</button>
             </div>
           </div>
         </>
       )}
+
+      {/* ================= STEP 3 ================= */}
       {step === 3 && selectedPet && (
         <>
           <div className="stepper">
@@ -383,7 +398,14 @@ export default function Loss() {
             <div className="booklet-layout">
               <div className="booklet-header">
                 <div className="pet-photo">
-                  <img src={selectedPet.photoUrl} alt={selectedPet.name} />
+                  <img
+                    src={form.photoUrl || selectedPet.photoUrl || vetdefault}
+                    alt={selectedPet.name}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = vetdefault;
+                    }}
+                  />
                 </div>
 
                 <div className="booklet-top">
@@ -395,7 +417,8 @@ export default function Loss() {
                     <p><span>Φύλο:</span> {selectedPet.gender}</p>
                     <p><span>Microchip:</span> {selectedPet.microchip}</p>
                     <p><span>Ημερομηνία Γέννησης:</span> {selectedPet.birthdate || "-"}</p>
-                    <p><span>Ηλικία:</span> {selectedPet.age || "-"}</p>                  </div>
+                    <p><span>Ηλικία:</span> {selectedPet.age || "-"}</p>
+                  </div>
 
                   <div className="info-box">
                     <h4>Στοιχεία Ιδιοκτήτη</h4>
@@ -414,19 +437,15 @@ export default function Loss() {
                     <p><span>Κατάσταση Ζώου:</span> {lossInfo.condition}</p>
                   </div>
                 </div>
-
               </div>
             </div>
 
             <div className="form-buttons">
-              <button onClick={handleCancel}>
-                Ακύρωση
-              </button>
+              <button onClick={handleCancel}>Ακύρωση</button>
               <button type="button" onClick={() => handleSubmit("draft")}>Προσωρινή Αποθήκευση</button>
               <button type="button" onClick={() => handleSubmit("submitted")}>Οριστική Υποβολή</button>
             </div>
           </div>
-
         </>
       )}
     </div>

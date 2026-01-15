@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { Link, useParams } from "react-router-dom";
-import { DAYS, buildEnabledServicesByCategory, Stars, } from "../Utils/Util";
+import { DAYS, buildEnabledServicesByCategory, Stars, calculateMO } from "../Utils/Util";
 import VetInfo from "../../components/Vet/VetInfo";
 import VetPrices from "../../components/Vet/VetPrices";
 import VetReview from "../../components/Vet/VetReview";
+import vetdefault from "../../images/vetdeafult.webp";
 
 export default function BookProfile() {
     const { id } = useParams();
@@ -90,12 +91,10 @@ export default function BookProfile() {
     }
 
     const fullName = `${vet.firstname || ""} ${vet.lastname || ""}`.trim();
-    const specializationText = Array.isArray(vet.specializations) && vet.specializations.length > 0 ? vet.specializations.join(", ") : (vet.specializations || "—");
-    const studyLevelText = vet.studyLevel || vet.education || "—";
-
-    const experienceText = Number(vet.experience ?? 0);
-    const experienceYears = Number.isFinite(experienceText) ? experienceText : 0;
-    const profileImage = (typeof vet.photoUrl === "string" && vet.photoUrl.trim() !== "") ? vet.photoUrl : (typeof vet.photoUrl=== "string" && vet.photoUrl.trim() !== "") ? vet.photoUrl : "/default.jpg";
+    const profileImage =
+        typeof vet.photoUrl === "string" && vet.photoUrl.trim() !== ""
+            ? vet.photoUrl
+            : vetdefault;
 
     const schedule = vet.schedule || {};
     const formatHours = (d) => {
@@ -108,21 +107,31 @@ export default function BookProfile() {
 
     const reviewCount = Number(vet.reviewCount || 0);
     const totalScore = Number(vet.totalScore || 0);
-    const avgRating = reviewCount > 0 ? totalScore / reviewCount : 0;
+    const avgRatingNum = reviewCount > 0 ? totalScore / reviewCount : 0;
+    const avgRatingText = calculateMO(totalScore, reviewCount);
 
     return (
         <div className="owner-profile">
             <div className="profile-card profile-card-top">
                 <div className="vet-top">
                     <div className="vet-top-left">
-                        <div className="vet-avatar"> <img src={profileImage} alt="Φωτογραφία κτηνιάτρου" /> </div>
+                        <div className="vet-avatar">
+                            <img
+                                src={profileImage}
+                                alt="Φωτογραφία κτηνιάτρου"
+                                onError={(e) => {
+                                    e.currentTarget.onerror = null;
+                                    e.currentTarget.src = vetdefault;
+                                }}
+                            />
+                        </div>
                         <div className="vet-identity">
                             <div className="vet-name">{fullName || "—"}</div>
 
                             <div className="vet-subtitle" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                <Stars value={avgRating} />
+                                <Stars value={avgRatingNum} />
                                 <span style={{ fontWeight: 800 }}>
-                                    {avgRating.toFixed(1)} ({reviewCount})
+                                    {avgRatingText} ({reviewCount})
                                 </span>
                             </div>
                         </div>
@@ -143,7 +152,7 @@ export default function BookProfile() {
             <div className="profile-card vet-tab-card">
                 {activeTab === "info" && (<VetInfo user={vet} vet={vet} days={DAYS} enabledServicesByCategory={enabledServicesByCategory} />)}
                 {activeTab === "prices" && (<VetPrices vet={vet} schedule={schedule} days={DAYS} formatHours={formatHours} enabledServicesByCategory={enabledServicesByCategory} />)}
-                {activeTab === "reviews" && (<VetReview reviews={reviews} avgRating={avgRating} reviewCount={reviewCount} Stars={Stars} />)}
+                {activeTab === "reviews" && (<VetReview reviews={reviews} Stars={Stars} />)}
             </div>
         </div>
     );

@@ -40,6 +40,11 @@ export default function Transfer() {
   };
 
   useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
