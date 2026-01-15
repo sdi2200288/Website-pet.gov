@@ -32,7 +32,6 @@ export default function HistoryDeclaration() {
   const isOwner = user?.role === "owner";
   const isVet = user?.role === "vet";
 
-  // Ξ¦ΟΟΟ„Ο‰ΟƒΞ· ΞΊΞ±Ο„ΞΏΞΉΞΊΞΉΞ΄Ξ―Ο‰Ξ½ (Ξ΄ΞΉΞ±Ο†ΞΏΟΞµΟ„ΞΉΞΊΞ¬ Ξ³ΞΉΞ± owner ΞΊΞ±ΞΉ vet)
   useEffect(() => {
     if (!user) return;
 
@@ -129,69 +128,70 @@ export default function HistoryDeclaration() {
   };
 
   const labelForType = (t) => {
-    if (t === "loss" || t === "lost") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ‘Ο€ΟΞ»ΞµΞΉΞ±Ο‚";
-    if (t === "found") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ•ΟΟΞµΟƒΞ·Ο‚";
-    if (t === "foundNoAcc") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ•ΟΟΞµΟƒΞ·Ο‚ (Ο‡Ο‰ΟΞ―Ο‚ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟ)";
-    if (t === "adoption") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ¥ΞΉΞΏΞΈΞµΟƒΞ―Ξ±Ο‚";
-    if (t === "foster") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ¦ΞΉΞ»ΞΏΞΎΞµΞ½Ξ―Ξ±Ο‚";
-    if (t === "transfer") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· ΞΞµΟ„Ξ±Ξ²Ξ―Ξ²Ξ±ΟƒΞ·Ο‚";
-    return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ·";
+    if (t === "loss" || t === "lost") return "Δήλωση Απώλειας";
+    if (t === "found") return "Δήλωση Εύρεσης";
+    if (t === "foundNoAcc") return "Δήλωση Εύρεσης (χωρίς λογαριασμό)";
+    if (t === "adoption") return "Δήλωση Υιοθεσίας";
+    if (t === "foster") return "Δήλωση Φιλοξενίας";
+    if (t === "transfer") return "Δήλωση Μεταβίβασης";
+    return "Δήλωση";
   };
 
-      const buildPrintRows = (declaration) => {
+  const buildPrintRows = (declaration) => {
     const rows = [
       ["ID", declaration.id],
       ["Pet ID", declaration.petId],
-      ["Status", declaration.status],
-      ["Created At", formatDateTime(declaration.createdAt)],
+      ["Κατάσταση", declaration.status],
+      ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)],
     ];
 
     const t = declaration.type;
 
     if (t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc") {
       rows.push(
-        ["Date", declaration.date],
-        ["Region", declaration.region],
-        ["Address", declaration.address],
-        ["Condition", declaration.condition]
+        ["Ημερομηνία", declaration.date],
+        ["Περιοχή", declaration.region],
+        ["Διεύθυνση", declaration.address],
+        ["Κατάσταση", declaration.condition]
       );
       if ("ownerId" in declaration) {
-        rows.push(["Submitted By", declaration.ownerName || declaration.ownerId]);
+        rows.push(["Υποβλήθηκε από", declaration.ownerName || declaration.ownerId]);
       }
     }
 
+
     if (t === "foundNoAcc") {
       rows.push(
-        ["First Name", declaration.firstname],
-        ["Last Name", declaration.lastname],
+        ["Όνομα", declaration.firstname],
+        ["Επώνυμο", declaration.lastname],
         ["Email", declaration.email],
-        ["Phone", declaration.phone]
+        ["Τηλέφωνο", declaration.phone]
       );
     }
 
     if (t === "adoption") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
     if (t === "foster") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
     if (t === "transfer") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Current Owner", declaration.currentOwnerName || declaration.currentOwnerId],
-        ["New Owner", declaration.newOwnerName || declaration.newOwnerId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Τρέχων Ιδιοκτήτης", declaration.currentOwnerName || declaration.currentOwnerId],
+        ["Νέος Ιδιοκτήτης", declaration.newOwnerName || declaration.newOwnerId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
@@ -264,54 +264,55 @@ export default function HistoryDeclaration() {
       cleanup();
     }, 250);
   };
-  // Ξ£Ο…Ξ½Ξ¬ΟΟ„Ξ·ΟƒΞ· Ξ³ΞΉΞ± ΞµΟΟΞµΟƒΞ· ΞΊΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞΏΟ… ΞΌΞµ Ξ²Ξ¬ΟƒΞ· Ο„ΞΏ petId
+
   const findPetById = (petId) => {
-    return allPets.find(p => p.id === petId) || null;
+    return allPets.find((p) => p.id === petId) || null;
   };
 
-
-  // Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± ΞΉΟƒΟ„ΞΏΟΞΉΞΊΞΏΟ Ξ΄Ξ·Ξ»ΟΟƒΞµΟ‰Ξ½ ΞΌΞµ ΟƒΟ‰ΟƒΟ„Ξ¬ Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ξ±
   const historyDeclarations = useMemo(() => {
     const combined = [];
 
-    lossDeclarations.forEach(r => {
+    lossDeclarations.forEach((r) => {
       const pet = findPetById(r.petId);
       combined.push({
         ...r,
         type: "lost",
-        petName: pet?.name || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        microchip: pet?.microchip || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        species: pet?.species || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        breed: pet?.breed || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        gender: pet?.gender || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
+        petName: pet?.name || "Άγνωστο",
+        microchip: pet?.microchip || "Άγνωστο",
+        species: pet?.species || "Άγνωστο",
+        breed: pet?.breed || "Άγνωστο",
+        gender: pet?.gender || "Άγνωστο",
         photo: pet?.photoUrl || "",
-        region: r.region || pet?.region || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
+        region: r.region || pet?.region || "Άγνωστο",
       });
     });
 
-    foundDeclarations.forEach(r => {
+      foundDeclarations.forEach((r) => {
       const pet = findPetById(r.petId);
       combined.push({
         ...r,
         type: "found",
-        petName: pet?.name || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        microchip: pet?.microchip || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        species: pet?.species || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        breed: pet?.breed || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
-        gender: pet?.gender || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
+        petName: pet?.name || "Άγνωστο",
+        microchip: pet?.microchip || "Άγνωστο",
+        species: pet?.species || "Άγνωστο",
+        breed: pet?.breed || "Άγνωστο",
+        gender: pet?.gender || "Άγνωστο",
         photo: pet?.photoUrl || "",
-        region: r.region || pet?.region || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ",
+        region: r.region || pet?.region || "Άγνωστο",
       });
     });
 
     return combined;
   }, [lossDeclarations, foundDeclarations, allPets]);
 
-  const breeds = selectedSpecies === "Ξ£ΞΊΟΞ»ΞΏΟ‚" ? dogPopular : selectedSpecies === "Ξ“Ξ¬Ο„Ξ±" ? catPopular : [...dogPopular, ...catPopular];
+  const breeds = selectedSpecies === "Σκύλος"
+    ? dogPopular
+    : selectedSpecies === "Γάτα"
+      ? catPopular
+      : [...dogPopular, ...catPopular];
 
   const filteredDeclarations = useMemo(() => {
     return historyDeclarations
-
       .filter((d) => {
         if (selectedChip && d.microchip !== selectedChip) return false;
         if (selectedSpecies && d.species !== selectedSpecies) return false;
@@ -329,7 +330,6 @@ export default function HistoryDeclaration() {
 
         return sortOrder === "recent" ? db - da : da - db;
       });
-
   }, [
     historyDeclarations,
     selectedChip,
@@ -339,50 +339,43 @@ export default function HistoryDeclaration() {
     selectedRegion,
     dateFrom,
     dateTo,
-    sortOrder
+    sortOrder,
   ]);
 
   const normalizeGender = (g) => {
     if (!g) return "";
-    if (g === "male") return "Ξ‘ΟΟƒΞµΞ½ΞΉΞΊΟ";
-    if (g === "female") return "ΞΞ·Ξ»Ο…ΞΊΟ";
+    if (g === "male") return "Αρσενικό";
+    if (g === "female") return "Θηλυκό";
     return g;
   };
 
+  const uniqueMicrochips = [...new Set(historyDeclarations.map((d) => d.microchip))];
 
-  // ΞΞΏΞ½Ξ±Ξ΄ΞΉΞΊΞ¬ microchips Ξ³ΞΉΞ± Ο„ΞΏ dropdown
-  const uniqueMicrochips = [...new Set(historyDeclarations.map(d => d.microchip))];
-
-  // Ξ£Ο…Ξ½Ξ¬ΟΟ„Ξ·ΟƒΞ· Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®Ο‚ Ξ΄Ξ®Ξ»Ο‰ΟƒΞ·Ο‚
-  const handleDeleteDeclaration = async (id, type) => {
-    if (!window.confirm("Ξ£Ξ―Ξ³ΞΏΟ…ΟΞ± Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®;")) return;
+  const handleDeleteDeclaration = async (declId, declType) => {
+    if (!window.confirm("Είσαι σίγουρος/η ότι θέλεις να διαγράψεις τη δήλωση;")) return;
 
     const map = {
       lost: "lostReports",
       found: "foundReports",
     };
 
-    await fetch(`http://localhost:3001/${map[type]}/${id}`, { method: "DELETE" });
+    await fetch(`http://localhost:3001/${map[declType]}/${declId}`, { method: "DELETE" });
     window.location.reload();
   };
 
   if (loading) {
-    return <p style={{ padding: 20 }}>Ξ¦ΟΟΟ„Ο‰ΟƒΞ· ΞΉΟƒΟ„ΞΏΟΞΉΞΊΞΏΟ...</p>;
+    return <p style={{ padding: 20 }}>Φόρτωση...</p>;
   }
 
   return (
-
     <div className="history-page">
-      <h3 className="history-title">Ξ™ΟƒΟ„ΞΏΟΞΉΞΊΟ Ξ”Ξ·Ξ»ΟΟƒΞµΟ‰Ξ½</h3>
+      <h3 className="history-title">Ιστορικό Δηλώσεων</h3>
 
       <div className="pets-filters history-filters-panel">
         <div className="filter-item">
-          <span className="filter-label">Ξ•Ξ―Ξ΄ΞΏΟ‚:</span>
-          <select
-            value={selectedSpecies}
-            onChange={(e) => setSelectedSpecies(e.target.value)}
-          >
-            <option value="">ΞΞ»Ξ±</option>
+          <span className="filter-label">Είδος:</span>
+          <select value={selectedSpecies} onChange={(e) => setSelectedSpecies(e.target.value)}>
+            <option value="">Όλα</option>
             {SPECIES.map((sp) => (
               <option key={sp} value={sp}>
                 {sp}
@@ -392,9 +385,9 @@ export default function HistoryDeclaration() {
         </div>
 
         <div className="filter-item">
-          <span className="filter-label">Ξ΅Ξ¬Ο„ΟƒΞ±:</span>
+          <span className="filter-label">Ράτσα:</span>
           <select value={selectedBreed} onChange={(e) => setSelectedBreed(e.target.value)}>
-            <option value="">ΞΞ»ΞµΟ‚</option>
+            <option value="">Όλες</option>
             {breeds.map((b) => (
               <option key={b} value={b}>
                 {b}
@@ -404,9 +397,9 @@ export default function HistoryDeclaration() {
         </div>
 
         <div className="filter-item">
-          <span className="filter-label">Ξ¦ΟΞ»ΞΏ:</span>
+          <span className="filter-label">Φύλο:</span>
           <select value={selectedGender} onChange={(e) => setSelectedGender(e.target.value)}>
-            <option value="">ΞΞ»Ξ±</option>
+            <option value="">Όλα</option>
             {GENDERS.map((g) => (
               <option key={g} value={g}>
                 {g}
@@ -416,9 +409,9 @@ export default function HistoryDeclaration() {
         </div>
 
         <div className="filter-item">
-          <span className="filter-label">Ξ ΞµΟΞΉΞΏΟ‡Ξ®:</span>
+          <span className="filter-label">Περιοχή:</span>
           <select value={selectedRegion} onChange={(e) => setSelectedRegion(e.target.value)}>
-            <option value="">ΞΞ»ΞµΟ‚</option>
+            <option value="">Όλες</option>
             {REGIONS.map((r) => (
               <option key={r} value={r}>
                 {r}
@@ -428,32 +421,31 @@ export default function HistoryDeclaration() {
         </div>
 
         <div className="filter-item">
-          <span className="filter-label">Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ±Ο€Ο:</span>
-          {/* <input type="date" /> */}
-          <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
+          <span className="filter-label">Ημερομηνία από:</span>
+          <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} />
         </div>
 
         <div className="filter-item">
-          <span className="filter-label">Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ­Ο‰Ο‚:</span>
-          {/* <input type="date" /> */}
-          <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
+          <span className="filter-label">Ημερομηνία έως:</span>
+          <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
         </div>
 
         <div className="filter-item history-chip-filter">
-          <span className="filter-label">ΞΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞΏ:</span>
+          <span className="filter-label">Κατοικίδιο:</span>
           <select value={selectedChip} onChange={(e) => setSelectedChip(e.target.value)}>
-            <option value="">ΞΞ»Ξ±</option>
-            {uniqueMicrochips.map(microchip => {
-              const pet = allPets.find(p => p.microchip === microchip);
+            <option value="">Όλα</option>
+            {uniqueMicrochips.map((microchip) => {
+              const pet = allPets.find((p) => p.microchip === microchip);
               return (
                 <option key={microchip} value={microchip}>
-                  {microchip} - {pet?.name || "Ξ§Ο‰ΟΞ―Ο‚ ΟΞ½ΞΏΞΌΞ±"} - {pet?.breed || "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„Ξ· ΟΞ¬Ο„ΟƒΞ±"}
+                  {microchip} - {pet?.name || "Άγνωστο"} - {pet?.breed || "Άγνωστο"}
                 </option>
               );
             })}
           </select>
         </div>
       </div>
+
       <div className="history-list-panel">
         <PetDeclarationsList
           declarations={filteredDeclarations}
@@ -462,7 +454,7 @@ export default function HistoryDeclaration() {
           onPrintDeclaration={handlePrintDeclaration}
           sortOrder={sortOrder}
           onSortChange={setSortOrder}
-                />
+        />
         <DeclarationModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
@@ -472,5 +464,3 @@ export default function HistoryDeclaration() {
     </div>
   );
 }
-
-

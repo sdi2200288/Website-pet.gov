@@ -25,7 +25,6 @@ function sortDecls(arr, sortOrder) {
   if (sortOrder === "submitted") return list.sort((a, b) => String(b.status || "").localeCompare(String(a.status || "")));
   if (sortOrder === "draft") return list.sort((a, b) => String(a.status || "").localeCompare(String(b.status || "")));
 
-  // recent (default)
   return list.sort((a, b) => getCreated(b) - getCreated(a));
 }
 
@@ -37,25 +36,16 @@ export default function ProfilePetOwner() {
   const myId = user?.id;
 
   const [pet, setPet] = useState(null);
-
-  // β€Ξ”ΞΉΞΊΞ­Ο‚ ΞΌΞΏΟ…β€ Ξ΄Ξ·Ξ»ΟΟƒΞµΞΉΟ‚ Ξ³ΞΉΞ± Ο„ΞΏ ΞΊΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞΏ
   const [lossDeclarations, setLossDeclarations] = useState([]);
   const [foundDeclarations, setFoundDeclarations] = useState([]);
-
-  // β€Ξ›ΞΏΞΉΟ€Ξ­Ο‚β€ Ξ΄Ξ·Ξ»ΟΟƒΞµΞΉΟ‚ (ΞΊΟ„Ξ·Ξ½Ξ―Ξ±Ο„ΟΞΏΞΉ/Ο€ΞΏΞ»Ξ―Ο„ΞµΟ‚/Ο€ΟΞΏΞ·Ξ³. ΞΉΞ΄ΞΉΞΏΞΊΟ„Ξ®Ο„ΞµΟ‚)
   const [otherDeclarations, setOtherDeclarations] = useState([]);
 
-  // Tabs
   const [activeTab, setActiveTab] = useState("booklet");
-
-  // Booklet - medical
   const [medicalActions, setMedicalActions] = useState([]);
 
-  // Modal
   const [selectedDeclaration, setSelectedDeclaration] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Sort
   const [sortOrder, setSortOrder] = useState("recent");
 
   useEffect(() => {
@@ -65,22 +55,18 @@ export default function ProfilePetOwner() {
         const petData = await petRes.json();
         setPet(petData);
 
-        // ---- LOST REPORTS (ΟΞ»ΞµΟ‚ Ξ³ΞΉΞ± petId)
         const lostRes = await fetch(`http://localhost:3001/lostReports?petId=${id}`);
         const lostAll = await lostRes.json();
         const lostAllArr = Array.isArray(lostAll) ? lostAll : [];
 
-        // ---- FOUND REPORTS (ΟΞ»ΞµΟ‚ Ξ³ΞΉΞ± petId)
         const foundRes = await fetch(`http://localhost:3001/foundReports?petId=${id}`);
         const foundAll = await foundRes.json();
         const foundAllArr = Array.isArray(foundAll) ? foundAll : [];
 
-        // ---- FOUND REPORTS WITHOUT ACCOUNT (Ο€ΞΏΞ»Ξ―Ο„ΞµΟ‚)
         const noAccRes = await fetch(`http://localhost:3001/foundReportsWithoutAcc?petId=${id}`);
         const noAccAll = await noAccRes.json();
         const noAccArr = Array.isArray(noAccAll) ? noAccAll : [];
 
-        // ---- adoption/foster/transfer
         const adoptionRes = await fetch(`http://localhost:3001/adoptionReports?petId=${id}&status=submitted`);
         const adoptionAll = await adoptionRes.json();
         const adoptionArr = Array.isArray(adoptionAll) ? adoptionAll : [];
@@ -143,13 +129,10 @@ export default function ProfilePetOwner() {
           newOwnerName: nameMap[r.newOwnerId] || null,
         });
 
-        // ---- medical
         const medRes = await fetch(`http://localhost:3001/medicalReports?petId=${id}`);
         const medAll = await medRes.json();
         setMedicalActions(Array.isArray(medAll) ? medAll : []);
 
-        // ========== Ξ¦Ξ™Ξ›Ξ¤Ξ΅Ξ‘ ==========
-        // β€Ξ”Ξ™ΞΞ•Ξ£ ΞΞΞ¥β€: ΞΌΟΞ½ΞΏ ΟΟƒΞµΟ‚ Ξ­Ο‡ΞΏΟ…Ξ½ ownerId = myId
         const myLost = lostAllArr
           .filter((r) => myId && r.ownerId === myId)
           .map((r) => ({ ...withNames(r), type: "loss" }));
@@ -161,7 +144,6 @@ export default function ProfilePetOwner() {
         setLossDeclarations(myLost);
         setFoundDeclarations(myFound);
 
-        // β€Ξ›ΞΞ™Ξ Ξ•Ξ£β€: ΟΞ»ΞµΟ‚ ΞΏΞΉ Ξ¬Ξ»Ξ»ΞµΟ‚ (ΞΏΟ€ΞΏΞΉΞΏΟƒΞ΄Ξ®Ο€ΞΏΟ„Ξµ Ξ¬Ξ»Ξ»ΞΏΟ‚ ownerId Ξ® Ο‡Ο‰ΟΞ―Ο‚ ownerId)
         const othersLost = lostAllArr
           .filter((r) => !(myId && r.ownerId === myId))
           .filter((r) => r.status === "submitted")
@@ -202,7 +184,7 @@ export default function ProfilePetOwner() {
     })();
   }, [id, myId]);
 
-  if (!pet) return <p>Ξ¦ΟΟΟ„Ο‰ΟƒΞ· ΞΊΞ±Ο„ΞΏΞΉΞΊΞΉΞ΄Ξ―ΞΏΟ…...</p>;
+  if (!pet) return <p>Φόρτωση κατοικιδίου...</p>;
 
   function handleViewDeclaration(declaration) {
     setSelectedDeclaration(declaration);
@@ -222,69 +204,69 @@ export default function ProfilePetOwner() {
   }
 
   function labelForType(t) {
-    if (t === "loss" || t === "lost") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ‘Ο€ΟΞ»ΞµΞΉΞ±Ο‚";
-    if (t === "found") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ•ΟΟΞµΟƒΞ·Ο‚";
-    if (t === "foundNoAcc") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ•ΟΟΞµΟƒΞ·Ο‚ (Ο‡Ο‰ΟΞ―Ο‚ Ξ»ΞΏΞ³Ξ±ΟΞΉΞ±ΟƒΞΌΟ)";
-    if (t === "adoption") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ¥ΞΉΞΏΞΈΞµΟƒΞ―Ξ±Ο‚";
-    if (t === "foster") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· Ξ¦ΞΉΞ»ΞΏΞΎΞµΞ½Ξ―Ξ±Ο‚";
-    if (t === "transfer") return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ· ΞΞµΟ„Ξ±Ξ²Ξ―Ξ²Ξ±ΟƒΞ·Ο‚";
-    return "Ξ”Ξ®Ξ»Ο‰ΟƒΞ·";
+    if (t === "loss" || t === "lost") return "Δήλωση Απώλειας";
+    if (t === "found") return "Δήλωση Εύρεσης";
+    if (t === "foundNoAcc") return "Δήλωση Εύρεσης (χωρίς λογαριασμό)";
+    if (t === "adoption") return "Δήλωση Υιοθεσίας";
+    if (t === "foster") return "Δήλωση Φιλοξενίας";
+    if (t === "transfer") return "Δήλωση Μεταβίβασης";
+    return "Δήλωση";
   }
 
   function buildPrintRows(declaration) {
     const rows = [
       ["ID", declaration.id],
       ["Pet ID", declaration.petId],
-      ["Status", declaration.status],
-      ["Created At", formatDateTime(declaration.createdAt)],
+      ["Κατάσταση", declaration.status],
+      ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)],
     ];
 
     const t = declaration.type;
 
     if (t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc") {
       rows.push(
-        ["Date", declaration.date],
-        ["Region", declaration.region],
-        ["Address", declaration.address],
-        ["Condition", declaration.condition]
+        ["Ημερομηνία", declaration.date],
+        ["Περιοχή", declaration.region],
+        ["Διεύθυνση", declaration.address],
+        ["Κατάσταση", declaration.condition]
       );
       if ("ownerId" in declaration) {
-        rows.push(["Submitted By", declaration.ownerName || declaration.ownerId]);
+        rows.push(["Υποβλήθηκε από", declaration.ownerName || declaration.ownerId]);
       }
     }
 
     if (t === "foundNoAcc") {
       rows.push(
-        ["First Name", declaration.firstname],
-        ["Last Name", declaration.lastname],
+        ["Όνομα", declaration.firstname],
+        ["Επώνυμο", declaration.lastname],
         ["Email", declaration.email],
-        ["Phone", declaration.phone]
+        ["Τηλέφωνο", declaration.phone]
       );
     }
 
     if (t === "adoption") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
     if (t === "foster") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
     if (t === "transfer") {
       rows.push(
-        ["Vet", declaration.vetName || declaration.vetId],
-        ["Current Owner", declaration.currentOwnerName || declaration.currentOwnerId],
-        ["New Owner", declaration.newOwnerName || declaration.newOwnerId],
-        ["Status", declaration.status],
-        ["Created At", formatDateTime(declaration.createdAt)]
+        ["Κτηνίατρος", declaration.vetName || declaration.vetId],
+        ["Τρέχων Ιδιοκτήτης", declaration.currentOwnerName || declaration.currentOwnerId],
+        ["Νέος Ιδιοκτήτης", declaration.newOwnerName || declaration.newOwnerId],
+        ["Κατάσταση", declaration.status],
+        ["Ημερομηνία δημιουργίας", formatDateTime(declaration.createdAt)]
       );
     }
 
@@ -362,8 +344,8 @@ export default function ProfilePetOwner() {
   const foundSorted = sortDecls(foundDeclarations, sortOrder);
   const otherSorted = sortDecls(otherDeclarations, sortOrder);
 
-  const handleDeleteDeclaration = async (id, type) => {
-    if (!window.confirm("Ξ•Ξ―ΟƒΞ±ΞΉ ΟƒΞ―Ξ³ΞΏΟ…ΟΞΏΟ‚/Ξ· ΟΟ„ΞΉ ΞΈΞ­Ξ»ΞµΞΉΟ‚ Ξ½Ξ± Ξ΄ΞΉΞ±Ξ³ΟΞ¬ΟΞµΞΉΟ‚ Ο„Ξ· Ξ΄Ξ®Ξ»Ο‰ΟƒΞ·;")) return;
+  const handleDeleteDeclaration = async (declId, declType) => {
+    if (!window.confirm("Είσαι σίγουρος/η ότι θέλεις να διαγράψεις τη δήλωση;")) return;
 
     const map = {
       loss: "lostReports",
@@ -371,13 +353,13 @@ export default function ProfilePetOwner() {
       found: "foundReports",
     };
 
-    const resource = map[type];
+    const resource = map[declType];
     if (!resource) return;
 
     try {
-      await fetch(`http://localhost:3001/${resource}/${id}`, { method: "DELETE" });
-      setLossDeclarations((prev) => prev.filter((r) => r.id !== id));
-      setFoundDeclarations((prev) => prev.filter((r) => r.id !== id));
+      await fetch(`http://localhost:3001/${resource}/${declId}`, { method: "DELETE" });
+      setLossDeclarations((prev) => prev.filter((r) => r.id !== declId));
+      setFoundDeclarations((prev) => prev.filter((r) => r.id !== declId));
     } catch (err) {
       console.error(err);
     }
@@ -386,8 +368,8 @@ export default function ProfilePetOwner() {
   return (
     <div className="petProfilePage">
       <div className="petBreadcrumb">
-        <a href="/">Ξ‘ΟΟ‡ΞΉΞΊΞ®</a> / <a href="/profile"> Ξ¤ΞΏ Ο€ΟΞΏΟ†Ξ―Ξ» ΞΌΞΏΟ…</a> /{" "}
-        <span> Ξ ΟΞΏΟ†Ξ―Ξ» ΞΞ±Ο„ΞΏΞΉΞΊΞΉΞ΄Ξ―ΞΏΟ…</span>
+        <a href="/">Αρχική</a> / <a href="/profile">Το Προφίλ μου</a> /{" "}
+        <span>Προφίλ Κατοικιδίου</span>
       </div>
 
       <div className="petProfileCard">
@@ -405,7 +387,7 @@ export default function ProfilePetOwner() {
 
         <div className="petProfileRight">
           <div className="petProfileInfoBox">
-            <h3 className="petProfileBoxTitle">Ξ£Ο„ΞΏΞΉΟ‡ΞµΞ―Ξ± ΞΞ±Ο„ΞΏΞΉΞΊΞΉΞ΄Ξ―ΞΏΟ…</h3>
+            <h3 className="petProfileBoxTitle">Στοιχεία Κατοικιδίου</h3>
 
             <div className="petProfileGrid two-columns">
               <div className="petProfileColumn">
@@ -414,30 +396,30 @@ export default function ProfilePetOwner() {
                   <span className="value">{pet.microchip || "-"}</span>
                 </div>
                 <div className="petInfoRow">
-                  <span className="label">ΞΞ½ΞΏΞΌΞ±</span>
+                  <span className="label">Όνομα</span>
                   <span className="value">{pet.name || "-"}</span>
                 </div>
                 <div className="petInfoRow">
-                  <span className="label">Ξ•Ξ―Ξ΄ΞΏΟ‚</span>
+                  <span className="label">Είδος</span>
                   <span className="value">{pet.species || "-"}</span>
                 </div>
                 <div className="petInfoRow">
-                  <span className="label">Ξ¦ΟΞ»ΞΏ</span>
+                  <span className="label">Φύλο</span>
                   <span className="value">{pet.gender || "-"}</span>
                 </div>
               </div>
 
               <div className="petProfileColumn">
                 <div className="petInfoRow">
-                  <span className="label">Ξ΅Ξ¬Ο„ΟƒΞ±</span>
+                  <span className="label">Ράτσα</span>
                   <span className="value">{pet.breed || "-"}</span>
                 </div>
                 <div className="petInfoRow">
-                  <span className="label">Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± Ξ³Ξ­Ξ½Ξ½Ξ·ΟƒΞ·Ο‚</span>
+                  <span className="label">Ημερομηνία γέννησης</span>
                   <span className="value">{pet.birthDate || pet.birthdate || "-"}</span>
                 </div>
                 <div className="petInfoRow">
-                  <span className="label">Ξ—Ξ»ΞΉΞΊΞ―Ξ±</span>
+                  <span className="label">Ηλικία</span>
                   <span className="value">{pet.age || "-"}</span>
                 </div>
               </div>
@@ -445,25 +427,25 @@ export default function ProfilePetOwner() {
 
             {pet.lost && (
               <div className="petMissingAlert">
-                <div className="petMissingTitle">ΞΞ±Ο„ΞΏΞΉΞΊΞ―Ξ΄ΞΉΞΏ Ξ•ΞΎΞ±Ο†Ξ±Ξ½ΞΉΟƒΞΌΞ­Ξ½ΞΏ</div>
+                <div className="petMissingTitle">Κατοικίδιο Εξαφανισμένο</div>
 
                 <div className="petMissingRow">
-                  <span>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ± ΞµΞΎΞ±Ο†Ξ¬Ξ½ΞΉΟƒΞ·Ο‚:</span>
+                  <span>Ημερομηνία εξαφάνισης:</span>
                   <strong>{pet.lastSeenDate || "-"}</strong>
                 </div>
 
                 <div className="petMissingRow">
-                  <span>Ξ”ΞΉΞµΟΞΈΟ…Ξ½ΟƒΞ·:</span>
+                  <span>Διεύθυνση:</span>
                   <strong>{pet.lastSeenAddress || "-"}</strong>
                 </div>
 
                 <div className="petMissingRow">
-                  <span>Ξ ΞµΟΞΉΞΏΟ‡Ξ® (ΞΞΏΞΌΟΟ‚):</span>
+                  <span>Περιοχή (Νομός):</span>
                   <strong>{pet.region || "-"}</strong>
                 </div>
 
                 <div className="petMissingRow">
-                  <span>ΞΞ±Ο„Ξ¬ΟƒΟ„Ξ±ΟƒΞ·:</span>
+                  <span>Κατάσταση:</span>
                   <strong>{pet.condition || "-"}</strong>
                 </div>
               </div>
@@ -479,7 +461,7 @@ export default function ProfilePetOwner() {
             onClick={() => setActiveTab("booklet")}
             type="button"
           >
-            Ξ’ΞΉΞ²Ξ»ΞΉΞ¬ΟΞΉΞΏ
+            Βιβλιάριο
           </button>
 
           <button
@@ -487,7 +469,7 @@ export default function ProfilePetOwner() {
             onClick={() => setActiveTab("loss")}
             type="button"
           >
-            Ξ”Ξ·Ξ»ΟΟƒΞµΞΉΟ‚ Ξ±Ο€ΟΞ»ΞµΞΉΞ±Ο‚ 
+            Δηλώσεις Απώλειας
           </button>
 
           <button
@@ -495,7 +477,7 @@ export default function ProfilePetOwner() {
             onClick={() => setActiveTab("found")}
             type="button"
           >
-            Ξ”Ξ·Ξ»ΟΟƒΞµΞΉΟ‚ ΞµΟΟΞµΟƒΞ·Ο‚
+            Δηλώσεις Εύρεσης
           </button>
 
           <button
@@ -503,7 +485,7 @@ export default function ProfilePetOwner() {
             onClick={() => setActiveTab("foundByOthers")}
             type="button"
           >
-            Ξ›ΞΏΞΉΟ€Ξ­Ο‚ Ξ΄Ξ·Ξ»ΟΟƒΞµΞΉΟ‚ (ΞΊΟ„Ξ·Ξ½Ξ―Ξ±Ο„ΟΞΏΞΉ/Ο€ΞΏΞ»Ξ―Ο„ΞµΟ‚/Ο€ΟΞΏΞ·Ξ³. ΞΉΞ΄ΞΉΞΏΞΊΟ„Ξ®Ο„ΞµΟ‚)
+            Λοιπές Δηλώσεις (πολίτες/κτηνίατροι/προηγούμενοι ιδιοκτήτες)
           </button>
         </div>
 
@@ -512,17 +494,17 @@ export default function ProfilePetOwner() {
             <div className="booklet-layout">
               <div className="booklet-bottom">
                 <div className="info-box large">
-                  <h4>Ξ™Ξ±Ο„ΟΞΉΞΊΞ­Ο‚ Ξ ΟΞ¬ΞΎΞµΞΉΟ‚</h4>
+                  <h4>Ιστορικό Πράξεων</h4>
                   {medicalActions.length === 0 ? (
-                    <p className="empty">β€” Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞΊΞ±Ο„Ξ±Ο‡Ο‰ΟΞ®ΟƒΞµΞΉΟ‚ β€”</p>
+                    <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
                   ) : (
                     <div className="medical-actions-list">
                       {medicalActions.map((action) => (
                         <div key={action.id} className="medical-action-item">
-                          <p><strong>Ξ—ΞΌΞµΟΞΏΞΌΞ·Ξ½Ξ―Ξ±:</strong> {action.date}</p>
-                          <p><strong>Ξ¤ΟΟ€ΞΏΟ‚:</strong> {action.type}</p>
-                          <p><strong>Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ®:</strong> {action.description}</p>
-                          <p><strong>Ξ¦Ξ¬ΟΞΌΞ±ΞΊΞ±/ΞΞ΄Ξ·Ξ³Ξ―ΞµΟ‚:</strong> {action.medications}</p>
+                          <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                          <p><strong>Είδος:</strong> {action.type}</p>
+                          <p><strong>Περιγραφή:</strong> {action.description}</p>
+                          <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
                           <hr />
                         </div>
                       ))}
@@ -531,14 +513,14 @@ export default function ProfilePetOwner() {
                 </div>
 
                 <div className="info-box large">
-                  <h4>Ξ¤Ο…Ο‡ΟΞ½ Ξ£Ο…ΞΌΞ²Ξ¬Ξ½Ο„Ξ±</h4>
-                  <p className="empty">β€” Ξ”ΞµΞ½ Ο…Ο€Ξ¬ΟΟ‡ΞΏΟ…Ξ½ ΞΊΞ±Ο„Ξ±Ο‡Ο‰ΟΞ®ΟƒΞµΞΉΟ‚ β€”</p>
+                  <h4>Λοιπές Πληροφορίες</h4>
+                  <p className="empty">Δεν υπάρχουν διαθέσιμες πληροφορίες.</p>
                 </div>
               </div>
 
               <div className="bookletPrintCenter">
                 <button className="next-btn" type="button" onClick={() => window.print()}>
-                  Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ·
+                  Εκτύπωση
                 </button>
               </div>
             </div>
@@ -592,5 +574,3 @@ export default function ProfilePetOwner() {
     </div>
   );
 }
-
-
