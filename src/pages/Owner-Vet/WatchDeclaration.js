@@ -1,86 +1,144 @@
-import React from "react";
+﻿import React from "react";
 import "./WatchDeclaration.css";
 
+const DEFAULT_PHOTO =
+  "https://th.bing.com/th/id/OIP.H1gHhKVbteqm1U5SrwpPgwHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3";
+
+function formatDateTime(iso) {
+  if (!iso) return "-";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return String(iso);
+  return d.toLocaleString("el-GR");
+}
+
+function labelForType(t) {
+  if (t === "loss" || t === "lost") return "Δήλωση Απώλειας";
+  if (t === "found") return "Δήλωση Εύρεσης";
+  if (t === "foundNoAcc") return "Δήλωση Εύρεσης (χωρίς λογαριασμό)";
+  if (t === "adoption") return "Δήλωση Υιοθεσίας";
+  if (t === "foster") return "Δήλωση Φιλοξενίας";
+  if (t === "transfer") return "Δήλωση Μεταβίβασης";
+  return "Δήλωση";
+}
+
+function Row({ label, value }) {
+  return (
+    <div className="modal-row">
+      <span className="modal-label">{label}</span>
+      <span className="modal-value">{value ?? "-"}</span>
+    </div>
+  );
+}
+
 export default function DeclarationModal({ isOpen, onClose, declaration }) {
-    if (!isOpen || !declaration) return null;
+  if (!isOpen || !declaration) return null;
 
-    return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                {/* Κουμπί × πάνω αριστερά */}
-                <button className="modal-close-x" onClick={onClose}>×</button>
+  const t = declaration.type;
+  const title = labelForType(t);
+  const hasPhoto = Boolean(declaration.photoUrl);
 
-                <h2 className="modal-title">Στοιχεία Δήλωσης</h2>
-
-                {/* ΦΩΤΟΓΡΑΦΙΑ ΖΩΟΥ */}
-                {declaration.photo && (
-                    <div className="modal-photo-wrapper">
-                        <img
-                            src={declaration.photo || "./images/pet-placeholder.png"}
-                            alt={declaration.petName || "Κατοικίδιο"}
-                            className="modal-pet-photo"
-                        />
-                    </div>
-                )}
-
-                {/* ===== ΣΤΟΙΧΕΙΑ ΖΩΟΥ ===== */}
-                <section className="modal-section">
-                    <h3>Στοιχεία Ζώου</h3>
-                    <div className="modal-grid">
-                        <div className="modal-field">
-                            <span className="modal-label">Κατάσταση Ζώου</span>
-                            <span className="modal-value">{declaration.type === "lost" ? "Έχει χαθεί" : "Έχει βρεθεί"}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Microchip</span>
-                            <span className="modal-value">{declaration.microchip}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Όνομα</span>
-                            <span className="modal-value">{declaration.petName}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Ημερομηνία Γέννησης</span>
-                            <span className="modal-value">{declaration.birthDate || "—"}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Ηλικία</span>
-                            <span className="modal-value">{declaration.age || "—"}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Είδος</span>
-                            <span className="modal-value">{declaration.species}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Ράτσα</span>
-                            <span className="modal-value">{declaration.breed}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Φύλο</span>
-                            <span className="modal-value">{declaration.gender}</span>
-                        </div>
-                    </div>
-                </section>
-
-                {/* ===== ΣΤΟΙΧΕΙΑ ΑΠΩΛΕΙΑΣ ===== */}
-                <section className="modal-section">
-                    <h3>Στοιχεία Απώλειας</h3>
-                    <div className="modal-grid">
-                        <div className="modal-field">
-                            <span className="modal-label">Ημερομηνία</span>
-                            <span className="modal-value">{declaration.date}</span>
-                        </div>
-                        <div className="modal-field">
-                            <span className="modal-label">Περιοχή (Νομός)</span>
-                            <span className="modal-value">{declaration.region}</span>
-                        </div>
-                        <div className="modal-field full">
-                            <span className="modal-label">Διεύθυνση</span>
-                            <span className="modal-value">{declaration.address}</span>
-                        </div>
-                    </div>
-                </section>
-            </div>
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>{title}</h2>
+          <button className="close-btn" type="button" onClick={onClose}>
+            ×
+          </button>
         </div>
-    );
+
+        <div className="modal-body">
+          <div className="modal-section">
+            <h4>Βασικά</h4>
+            <Row label="ID" value={declaration.id} />
+            <Row label="Pet ID" value={declaration.petId} />
+            <Row label="Status" value={declaration.status} />
+            <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+          </div>
+
+          {(t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc") && (
+            <div className="modal-section">
+              <h4>Στοιχεία Δήλωσης</h4>
+              <Row label="Ημερομηνία" value={declaration.date} />
+              <Row label="Περιοχή" value={declaration.region} />
+              <Row label="Διεύθυνση" value={declaration.address} />
+              <Row label="Κατάσταση" value={declaration.condition} />
+              {"ownerId" in declaration && (
+                <Row
+                  label="Υποβλήθηκε από"
+                  value={declaration.ownerName || declaration.ownerId}
+                />
+              )}
+            </div>
+          )}
+
+          {t === "foundNoAcc" && (
+            <div className="modal-section">
+              <h4>Στοιχεία Επικοινωνίας</h4>
+              <Row label="Όνομα" value={declaration.firstname} />
+              <Row label="Επώνυμο" value={declaration.lastname} />
+              <Row label="Email" value={declaration.email} />
+              <Row label="Τηλέφωνο" value={declaration.phone} />
+            </div>
+          )}
+
+          {t === "adoption" && (
+            <div className="modal-section">
+              <h4>Στοιχεία Υιοθεσίας</h4>
+              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
+              <Row label="Status" value={declaration.status} />
+              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+            </div>
+          )}
+
+          {t === "foster" && (
+            <div className="modal-section">
+              <h4>Στοιχεία Φιλοξενίας</h4>
+              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
+              <Row label="Status" value={declaration.status} />
+              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+            </div>
+          )}
+
+          {t === "transfer" && (
+            <div className="modal-section">
+              <h4>Στοιχεία Μεταβίβασης</h4>
+              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
+              <Row
+                label="Τρέχων Ιδιοκτήτης"
+                value={declaration.currentOwnerName || declaration.currentOwnerId}
+              />
+              <Row
+                label="Νέος Ιδιοκτήτης"
+                value={declaration.newOwnerName || declaration.newOwnerId}
+              />
+              <Row label="Status" value={declaration.status} />
+              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+            </div>
+          )}
+
+          {hasPhoto && (
+            <div className="modal-section">
+              <h4>Φωτογραφία</h4>
+              <img
+                src={declaration.photoUrl || DEFAULT_PHOTO}
+                alt="Φωτογραφία δήλωσης"
+                className="modal-photo"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = DEFAULT_PHOTO;
+                }}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="modal-footer">
+          <button type="button" className="primary-btn" onClick={onClose}>
+            Κλείσιμο
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
