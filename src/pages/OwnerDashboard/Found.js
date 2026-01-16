@@ -5,23 +5,32 @@ import "./PetReport.css";
 import { REGIONS } from "../Utils/Util";
 import vetdefault from "../../images/vetdeafult.webp";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 
 export default function Found() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId, setSelectedPetId] = useState(null);
+  const location = useLocation();
+
+  const state = location.state || {};
+
+  // Αν υπάρχει state.step από το navigation, ξεκινάμε από εκεί
+  const [step, setStep] = useState(state.step || 0);
+
+  // Προ-συμπληρώνουμε το pet και τα πεδία φόρμας αν υπάρχει declarationData
+  const [selectedPetId, setSelectedPetId] = useState(state.declarationData?.petId || null);
+  const [foundInfo, setFoundInfo] = useState({
+    date: state.declarationData?.date || "",
+    region: state.declarationData?.region || "",
+    address: state.declarationData?.address || "",
+    condition: state.declarationData?.condition || "",
+  });
+  const [form, setForm] = useState({
+    photoUrl: state.declarationData?.photoUrl || "",
+  });
   const [pets, setPets] = useState([]);
   const [errors, setErrors] = useState({});
   const photoInputRef = useRef(null);
-  const [form, setForm] = useState({ photoUrl: "" });
-
-  const [foundInfo, setFoundInfo] = useState({
-    date: "",
-    region: "",
-    address: "",
-    condition: "",
-  });
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
@@ -57,10 +66,10 @@ export default function Found() {
   }, [user]);
 
   const handleSubmit = async (status) => {
-    if (!selectedPet) return;
+    if (!selectedPet && !state.declarationData) return;
 
     const report = {
-      petId: selectedPet.id,
+      petId: selectedPet?.id || state.declarationData.petId,
       date: foundInfo.date,
       region: foundInfo.region,
       address: foundInfo.address,
@@ -68,19 +77,32 @@ export default function Found() {
       status, // 'draft' ή 'submitted'
       ownerId: user.id,
       createdAt: new Date().toISOString(),
-      photoUrl: form.photoUrl || vetdefault,
+      photoUrl: form.photoUrl || state.declarationData?.photoUrl || vetdefault,
     };
 
     try {
-      const res = await fetch("http://localhost:3001/foundReports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(report),
-      });
-      if (!res.ok) throw new Error("POST foundReports failed");
+      if (state.declarationData?.id) {
+        // Υπάρχουσα δήλωση → PATCH
+        const res = await fetch(`http://localhost:3001/foundReports/${state.declarationData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("PATCH foundReports failed");
+      } else {
+        // Νέα δήλωση → POST
+        const res = await fetch("http://localhost:3001/foundReports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("POST foundReports failed");
+      }
 
+      // Αν είναι οριστική υποβολή, ενημέρωση pet
       if (status === "submitted") {
-        const petUpdate = await fetch(`http://localhost:3001/pets/${selectedPet.id}`, {
+        const petId = selectedPet?.id || state.declarationData.petId;
+        const petUpdate = await fetch(`http://localhost:3001/pets/${petId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -96,6 +118,7 @@ export default function Found() {
 
       alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
 
+      // reset και redirect
       setStep(0);
       setSelectedPetId(null);
       setFoundInfo({ date: "", region: "", address: "", condition: "" });
@@ -103,6 +126,7 @@ export default function Found() {
 
       navigate("/owner-dashboard");
     } catch (err) {
+      console.error(err);
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
     }
   };
@@ -230,7 +254,7 @@ export default function Found() {
       )}
 
       {/* ================= STEP 2 ================= */}
-      {step === 2 && selectedPet && (
+      {step === 2 && (selectedPet || state.declarationData) && (
         <>
           <div className="stepper">
             <div className="step clickable" onClick={() => setStep(1)}>
@@ -317,9 +341,7 @@ export default function Found() {
                 Προσθήκη Φωτογραφίας
               </button>
 
-              {form.photoUrl && (
-                <div className="registerPhotoName">Επιλέχθηκε φωτογραφία</div>
-              )}
+              {form.photoUrl && <div className="registerPhotoName">Επιλέχθηκε φωτογραφία</div>}
             </div>
 
             <div className="form-buttons">
@@ -333,7 +355,7 @@ export default function Found() {
       )}
 
       {/* ================= STEP 3 ================= */}
-      {step === 3 && selectedPet && (
+      {step === 3 && (selectedPet || state.declarationData) && (
         <>
           <div className="stepper">
             <div className="step clickable" onClick={() => setStep(1)}>
@@ -361,25 +383,20 @@ export default function Found() {
               <div className="booklet-header">
                 <div className="pet-photo">
                   <img
-                    src={form.photoUrl || selectedPet.photoUrl || vetdefault}
-                    alt={selectedPet.name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = vetdefault;
-                    }}
+                    src={form.photoUrl || selectedPet?.photoUrl || state.declarationData?.photoUrl || vetdefault}
+                    alt={selectedPet?.name || state.declarationData?.petName || "Pet"}
+                    onError={(e) => { e.target.onerror = null; e.target.src = vetdefault; }}
                   />
                 </div>
 
                 <div className="booklet-top">
                   <div className="info-box">
                     <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
-                    <p><span>Όνομα:</span> {selectedPet.name}</p>
-                    <p><span>Είδος:</span> {selectedPet.species}</p>
-                    <p><span>Ράτσα:</span> {selectedPet.breed}</p>
-                    <p><span>Φύλο:</span> {selectedPet.gender}</p>
-                    <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία Γέννησης:</span> {selectedPet.birthdate || "-"}</p>
-                    <p><span>Ηλικία:</span> {selectedPet.age || "-"}</p>
+                    <p><span>Όνομα:</span> {selectedPet?.name || state.declarationData?.petName || "-"}</p>
+                    <p><span>Είδος:</span> {selectedPet?.species || state.declarationData?.species || "-"}</p>
+                    <p><span>Ράτσα:</span> {selectedPet?.breed || state.declarationData?.breed || "-"}</p>
+                    <p><span>Φύλο:</span> {selectedPet?.gender || state.declarationData?.gender || "-"}</p>
+                    <p><span>Microchip:</span> {selectedPet?.microchip || state.declarationData?.microchip || "-"}</p>
                   </div>
 
                   <div className="info-box">
@@ -409,7 +426,6 @@ export default function Found() {
             </div>
           </div>
         </>
-      )}
-    </div>
+      )}    </div>
   );
 }

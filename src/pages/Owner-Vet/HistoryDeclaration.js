@@ -6,7 +6,7 @@ import { REGIONS, SPECIES, GENDERS, dogPopular, catPopular } from "../Utils/Util
 import DeclarationModal from "../../pages/Owner-Vet/WatchDeclaration";
 
 export default function HistoryDeclaration() {
-
+  const navigate = useNavigate();
   const [selectedSpecies, setSelectedSpecies] = useState("");
   const [selectedBreed, setSelectedBreed] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
@@ -31,80 +31,34 @@ export default function HistoryDeclaration() {
   useEffect(() => {
     if (!user) return;
 
-    const fetchAll = async () => {
+    const fetchAllData = async () => {
       try {
-        const petsReq = fetch("http://localhost:3001/pets").then((r) => r.json());
-
-        const foundUrl = isOwner
-          ? `http://localhost:3001/foundReports?ownerId=${user.id}`
-          : `http://localhost:3001/foundReports?vetId=${user.id}`;
-
-        const lostUrl = isOwner
-          ? `http://localhost:3001/lostReports?ownerId=${user.id}`
-          : `http://localhost:3001/lostReports?vetId=${user.id}`;
-
-        const [pets, found, lost] = await Promise.all([
-          petsReq,
-          fetch(foundUrl).then((r) => r.json()),
-          fetch(lostUrl).then((r) => r.json()),
+        // Φέρνουμε μόνο τα απαραίτητα δεδομένα
+        const [found, lost, pets] = await Promise.all([
+          fetch("http://localhost:3001/foundReports").then(res => res.json()),
+          fetch("http://localhost:3001/lostReports").then(res => res.json()),
+          fetch("http://localhost:3001/pets").then(res => res.json()),
         ]);
 
-        const nameCache = new Map();
-        const fetchPersonName = async (personId) => {
-          if (!personId) return null;
-          if (nameCache.has(personId)) return nameCache.get(personId);
-
-          const tryFetch = async (url) => {
-            const res = await fetch(url);
-            if (!res.ok) return null;
-            return res.json();
-          };
-
-          let person = await tryFetch(`http://localhost:3001/owners/${personId}`);
-          if (!person || !person.id) {
-            person = await tryFetch(`http://localhost:3001/vets/${personId}`);
-          }
-
-          const fullName = person
-            ? [person.firstname, person.lastname].filter(Boolean).join(" ").trim()
-            : "";
-          const value = fullName || null;
-          nameCache.set(personId, value);
-          return value;
-        };
-
-        const ownerIds = new Set();
-        (Array.isArray(found) ? found : []).forEach((r) => r.ownerId && ownerIds.add(r.ownerId));
-        (Array.isArray(lost) ? lost : []).forEach((r) => r.ownerId && ownerIds.add(r.ownerId));
-
-        const nameMap = {};
-        await Promise.all(
-          [...ownerIds].map(async (personId) => {
-            nameMap[personId] = await fetchPersonName(personId);
-          })
-        );
-
-        const foundWithNames = (Array.isArray(found) ? found : []).map((r) => ({
-          ...r,
-          ownerName: nameMap[r.ownerId] || null,
-        }));
-        const lostWithNames = (Array.isArray(lost) ? lost : []).map((r) => ({
-          ...r,
-          ownerName: nameMap[r.ownerId] || null,
-        }));
-
         setAllPets(pets);
-        setFoundDeclarations(foundWithNames);
-        setLossDeclarations(lostWithNames);
+
+        // Για ΟΛΟΥΣ (owner και vet) φιλτράρουμε με βάση το ownerId
+        // Αφού και οι κτηνίατροι μπορούν να έχουν δηλώσεις ως ιδιοκτήτες
+        const myFound = found.filter(r => r.ownerId === user.id);
+        const myLost = lost.filter(r => r.ownerId === user.id);
+
+        setFoundDeclarations(myFound);
+        setLossDeclarations(myLost);
+
+        setLoading(false);
       } catch (err) {
-        console.error(err);
-      } finally {
+        console.error("Error fetching declarations:", err);
         setLoading(false);
       }
     };
 
-    fetchAll();
-  }, [user, isOwner, isVet]);
+    fetchAllData();
+  }, [user]);
 
   const handleViewDeclaration = (declaration) => {
     setSelectedDeclaration(declaration);
@@ -134,6 +88,16 @@ export default function HistoryDeclaration() {
     }, 0);
   };
 
+  const handleEditDeclaration = (declaration) => {
+    const tab = declaration.type === "lost" ? "loss" : "found";
+
+    navigate(`/owner-dashboard/${tab}`, {
+      state: {
+        step: 2, // ανοίγει στο step 2
+        declarationData: declaration, // όλα τα δεδομένα της δήλωσης
+      },
+    });
+  };
   const findPetById = (petId) => {
     return allPets.find((p) => p.id === petId) || null;
   };
@@ -181,7 +145,7 @@ export default function HistoryDeclaration() {
     if (g === "female") return "Θηλυκό";
     return g;
   };
-  
+
   const breeds = selectedSpecies === "Σκύλος"
     ? dogPopular
     : selectedSpecies === "Γάτα"
@@ -324,6 +288,7 @@ export default function HistoryDeclaration() {
           onDeleteDeclaration={handleDeleteDeclaration}
           onViewDeclaration={handleViewDeclaration}
           onPrintDeclaration={handlePrintDeclaration}
+          onEditDeclaration={handleEditDeclaration}
           sortOrder={sortOrder}
           onSortChange={setSortOrder}
         />
