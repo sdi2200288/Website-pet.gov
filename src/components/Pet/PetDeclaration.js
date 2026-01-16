@@ -1,7 +1,7 @@
 ﻿import React from "react";
 import "./PetDeclaration.css";
 
-export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration, onPrintDeclaration }) {
+export default function PetDeclaration({ item, type, onDeleteDeclaration, onViewDeclaration, onPrintDeclaration, onEditDeclaration }) {
   const effectiveType = type === "mixed" ? item.type : type;
   const isFinal = item.status === "submitted";
   const statusLabel = isFinal ? "Οριστικοποιημένη" : "Προσωρινά αποθηκευμένη";
@@ -33,6 +33,13 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
       onViewDeclaration(item);
     }
   };
+
+  const handleEdit = () => {
+    if (onEditDeclaration) {
+      onEditDeclaration(item);
+    }
+  };
+
 
   const infoRows = (() => {
     if (
@@ -125,7 +132,10 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
                 <button className="petButtonDanger" onClick={handleDelete}>
                   Διαγραφή
                 </button>
-                <button className="petButtonPrimary">Επεξεργασία</button>
+                <button className="petButtonPrimary" onClick={handleEdit}>
+                  Επεξεργασία
+                </button>
+
               </>
             )
             }

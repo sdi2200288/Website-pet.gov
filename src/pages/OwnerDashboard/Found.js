@@ -4,6 +4,8 @@ import PetDetails from "../../components/Pet/Pet";
 import "./PetReport.css";
 import { REGIONS } from "../Utils/Util";
 import vetdefault from "../../images/vetdeafult.webp";
+import { useParams } from "react-router-dom";
+
 
 export default function Found() {
   const navigate = useNavigate();

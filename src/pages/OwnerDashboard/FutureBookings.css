@@ -1,8 +1,8 @@
 .future-bookings {  
   width: 100%;
-  max-width: 1200px; /* μεγαλύτερο container */
+  max-width: 1200px;
   margin: 40px auto;
-  padding: 100px 20px 20px; /* top padding για τίτλο */
+  padding: 100px 20px 20px;
   font-family: 'Arial', sans-serif;
 }
 
@@ -12,14 +12,7 @@
   color: #2c3e50;
 }
 
-/* Λίστα */
-.bookings-list {
-  display: grid;
-  grid-template-columns: 1fr; /* full width cards */
-  gap: 24px;
-}
-
-/* Κάρτα */
+/* Λίστα bookings */
 .booking-card {
   width: 100%;
   border-radius: 14px;
@@ -27,6 +20,7 @@
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  margin-bottom: 20px;
 }
 
 .booking-card:hover {
@@ -34,7 +28,73 @@
   box-shadow: 0 10px 22px rgba(0,0,0,0.12);
 }
 
-/* Χρώματα κατάστασης */
+/* Header της κάθε booking card */
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #fafafa, #f2f2f2);
+  font-size: 0.95rem;
+}
+
+.booking-header strong {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.booking-header span {
+  font-weight: 500;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* Body της κάθε booking card */
+.booking-body {
+  background: #ffffff;
+  padding: 22px 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px 24px;
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.info-grid strong {
+  color: #2c3e50;
+}
+
+/* Κουμπί ακύρωσης */
+  .booking-body .cancel-btn{
+  background: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+
+}
+  .booking-body .cancel-btn:hover{
+  background: #f8d7da;
+  color: #6b1b22;
+  border: 1px solid #f5c2c7;
+
+}
+.booking-body .confirm-btn {
+  background: #2e8b57;
+  color: white;
+  border: none;
+}
+
+.booking-body .confirm-btn:hover {
+  background: #19653a;
+  color: white;
+}
+
+/* Χρώματα κατάστασης (αν θες να τα χρησιμοποιήσεις) */
 .booking-card.confirmed {
   background: #dff3e7;
   border: 2px solid #3fa67a;
@@ -50,111 +110,23 @@
   border: 2px solid #a12b2a;
 }
 
-/* Header */
-.booking-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px; /* πιο μεγάλος χώρος */
-  background: linear-gradient(135deg, #fafafa, #f2f2f2);
-  font-size: 0.95rem;
-}
-
-/* Αριστερά */
-.left .pet-name {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #2c3e50;
-}
-
-/* Δεξιά */
-.right {
+.booking-header .right {
   display: flex;
   align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.time {
-  font-weight: 500;
-  color: #555;
-  white-space: nowrap;
-}
-
-.status {
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status.ok {
-  background: #cdeee0;
-  color: #1f7a53;
-}
-
-.status.waiting {
-  background: #f6e7d3;
-  color: #8a5a1e;
-}
-
-.status.cancelled {
-  background: #f5c6c5;
-  color: #a12b2a;
-}
-
-/* Ιατρική πράξη */
-.action {
-  background: rgba(255,255,255,0.6);
-  padding: 6px 14px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-/* Βελάκι */
 .arrow {
-  font-size: 0.9rem;
-  color: #777;
-}
-
-/* Body */
-.booking-body {
-  background: #ffffff;
-  padding: 22px 24px;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px 24px;
-  font-size: 0.95rem;
-  color: #555;
-}
-
-.info-grid strong {
+  font-size: 1rem;
+  transition: transform 0.25s ease;
   color: #2c3e50;
 }
 
-/* Κουμπί ακύρωσης */
-.cancel-btn {
-  margin-top: 20px;
-  padding: 10px 20px;
-  border: 1px solid red;
-  background: white;
-  color: red;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
+/* Όταν είναι ανοιχτό */
+.arrow.open {
+  transform: rotate(180deg);
 }
 
-.cancel-btn:hover {
-  background: red;
-  color: white;
-}
 
 /* MOBILE */
 @media (max-width: 600px) {
@@ -164,16 +136,15 @@
     gap: 12px;
   }
 
-  .right {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .action, .status, .time {
-    font-size: 0.8rem;
+  .booking-header span {
+    font-size: 0.85rem;
   }
 
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .booking-body button {
+    width: 100%;
   }
 }

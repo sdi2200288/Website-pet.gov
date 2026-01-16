@@ -4,6 +4,7 @@ import { REGIONS } from "../Utils/Util";
 import PetDetails from "../../components/Pet/Pet";
 import "./PetReport.css";
 import vetdefault from "../../images/vetdeafult.webp";
+import { useParams } from "react-router-dom";
 
 export default function Loss() {
   const navigate = useNavigate();

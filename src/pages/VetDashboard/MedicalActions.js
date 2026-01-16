@@ -74,50 +74,69 @@ export default function MedicalActions() {
 
 
   // Συνάρτηση για φόρτωση του τρέχοντος ιδιοκτήτη
+  // Συνάρτηση για φόρτωση του τρέχοντος ιδιοκτήτη - ΔΙΟΡΘΩΜΕΝΗ
   const loadCurrentOwner = async (ownerId) => {
     try {
-      const res = await fetch(`http://localhost:3001/owners/${ownerId}`);
+      // Ψάχνουμε πρώτα στους owners
+      let res = await fetch(`http://localhost:3001/owners/${ownerId}`);
       if (res.ok) {
         const ownerData = await res.json();
         setCurrentOwner(ownerData);
-      } else {
-        setCurrentOwner(null);
+        return true;  // Βρέθηκε owner
       }
+
+      // Αν δεν βρέθηκε στους owners, ψάχνουμε στους vets
+      res = await fetch(`http://localhost:3001/vets/${ownerId}`);
+      if (res.ok) {
+        const vetData = await res.json();
+        setCurrentOwner(vetData);
+        return true;  // Βρέθηκε vet
+      }
+
+      // Δεν βρέθηκε πουθενά
+      setCurrentOwner(null);
+      return false;
     } catch (error) {
       console.error("Σφάλμα φόρτωσης ιδιοκτήτη:", error);
       setCurrentOwner(null);
+      return false;
     }
   };
-
   const handleSearchByMicrochip = async () => {
     setLoading(true);
     setErrors({});
     try {
       const res = await fetch(`http://localhost:3001/pets?microchip=${microchip}`);
       const data = await res.json();
+
       if (!Array.isArray(data) || data.length === 0) {
         setErrors({ microchip: "Δεν βρέθηκε κατοικίδιο με αυτό το microchip" });
         return;
       }
+
       const foundPet = data[0];
-      if (foundPet.lost === false) {
-        setErrors({ microchip: "Το κατοικίδιο δεν έχει ενεργή δήλωση εξαφάνισης" });
-        return;
-      }
+
+      // Αποθηκεύουμε το κατοικίδιο ΠΡΙΝ από όλα - αυτό λείπει!
       setSelectedPet(foundPet);
-      const ownerLoaded = await loadCurrentOwner(foundPet.ownerId);
-      if (!ownerLoaded) {
+
+      // Καλούμε την loadCurrentOwner και περιμένουμε το αποτέλεσμα
+      const ownerFound = await loadCurrentOwner(foundPet.ownerId);
+
+      if (!ownerFound) {
         setErrors({ microchip: "Δεν βρέθηκαν στοιχεία ιδιοκτήτη (ούτε σε owners ούτε σε vets)" });
         return;
       }
+
+      // Φορτώνουμε το ιατρικό ιστορικό
+      await loadMedicalHistory(foundPet.id);
       setStep(2);
     } catch (err) {
+      console.error("Σφάλμα αναζήτησης:", err);
       setErrors({ microchip: "Σφάλμα αναζήτησης. Προσπαθήστε ξανά." });
     } finally {
       setLoading(false);
     }
   };
-
   const validate1 = () => {
     const newErrors = {};
     if (!microchip.trim()) newErrors.microchip = "Πρέπει να εισάγετε αριθμό microchip";

@@ -194,31 +194,46 @@ export default function HealthBookletOwner() {
               </div>
 
               <div className="booklet-bottom">
-                <div className="info-box large">
-                  <h4>Ιστορικό πράξεων</h4>
-                  {loading ? (
-                    <p>Φόρτωση...</p>
-                  ) : medicalActions.length === 0 ? (
-                    <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
-                  ) : (
-                    <div className="medical-actions-list">
-                      {medicalActions.map((action) => {
-                        const actLabel =
-                          MEDICAL_ACTS.find((a) => a.id === action.type)?.label ?? action.type ?? "—";
+  <div className="info-box large">
+    <h4>Ιστορικό πράξεων</h4>
+    {loading ? (
+      <p>Φόρτωση...</p>
+    ) : medicalActions.length === 0 ? (
+      <p className="empty">Δεν υπάρχουν καταχωρημένες πράξεις.</p>
+    ) : (
+      <div className="medical-actions-list">
+        {medicalActions.map((action) => {
+          const actLabel =
+            MEDICAL_ACTS.find((a) => a.id === action.type)?.label ?? action.type ?? "—";
+          const vetName = action.vet 
+            ? `${action.vet.firstname} ${action.vet.lastname}` 
+            : "Άγνωστος κτηνίατρος";
 
-                        return (
-                          <div key={action.id} className="medical-action-item">
-                            <p><strong>Ημερομηνία:</strong> {action.date}</p>
-                            <p><strong>Είδος:</strong> {actLabel}</p>
-                            <p><strong>Περιγραφή:</strong> {action.description}</p>
-                            <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
-                            <hr />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+          return (
+            <div key={action.id} className="medical-action-item">
+              <div className="medical-action-header">
+                <p><strong>Ημερομηνία:</strong> {action.date}</p>
+                <p><strong>Είδος:</strong> {actLabel}</p>
+                <p><strong>Κτηνίατρος:</strong> {vetName}</p>
+              </div>
+              <div className="medical-action-details">
+                {action.description && (
+                  <p><strong>Περιγραφή:</strong> {action.description}</p>
+                )}
+                {action.medications && (
+                  <p><strong>Φάρμακα/Αγωγή:</strong> {action.medications}</p>
+                )}
+                {action.notes && (
+                  <p><strong>Σημειώσεις:</strong> {action.notes}</p>
+                )}
+              </div>
+              <hr />
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
               </div>
             </div>
 

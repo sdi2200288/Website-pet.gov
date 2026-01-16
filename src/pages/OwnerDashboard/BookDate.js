@@ -8,6 +8,15 @@ import BookDateImage from "../../images/BookDate.png";
 import { REGIONS, VET_GENDERS, EXPERIENCE_OPTIONS, MEDICAL_ACTS, VET_SPECIALIZATIONS, EDUCATION_OPTIONS, } from "../Utils/Util";
 import vetdefault from "../../images/vetdeafult.webp";
 
+
+// Helper για σωστή δημιουργία Date αντικειμένου για συγκρίσεις
+const getAppointmentDateTime = (appointment) => {
+  const [hour, minute] = appointment.time.split(":").map(Number);
+  const d = new Date(appointment.date);
+  d.setHours(hour, minute, 0, 0);
+  return d;
+};
+
 export default function BookDate() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -39,6 +48,15 @@ export default function BookDate() {
   const [timeTo, setTimeTo] = useState("");
   const [gender, setGender] = useState("");
   const [sortOrder, setSortOrder] = useState("ratingDesc");
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/appointments")
+      .then(res => res.json())
+      .then(data => setAppointments(data))
+      .catch(err => console.error(err));
+  }, []);
+
 
   // Φίλτρα (APPLIED - εφαρμόζονται μόνο όταν πατηθεί "Εφαρμογή φίλτρων")
   const [appliedFilters, setAppliedFilters] = useState({
@@ -306,11 +324,26 @@ export default function BookDate() {
     setVeterinarians(filtered);
   };
 
+
   const handleGoToPreview = () => {
     if (!selectedDate) return alert("Παρακαλώ επιλέξτε ημερομηνία");
     if (!selectedTime) return alert("Παρακαλώ επιλέξτε ώρα");
+
+    // Έλεγχος παρελθόντος
+    const now = new Date();
+    const [hour, minute] = selectedTime.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hour, minute, 0, 0);
+
+    if (selectedDateTime < now) {
+      return alert("Δεν μπορείτε να κλείσετε ραντεβού στο παρελθόν.");
+    }
+
     setStep(3);
   };
+
+
+
 
   const handleConfirmAppointment = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -372,7 +405,22 @@ export default function BookDate() {
     if (!vet) return null;
 
     const selectedAvailability = vet.availability.find((a) => a.date === selectedDate);
-    const availableTimes = selectedAvailability?.times || [];
+    // const availableTimes = selectedAvailability?.times || [];
+    const bookedTimes = appointments
+      .filter(app =>
+        app.vetId === vet.id &&
+        app.date === selectedDate
+      )
+      .map(app => app.time);
+
+    const availableTimes = (selectedAvailability?.times || [])
+      .filter(time => !bookedTimes.includes(time));
+
+
+    // Προσθήκη: ταξινομούμε το availability με βάση την ημερομηνία
+    const sortedAvailability = [...vet.availability].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
 
     return (
       <div className="appointment-wrapper">
@@ -418,13 +466,14 @@ export default function BookDate() {
               type="date"
               required
               value={selectedDate}
-              min={vet.availability[0]?.date}
-              max={vet.availability[vet.availability.length - 1]?.date}
+              min={sortedAvailability[0]?.date}
+              max={sortedAvailability[sortedAvailability.length - 1]?.date}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
                 setSelectedTime("");
               }}
             />
+
           </div>
 
           <div className="form-group">

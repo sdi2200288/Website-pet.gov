@@ -36,6 +36,12 @@ export default function MedicalActions() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  useEffect(() => {
+  if (selectedPet) {
+    loadMedicalHistory(selectedPet.id);
+  }
+}, [selectedPet]);
+
   const handlePrint = () => {
     window.print();
   };
@@ -66,16 +72,15 @@ export default function MedicalActions() {
         return;
       }
       const foundPet = data[0];
-      if (foundPet.lost === false) {
-        setErrors({ microchip: "Το κατοικίδιο δεν έχει ενεργή δήλωση εξαφάνισης" });
-        return;
-      }
+
       setSelectedPet(foundPet);
-      const ownerLoaded = await loadCurrentOwner(foundPet.ownerId);
-      if (!ownerLoaded) {
-        setErrors({ microchip: "Δεν βρέθηκαν στοιχεία ιδιοκτήτη (ούτε σε owners ούτε σε vets)" });
-        return;
-      }
+
+      // ΞΕΣΧΟΛΙΑΣΜΕΝΟ: Φορτώνουμε τον ιδιοκτήτη
+      await loadCurrentOwner(foundPet.ownerId);
+
+      // Φορτώνουμε το ιατρικό ιστορικό
+      await loadMedicalHistory(foundPet.id);
+
       setStep(2);
     } catch (err) {
       setErrors({ microchip: "Σφάλμα αναζήτησης. Προσπαθήστε ξανά." });
@@ -83,6 +88,7 @@ export default function MedicalActions() {
       setLoading(false);
     }
   };
+
 
   const validate1 = () => {
     const newErrors = {};

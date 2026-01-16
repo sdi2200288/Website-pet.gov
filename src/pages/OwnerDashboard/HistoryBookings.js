@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { MEDICAL_ACTS } from "../Utils/Util";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./HistoryBookings.css";
+
+const getAppointmentDateTime = (a) => {
+  const [hour, minute] = a.time.split(":").map(Number);
+  const d = new Date(a.date);
+  d.setHours(hour, minute, 0, 0);
+  return d;
+};
 
 export default function AppointmentHistory() {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
   const [openId, setOpenId] = useState(null);
 
-  const handleRepeatAppointment = (appointment) => {
-  const vetName = appointment.vet 
-    ? `${appointment.vet.firstname} ${appointment.vet.lastname}`
-    : appointment.vetId;
-  
-  alert(`Θέλετε να κλείσετε ραντεβού ξανά με τον κτηνίατρο: ${vetName}`);
-  navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
-};
-
-const handleReviewAppointment = (appointment) => {
-  const vetName = appointment.vet 
-    ? `${appointment.vet.firstname} ${appointment.vet.lastname}`
-    : appointment.vetId;
-  
-  alert(`Θέλετε να αξιολογήσετε τον: ${vetName}`);
-  navigate(`/review/${appointment.vetId}`, { 
-    state: { 
-      appointmentId: appointment.id,
-      vetId: appointment.vetId 
-    }  
-  });
-};
-
   const getMedicalActLabel = (id) => {
     const act = MEDICAL_ACTS.find(a => a.id === id);
     return act ? act.label : "Άγνωστη Πράξη";
   };
-  
+
+  const handleRepeatAppointment = (appointment) => {
+    navigate(`/owner-dashboard/book-date?vetId=${appointment.vetId}`);
+  };
+
+  const handleReviewAppointment = (appointment) => {
+    navigate(`/review/${appointment.vetId}`, {
+      state: {
+        appointmentId: appointment.id,
+        vetId: appointment.vetId
+      }
+    });
+  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -45,24 +41,28 @@ const handleReviewAppointment = (appointment) => {
       fetch(`http://localhost:3001/appointments?ownerId=${user.id}`).then(r => r.json()),
       fetch(`http://localhost:3001/pets?ownerId=${user.id}`).then(r => r.json()),
       fetch(`http://localhost:3001/reviews`).then(r => r.json()),
-      fetch(`http://localhost:3001/vets`).then(r => r.json()) // 
-    ])
-    .then(([appointments, pets,reviews,vets]) => {
-      const today = new Date();
+      fetch(`http://localhost:3001/vets`).then(r => r.json())
+    ]).then(([appointments, pets, reviews, vets]) => {
+      const now = new Date();
 
       const pastAppointments = appointments
-        .filter(a =>
-          new Date(`${a.date}T${a.time}`) < today ||
-          ["cancelled", "rejected"].includes(a.status)
-        )
+        .filter(a => {
+          const apptDate = getAppointmentDateTime(a);
+          return (
+            apptDate < now ||
+            ["cancelled", "rejected"].includes(a.status)
+          );
+        })
         .map(a => ({
           ...a,
           pet: pets.find(p => p.id === a.petId),
-          vet: vets.find(v => v.id === a.vetId), 
-          reviewed: reviews.some(r=> r.appointmentId === a.id)
+          vet: vets.find(v => v.id === a.vetId),
+          reviewed: reviews.some(r => r.appointmentId === a.id)
         }))
-        .sort((a, b) => new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`));
-
+        .sort(
+          (a, b) =>
+            getAppointmentDateTime(b) - getAppointmentDateTime(a)
+        );
 
       setHistory(pastAppointments);
     });
@@ -82,7 +82,7 @@ const handleReviewAppointment = (appointment) => {
             <div className="history-main">
               <div className="history-pet-name">{a.pet?.name}</div>
               <div className="history-datetime">
-                {new Date(`${a.date}T${a.time}`).toLocaleDateString("el-GR")} • {a.time}
+                {getAppointmentDateTime(a).toLocaleDateString("el-GR")} • {a.time}
               </div>
             </div>
 
@@ -91,11 +91,13 @@ const handleReviewAppointment = (appointment) => {
                 {a.status === "cancelled" && "Ακυρώθηκε"}
                 {a.status === "rejected" && "Απορρίφθηκε"}
                 {a.status === "confirmed" && "Ολοκληρώθηκε"}
+                {a.status === "pending" && "Δεν ολοκληρώθηκε"}
               </span>
-              <span className="history-arrow">{openId === a.id ? "▲" : "▼"}</span>
+              <span className="history-arrow">
+                {openId === a.id ? "▲" : "▼"}
+              </span>
             </div>
           </div>
-
 
           {openId === a.id && (
             <div className="history-booking-body">
@@ -108,17 +110,17 @@ const handleReviewAppointment = (appointment) => {
                   <div><strong>Ακυρώθηκε από:</strong> {a.cancelledBy === "owner" ? "Ιδιοκτήτη" : "Κτηνίατρο"}</div>
                 )}
               </div>
+
               <div className="history-buttons">
-                <button className="history-btn repeat" onClick={() => handleRepeatAppointment(a)}>Ραντεβού Ξανά</button>
-                {!a.reviewed && (
-                  <button
-                    className="history-btn review"
-                    onClick={() => handleReviewAppointment(a)}
-                  >
+                <button className="history-btn repeat" onClick={() => handleRepeatAppointment(a)}>
+                  Ραντεβού Ξανά
+                </button>
+
+                {!a.reviewed && ["confirmed", "cancelled", "rejected", "pending"].includes(a.status) && (
+                  <button className="history-btn review" onClick={() => handleReviewAppointment(a)}>
                     Αξιολόγησε
                   </button>
                 )}
-
               </div>
             </div>
           )}

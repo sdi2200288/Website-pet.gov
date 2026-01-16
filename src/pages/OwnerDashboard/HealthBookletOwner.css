@@ -161,7 +161,7 @@
 .booklet-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 35px !important;
 }
 
 /* ===============================
@@ -170,7 +170,7 @@
 .info-box {
   background: #fff;
   border-radius: 14px;
-  padding: 18px 20px;
+  padding: px 20px;
   border: 1px solid #ddd;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
@@ -196,16 +196,36 @@
 }
 
 /* ===============================
-   BOTTOM SECTION
+   BOTTOM SECTION - ΑΛΛΑΓΗ
 ================================ */
 .booklet-bottom {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
+  display: block !important; /* Αλλαγή από flex σε block */
+  width: 100% !important;
 }
 
+/* ===============================
+   INFO BOX LARGE - ΑΛΛΑΓΗ
+================================ */
 .info-box.large {
-  min-height: 180px;
+  display: block !important; /* Αλλαγή από flex σε block */
+  max-width: 100% !important; /* Αλλαγή από 1000px σε 100% */
+  width: 100% !important;
+  flex: none !important; /* Αφαίρεση flex property */
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ===============================
+   MEDICAL ACTIONS LIST - ΒΕΛΤΙΩΣΗ
+================================ */
+.medical-actions-list {
+  width: 100%;
+  display: block;
+}
+
+.medical-action-item {
+  width: 100%;
+  display: block;
 }
 
 /* ===============================
@@ -245,6 +265,8 @@
   background: #2c3e50;
   color: #fff;
 }
+
+
 
 /* ===============================
    EMPTY STATE

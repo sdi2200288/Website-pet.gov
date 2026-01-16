@@ -12,19 +12,62 @@ export default function FutureBookingsVet() {
     return act ? act.label : "Άγνωστη Πράξη";
   };
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "confirmed": return "ok";
+      case "pending": return "waiting";
+      case "rejected": return "cancelled";
+      case "cancelled": return "cancelled";
+      default: return "";
+    }
+  }
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
 
-    fetch(`http://localhost:3001/appointments?vetId=${user.id}`)
-      .then(res => res.json())
-      .then(data => {
+    const fetchData = async () => {
+      try {
+        const [appointmentsRes, petsRes, ownersRes] = await Promise.all([
+          fetch(`http://localhost:3001/appointments?vetId=${user.id}`),
+          fetch(`http://localhost:3001/pets`),
+          fetch(`http://localhost:3001/owners`) // ⚡ Διορθώθηκε
+        ]);
+
+        const [appointments, pets, owners] = await Promise.all([
+          appointmentsRes.json(),
+          petsRes.json(),
+          ownersRes.json()
+        ]);
+
         const today = new Date();
-        const future = data
+        const future = appointments
           .filter(a => new Date(a.date) >= today)
+          .map(a => {
+            const pet = pets.find(p => p.id === a.petId) || {};
+            const owner = owners.find(o => o.id === a.ownerId) || {};
+            return {
+              ...a,
+              petName: pet.name || "Άγνωστο",
+              petSpecies: pet.species || "Άγνωστο",
+              petMicrochip: pet.microchip || "—",
+              ownerName: owner.firstname && owner.lastname ? `${owner.firstname} ${owner.lastname}` : "Άγνωστος",
+              ownerEmail: owner.email || "—",
+              ownerPhone: owner.phone || "—",
+              vetName: user.name || "Κτηνίατρος"
+            };
+          })
           .sort((a, b) => new Date(a.date) - new Date(b.date));
+
         setBookings(future);
-      });
+
+      } catch (err) {
+        console.error("Σφάλμα κατά τη φόρτωση ραντεβού:", err);
+        alert("Σφάλμα κατά τη φόρτωση ραντεβού");
+      }
+    };
+
+    fetchData();
   }, []);
 
   const toggle = (id) => setOpenId(openId === id ? null : id);
@@ -36,12 +79,10 @@ export default function FutureBookingsVet() {
     }
 
     try {
-      // Αν απορρίπτεται επιβεβαιωμένο ραντεβού → επαναφορά ώρας
       if (appointment.status === "confirmed" && newStatus === "rejected") {
         await updateVetAvailability(appointment.vetId, appointment.date, appointment.time, "add");
       }
 
-      // Update status appointment
       const res = await fetch(`http://localhost:3001/appointments/${appointment.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -55,18 +96,16 @@ export default function FutureBookingsVet() {
       });
       const updatedAppointment = await res.json();
 
-      // Αν επιβεβαιώνεται → αφαιρούμε ώρα
       if (newStatus === "confirmed") {
         await updateVetAvailability(appointment.vetId, appointment.date, appointment.time, "remove");
       }
 
-      // Δημιουργία ειδοποίησης στον owner
       if (newStatus === "confirmed" || newStatus === "rejected") {
         await sendNotification({
           userId: appointment.ownerId,
           userType: "owner",
           title: newStatus === "confirmed" ? "Επιβεβαίωση Ραντεβού" : "Απόρριψη Ραντεβού",
-          message: newStatus === "confirmed" 
+          message: newStatus === "confirmed"
             ? `Ο κτηνίατρος ${appointment.vetName} επιβεβαίωσε το ραντεβού για ${appointment.petName} στις ${appointment.date} ${appointment.time}`
             : `Ο κτηνίατρος ${appointment.vetName} απέρριψε το ραντεβού για ${appointment.petName}`,
           appointmentId: appointment.id
@@ -120,7 +159,7 @@ export default function FutureBookingsVet() {
   };
 
   const renderStatusText = (status) => {
-    if (status === "pending") return "Περιμένει απάντηση από ιδιοκτήτη";
+    if (status === "pending") return "Περιμένει επιβεβαίωση";
     if (status === "confirmed") return "Επιβεβαιωμένο";
     if (status === "rejected") return "Απορρίφθηκε";
     if (status === "cancelled") return "Ακυρώθηκε";
@@ -128,7 +167,7 @@ export default function FutureBookingsVet() {
 
   return (
     <div className="future-bookings">
-      <h2>Μελλοντικά Ραντεβού Κτηνιάτρου</h2>
+      <h2>Μελλοντικά Ραντεβού</h2>
       <div className="bookings-list">
         {bookings.map(b => (
           <div key={b.id} className={`booking-card ${b.status}`}>
@@ -138,10 +177,13 @@ export default function FutureBookingsVet() {
                 <div className="owner-name">Ιδιοκτήτης: {b.ownerName}</div>
               </div>
               <div className="right">
-                <span className="time">🕒 {new Date(b.date).toLocaleDateString("el-GR")} • {b.time}</span>
-                <span className={`status ${b.status}`}>{renderStatusText(b.status)}</span>
+                <span className="time">{new Date(b.date).toLocaleDateString("el-GR")} • {b.time}</span>
+                <span className={`status ${getStatusClass(b.status)}`}>{renderStatusText(b.status)}</span>
                 <span className="action">{getMedicalActLabel(b.reason)}</span>
-                <span className="arrow">{openId === b.id ? "▲" : "▼"}</span>
+                <span className={`arrow ${openId === b.id ? "open" : ""}`}>
+                  ▼
+                </span>
+
               </div>
             </div>
             {openId === b.id && (
@@ -163,7 +205,7 @@ export default function FutureBookingsVet() {
                       </>
                     )}
                     <button className="cancel-btn" onClick={() => cancelBooking(b)}>
-                      {b.status === "pending" ? "Ακύρωση" : "Ακύρωση Επιβεβαιωμένου"}
+                      Ακύρωση
                     </button>
                   </div>
                 )}

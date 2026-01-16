@@ -1,3 +1,4 @@
+/* ===== CONTAINER ===== */
 .history-appointment-history-vet {
   width: 100%;
   max-width: 1200px;
@@ -8,13 +9,12 @@
 
 .history-appointment-history-vet h2 {
   text-align: center;
-  /* margin-bottom: 24px; */
   color: #2c3e50;
   margin-top: 40px;
+  margin-bottom: 24px;
 }
 
 /* ===== CARD ===== */
-
 .history-booking-card-vet {
   width: 100%;
   border-radius: 14px;
@@ -31,15 +31,14 @@
 }
 
 /* ===== HEADER ===== */
-
 .history-booking-header-vet {
-  padding: 20px 26px;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
   cursor: pointer;
   background: linear-gradient(135deg, #fafafa, #f2f2f2);
+  border-bottom: 1px solid #eee;
 }
 
 /* Left side */
@@ -55,10 +54,10 @@
   color: #2c3e50;
 }
 
-.history-datetime-vet {
+/* .history-datetime-vet {
   font-size: 0.85rem;
   color: #7f8c8d;
-}
+} */
 
 /* Right side */
 .history-actions-vet {
@@ -67,46 +66,10 @@
   gap: 14px;
 }
 
-/* ===== STATUS BADGE ===== */
-
-.history-status-vet {
-  min-width: 120px;
-  text-align: center;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-}
-
-/* Status colors */
-.history-booking-card.cancelled-vet .history-status {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-}
-
-.history-booking-card.rejected-vet .history-status {
-  background: linear-gradient(135deg, #f39c12, #d35400);
-}
-
-.history-booking-card.confirmed-vet .history-status {
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
-}
-
-/* Arrow */
-.history-arrow-vet {
-  font-size: 0.7rem;
-  color: #999;
-}
-
 /* ===== BODY ===== */
-
 .history-booking-body-vet {
   padding: 22px 26px;
   background-color: #fff;
-  border-top: 1px solid #eee;
 }
 
 /* Info grid */
@@ -126,11 +89,39 @@
 }
 
 /* ===== EMPTY STATE ===== */
-
 .history-appointment-history-vet p {
   text-align: center;
   color: #777;
   font-size: 0.95rem;
+  margin-top: 24px;
+}
+
+.history-left-vet {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-datetime-vet {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.history-right-vet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Status badge */
+.history-status-vet {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
 }
 
 /* Status colors */
@@ -147,26 +138,28 @@
   box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
 }
 
-/* ===== MOBILE ===== */
+/* Arrow */
+.history-arrow-vet {
+  font-size: 0.8rem;
+  color: #999;
+}
 
+/* Responsive */
 @media (max-width: 600px) {
-  .history-booking-header {
+  .history-booking-header-vet {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
-  .history-actions {
+  .history-right-vet {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 10px;
   }
 
-  .history-status {
+  .history-status-vet {
     min-width: auto;
     padding: 6px 12px;
-  }
-
-  .history-info-grid {
-    grid-template-columns: 1fr;
   }
 }

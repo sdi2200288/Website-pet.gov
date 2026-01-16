@@ -490,6 +490,11 @@
   padding: 25px;
   margin: 20px 0;
   text-align: left;
+
+  flex: 2;           /* Παίρνει περισσότερο χώρο από άλλα πλαίσια */
+  min-width: 0;      /* Απαραίτητο για flexbox overflow */
+  width: 100%;       /* Εκτείνεται όσο μπορεί */
+  max-width: 1000px; /* Προαιρετικά, για να μην είναι τεράστιο */
 }
 
 .info-box.large p {
