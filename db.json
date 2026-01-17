@@ -509,24 +509,6 @@
   ],
   "pets": [
     {
-      "id": "vp001",
-      "ownerId": "2707",
-      "name": "Ρεξ",
-      "species": "Σκύλος",
-      "breed": "Ημίαιμο",
-      "gender": "Αρσενικό",
-      "microchip": "555111222",
-      "birthdate": "2021-04-12",
-      "age": "4",
-      "region": "Θεσσαλονίκης",
-      "lastSeenAddress": "",
-      "lastSeenDate": "2026-01-16",
-      "condition": "",
-      "status": "foster",
-      "photoUrl": "https://placedog.net/400/300?id=6",
-      "lost": false
-    },
-    {
       "id": "vp002",
       "ownerId": "o102",
       "name": "Μίλα",
