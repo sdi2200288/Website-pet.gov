@@ -11,7 +11,7 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
     if (effectiveType === "found") return "Εύρεση";
     if (effectiveType === "foundNoAcc") return "Εύρεση (χωρίς λογαριασμό)";
     if (effectiveType === "adoption") return "Υιοθεσία";
-    if (effectiveType === "foster") return "Φιλοξενία";
+    if (effectiveType === "foster") return "Αναδοχής";
     if (effectiveType === "transfer") return "Μεταβίβαση";
     return "Δήλωση";
   })();
@@ -40,7 +40,6 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
     }
   };
 
-
   const infoRows = (() => {
     if (
       effectiveType === "loss" ||
@@ -57,26 +56,33 @@ export default function PetDeclaration({ item, type, onDeleteDeclaration, onView
       ];
     }
 
-    if (effectiveType === "adoption" || effectiveType === "foster") {
+    if (effectiveType === "adoption") {
       return [
         { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+        { label: "Τρέχων Ιδιοκτήτης", value: item.currentOwnerId },
+        { label: "Νέος Ιδιοκτήτης", value: item.newOwnerId },
+        { label: "Κτηνίατρος", value: item.vetId },
+        { label: "Ημερομηνία Υιοθεσίας", value: item.adoptionDate },
         { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
       ];
     }
-
-    if (effectiveType === "transfer") {
-      const currentOwner =
-        item.currentOwnerName ||
-        item.currentOwnerFullname ||
-        item.currentOwner ||
-        item.currentOwnerId;
-      const newOwner =
-        item.newOwnerName || item.newOwnerFullname || item.newOwner || item.newOwnerId;
-
+    if (effectiveType === "foster") {
       return [
         { label: "Τύπος δήλωσης", value: declarationTypeLabel },
-        { label: "Τρέχων Ιδιοκτήτης", value: currentOwner },
-        { label: "Νέος Ιδιοκτήτης", value: newOwner },
+        { label: "Τρέχων Ιδιοκτήτης", value: item.currentOwnerId },
+        { label: "Ανάδοχος", value: item.fosterOwnerId },
+        { label: "Κτηνίατρος", value: item.vetId },
+        { label: "Ημερομηνία Ανάδοχης", value: item.fosterDate },
+        { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
+      ];
+    }
+    if (effectiveType === "transfer") {
+      return [
+        { label: "Τύπος δήλωσης", value: declarationTypeLabel },
+        { label: "Τρέχων Ιδιοκτήτης", value: item.currentOwnerId },
+        { label: "Νέος Ιδιοκτήτης", value: item.newOwnerId },
+        { label: "Κτηνίατρος", value: item.vetId },
+        { label: "Ημερομηνία Μεταβίβασης", value: item.transferDate },
         { label: "Ημερομηνία δημιουργίας", value: item.createdAt },
       ];
     }
