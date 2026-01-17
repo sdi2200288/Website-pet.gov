@@ -350,10 +350,11 @@
 
 /* Vet Banner */
 .vet-banner {
-  background: linear-gradient(135deg, #1a5f7a 0%, #2c3e50 100%);
+  background: linear-gradient(135deg, #3297bf 0%, #6994bf 100%);
   color: white;
   border-radius: 15px;
   padding: 30px;
+  margin-top: 30px;
   margin-bottom: 30px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   position: relative;
@@ -422,15 +423,15 @@
 }
 
 .register-btn {
-  background: #4CAF50;
+  background: #181818;
   color: white;
-  border-color: #4CAF50;
+  border-color: #343534;
 }
 
 .register-btn:hover {
-  background: #45a049;
+  background: #4e4f4e;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 5px 15px rgba(34, 34, 34, 0.3);
 }
 
 

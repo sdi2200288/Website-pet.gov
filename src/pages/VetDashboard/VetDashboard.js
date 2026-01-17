@@ -306,9 +306,8 @@ export default function VetDashboard() {
                 </div>
                 <div className="services-grid">
                   <div className="service-card">
-                    <h3>Αυτόματες Υπενθυμίσεις</h3>
-                    <p>Λάβετε αυτόματες ειδοποιήσεις για επαναληπτικούς εμβολιασμούς, αποπαραστώσεις και προγραμματισμένα check-ups απο τους πελάτες σας.</p>
-                   
+                    <h3>Διαχείριση Ραντεβού</h3>
+                    <p>Ελέγξτε πλήρως τα ραντεβού σας, επιβεβαιώστε ή ακυρώστε επισκέψεις και προσαρμόστε τη διαθεσιμότητά σας εύκολα και άμεσα.</p>
                   </div>
                   <div className="service-card">
                     <h3>Ψηφιακές Δηλώσεις</h3>
@@ -331,7 +330,6 @@ export default function VetDashboard() {
                   <h2>Είστε Κτηνίατρος ;</h2>
                   <p>Εγγραφείτε δωρεάν και αποκτήστε πρόσβαση σε όλα τα εργαλεία διαχείρισης.</p>
                   <div className="banner-buttons">
-                    <button className="learn-more-btn">Μάθετε Περισσότερα</button>
                     <button className="register-btn">Εγγραφή</button>
                   </div>
                 </div>
