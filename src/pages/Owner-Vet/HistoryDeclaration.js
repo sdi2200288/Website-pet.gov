@@ -114,7 +114,7 @@ export default function HistoryDeclaration() {
           state: { step: 2, declarationData: declaration },
         });
       } else if (declaration.type === "found") {
-        navigate(`/vet-dashboard/found2`, {  
+        navigate(`/vet-dashboard/found2`, {
           state: { step: 2, declarationData: declaration },
         });
       } else {
@@ -311,6 +311,7 @@ export default function HistoryDeclaration() {
 
       <div className="history-list-panel">
         <PetDeclarationsList
+          type="mixed"
           declarations={filteredDeclarations}
           onDeleteDeclaration={handleDeleteDeclaration}
           onViewDeclaration={handleViewDeclaration}
