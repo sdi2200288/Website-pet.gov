@@ -17,6 +17,7 @@
 }
 
 .logo-link {
+  margin-left: -150px;
   text-decoration: none;
   display: inline-flex;
 }
