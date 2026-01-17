@@ -1,3 +1,53 @@
+_________________________________________________________________________________________________________________________________________________________
+
+MΕΛΟΙ
+
+Αλτάνη-Δάφνη Τόντου    1115 2022 00288
+Ελένη Αντωνίου         1115 2022 00006
+
+_________________________________________________________________________________________________________________________________________________________
+
+ΤΙ ΕΧΟΥΜΕ ΥΛΟΠΟΙΉΣΕΙ
+
+Έχουμε υλοποιήσει όλα τα ζητούμενα εκτός απο την επεξεργασία των δηλώσεων υιοθεσίας, αναδοχής και μεταβίβασης του Κτηνιάτρου οταν είναι σε 
+κατάσταση προσωρινής αποθήκευσης, μιας και η κυρία Κολοβού είπε στο feedback οτι δεν ειναι απαραίτητο να υλοποιήσουμε αυτους τους 3 τύπους δηλώσεων.
+Επίσης δεν έχουμε υλοποιήσει να ανεβαίνουν εικόνες στη ΒΔ αν και στις δηλώσεις ο χρήστης  μπορεί να επιλέξει κάποια φωτογραφία απο τον υπολογιστή (ρωτήσαμε και την κυρία Κολοβού στο feedback και είπε οτι είναι οκ). 
+Τέλος στο ξεχάσατε τον κωδικό σας δεν αποστέλεται κάποιο email, απλα ψάχνει το email αν το βρει βγάζει μήνυμα οτι έγινε η αποστολή email αλλιως 
+βγάζει μήνυμα μη ύπαρξης λογαριασμού με αυτο το ΑΦΜ στην ΒΔ.
+
+_________________________________________________________________________________________________________________________________________________________
+
+ΔΟΚΙΜΑΣΤΙΚΟΙ ΚΩΔΙΚΟΊ
+
+Owners = [
+    {
+        EMAIL = sdi2200288@uoa.gr
+        PASSWORD = Altani1!!!
+    }
+]
+
+Vets = [
+    {
+        EMAIL = vetgiorgos@example.com
+        PASSWORD = Vet1!!
+    },
+    {
+        EMAIL = e.antoniou@gmail.com
+        PASSWORD = 123456789
+    }
+]
+ 
+_________________________________________________________________________________________________________________________________________________________
+
+ΣΎΝΔΕΣΜΟΣ GITHUB 
+
+HTTPS =  https://github.com/sdi2200006/lab1.git
+SSH = git@github.com:sdi2200006/lab1.git
+
+_________________________________________________________________________________________________________________________________________________________
+
+ΜΟΡΦΗ ΒΔ
+
 Owners = {
     id
     firstname 
@@ -22,14 +72,14 @@ Vets={
     address
     phone
     password
-    specializations
+    specializations []
     region
     studyLevel
     experience
     photoUrl
-    services
-    schedule
-    availability
+    services []
+    schedule []
+    availability []
     totalScore
     reviewCount
 }
@@ -82,26 +132,40 @@ foundReportsWithoutAcc = {
     phone
 }
 
-
- adoptionReports, fosterReports = {
+adoptionReports ={
     id
     petId
     vetId
-    status
-    createdAt
-}
-
-transferReports ={
-    id
-    petId
-    vetId
-    newOwnerId
     currentOwnerId
+    newOwnerId
+    adoptionDate
     status
     createdAt
 }
 
-medicalReports=    {
+fosterReports = { 
+    id
+    petId
+    vetId
+    currentOwnerId
+    fosterOwnerId
+    fosterDate
+    status
+    createdAt
+}
+
+transferReports = {
+    id
+    petId
+    vetId
+    currentOwnerId
+    newOwnerId
+    transferDate
+    status
+    createdAt
+}
+
+medicalReports = {
     id
     petId
     vetId
@@ -116,6 +180,7 @@ medicalReports=    {
     description
     medications
     createdAt
+    status = "submitted"
 }
 
 appointments = {
@@ -134,22 +199,23 @@ appointments = {
 }
 
 notifications={
-    id: 4155,
-    userId: o102,
-    userType: owner,
-    title: Επιβεβαίωση Ραντεβού,
-    message: Ο κτηνίατρος ΓΙΩΡΓΟΣ ΚΩΝΣΤΑΝΤΙΝΟΥ επιβεβαίωσε το ραντεβού για Σούζυ στις 2026-01-21 10:30,
-    appointmentId: app_08eniqgxl,
-    read: false,
-    createdAt: 2026-01-07T19:06:29.401Z
+    id
+    userId
+    userType
+    title
+    message
+    appointmentId
+    read
+    createdAt
 }
 
 
 identity= {
-    id: idnqad0xm55x,
-    petId: vp2zapvcwhj,
-    vetId: v001,
-    date: 2026-01-10
+    id
+    petId
+    vetId
+    ownerId
+    date
 }
 
 reviews = {
@@ -162,4 +228,5 @@ reviews = {
     createdAt
 }
 
+_________________________________________________________________________________________________________________________________________________________
 
