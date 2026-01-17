@@ -147,10 +147,11 @@
 
 import React, { useState } from "react";
 import "./VetDashboard.css";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { FaUser, FaFileAlt, FaBook, FaCalendarAlt, FaHistory } from "react-icons/fa";
 
 export default function VetDashboard() {
+  const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(null);
   const [hideMainContent, setHideMainContent] = useState(false);
 
@@ -325,12 +326,17 @@ export default function VetDashboard() {
                   </div>
                 </div>
               </section>
-               <div className="vet-banner">
+              <div className="vet-banner">
                 <div className="banner-content">
                   <h2>Είστε Κτηνίατρος ;</h2>
                   <p>Εγγραφείτε δωρεάν και αποκτήστε πρόσβαση σε όλα τα εργαλεία διαχείρισης.</p>
                   <div className="banner-buttons">
-                    <button className="register-btn">Εγγραφή</button>
+                    <button
+                      className="register-btn"
+                      onClick={() => navigate("/register/vet")}
+                    >
+                      Εγγραφή
+                    </button>
                   </div>
                 </div>
               </div>

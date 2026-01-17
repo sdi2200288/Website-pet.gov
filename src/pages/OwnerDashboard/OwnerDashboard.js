@@ -128,9 +128,9 @@
 
 
 
-import "./OwnerDashboard.css"; 
+import "./OwnerDashboard.css";
 import React, { useState, useEffect } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
@@ -141,6 +141,7 @@ import {
 } from "react-icons/fa";
 
 export default function OwnerDashboard() {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const location = useLocation();
   const [hideMainContent, setHideMainContent] = useState(false);
@@ -240,72 +241,76 @@ export default function OwnerDashboard() {
         </aside>
 
         <main className="dashboard-content">
-                 {!hideMainContent && (
-                   <div className="dashboard-welcome-content">
-                     <section className="platform-guide">
-                       <h2>Πώς Λειτουργεί η Πλατφόρμα</h2>
-                       <div className="guide-steps">
-                         <div className="guide-step">
-                           <h3>Εγγραφή & Προφίλ</h3>
-                           <p> Δημιουργήστε τον λογαριασμό σας και προσθέστε τα κατοικίδιά σας με όλες τις πληροφορίες τους.</p>
-                         </div>
-                         <div className="guide-step">
-                           <h3>Αναζήτηση Κτηνιάτρου</h3>
-                           <p>Βρείτε κτηνιάτρους κοντά σας, δείτε αξιολογήσεις και διαθεσιμότητα σε πραγματικό χρόνο.</p>
-                         </div>
-                         <div className="guide-step">
-                           <h3>Κλείστε Ραντεβού</h3>
-                           <p>Προγραμματίστε επισκέψεις online, επιλέξτε ημερομηνία και ώρα που σας βολεύει.</p>
-                         </div>
-                         <div className="guide-step">
-                           <h3>Ιατρικό Ιστορικό</h3>
-                           <p>Έχετε πρόσβαση στο πλήρες ιστορικό υγείας των κατοικιδίων σας, εμβολιασμούς και θεραπείες.</p>
-                         </div>
-                       </div>
-                     </section>
-       
-                     <section className="new-services-section">
-                       <div className="section-header">
-                         <h2> Υπηρεσίες</h2>
-                       </div>
-                       <div className="services-grid">
-                         <div className="service-card">
-                           <h3>Αυτόματες Υπενθυμίσεις</h3>
-                           <p>Λάβετε αυτόματες ειδοποιήσεις για επαναληπτικούς εμβολιασμούς, αποπαραστώσεις και προγραμματισμένα check-ups απο τους πελάτες σας.</p>
-                          
-                         </div>
-                         <div className="service-card">
-                           <h3>Ψηφιακές Δηλώσεις</h3>
-                           <p>Δηλώστε απώλεια ή εύρεση κατοικιδίου και ειδοποιήστε αυτόματα κτηνιάτρους και καταφύγια στην περιοχή σας.</p>
-                           <div className="service-stat">
-                             <span className="stat-highlight">Εξοικονόμηση χρόνου 80%</span>
-                           </div>
-                         </div>
-                         <div className="service-card ">
-                           <h3>Πιστοποίηση Υγείας</h3>
-                           <p>Εκδώστε ψηφιακά τα πιστοποιητικά υγείας των ζώων με επίσημη ψηφιακή υπογραφή.</p>
-                           <div className="service-stat">
-                             <span className="stat-highlight">Άμεση έκδοση</span>
-                           </div>
-                         </div>
-                       </div>
-                     </section>
-                      <div className="vet-banner">
-                       <div className="banner-content">
-                         <h2>Έχετε Κατοικίδιο ;</h2>
-                         <p>Εγγραφείτε δωρεάν και διαχειριστείτε την υγεία των κατοικιδίων σας εύκολα.</p>
-                         <div className="banner-buttons">
-                           <button className="register-btn">Εγγραφή</button>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                 )}
-       
-                 <Outlet />
-               </main>
-             </div>
-           </div>
-         );
-       }
-       
+          {!hideMainContent && (
+            <div className="dashboard-welcome-content">
+              <section className="platform-guide">
+                <h2>Πώς Λειτουργεί η Πλατφόρμα</h2>
+                <div className="guide-steps">
+                  <div className="guide-step">
+                    <h3>Εγγραφή & Προφίλ</h3>
+                    <p> Δημιουργήστε τον λογαριασμό σας και προσθέστε τα κατοικίδιά σας με όλες τις πληροφορίες τους.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Αναζήτηση Κτηνιάτρου</h3>
+                    <p>Βρείτε κτηνιάτρους κοντά σας, δείτε αξιολογήσεις και διαθεσιμότητα σε πραγματικό χρόνο.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Κλείστε Ραντεβού</h3>
+                    <p>Προγραμματίστε επισκέψεις online, επιλέξτε ημερομηνία και ώρα που σας βολεύει.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Ιατρικό Ιστορικό</h3>
+                    <p>Έχετε πρόσβαση στο πλήρες ιστορικό υγείας των κατοικιδίων σας, εμβολιασμούς και θεραπείες.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section className="new-services-section">
+                <div className="section-header">
+                  <h2> Υπηρεσίες</h2>
+                </div>
+                <div className="services-grid">
+                  <div className="service-card">
+                    <h3>Αυτόματες Υπενθυμίσεις</h3>
+                    <p>Λάβετε αυτόματες ειδοποιήσεις για επαναληπτικούς εμβολιασμούς, αποπαραστώσεις και προγραμματισμένα check-ups απο τους πελάτες σας.</p>
+
+                  </div>
+                  <div className="service-card">
+                    <h3>Ψηφιακές Δηλώσεις</h3>
+                    <p>Δηλώστε απώλεια ή εύρεση κατοικιδίου και ειδοποιήστε αυτόματα κτηνιάτρους και καταφύγια στην περιοχή σας.</p>
+                    <div className="service-stat">
+                      <span className="stat-highlight">Εξοικονόμηση χρόνου 80%</span>
+                    </div>
+                  </div>
+                  <div className="service-card ">
+                    <h3>Πιστοποίηση Υγείας</h3>
+                    <p>Εκδώστε ψηφιακά τα πιστοποιητικά υγείας των ζώων με επίσημη ψηφιακή υπογραφή.</p>
+                    <div className="service-stat">
+                      <span className="stat-highlight">Άμεση έκδοση</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <div className="vet-banner">
+                <div className="banner-content">
+                  <h2>Έχετε Κατοικίδιο ;</h2>
+                  <p>Εγγραφείτε δωρεάν και διαχειριστείτε την υγεία των κατοικιδίων σας εύκολα.</p>
+                  <div className="banner-buttons">
+                    <button
+                      className="register-btn"
+                      onClick={() => navigate("/register/owner")}
+                    >
+                      Εγγραφή
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
