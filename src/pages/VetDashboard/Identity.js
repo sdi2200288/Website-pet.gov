@@ -127,6 +127,22 @@ export default function Identity() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const checkEmailExists = async () => {
+    try {
+      const ownerEmailRes = await fetch(`http://localhost:3001/owners?email=${ownerForm.email}`);
+      const ownerEmail = await ownerEmailRes.json();
+      const vetEmailRes = await fetch(`http://localhost:3001/vets?email=${ownerForm.email}`);
+      const vetEmail = await vetEmailRes.json();
+      if (ownerEmail.length > 0 || vetEmail.length > 0) {
+        return "Υπάρχει ήδη εγγραφή με αυτό το email.";
+      }
+      return "";
+    } catch {
+      return "Σφάλμα ελέγχου email.";
+    }
+  };
+
+
   const validateForm = async () => {
     const newErrors = {};
     if (!/^\d{9}$/.test(petInfo.microchip)) newErrors.microchip = "Το microchip πρέπει να έχει 9 ψηφία";
@@ -193,6 +209,11 @@ export default function Identity() {
     }
     const okOwner = await validateUser();
     if (!okOwner) return;
+    const emailError = await checkEmailExists();
+    if (emailError) {
+      setErrors((prev) => ({ ...prev, email: emailError }));
+      return;
+    }
     setStep(2);
   };
 
@@ -213,6 +234,13 @@ export default function Identity() {
           finalOwnerId = ownerFound.id;
         } else {
           const okOwner = await validateUser();
+          if (!okOwner) return;
+          const emailError = await checkEmailExists();
+          if (emailError) {
+            setErrors(prev => ({ ...prev, email: emailError }));
+            setIsSubmitting(false);
+            return;
+          }
           if (!okOwner) return;
           const resOwner = await fetch(`http://localhost:3001/owners`, {
             method: "POST",
@@ -310,6 +338,37 @@ export default function Identity() {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (step !== 1 || petInfo.forAdoption !== "Όχι") return;
+    if (!/^\d{10}$/.test(ownerAFM)) {
+      setOwnerFound(null);
+      return;
+    }
+    const t = setTimeout(async () => {
+      const user = await findOwnerByAFM(ownerAFM);
+      if (user) {
+        setOwnerFound(user);
+        setShowOwnerRegister(false);
+        setErrors((prev) => ({ ...prev, ownerAFM: "", email: "" }));
+        setOwnerForm({
+          firstname: "",
+          lastname: "",
+          genderu: "",
+          address: "",
+          birthdate: "",
+          phone: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
+      } else {
+        setOwnerFound(null);
+      }
+    }, 350);
+    return () => clearTimeout(t);
+  }, [ownerAFM, step, petInfo.forAdoption]);
+
 
   return (
     <div className="identity">

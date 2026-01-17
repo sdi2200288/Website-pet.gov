@@ -48,6 +48,21 @@ export default function Transfer() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
 
+  const checkEmailExists = async () => {
+    try {
+      const ownerEmailRes = await fetch(`http://localhost:3001/owners?email=${ownerForm.email}`);
+      const ownerEmail = await ownerEmailRes.json();
+      const vetEmailRes = await fetch(`http://localhost:3001/vets?email=${ownerForm.email}`);
+      const vetEmail = await vetEmailRes.json();
+      if (ownerEmail.length > 0 || vetEmail.length > 0) {
+        return "Υπάρχει ήδη εγγραφή με αυτό το email.";
+      }
+      return "";
+    } catch {
+      return "Σφάλμα ελέγχου email.";
+    }
+  };
+
   const resetAll = () => {
     setStep(0);
     setMicrochip("");
@@ -145,6 +160,12 @@ export default function Transfer() {
       }
 
       const foundPet = data[0];
+      if (foundPet.status !== "owned") {
+        setErrors({ microchip: "Το κατοικίδιο είναι προς υιοθεσία και δεν μπορεί να γίνει μεταβίβαση.", });
+        setSelectedPet(null);
+        return;
+      }
+
       setSelectedPet(foundPet);
 
       const okOwner = await loadCurrentOwner(foundPet.ownerId);
@@ -233,6 +254,11 @@ export default function Transfer() {
     }
     const ok = await validateNewOwnerRegister();
     if (!ok) return;
+    const emailError = await checkEmailExists();
+    if (emailError) {
+      setErrors(prev => ({ ...prev, email: emailError }));
+      return;
+    }
     setLoading(true);
     try {
       const existing = await findUserByAFM(newOwnerAFM.trim());
@@ -281,7 +307,6 @@ export default function Transfer() {
     try {
       const report = {
         petId: selectedPet.id,
-        microchip: selectedPet.microchip,
         vetId: vet.id,
         currentOwnerId: currentOwner.id,
         newOwnerId: newOwnerFound.data.id,
@@ -508,7 +533,7 @@ export default function Transfer() {
                   setNewOwnerAFM(v);
                   setNewOwnerFound(null);
                   setShowOwnerRegister(false);
-                  setErrors((prev) => ({ ...prev, newOwnerAfm: "" }));
+                  setErrors((prev) => ({ ...prev, newOwnerAfm: "", email: "" }));
                 }}
               />
               {errors.newOwnerAfm && <p className="error-text">{errors.newOwnerAfm}</p>}
