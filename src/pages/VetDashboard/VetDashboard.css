@@ -35,7 +35,7 @@
 .dashboard-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px 40px;
+  padding: 40px 20px 40px;
 }
 
 
@@ -197,4 +197,303 @@
   font-size: 1.5rem;
   font-weight: bold;
   color: #007bff;
+}
+/* Dashboard Welcome Content */
+.dashboard-welcome-content {
+  padding: 50px 0;
+}
+
+/* Platform Guide Section */
+.platform-guide {
+  margin-bottom: 40px;
+}
+
+.platform-guide h2 {
+  color: #333;
+  margin-bottom: 25px;
+  font-size: 24px;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 10px;
+}
+
+.guide-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.guide-step {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #4CAF50;
+  transition: transform 0.3s ease;
+}
+
+.guide-step:hover {
+  transform: translateY(-5px);
+}
+
+.guide-step h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.guide-step p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* New Services Section */
+.new-services-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 30px;
+  border-radius: 15px;
+  margin-top: 30px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.section-header h2 {
+  color: #333;
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.new-badge {
+  background: #ff6b6b;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.service-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.service-card.premium-card {
+  border: 2px solid #ffd700;
+  background: linear-gradient(135deg, #fff9e6 0%, #fff0b3 100%);
+}
+
+.service-card h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.service-card p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.service-status {
+  display: flex;
+  align-items: center;
+  color: #28a745;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background: #28a745;
+  border-radius: 50%;
+  margin-right: 8px;
+  animation: pulse 2s infinite;
+}
+
+.service-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.stat-highlight {
+  color: #007bff;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.premium-tag {
+  background: linear-gradient(135deg, #ffd700 0%, #ffcc00 100%);
+  color: #856404;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(255, 215, 0, 0.3);
+}
+
+/* Vet Banner */
+.vet-banner {
+  background: linear-gradient(135deg, #1a5f7a 0%, #2c3e50 100%);
+  color: white;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.vet-banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(255,255,255,0.05)" d="M50,0 C22.4,0 0,22.4 0,50 C0,77.6 22.4,100 50,100 C77.6,100 100,77.6 100,50 C100,22.4 77.6,0 50,0 Z M50,90 C27.9,90 10,72.1 10,50 C10,27.9 27.9,10 50,10 C72.1,10 90,27.9 90,50 C90,72.1 72.1,90 50,90 Z M50,20 C33.4,20 20,33.4 20,50 C20,66.6 33.4,80 50,80 C66.6,80 80,66.6 80,50 C80,33.4 66.6,20 50,20 Z"/></svg>') no-repeat;
+  background-size: contain;
+  opacity: 0.3;
+  transform: translate(30%, -30%);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+}
+
+.banner-content h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: white;
+}
+
+.banner-content p {
+  font-size: 18px;
+  margin-bottom: 25px;
+  opacity: 0.9;
+  line-height: 1.5;
+}
+
+.banner-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.learn-more-btn,
+.register-btn {
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.learn-more-btn {
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+.learn-more-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.register-btn {
+  background: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
+.register-btn:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+
+/* Responsive Design για το banner */
+@media (max-width: 768px) {
+  .vet-banner {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .banner-content h2 {
+    font-size: 26px;
+  }
+  
+  .banner-content p {
+    font-size: 16px;
+  }
+  
+  .banner-buttons {
+    justify-content: center;
+  }
+  
+  .learn-more-btn,
+  .register-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .guide-steps,
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .guide-steps,
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-welcome-content {
+    padding: 15px;
+  }
+  
+  .new-services-section {
+    padding: 20px;
+  }
 }

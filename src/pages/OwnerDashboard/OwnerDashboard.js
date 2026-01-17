@@ -1,32 +1,161 @@
-import "./OwnerDashboard.css";
-import React from "react";
-import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
+// import "./OwnerDashboard.css";
+// import React from "react";
+// import { NavLink, Link, Outlet, useNavigate } from "react-router-dom";
+// import {
+//   FaUser,
+//   FaFileAlt,
+//   FaExclamationCircle,
+//   FaBook,
+//   FaCalendarAlt,
+//   FaHistory,
+//   FaSignOutAlt
+// } from "react-icons/fa";
+
+
+// export default function OwnerDashboard() {
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   return (
+//     <div className="OwnerDashboard">
+
+//       {/* <nav className="breadcrumb">
+//         <Link to="/">Αρχική /</Link>
+//         <span>Dashboard Ιδιοκτήτη</span>
+//       </nav> */}
+
+//       <div className="dashboard-layout">
+//         <aside className="sidebar">
+//           <h3>Επιλογές Ιδιοκτήτη</h3>
+
+//           <ul className="sidebar-menu">
+//             {user && (
+//               <li>
+//                 <NavLink
+//                   to={`profile?ownerId=${user.id}`}
+//                   className={({ isActive }) =>
+//                     `sidebar-link ${isActive ? "active" : ""}`
+//                   }
+//                 >
+//                   <FaUser className="menu-icon" />
+//                   <span>Το Προφίλ μου</span>
+//                 </NavLink>
+//               </li>
+//             )}
+
+//             <li>
+//               <NavLink
+//                 to={`found?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) =>
+//                   `sidebar-link ${isActive ? "active" : ""}`
+//                 }
+//               >
+//                 <FaFileAlt className="menu-icon" /> <span>Δηλώσεις Εύρεσης</span>
+//               </NavLink>
+//             </li>
+//             <li>
+//               <NavLink
+//                 to={`loss?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) =>
+//                   `sidebar-link ${isActive ? "active" : ""}`
+//                 }
+//               >
+//                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
+//               </NavLink>
+//             </li>
+
+//             <li>
+//               <NavLink
+//                 to={`history-statement?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+//               >
+//                 <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
+//               </NavLink>
+//             </li>
+
+//             <li>
+//               <NavLink
+//                 to={`health-booklet?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) =>
+//                   `sidebar-link ${isActive ? "active" : ""}`
+//                 }
+//               >
+//                 <FaBook className="menu-icon" /> <span>Προβολή Βιβλιαρίου</span>
+//               </NavLink>
+//             </li>
+//             <li>
+//               <NavLink
+//                 to={`book-date?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) =>
+//                   `sidebar-link ${isActive ? "active" : ""}`
+//                 }
+//               >
+//                 <FaCalendarAlt className="menu-icon" /> <span>Κλείσιμο Ραντεβού</span>
+//               </NavLink>
+//             </li>
+
+//             <li>
+//               <NavLink
+//                 to={`future-bookings?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) =>
+//                   `sidebar-link ${isActive ? "active" : ""}`
+//                 }
+//               >
+//                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
+//               </NavLink>
+//             </li>
+
+//             <li>
+//               <NavLink
+//                 to={`history-bookings-owner?ownerId=${user?.id || ""}`}
+//                 className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
+//               >
+//                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
+//               </NavLink>
+
+//             </li>
+
+//           </ul>
+//         </aside>
+//         <main className="dashboard-content">
+//           <Outlet />
+//         </main>
+//       </div>
+//     </div>
+
+//   );
+// }
+
+
+
+
+import "./OwnerDashboard.css"; 
+import React, { useState, useEffect } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   FaUser,
   FaFileAlt,
   FaExclamationCircle,
   FaBook,
   FaCalendarAlt,
-  FaHistory,
-  FaSignOutAlt
+  FaHistory
 } from "react-icons/fa";
-
 
 export default function OwnerDashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
+  const [hideMainContent, setHideMainContent] = useState(false);
+
+  useEffect(() => {
+    // Αν είμαστε στο βασικό dashboard path, δείχνουμε τα info cards
+    // Αν είναι κάποιο από τα children routes, κρύβουμε τα info cards
+    setHideMainContent(location.pathname !== "/owner-dashboard");
+  }, [location.pathname]);
 
   return (
     <div className="OwnerDashboard">
-
-      {/* <nav className="breadcrumb">
-        <Link to="/">Αρχική /</Link>
-        <span>Dashboard Ιδιοκτήτη</span>
-      </nav> */}
-
       <div className="dashboard-layout">
         <aside className="sidebar">
           <h3>Επιλογές Ιδιοκτήτη</h3>
-
           <ul className="sidebar-menu">
             {user && (
               <li>
@@ -41,7 +170,6 @@ export default function OwnerDashboard() {
                 </NavLink>
               </li>
             )}
-
             <li>
               <NavLink
                 to={`found?ownerId=${user?.id || ""}`}
@@ -62,7 +190,6 @@ export default function OwnerDashboard() {
                 <FaExclamationCircle className="menu-icon" /> <span>Δηλώσεις Απώλειας</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink
                 to={`history-statement?ownerId=${user?.id || ""}`}
@@ -71,7 +198,6 @@ export default function OwnerDashboard() {
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Δηλώσεων</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink
                 to={`health-booklet?ownerId=${user?.id || ""}`}
@@ -92,7 +218,6 @@ export default function OwnerDashboard() {
                 <FaCalendarAlt className="menu-icon" /> <span>Κλείσιμο Ραντεβού</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink
                 to={`future-bookings?ownerId=${user?.id || ""}`}
@@ -103,7 +228,6 @@ export default function OwnerDashboard() {
                 <FaCalendarAlt className="menu-icon" /> <span>Μελλοντικά Ραντεβού</span>
               </NavLink>
             </li>
-
             <li>
               <NavLink
                 to={`history-bookings-owner?ownerId=${user?.id || ""}`}
@@ -111,20 +235,78 @@ export default function OwnerDashboard() {
               >
                 <FaHistory className="menu-icon" /> <span>Ιστορικό Ραντεβού</span>
               </NavLink>
-
             </li>
-
           </ul>
         </aside>
+
         <main className="dashboard-content">
-          <Outlet />
-        </main>
-      </div>
-    </div>
-
-  );
-}
-
-
-
-
+                 {!hideMainContent && (
+                   <div className="dashboard-welcome-content">
+                     <section className="platform-guide">
+                       <h2>Πώς Λειτουργεί η Πλατφόρμα</h2>
+                       <div className="guide-steps">
+                         <div className="guide-step">
+                           <h3>Εγγραφή & Προφίλ</h3>
+                           <p>Δημιουργήστε το προφίλ σας ως κτηνίατρος, προσθέστε τα στοιχεία του ιατρείου σας και τις ώρες λειτουργίας.</p>
+                         </div>
+                         <div className="guide-step">
+                           <h3>Καταχώρηση Ζώων</h3>
+                           <p>Καταχωρήστε τα ζώα που εξετάζετε με πλήρες ιατρικό ιστορικό, εμβολιασμούς και θεραπείες.</p>
+                         </div>
+                         <div className="guide-step">
+                           <h3>Διαχείριση Ραντεβού</h3>
+                           <p>Οργανώστε τα ραντεβού σας, ενημερώστε τη διαθεσιμότητά σας και λάβετε υπενθυμίσεις.</p>
+                         </div>
+                         <div className="guide-step">
+                           <h3>Υποστήριξη Υιοθεσιών</h3>
+                           <p>Συνεργαστείτε με ιδιοκτήτες για υιοθεσίες, εκδώστε πιστοποιητικά υγείας και παρακολουθήστε τη διαδικασία.</p>
+                         </div>
+                       </div>
+                     </section>
+       
+                     <section className="new-services-section">
+                       <div className="section-header">
+                         <h2> Υπηρεσίες</h2>
+                       </div>
+                       <div className="services-grid">
+                         <div className="service-card">
+                           <h3>Αυτόματες Υπενθυμίσεις</h3>
+                           <p>Λάβετε αυτόματες ειδοποιήσεις για επαναληπτικούς εμβολιασμούς, αποπαραστώσεις και προγραμματισμένα check-ups απο τους πελάτες σας.</p>
+                          
+                         </div>
+                         <div className="service-card">
+                           <h3>Ψηφιακές Δηλώσεις</h3>
+                           <p>Υποβάλλετε δηλώσεις απώλειας,εύρεσης, δημιουργήστε την καρτέλα ενός ζώου όλα ηλεκτρονικά, χωρίς γραφειοκρατία.</p>
+                           <div className="service-stat">
+                             <span className="stat-highlight">Εξοικονόμηση χρόνου 80%</span>
+                           </div>
+                         </div>
+                         <div className="service-card ">
+                           <h3>Πιστοποίηση Υγείας</h3>
+                           <p>Εκδώστε ψηφιακά τα πιστοποιητικά υγείας των ζώων με επίσημη ψηφιακή υπογραφή.</p>
+                           <div className="service-stat">
+                             <span className="stat-highlight">Άμεση έκδοση</span>
+                           </div>
+                         </div>
+                       </div>
+                     </section>
+                      <div className="vet-banner">
+                       <div className="banner-content">
+                         <h2>Είστε Κτηνίατρος ;</h2>
+                         <p>Εγγραφείτε δωρεάν και αποκτήστε πρόσβαση σε όλα τα εργαλεία διαχείρισης.</p>
+                         <div className="banner-buttons">
+                           <button className="learn-more-btn">Μάθετε Περισσότερα</button>
+                           <button className="register-btn">Εγγραφή</button>
+                         </div>
+                       </div>
+                     </div>
+                   </div>
+                 )}
+       
+                 <Outlet />
+               </main>
+             </div>
+           </div>
+         );
+       }
+       

@@ -276,24 +276,65 @@ export default function VetDashboard() {
         </aside>
 
         <main className="dashboard-content">
-          {/* Αν hideMainContent είναι false, δείξε τα info cards */}
           {!hideMainContent && (
-            <div className="info-cards">
-              <div className="info-card">
-                <h4>Συνολικά Ζώα</h4>
-                <p>120</p>
-              </div>
-              <div className="info-card">
-                <h4>Μελλοντικά Ραντεβού</h4>
-                <p>15</p>
-              </div>
-              <div className="info-card">
-                <h4>Τελευταίες Δηλώσεις</h4>
-                <p>8</p>
-              </div>
-              <div className="info-card">
-                <h4>Υιοθεσίες Αυτόν τον Μήνα</h4>
-                <p>3</p>
+            <div className="dashboard-welcome-content">
+              <section className="platform-guide">
+                <h2>Πώς Λειτουργεί η Πλατφόρμα</h2>
+                <div className="guide-steps">
+                  <div className="guide-step">
+                    <h3>Εγγραφή & Προφίλ</h3>
+                    <p>Δημιουργήστε το προφίλ σας ως κτηνίατρος, προσθέστε τα στοιχεία του ιατρείου σας και τις ώρες λειτουργίας.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Καταχώρηση Ζώων</h3>
+                    <p>Καταχωρήστε τα ζώα που εξετάζετε με πλήρες ιατρικό ιστορικό, εμβολιασμούς και θεραπείες.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Διαχείριση Ραντεβού</h3>
+                    <p>Οργανώστε τα ραντεβού σας, ενημερώστε τη διαθεσιμότητά σας και λάβετε υπενθυμίσεις.</p>
+                  </div>
+                  <div className="guide-step">
+                    <h3>Υποστήριξη Υιοθεσιών</h3>
+                    <p>Συνεργαστείτε με ιδιοκτήτες για υιοθεσίες, εκδώστε πιστοποιητικά υγείας και παρακολουθήστε τη διαδικασία.</p>
+                  </div>
+                </div>
+              </section>
+
+              <section className="new-services-section">
+                <div className="section-header">
+                  <h2> Υπηρεσίες</h2>
+                </div>
+                <div className="services-grid">
+                  <div className="service-card">
+                    <h3>Αυτόματες Υπενθυμίσεις</h3>
+                    <p>Λάβετε αυτόματες ειδοποιήσεις για επαναληπτικούς εμβολιασμούς, αποπαραστώσεις και προγραμματισμένα check-ups απο τους πελάτες σας.</p>
+                   
+                  </div>
+                  <div className="service-card">
+                    <h3>Ψηφιακές Δηλώσεις</h3>
+                    <p>Υποβάλλετε δηλώσεις απώλειας,εύρεσης, δημιουργήστε την καρτέλα ενός ζώου όλα ηλεκτρονικά, χωρίς γραφειοκρατία.</p>
+                    <div className="service-stat">
+                      <span className="stat-highlight">Εξοικονόμηση χρόνου 80%</span>
+                    </div>
+                  </div>
+                  <div className="service-card ">
+                    <h3>Πιστοποίηση Υγείας</h3>
+                    <p>Εκδώστε ψηφιακά τα πιστοποιητικά υγείας των ζώων με επίσημη ψηφιακή υπογραφή.</p>
+                    <div className="service-stat">
+                      <span className="stat-highlight">Άμεση έκδοση</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+               <div className="vet-banner">
+                <div className="banner-content">
+                  <h2>Είστε Κτηνίατρος ;</h2>
+                  <p>Εγγραφείτε δωρεάν και αποκτήστε πρόσβαση σε όλα τα εργαλεία διαχείρισης.</p>
+                  <div className="banner-buttons">
+                    <button className="learn-more-btn">Μάθετε Περισσότερα</button>
+                    <button className="register-btn">Εγγραφή</button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
