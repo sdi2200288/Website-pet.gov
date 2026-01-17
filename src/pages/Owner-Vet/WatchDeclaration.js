@@ -33,9 +33,25 @@ function Row({ label, value }) {
 export default function DeclarationModal({ isOpen, onClose, declaration }) {
   if (!isOpen || !declaration) return null;
 
-  const t = declaration.type;
+  // ΜΟΝΟ με βάση το schema που έδωσες
+  const t =
+    declaration.type || // αν το δίνεις από έξω
+    (declaration.adoptionDate ? "adoption" : null) ||
+    (declaration.fosterDate ? "foster" : null) ||
+    (declaration.transferDate ? "transfer" : null) ||
+    (declaration.firstname || declaration.lastname || declaration.email || declaration.phone
+      ? "foundNoAcc"
+      : null) ||
+    // αλλιώς θεωρούμε ότι είναι loss/found (το αποφασίζει το parent με type ideally)
+    "found";
+
   const title = labelForType(t);
+
+  // Στο schema ΟΛΑ αυτά μπορεί να έχουν photoUrl, αλλά αν δεν υπάρχει δεν δείχνουμε section
   const hasPhoto = Boolean(declaration.photoUrl);
+
+  const isLostOrFound =
+    t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc";
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -56,18 +72,17 @@ export default function DeclarationModal({ isOpen, onClose, declaration }) {
             <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
           </div>
 
-          {(t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc") && (
+          {isLostOrFound && (
             <div className="modal-section">
               <h4>Στοιχεία Δήλωσης</h4>
-              <Row label="Ημερομηνία" value={declaration.date} />
+              <Row label="Ημερομηνία" value={formatDateTime(declaration.date)} />
               <Row label="Περιοχή" value={declaration.region} />
               <Row label="Διεύθυνση" value={declaration.address} />
               <Row label="Κατάσταση" value={declaration.condition} />
-              {"ownerId" in declaration && (
-                <Row
-                  label="Υποβλήθηκε από"
-                  value={declaration.ownerName || declaration.ownerId}
-                />
+
+              {/* ΜΟΝΟ lostReports/foundReports έχουν ownerId */}
+              {typeof declaration.ownerId !== "undefined" && (
+                <Row label="Υποβλήθηκε από (ownerId)" value={declaration.ownerId} />
               )}
             </div>
           )}
@@ -85,35 +100,30 @@ export default function DeclarationModal({ isOpen, onClose, declaration }) {
           {t === "adoption" && (
             <div className="modal-section">
               <h4>Στοιχεία Υιοθεσίας</h4>
-              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
-              <Row label="Status" value={declaration.status} />
-              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+              <Row label="Κτηνίατρος (vetId)" value={declaration.vetId} />
+              <Row label="Τρέχων Ιδιοκτήτης (currentOwnerId)" value={declaration.currentOwnerId} />
+              <Row label="Νέος Ιδιοκτήτης (newOwnerId)" value={declaration.newOwnerId} />
+              <Row label="Ημερομηνία Υιοθεσίας" value={formatDateTime(declaration.adoptionDate)} />
             </div>
           )}
 
           {t === "foster" && (
             <div className="modal-section">
               <h4>Στοιχεία Αναδοχής</h4>
-              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
-              <Row label="Status" value={declaration.status} />
-              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+              <Row label="Κτηνίατρος (vetId)" value={declaration.vetId} />
+              <Row label="Τρέχων Ιδιοκτήτης (currentOwnerId)" value={declaration.currentOwnerId} />
+              <Row label="Ανάδοχος (fosterOwnerId)" value={declaration.fosterOwnerId} />
+              <Row label="Ημερομηνία Αναδοχής" value={formatDateTime(declaration.fosterDate)} />
             </div>
           )}
 
           {t === "transfer" && (
             <div className="modal-section">
               <h4>Στοιχεία Μεταβίβασης</h4>
-              <Row label="Κτηνίατρος" value={declaration.vetName || declaration.vetId} />
-              <Row
-                label="Τρέχων Ιδιοκτήτης"
-                value={declaration.currentOwnerName || declaration.currentOwnerId}
-              />
-              <Row
-                label="Νέος Ιδιοκτήτης"
-                value={declaration.newOwnerName || declaration.newOwnerId}
-              />
-              <Row label="Status" value={declaration.status} />
-              <Row label="Created At" value={formatDateTime(declaration.createdAt)} />
+              <Row label="Κτηνίατρος (vetId)" value={declaration.vetId} />
+              <Row label="Τρέχων Ιδιοκτήτης (currentOwnerId)" value={declaration.currentOwnerId} />
+              <Row label="Νέος Ιδιοκτήτης (newOwnerId)" value={declaration.newOwnerId} />
+              <Row label="Ημερομηνία Μεταβίβασης" value={formatDateTime(declaration.transferDate)} />
             </div>
           )}
 
