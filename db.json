@@ -518,9 +518,9 @@
       "microchip": "555111222",
       "birthdate": "2021-04-12",
       "age": "4",
-      "region": "Αρκαδίας",
+      "region": "Θεσσαλονίκης",
       "lastSeenAddress": "",
-      "lastSeenDate": "2026-01-15",
+      "lastSeenDate": "2026-01-16",
       "condition": "",
       "status": "foster",
       "photoUrl": "https://placedog.net/400/300?id=6",
@@ -536,13 +536,13 @@
       "microchip": "555333444",
       "birthdate": "2022-06-01",
       "age": "0",
-      "region": "Άρτας",
-      "lastSeenAddress": "εεεεεεε",
-      "lastSeenDate": "2026-01-07",
-      "condition": "εεεε",
+      "region": "Έβρου",
+      "lastSeenAddress": "",
+      "lastSeenDate": "2026-01-17",
+      "condition": "",
       "status": "adoption",
       "photoUrl": "/images/mila.png",
-      "lost": true
+      "lost": false
     },
     {
       "id": "1",
@@ -913,6 +913,19 @@
       "createdBy": "v001",
       "createdAt": "2026-01-17T08:33:17.831Z",
       "photoUrl": "https://placedog.net/400/300?id=6"
+    },
+    {
+      "id": "7f12",
+      "petId": "vp001",
+      "date": "2026-01-16",
+      "region": "Θεσσαλονίκης",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "v001",
+      "createdBy": "v001",
+      "createdAt": "2026-01-17T09:39:16.749Z",
+      "photoUrl": ""
     }
   ],
   "foundReports": [
@@ -943,18 +956,6 @@
       "photoUrl": "https://placedog.net/400/300?id=4"
     },
     {
-      "id": "4515",
-      "petId": "vpt3x54epvu",
-      "date": "2026-01-17",
-      "region": "Αρκαδίας",
-      "address": "",
-      "condition": "",
-      "status": "draft",
-      "ownerId": "844c",
-      "createdBy": "v001",
-      "photoUrl": "https://placedog.net/400/300?id=6"
-    },
-    {
       "id": "3269",
       "petId": "14",
       "date": "2026-01-17",
@@ -966,6 +967,19 @@
       "createdBy": "v001",
       "createdAt": "2026-01-17T09:06:24.745Z",
       "photoUrl": "https://placekitten.com/406/306"
+    },
+    {
+      "id": "61f0",
+      "petId": "vp002",
+      "date": "2026-01-17",
+      "region": "Έβρου",
+      "address": "",
+      "condition": "",
+      "status": "submitted",
+      "ownerId": "v001",
+      "createdBy": "v001",
+      "createdAt": "2026-01-17T09:37:11.127Z",
+      "photoUrl": ""
     }
   ],
   "foundReportsWithoutAcc": [],

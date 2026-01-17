@@ -108,9 +108,20 @@ export default function HistoryDeclaration() {
     }
 
     if (isVet) {
-      navigate(`/vet-dashboard/loss2`, {
-        state: { step: 2, declarationData: declaration },
-      });
+      // Διαχωρισμός μεταξύ απώλειας και εύρεσης
+      if (declaration.type === "lost") {
+        navigate(`/vet-dashboard/loss2`, {
+          state: { step: 2, declarationData: declaration },
+        });
+      } else if (declaration.type === "found") {
+        navigate(`/vet-dashboard/found2`, {  
+          state: { step: 2, declarationData: declaration },
+        });
+      } else {
+        // Πτώση ασφαλείας για άλλους τύπους δηλώσεων
+        console.warn("Άγνωστος τύπος δήλωσης:", declaration.type);
+        navigate(`/vet-dashboard/history`);
+      }
     }
   };
 

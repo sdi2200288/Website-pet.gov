@@ -16,12 +16,21 @@ export default function Found2() {
   const state = location.state || {};
   const declarationData = location.state?.declarationData;
   const isEdit = !!declarationData;
-  const [step, setStep] = useState(state.step || 0);// 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+
+  // const [step, setStep] = useState(location.state?.step ?? 0);// 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+  const [step, setStep] = useState(() => {
+    if (isEdit) {
+      // Αν είναι επεξεργασία, πήγαινε κατευθείαν στο step 2
+      return 2;
+    }
+    return state.step || 0;
+  });
   const [microchip, setMicrochip] = useState("");
-  const [pet, setPet] = useState(state.declarationData?.pet || null);
-  const [owner, setOwner] = useState(state.declarationData?.owner || null);
+  const [pet, setPet] = useState(null);
+  const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
   const [foundInfo, setFoundInfo] = useState({
     date: declarationData?.date || "",
     region: declarationData?.region || "",
@@ -37,19 +46,16 @@ export default function Found2() {
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
 
   useEffect(() => {
-    if (isEdit && declarationData) {
-      // φόρτωσε pet αν δεν υπάρχει
-      if (!pet && declarationData.petId) {
-        fetch(`http://localhost:3001/pets/${declarationData.petId}`)
-          .then(res => res.json())
-          .then(setPet);
-      }
+    if (!isEdit || !declarationData) return;
+    const loadEditData = async () => {
+      const petRes = await fetch(`http://localhost:3001/pets/${declarationData.petId}`);
+      const petData = await petRes.json();
+      setPet(petData);
 
-      // φόρτωσε owner αν δεν υπάρχει
-      if (!owner && declarationData.ownerId) {
-        loadOwnerData(declarationData.ownerId);
-      }
-    }
+      await loadOwnerData(declarationData.ownerId);
+    };
+
+    loadEditData();
   }, [isEdit, declarationData]);
 
 
@@ -133,18 +139,21 @@ export default function Found2() {
     }
   };
   const handleSubmit = async (status) => {
-    if (!pet && !declarationData) return;
+    // Χρησιμοποιούμε το petId από το declarationData αν το pet δεν είναι ακόμα φορτωμένο
+    const effectivePetId = pet?.id || declarationData?.petId;
 
-    const isEdit = !!declarationData;
+    if (!effectivePetId) {
+      alert("Δεν βρέθηκε ID κατοικίδιου. Προσπαθήστε ξανά.");
+      return;
+    }
 
-    // Βεβαιώσου ότι έχουμε όλα τα απαραίτητα στοιχεία
     if (!foundInfo.date || !foundInfo.region) {
       alert("Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία (ημερομηνία και περιοχή)");
       return;
     }
 
     const report = {
-      petId: pet?.id || declarationData.petId,
+      petId: effectivePetId,
       date: foundInfo.date,
       region: foundInfo.region,
       address: foundInfo.address,
@@ -159,7 +168,6 @@ export default function Found2() {
     try {
       let updatedReport;
 
-      // 1. Αποθήκευση/ενημέρωση της δήλωσης
       if (isEdit) {
         const res = await fetch(`http://localhost:3001/foundReports/${declarationData.id}`, {
           method: "PATCH",
@@ -167,11 +175,7 @@ export default function Found2() {
           body: JSON.stringify(report),
         });
 
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`Σφάλμα ενημέρωσης δήλωσης: ${errorText}`);
-        }
-
+        if (!res.ok) throw new Error("Σφάλμα ενημέρωσης δήλωσης");
         updatedReport = await res.json();
       } else {
         const res = await fetch("http://localhost:3001/foundReports", {
@@ -180,70 +184,52 @@ export default function Found2() {
           body: JSON.stringify(report),
         });
 
-        if (!res.ok) {
-          const errorText = await res.text();
-          throw new Error(`Σφάλμα δημιουργίας δήλωσης: ${errorText}`);
-        }
-
+        if (!res.ok) throw new Error("Σφάλμα δημιουργίας δήλωσης");
         updatedReport = await res.json();
       }
 
-      // 2. Ενημέρωση του pet ΜΟΝΟ αν είναι ΟΡΙΣΤΙΚΗ υποβολή
+      // Ενημέρωση του pet ΜΟΝΟ αν είναι ΟΡΙΣΤΙΚΗ υποβολή
       if (status === "submitted") {
-        const petIdToUpdate = pet?.id || declarationData?.petId;
+        const petUpdateData = {
+          lost: false,  // Το ζώο ΒΡΕΘΗΚΕ
+          lastSeenDate: foundInfo.date,
+          region: foundInfo.region,
+          lastSeenAddress: foundInfo.address,
+          condition: foundInfo.condition,
+        };
 
-        if (petIdToUpdate) {
-          // Σωστή ενημέρωση: για δήλωση εύρεσης, το pet βρέθηκε (lost: false)
-          const petUpdateData = {
-            lost: false,  // Το ζώο ΒΡΕΘΗΚΕ
-            lastSeenDate: foundInfo.date,
-            region: foundInfo.region,
-            lastSeenAddress: foundInfo.address,
-            condition: foundInfo.condition,
-          };
+        const petUpdate = await fetch(`http://localhost:3001/pets/${effectivePetId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(petUpdateData),
+        });
 
-          console.log("Ενημέρωση pet με δεδομένα:", petUpdateData);
-
-          const petUpdate = await fetch(`http://localhost:3001/pets/${petIdToUpdate}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(petUpdateData),
-          });
-
-          if (!petUpdate.ok) {
-            const errorText = await petUpdate.text();
-            console.error("Σφάλμα ενημέρωσης pet:", errorText);
-            // Μην πετάξεις error εδώ - η δήλωση έχει ήδη αποθηκευτεί
-            // Απλά ενημέρωσε τον χρήστη ότι η ενημέρωση pet απέτυχε
-            alert("Η δήλωση υποβλήθηκε, αλλά η ενημέρωση των στοιχείων του κατοικίδιου απέτυχε.");
-          }
+        if (!petUpdate.ok) {
+          console.error("Σφάλμα ενημέρωσης pet");
         }
       }
 
-      // 3. Ενημέρωση χρήστη και redirect
       alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε επιτυχώς"}!`);
 
-      // Ανάλογα με τον ρόλο, πήγαινε στο σωστό ιστορικό
       if (vet.role === "vet") {
         navigate("/vet-dashboard/history");
       } else {
         navigate("/owner-dashboard/history");
       }
 
-      // 4. Reset φόρμας
+      // Reset φόρμας
       setStep(0);
       setPet(null);
       setOwner(null);
+      setMicrochip("");
       setFoundInfo({ date: "", region: "", address: "", condition: "" });
       setForm({ photoUrl: "" });
-      setMicrochip("");
 
     } catch (err) {
       console.error("Λεπτομερές σφάλμα:", err);
-      alert(`Σφάλμα υποβολής: ${err.message}. Παρακαλώ προσπαθήστε ξανά.`);
+      alert(`Σφάλμα υποβολής: ${err.message}`);
     }
   };
-
   const validate1 = () => {
     const newErrors = {};
     if (!microchip.trim()) newErrors.microchip = "Πρέπει να εισάγετε αριθμό microchip";
@@ -256,18 +242,20 @@ export default function Found2() {
     const newErrors = {};
     if (!foundInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
     if (!foundInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
-    if (foundInfo.date && pet?.lastSeenDate) {
+
+    // Μόνο για νέα δήλωση κάνουμε τον έλεγχο
+    if (!isEdit && foundInfo.date && pet?.lastSeenDate) {
       const foundDate = new Date(foundInfo.date);
       const lastSeenDate = new Date(pet.lastSeenDate);
       if (foundDate < lastSeenDate) {
         newErrors.date = "Η ημερομηνία πρέπει να είναι μετά την εξαφάνιση του κατοικιδίου";
       }
     }
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
     goToStep(4);
   };
-
 
   const handleCancel = () => {
     const confirmLeave = window.confirm(
@@ -366,7 +354,7 @@ export default function Found2() {
       )}
 
       {/* ================= STEP 1 ================= */}
-      {step === 1 && (
+      {step === 1 && !isEdit && (
         <>
           <div className="stepper">
             <div className="step active">
@@ -420,7 +408,7 @@ export default function Found2() {
       }
       {/* ================= STEP 2 ================= */}
       {
-        step === 2 && pet && (
+        step === 2 && (
           <>
             <div className="stepper">
               <div
@@ -511,7 +499,7 @@ export default function Found2() {
       }
       {/* ================= STEP 3 ================= */}
       {
-        step === 3 && pet && (
+        step === 3 && (
           <>
             <div className="stepper">
               <div
@@ -631,7 +619,7 @@ export default function Found2() {
         )
       }
       {
-        step === 4 && pet && (
+        step === 4 && (
           <>
             <div className="stepper">
               <div

@@ -59,7 +59,7 @@ export default function Found() {
 
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:3001/pets?ownerId=${user.id}&lost=true`)
+    fetch(`http://localhost:3001/pets?ownerId=${user.id}&lost=false`)
       .then((res) => res.json())
       .then((data) => setPets(Array.isArray(data) ? data : []))
       .catch(() => setPets([]));
