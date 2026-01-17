@@ -135,10 +135,16 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.firstname.trim()) newErrors.firstname = "Πρέπει να συμπληρωθεί το όνομα";
-    if (!form.lastname.trim()) newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
-    if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
-    if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
+    if (!form.firstname.trim()) {
+      newErrors.firstname = "Πρέπει να συμπληρωθεί το όνομα";
+    } else if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) {
+      newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
+    }
+    if (!form.lastname.trim()) {
+      newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
+    } else if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) {
+      newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
+    }
     if (!form.gender) newErrors.gender = "Πρέπει να επιλέξετε φύλο";
     if (!form.birthdate) { newErrors.birthdate = "Πρέπει να συμπληρωθεί η ημερομηνία γέννησης"; }
     else {
@@ -190,48 +196,30 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) {
-      alert("ΚΟΠΗΚΕ ΑΠΟ VALIDATE");
       return;
     }
 
     try {
-      // --------- ΕΝΙΑΙΟΣ ΕΛΕΓΧΟΣ ΑΦΜ + EMAIL (owners + vets) ---------
-      const normalizedEmail = form.email.trim().toLowerCase();
-      const normalizedAfm = String(form.afm).trim();
+      const ownersRes = await fetch(`http://localhost:3001/owners?afm=${form.afm}`);
+      const ownersData = await ownersRes.json();
+      const vetRes = await fetch(`http://localhost:3001/vets?afm=${form.afm}`);
+      const vetData = await vetRes.json();
 
-      const [ownersRes, vetsRes] = await Promise.all([
-        fetch("http://localhost:3001/owners"),
-        fetch("http://localhost:3001/vets"),
-      ]);
+      const ownersResEmail = await fetch(`http://localhost:3001/owners?email=${form.email}`);
+      const ownersDataEmail = await ownersResEmail.json();
+      const vetResEmail = await fetch(`http://localhost:3001/vets?email=${form.email}`);
+      const vetDataEmail = await vetResEmail.json();
 
-      if (!ownersRes.ok || !vetsRes.ok) {
-        throw new Error("Δεν μπορώ να διαβάσω owners/vets από τον server");
-      }
-
-      const [owners, vets] = await Promise.all([ownersRes.json(), vetsRes.json()]);
-
-      console.log("owners count:", owners?.length, "vets count:", vets?.length);
-      console.log("testing email:", normalizedEmail, "testing afm:", normalizedAfm);
-
-      const afmExists =
-        (owners ?? []).some(o => String(o.afm).trim() === normalizedAfm) ||
-        (vets ?? []).some(v => String(v.afm).trim() === normalizedAfm);
-
-
-      const emailExists =
-        (owners ?? []).some(o => (o.email ?? "").trim().toLowerCase() === normalizedEmail) ||
-        (vets ?? []).some(v => (v.email ?? "").trim().toLowerCase() === normalizedEmail);
-
-
-      if (afmExists) {
-        alert("Βρέθηκε διπλό ΑΦΜ!");
-        setErrors(prev => ({ ...prev, afm: "Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ." }));
+      const hasAfm = vetData.length > 0 || ownersData.length > 0;
+      const hasEmail = vetDataEmail.length > 0 || ownersDataEmail.length > 0;
+      if (hasAfm && hasEmail) {
+        setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ και email.");
         return;
-      }
-
-      if (emailExists) {
-        alert("Βρέθηκε διπλό email!");
-        setErrors(prev => ({ ...prev, email: "Υπάρχει ήδη εγγραφή με αυτό το email." }));
+      } else if (hasAfm) {
+        setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ.");
+        return;
+      } else if (hasEmail) {
+        setServerError("Υπάρχει ήδη εγγραφή με αυτό το email.");
         return;
       }
 
@@ -258,7 +246,7 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
   }
 
   return (
-    <form noValidate className="registerForm" onSubmit={handleSubmit}>
+    <form noValidate className="loginForm registerForm" onSubmit={handleSubmit}>
       <label className="loginLabel">
         Όνομα: πχ ΜΑΡΙΑ με κεφαλαία *
         <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange} />
@@ -507,8 +495,8 @@ export default function RegisterVet({ onOpenTerms, onRegister }) {
           <button type="button" className="registerSecondaryButton" onClick={handleClear}>
             Απαλοιφή όλων
           </button>
-          <button className="loginButton" type="submit" >
-            Eγγραφή
+          <button type="submit" className="loginButton">
+            Εγγραφή
           </button>
         </div>
         <div className="loginFooter">
