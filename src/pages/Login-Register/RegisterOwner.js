@@ -47,10 +47,17 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.firstname.trim()) newErrors.firstname = "Πρέπει να συμπληρωθεί το όνομα";
-    if (!form.lastname.trim()) newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
-    if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
-    if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
+    if (!form.firstname.trim()) {
+      newErrors.firstname = "Πρέπει να συμπληρωθεί το όνομα";
+    } else if (!/^[Α-ΩA-Z]+$/.test(form.firstname.trim())) {
+      newErrors.firstname = "Το όνομα πρέπει να είναι μόνο κεφαλαία γράμματα";
+    }
+    if (!form.lastname.trim()) {
+      newErrors.lastname = "Πρέπει να συμπληρωθεί το επώνυμο";
+    } else if (!/^[Α-ΩA-Z]+$/.test(form.lastname.trim())) {
+      newErrors.lastname = "Το επώνυμο πρέπει να είναι μόνο κεφαλαία γράμματα";
+    }
+
     if (!form.afm) newErrors.afm = "Πρέπει να συμπληρωθεί το ΑΦΜ";
     else if (!/^\d{10}$/.test(form.afm)) newErrors.afm = "Το ΑΦΜ πρέπει να έχει ακριβώς 10 ψηφία";
     if (!form.phone) newErrors.phone = "Πρέπει να συμπληρωθεί το τηλέφωνο";
@@ -70,7 +77,8 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
     }
     if (!form.email.includes("@")) newErrors.email = "Μη έγκυρο email";
     if (form.password.length < 8) newErrors.password = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
-    if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
+    if (form.confirmPassword.length < 8) newErrors.confirmPassword = "Ο κωδικός πρέπει να έχει τουλάχιστον 8 χαρακτήρες";
+    else if (form.password !== form.confirmPassword) newErrors.confirmPassword = "Οι κωδικοί δεν ταιριάζουν";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -86,8 +94,21 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
       const vetRes = await fetch(`http://localhost:3001/vets?afm=${form.afm}`);
       const vetData = await vetRes.json();
 
-      if (vetData.length > 0 || ownersData.length > 0) {
+      const ownersResEmail = await fetch(`http://localhost:3001/owners?email=${form.email}`);
+      const ownersDataEmail = await ownersResEmail.json();
+      const vetResEmail = await fetch(`http://localhost:3001/vets?email=${form.email}`);
+      const vetDataEmail = await vetResEmail.json();
+
+      const hasAfm = vetData.length > 0 || ownersData.length > 0;
+      const hasEmail = vetDataEmail.length > 0 || ownersDataEmail.length > 0;
+      if (hasAfm && hasEmail) {
+        setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ και email.");
+        return;
+      } else if (hasAfm) {
         setServerError("Υπάρχει ήδη εγγραφή με αυτό το ΑΦΜ.");
+        return;
+      } else if (hasEmail) {
+        setServerError("Υπάρχει ήδη εγγραφή με αυτό το email.");
         return;
       }
       const submitData = { ...form };
@@ -126,7 +147,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
 
 
   return (
-    <form noValidate className="loginForm registerForm">
+    <form noValidate className="loginForm registerForm" onSubmit={handleSubmit}>
       <label className="loginLabel">
         Όνομα:  πχ ΜΑΡΙΑ με κεφαλαία *
         <input type="text" className={`loginInput ${errors.firstname ? "inputError" : ""}`} name="firstname" value={form.firstname} onChange={handleChange} />
@@ -253,7 +274,7 @@ export default function RegisterOwner({ onOpenTerms, onRegister }) {
           <button type="reset" className="registerSecondaryButton" onClick={handleClear}>
             Απαλοιφή όλων
           </button>
-          <button type="submit" className="loginButton" onClick={handleSubmit}>
+          <button type="submit" className="loginButton">
             Εγγραφή
           </button>
         </div>
