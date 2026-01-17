@@ -10,7 +10,7 @@ export default function Footer({ setActiveMenu }) {
       <div className="footer-inner">
 
         <div className="footer-col">
-          <div className="footer-title">Pet</div>
+          <div className="footer-title">Pet Care ΕΛΛΑΣ</div>
           <div className="footer-small">
             Η πλατφόρμα για ιδιοκτήτες και κτηνιάτρους.
           </div>
