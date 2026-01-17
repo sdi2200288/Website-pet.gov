@@ -2,28 +2,56 @@ import React, { useEffect, useState, useRef } from "react";
 import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
+import { useLocation } from "react-router-dom";
+
 import "./Found2.css";
 import "./Loss2.css";
 
 
 export default function Found2() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+  const location = useLocation();
+
+
+  const state = location.state || {};
+  const declarationData = location.state?.declarationData;
+  const isEdit = !!declarationData;
+  const [step, setStep] = useState(state.step || 0);// 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
   const [microchip, setMicrochip] = useState("");
-  const [pet, setPet] = useState(null);
-  const [owner, setOwner] = useState(null);
+  const [pet, setPet] = useState(state.declarationData?.pet || null);
+  const [owner, setOwner] = useState(state.declarationData?.owner || null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [foundInfo, setFoundInfo] = useState({
-    date: "",
-    region: "",
-    address: "",
-    condition: "",
+    date: declarationData?.date || "",
+    region: declarationData?.region || "",
+    address: declarationData?.address || "",
+    condition: declarationData?.condition || "",
   });
   const photoInputRef = useRef(null);
-  const [form, setForm] = useState({ photoUrl: "" });
+  // const [form, setForm] = useState({ photoUrl: "" });
 
+  const [form, setForm] = useState({
+    photoUrl: declarationData?.photoUrl || "",
+  });
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
+
+  useEffect(() => {
+    if (isEdit && declarationData) {
+      // φόρτωσε pet αν δεν υπάρχει
+      if (!pet && declarationData.petId) {
+        fetch(`http://localhost:3001/pets/${declarationData.petId}`)
+          .then(res => res.json())
+          .then(setPet);
+      }
+
+      // φόρτωσε owner αν δεν υπάρχει
+      if (!owner && declarationData.ownerId) {
+        loadOwnerData(declarationData.ownerId);
+      }
+    }
+  }, [isEdit, declarationData]);
+
 
   const goToStep = (targetStep) => {
     if (!vet) {
@@ -104,62 +132,117 @@ export default function Found2() {
       setLoading(false);
     }
   };
-
   const handleSubmit = async (status) => {
-    if (!pet) return;
+    if (!pet && !declarationData) return;
+
+    const isEdit = !!declarationData;
+
+    // Βεβαιώσου ότι έχουμε όλα τα απαραίτητα στοιχεία
+    if (!foundInfo.date || !foundInfo.region) {
+      alert("Παρακαλώ συμπληρώστε όλα τα υποχρεωτικά πεδία (ημερομηνία και περιοχή)");
+      return;
+    }
+
     const report = {
-      petId: pet.id,
+      petId: pet?.id || declarationData.petId,
       date: foundInfo.date,
       region: foundInfo.region,
       address: foundInfo.address,
       condition: foundInfo.condition,
       status,
-      ownerId: owner.id,
-      createdAt: new Date().toISOString(),
-      photoUrl: form.photoUrl || pet.photoUrl || "",
+      ownerId: declarationData?.ownerId || vet.id,
+      createdBy: isEdit ? declarationData.createdBy : vet.id,
+      createdAt: isEdit ? declarationData.createdAt : new Date().toISOString(),
+      photoUrl: form.photoUrl || declarationData?.photoUrl || "",
     };
 
-
     try {
-      const res = await fetch("http://localhost:3001/foundReports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(report),
-      });
-      if (!res.ok) throw new Error("POST foundReports failed");
+      let updatedReport;
+
+      // 1. Αποθήκευση/ενημέρωση της δήλωσης
+      if (isEdit) {
+        const res = await fetch(`http://localhost:3001/foundReports/${declarationData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Σφάλμα ενημέρωσης δήλωσης: ${errorText}`);
+        }
+
+        updatedReport = await res.json();
+      } else {
+        const res = await fetch("http://localhost:3001/foundReports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Σφάλμα δημιουργίας δήλωσης: ${errorText}`);
+        }
+
+        updatedReport = await res.json();
+      }
+
+      // 2. Ενημέρωση του pet ΜΟΝΟ αν είναι ΟΡΙΣΤΙΚΗ υποβολή
       if (status === "submitted") {
-        const petUpdate = await fetch(
-          `http://localhost:3001/pets/${pet.id}`,
-          {
+        const petIdToUpdate = pet?.id || declarationData?.petId;
+
+        if (petIdToUpdate) {
+          // Σωστή ενημέρωση: για δήλωση εύρεσης, το pet βρέθηκε (lost: false)
+          const petUpdateData = {
+            lost: false,  // Το ζώο ΒΡΕΘΗΚΕ
+            lastSeenDate: foundInfo.date,
+            region: foundInfo.region,
+            lastSeenAddress: foundInfo.address,
+            condition: foundInfo.condition,
+          };
+
+          console.log("Ενημέρωση pet με δεδομένα:", petUpdateData);
+
+          const petUpdate = await fetch(`http://localhost:3001/pets/${petIdToUpdate}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              lost: false,
-              lastSeenDate: foundInfo.date,
-              region: foundInfo.region,
-              lastSeenAddress: foundInfo.address,
-              condition: foundInfo.condition,
-            }),
+            body: JSON.stringify(petUpdateData),
+          });
+
+          if (!petUpdate.ok) {
+            const errorText = await petUpdate.text();
+            console.error("Σφάλμα ενημέρωσης pet:", errorText);
+            // Μην πετάξεις error εδώ - η δήλωση έχει ήδη αποθηκευτεί
+            // Απλά ενημέρωσε τον χρήστη ότι η ενημέρωση pet απέτυχε
+            alert("Η δήλωση υποβλήθηκε, αλλά η ενημέρωση των στοιχείων του κατοικίδιου απέτυχε.");
           }
-        );
-        if (!petUpdate.ok) throw new Error("PATCH pet failed");
+        }
       }
-      alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
-      // Reset
+
+      // 3. Ενημέρωση χρήστη και redirect
+      alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε επιτυχώς"}!`);
+
+      // Ανάλογα με τον ρόλο, πήγαινε στο σωστό ιστορικό
+      if (vet.role === "vet") {
+        navigate("/vet-dashboard/history");
+      } else {
+        navigate("/owner-dashboard/history");
+      }
+
+      // 4. Reset φόρμας
       setStep(0);
       setPet(null);
       setOwner(null);
-      setMicrochip("");
       setFoundInfo({ date: "", region: "", address: "", condition: "" });
       setForm({ photoUrl: "" });
+      setMicrochip("");
 
-      // Μετάβαση στην αρχικη
-      navigate("/vet-dashboard");
-    } catch {
-      alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
+    } catch (err) {
+      console.error("Λεπτομερές σφάλμα:", err);
+      alert(`Σφάλμα υποβολής: ${err.message}. Παρακαλώ προσπαθήστε ξανά.`);
     }
   };
-
 
   const validate1 = () => {
     const newErrors = {};
@@ -337,7 +420,7 @@ export default function Found2() {
       }
       {/* ================= STEP 2 ================= */}
       {
-        step === 2 && (
+        step === 2 && pet && (
           <>
             <div className="stepper">
               <div

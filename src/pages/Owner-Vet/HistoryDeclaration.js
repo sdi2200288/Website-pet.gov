@@ -42,13 +42,24 @@ export default function HistoryDeclaration() {
 
         setAllPets(pets);
 
-        // Για ΟΛΟΥΣ (owner και vet) φιλτράρουμε με βάση το ownerId
-        // Αφού και οι κτηνίατροι μπορούν να έχουν δηλώσεις ως ιδιοκτήτες
-        const myFound = found.filter(r => r.ownerId === user.id);
-        const myLost = lost.filter(r => r.ownerId === user.id);
+        let myFound = [];
+        let myLost = [];
+
+        if (isOwner) {
+          myFound = found.filter(r => r.ownerId === user.id);
+          myLost = lost.filter(r => r.ownerId === user.id);
+        }
+
+        if (isVet) {
+          myFound = found.filter(r => r.createdBy === user.id);
+          myLost = lost.filter(r => r.createdBy === user.id);
+        }
+
+
 
         setFoundDeclarations(myFound);
         setLossDeclarations(myLost);
+
 
         setLoading(false);
       } catch (err) {
@@ -58,7 +69,7 @@ export default function HistoryDeclaration() {
     };
 
     fetchAllData();
-  }, [user]);
+  }, [user, isOwner, isVet]);
 
   const handleViewDeclaration = (declaration) => {
     setSelectedDeclaration(declaration);
@@ -89,15 +100,20 @@ export default function HistoryDeclaration() {
   };
 
   const handleEditDeclaration = (declaration) => {
-    const tab = declaration.type === "lost" ? "loss" : "found";
+    if (isOwner) {
+      const tab = declaration.type === "lost" ? "loss" : "found";
+      navigate(`/owner-dashboard/${tab}`, {
+        state: { step: 2, declarationData: declaration },
+      });
+    }
 
-    navigate(`/owner-dashboard/${tab}`, {
-      state: {
-        step: 2, // ανοίγει στο step 2
-        declarationData: declaration, // όλα τα δεδομένα της δήλωσης
-      },
-    });
+    if (isVet) {
+      navigate(`/vet-dashboard/loss2`, {
+        state: { step: 2, declarationData: declaration },
+      });
+    }
   };
+
   const findPetById = (petId) => {
     return allPets.find((p) => p.id === petId) || null;
   };

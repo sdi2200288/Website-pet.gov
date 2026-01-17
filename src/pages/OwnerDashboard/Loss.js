@@ -5,30 +5,32 @@ import PetDetails from "../../components/Pet/Pet";
 import "./PetReport.css";
 import vetdefault from "../../images/vetdeafult.webp";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 
 export default function Loss() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
-  const [selectedPetId, setSelectedPetId] = useState(null);
+  const location = useLocation();
+
+  const state = location.state || {};
+
+  const [step, setStep] = useState(state.step || 0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+  const [selectedPetId, setSelectedPetId] = useState(state.declarationData?.petId || null);
   const [pets, setPets] = useState([]);
   const [errors, setErrors] = useState({});
   const photoInputRef = useRef(null);
-  const [form, setForm] = useState({ photoUrl: "" });
-
+  const [form, setForm] = useState({
+    photoUrl: state.declarationData?.photoUrl || "",
+  });
   const [lossInfo, setLossInfo] = useState({
-    date: "",
-    region: "",
-    address: "",
-    condition: "",
+    date: state.declarationData?.date || "",
+    region: state.declarationData?.region || "",
+    address: state.declarationData?.address || "",
+    condition: state.declarationData?.condition || "",
   });
 
   const user = JSON.parse(localStorage.getItem("user"));
   const selectedPet = pets.find((p) => p.id === selectedPetId);
-
-  useEffect(() => {
-    // Όταν αλλάζει το step, scroll στην κορυφή του container
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [step]);
 
   function handlePhotoChange(e) {
     const file = e.target.files?.[0] ?? null;
@@ -49,43 +51,63 @@ export default function Loss() {
   };
 
   useEffect(() => {
+    // Όταν αλλάζει το step, scroll στην κορυφή του container
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
+
+
+  useEffect(() => {
     if (!user) return;
 
     fetch(`http://localhost:3001/pets?ownerId=${user.id}&lost=false`)
       .then((res) => res.json())
-      .then((data) => {
-        setPets(data);
-      })
+      .then((data) => setPets(Array.isArray(data) ? data : []))
       .catch(() => setPets([]));
   }, [user]);
 
+  const isEdit = !!state.declarationData;
+
   const handleSubmit = async (status) => {
-    if (!selectedPet) {
-      return;
-    }
+    if (!selectedPet && !state.declarationData) return;
 
     const report = {
-      petId: selectedPet.id,
+      petId: selectedPet?.id || state.declarationData.petId,
       date: lossInfo.date,
       region: lossInfo.region,
       address: lossInfo.address,
       condition: lossInfo.condition,
       status, // 'draft' ή 'submitted'
       ownerId: user.id,
-      createdAt: new Date().toISOString(),
-      photoUrl: form.photoUrl || selectedPet.photoUrl || vetdefault,
+      createdBy: isEdit
+        ? state.declarationData.createdBy
+        : user.id,
+      createdAt: isEdit
+        ? state.declarationData.createdAt
+        : new Date().toISOString(),
+      photoUrl: form.photoUrl || state.declarationData?.photoUrl || vetdefault,
     };
 
     try {
-      const res = await fetch("http://localhost:3001/lostReports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(report),
-      });
-      if (!res.ok) throw new Error("POST lostReports failed");
+      if (state.declarationData?.id) {
+        const res = await fetch(`http://localhost:3001/lostReports/${state.declarationData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("PATCH lostReports failed");
+      } else {
+        // Νέα δήλωση → POST
+        const res = await fetch("http://localhost:3001/lostReports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("POST lostReports failed");
+      }
 
       if (status === "submitted") {
-        const petUpdate = await fetch(`http://localhost:3001/pets/${selectedPet.id}`, {
+        const petId = selectedPet?.id || state.declarationData.petId;
+        const petUpdate = await fetch(`http://localhost:3001/pets/${petId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -122,6 +144,7 @@ export default function Loss() {
     const newErrors = {};
     if (!lossInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
     if (!lossInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
+
     if (lossInfo.date && selectedPet?.lastSeenDate) {
       const lossDate = new Date(lossInfo.date);
       const lastSeenDate = new Date(selectedPet.lastSeenDate);
@@ -139,6 +162,7 @@ export default function Loss() {
       "Αν ακυρώσετε, τα στοιχεία της δήλωσης δεν θα αποθηκευτούν.\nΘέλετε σίγουρα να συνεχίσετε;"
     );
     if (!confirmLeave) return;
+
     setStep(0);
     setSelectedPetId(null);
     setLossInfo({
@@ -241,7 +265,7 @@ export default function Loss() {
       )}
 
       {/* ================= STEP 2 ================= */}
-      {step === 2 && selectedPet && (
+      {step === 2 && (selectedPet || state.declarationData) && (
         <>
           <div className="stepper">
             <div className="step clickable" onClick={() => setStep(1)}>
@@ -338,7 +362,7 @@ export default function Loss() {
       )}
 
       {/* ================= STEP 3 ================= */}
-      {step === 3 && selectedPet && (
+      {step === 3 && (selectedPet || state.declarationData) && (
         <>
           <div className="stepper">
             <div className="step clickable" onClick={() => setStep(1)}>
@@ -366,25 +390,22 @@ export default function Loss() {
               <div className="booklet-header">
                 <div className="pet-photo">
                   <img
-                    src={form.photoUrl || selectedPet.photoUrl || vetdefault}
-                    alt={selectedPet.name}
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = vetdefault;
-                    }}
+                    src={form.photoUrl || selectedPet?.photoUrl || state.declarationData?.photoUrl || vetdefault}
+                    alt={selectedPet?.name || state.declarationData?.petName || "Pet"}
+                    onError={(e) => { e.target.onerror = null; e.target.src = vetdefault; }}
                   />
                 </div>
 
                 <div className="booklet-top">
                   <div className="info-box">
                     <h4>Βασικά Στοιχεία Κατοικιδίου</h4>
-                    <p><span>Όνομα:</span> {selectedPet.name}</p>
-                    <p><span>Είδος:</span> {selectedPet.species}</p>
-                    <p><span>Ράτσα:</span> {selectedPet.breed}</p>
-                    <p><span>Φύλο:</span> {selectedPet.gender}</p>
-                    <p><span>Microchip:</span> {selectedPet.microchip}</p>
-                    <p><span>Ημερομηνία Γέννησης:</span> {selectedPet.birthdate || "-"}</p>
-                    <p><span>Ηλικία:</span> {selectedPet.age || "-"}</p>
+                    <p><span>Όνομα:</span> {selectedPet?.name || state.declarationData?.petName || "-"}</p>
+                    <p><span>Είδος:</span> {selectedPet?.species || state.declarationData?.species || "-"}</p>
+                    <p><span>Ράτσα:</span> {selectedPet?.breed || state.declarationData?.breed || "-"}</p>
+                    <p><span>Φύλο:</span> {selectedPet?.gender || state.declarationData?.gender || "-"}</p>
+                    <p><span>Microchip:</span> {selectedPet?.microchip || state.declarationData?.microchip || "-"}</p>
+                    <p><span>Ημερομηνία Γέννησης:</span> {selectedPet?.birthdate || state.declarationData?.birthdate || "-"}</p>
+                    <p><span>Ηλικία:</span> {selectedPet?.age || state.declarationData?.age || "-"}</p>
                   </div>
 
                   <div className="info-box">

@@ -65,6 +65,8 @@ export default function Found() {
       .catch(() => setPets([]));
   }, [user]);
 
+  const isEdit = !!state.declarationData;
+
   const handleSubmit = async (status) => {
     if (!selectedPet && !state.declarationData) return;
 
@@ -76,7 +78,13 @@ export default function Found() {
       condition: foundInfo.condition,
       status, // 'draft' ή 'submitted'
       ownerId: user.id,
-      createdAt: new Date().toISOString(),
+      createdBy: isEdit
+        ? state.declarationData.createdBy
+        : user.id,
+      createdAt: isEdit
+        ? state.declarationData.createdAt
+        : new Date().toISOString(),
+
       photoUrl: form.photoUrl || state.declarationData?.photoUrl || vetdefault,
     };
 
@@ -426,6 +434,7 @@ export default function Found() {
             </div>
           </div>
         </>
-      )}    </div>
+      )}
+    </div>
   );
 }

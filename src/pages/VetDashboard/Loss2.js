@@ -2,24 +2,38 @@ import React, { useEffect, useState, useRef } from "react";
 // import { FiSearch } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { REGIONS } from "../Utils/Util";
+import { useLocation } from "react-router-dom";
 import "./Loss2.css";
 
 export default function Loss2() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0); // 0 = intro, 1 = επιλογή, 2 = φόρμα, 3 = προεπισκόπηση
+  const location = useLocation();
+
+  const state = location.state || {};
+  const declarationData = location.state?.declarationData;
+  const isEdit = !!declarationData;
+
+
   const [microchip, setMicrochip] = useState("");
   const [pet, setPet] = useState(null);
   const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [step, setStep] = useState(location.state?.step ?? 0);
+
   const [lossInfo, setLossInfo] = useState({
-    date: "",
-    region: "",
-    address: "",
-    condition: "",
+    date: declarationData?.date || "",
+    region: declarationData?.region || "",
+    address: declarationData?.address || "",
+    condition: declarationData?.condition || "",
   });
+
+  const [form, setForm] = useState({
+    photoUrl: declarationData?.photoUrl || "",
+  });
+
   const photoInputRef = useRef(null);
-  const [form, setForm] = useState({ photoUrl: "" });
+
 
   const vet = JSON.parse(localStorage.getItem("user")); // role: vet
 
@@ -50,6 +64,20 @@ export default function Loss2() {
     // Όταν αλλάζει το step, scroll στην κορυφή του container
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step]);
+
+  useEffect(() => {
+    if (!isEdit || !declarationData) return;
+    const loadEditData = async () => {
+      const petRes = await fetch(`http://localhost:3001/pets/${declarationData.petId}`);
+      const petData = await petRes.json();
+      setPet(petData);
+
+      await loadOwnerData(declarationData.ownerId);
+    };
+
+    loadEditData();
+  }, [isEdit, declarationData]);
+
 
   const loadOwnerData = async (ownerId) => {
     try {
@@ -106,60 +134,81 @@ export default function Loss2() {
 
 
   const handleSubmit = async (status) => {
-    if (!pet) return;
+    if (!pet && !declarationData) return; // αντικαταστήσαμε selectedPet -> pet
+
+    const isEdit = !!declarationData;
 
     const report = {
-      petId: pet.id,
+      petId: pet?.id || declarationData.petId,
       date: lossInfo.date,
       region: lossInfo.region,
       address: lossInfo.address,
       condition: lossInfo.condition,
       status, // 'draft' ή 'submitted'
-      ownerId: owner.id,
-      createdAt: new Date().toISOString(),
-      photoUrl: form.photoUrl || pet.photoUrl || "",
+      ownerId: declarationData?.ownerId || vet.id, // user -> vet
+      createdBy: isEdit ? declarationData.createdBy : vet.id, // user -> vet
+      createdAt: isEdit ? declarationData.createdAt : new Date().toISOString(),
+      photoUrl: form.photoUrl || declarationData?.photoUrl || "", // vetdefault -> ""
     };
 
     try {
-      const res = await fetch("http://localhost:3001/lostReports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(report),
-      });
-      if (!res.ok) throw new Error("POST lostReports failed");
-      if (status === "submitted") {
-        const petUpdate = await fetch(
-          `http://localhost:3001/pets/${pet.id}`,
-          {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              lost: true,
-              lastSeenDate: lossInfo.date,
-              region: lossInfo.region,
-              lastSeenAddress: lossInfo.address,
-              condition: lossInfo.condition,
-            }),
-          }
-        );
+      let updatedReport;
+
+      if (isEdit) {
+        // PATCH υπάρχουσας δήλωσης
+        const res = await fetch(`http://localhost:3001/lostReports/${declarationData.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("PATCH foundReports failed");
+        updatedReport = await res.json();
+      } else {
+        // Νέα δήλωση
+        const res = await fetch("http://localhost:3001/lostReports", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(report),
+        });
+        if (!res.ok) throw new Error("POST lostReports failed");
+        updatedReport = await res.json();
+      }
+
+      // Αν είναι οριστική υποβολή, ενημέρωση pet
+      if (status === "submitted" && pet) {
+        const petUpdate = await fetch(`http://localhost:3001/pets/${pet.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            lost: false,
+            lastSeenDate: lossInfo.date,
+            region: lossInfo.region,
+            lastSeenAddress: lossInfo.address,
+            condition: lossInfo.condition,
+          }),
+        });
         if (!petUpdate.ok) throw new Error("PATCH pet failed");
       }
+
       alert(`Η δήλωση ${status === "draft" ? "αποθηκεύτηκε προσωρινά" : "υποβλήθηκε"}!`);
-      // Reset
+
+      // Εδώ δεν μπορούμε να κάνουμε setFoundDeclarations γιατί δεν υπάρχει στο component
+      // Αν θέλεις, μπορείς να κάνεις navigate στο ιστορικό:
+      navigate("/vet-dashboard/history");
+
+      // reset φόρμας
       setStep(0);
       setPet(null);
       setOwner(null);
-      setMicrochip("");
       setLossInfo({ date: "", region: "", address: "", condition: "" });
       setForm({ photoUrl: "" });
 
-
-      // Μετάβαση στην αρχικη
-      navigate("/vet-dashboard");
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Σφάλμα υποβολής. Προσπαθήστε ξανά.");
     }
   };
+
 
   const validate1 = () => {
     const newErrors = {};
@@ -173,7 +222,7 @@ export default function Loss2() {
     const newErrors = {};
     if (!lossInfo.date) newErrors.date = "Πρέπει να επιλέξετε ημερομηνία";
     if (!lossInfo.region) newErrors.region = "Πρέπει να επιλέξετε περιοχή";
-    if (lossInfo.date && pet?.lastSeenDate) {
+    if (!isEdit && lossInfo.date && pet?.lastSeenDate) {
       const lossDate = new Date(lossInfo.date);
       const lastSeenDate = new Date(pet.lastSeenDate);
       if (lossDate < lastSeenDate) {
@@ -290,7 +339,7 @@ export default function Loss2() {
       )}
 
       {/* ================= STEP 1 ================= */}
-      {step === 1 && (
+      {step === 1 && !isEdit && (
         <div className="step1-container">
           <div className="stepper">
             <div className="step active">
