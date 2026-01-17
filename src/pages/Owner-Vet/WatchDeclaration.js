@@ -33,25 +33,17 @@ function Row({ label, value }) {
 export default function DeclarationModal({ isOpen, onClose, declaration }) {
   if (!isOpen || !declaration) return null;
 
-  // ΜΟΝΟ με βάση το schema που έδωσες
-  const t =
-    declaration.type || // αν το δίνεις από έξω
+  const t =  declaration.type ||
     (declaration.adoptionDate ? "adoption" : null) ||
     (declaration.fosterDate ? "foster" : null) ||
     (declaration.transferDate ? "transfer" : null) ||
-    (declaration.firstname || declaration.lastname || declaration.email || declaration.phone
-      ? "foundNoAcc"
-      : null) ||
-    // αλλιώς θεωρούμε ότι είναι loss/found (το αποφασίζει το parent με type ideally)
-    "found";
+    (declaration.firstname || declaration.lastname || declaration.email || declaration.phone? "foundNoAcc" : null) ||"found";
 
   const title = labelForType(t);
 
-  // Στο schema ΟΛΑ αυτά μπορεί να έχουν photoUrl, αλλά αν δεν υπάρχει δεν δείχνουμε section
   const hasPhoto = Boolean(declaration.photoUrl);
 
-  const isLostOrFound =
-    t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc";
+  const isLostOrFound =  t === "loss" || t === "lost" || t === "found" || t === "foundNoAcc";
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -80,7 +72,6 @@ export default function DeclarationModal({ isOpen, onClose, declaration }) {
               <Row label="Διεύθυνση" value={declaration.address} />
               <Row label="Κατάσταση" value={declaration.condition} />
 
-              {/* ΜΟΝΟ lostReports/foundReports έχουν ownerId */}
               {typeof declaration.ownerId !== "undefined" && (
                 <Row label="Υποβλήθηκε από (ownerId)" value={declaration.ownerId} />
               )}
