@@ -4,7 +4,7 @@ A full-featured web application built with **React** and **JSON Server** for man
 
 Υου can view the website in the demo video available on my university's official Youtube channel.
 
-Check here -> https://youtu.be/fcQR_kGM0_Y?si=zjoA_h_6fOcEr7Yo
+Check here: https://youtu.be/fcQR_kGM0_Y?si=zjoA_h_6fOcEr7Yo
 
 ---
 
