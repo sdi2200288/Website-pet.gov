@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# 🐾 pet.gov — Pet Health Monitoring & Registration Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-featured web application built with **React** and **JSON Server** for managing pet health records, veterinary appointments, and lost & found reports. Developed as a university Human-Computer Interaction project (ΥΣ08, University of Athens, 2025–2026).
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 📌 Overview
 
-### `npm start`
+**pet.gov** is a civic digital platform that connects **pet owners** and **licensed veterinarians**, enabling streamlined management of pet health data, medical records, and appointment scheduling — all in one place.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The platform supports three distinct user roles, each with a personalized experience:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 🐶 **Pet Owners** — manage their pets' health passports, report lost/found animals, and book vet appointments
+- 🩺 **Veterinarians** — register pets, log medical procedures, manage availability, and handle appointment requests
+- 👤 **Guests / Citizens** — browse lost pet reports and submit found-pet notifications without needing an account
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## ✨ Key Features
 
-### `npm run build`
+### For Pet Owners
+- View and print the **health passport** (βιβλιάριο υγείας) for each registered pet
+- **Report a lost pet** with draft/submit states (editable until final submission)
+- **Report a found pet** with location, photo, date, and finder details
+- Browse the **history of submitted reports**
+- **Search for veterinarians** by area, availability (day/time), specialty, education, and experience
+- **Book appointments** for pet registration or medical procedures
+  - Appointment states: Confirmed / Pending / Cancelled
+  - Cancellation notifies the vet; confirmation/cancellation by vet notifies the owner
+  - Cancelled appointments cannot be modified
+- View **appointment history**
+- **Rate and review** veterinarians after visits
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### For Veterinarians
+- Create and manage a **professional profile** (VAT number, name, gender, education, experience, clinic address)
+- **Register a new pet** (microchip number, species, gender, name, date of birth) — draft or final submission
+- Log **life events** for pets: loss, found, transfer, adoption, fostering
+- Record **medical procedures**: vaccinations, spaying/neutering, surgeries, and more
+- View and print the pet's **full medical history**
+- Set **availability slots** (days, times, procedure types)
+- **Manage appointment requests** — confirm or reject; receive cancellation notifications
+- View **ratings and reviews** left by owners
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### For All Users
+- Browse **lost pet listings** without an account
+- Submit a **found-pet report** linked to an existing lost-pet listing
+- **Edit profile** after login
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## 🛠️ Tech Stack
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+| Layer | Technology |
+|---|---|
+| Frontend | React (Create React App) |
+| UI Components | Material UI |
+| Backend (mock) | JSON Server |
+| State Management | React Hooks + REST calls to JSON Server |
+| Routing | React Router |
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🚀 Getting Started
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
+- Node.js ≥ 14
+- npm
 
-## Learn More
+### Run the app
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Start the mock backend (JSON Server) and the React app in two separate terminals:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+# Terminal 1 – mock API
+npx json-server --watch db.json --port 3001
 
-### Code Splitting
+# Terminal 2 – React app
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📁 Project Structure
 
-### Making a Progressive Web App
+```
+src/
+├── components/       # Reusable UI components
+├── pages/            # Page-level components per role
+├── services/         # API call helpers (JSON Server)
+└── App.js            # Routing & role-based navigation
+public/
+db.json               # Mock database (JSON Server)
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🎓 Academic Context
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+This project was built for the **Human-Computer Interaction (ΥΣ08)** course at the **Department of Informatics & Telecommunications, University of Athens**, as part of a three-phase assignment:
 
-### Deployment
+- **A1** — Requirements analysis & user personas
+- **A2** — Illustrated scenario (storyboard / wireframes)
+- **A3** — Full frontend implementation *(this repository)*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+> Note: This is a frontend-only implementation. The backend is simulated using JSON Server for demonstration purposes.
